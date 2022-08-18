@@ -56,7 +56,7 @@ HRESULT CTexture::Bind_OnGraphicDev(_uint iIndex)
 _int CTexture::MoveFrame(_float fTimeDelta, _float MoveSpeed, _int MaxFrame)
 {
 	m_fFrameTime += fTimeDelta;
-	if (fTimeDelta > MoveSpeed)
+	if (m_fFrameTime > MoveSpeed)
 		++m_iFrame;
 	if (m_iFrame > MaxFrame)
 		m_iFrame = 0;
