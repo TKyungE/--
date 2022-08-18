@@ -32,6 +32,7 @@ public:
 		_int		 iExp;
 		_int		 iMaxExp;
 		_int		 iMoney;
+		_int		 iCurrentFrame;
 	}INFO;
 protected:
 	INFO m_tInfo;

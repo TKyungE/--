@@ -59,6 +59,9 @@ void CBackGround::Tick(_float fTimeDelta)
 		// m_pTransformCom->Go_Right(fTimeDelta);
 	}
 
+	// 스프라이트 사용 예시
+	//iCurrentFrame = m_pTextureCom->MoveFrame(fTimeDelta, 0.15f, 10);
+	//iCurrentFrame을 바인드 인자값으로 주면 됨;
 }
 
 void CBackGround::Late_Tick(_float fTimeDelta)
