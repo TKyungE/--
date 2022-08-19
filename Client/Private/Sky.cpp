@@ -63,7 +63,7 @@ HRESULT CSky::Render()
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(2)))
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(TEXT("Prototype_Component_Texture_Sky"),2)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_RenderState()))

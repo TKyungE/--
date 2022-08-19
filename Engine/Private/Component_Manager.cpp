@@ -30,6 +30,24 @@ HRESULT CComponent_Manager::Add_Prototype(_uint iLevelIndex, const _tchar * pPro
 
 	m_pPrototypes[iLevelIndex].emplace(pPrototypeTag, pPrototype);
 
+	if (!lstrcmp(pPrototypeTag, TEXT("Prototype_Component_Texture_Terrain_CollTile")))
+	{
+		dynamic_cast<CTexture*>(pPrototype)->LoadTexture(CTexture::TYPE_DEFAULT, TEXT("Prototype_Component_Texture_Terrain_LookMap"), TEXT("../Bin/Resources/Textures/OBJ/OBJ/MAP/LookMap/Map%d.png"), 1111);
+	}
+
+
+	//*if (!lstrcmp(pPrototypeTag, TEXT("Prototype_Component_Texture_Player_IDLE")))
+	//{
+	//	dynamic_cast<CTexture*>(pPrototype)->LoadTexture(CTexture::TYPE_DEFAULT, TEXT("Prototype_Component_Texture_Player_Front"), TEXT("../Bin/Resources/Textures/Player/Attack/%d.jpg"), 5);
+	//	dynamic_cast<CTexture*>(pPrototype)->LoadTexture(CTexture::TYPE_DEFAULT, TEXT("Prototype_Component_Texture_Player_Front"), TEXT("../Bin/Resources/Textures/Player/Front/%d.jpg"), 5);
+
+	//}
+	//else if (!lstrcmp(pPrototypeTag, TEXT("Prototype_Component_Texture_Monster_IDLE")))
+	//{
+	//	dynamic_cast<CTexture*>(pPrototype)->LoadTexture(CTexture::TYPE_DEFAULT, TEXT("Prototype_Component_Texture_Player_Front"), TEXT("../Bin/Resources/Textures/Player/Attack/%d.jpg"), 5);
+	//	dynamic_cast<CTexture*>(pPrototype)->LoadTexture(CTexture::TYPE_DEFAULT, TEXT("Prototype_Component_Texture_Player_Front"), TEXT("../Bin/Resources/Textures/Player/Front/%d.jpg"), 5);
+
+	//}*/
 	return S_OK;
 }
 

@@ -88,7 +88,7 @@ HRESULT CBackGround::Render()
 	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
 	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &ProjMatrix);	
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(1)))
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(TEXT("Prototype_Component_Texture_BackGround"),1)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_RenderState()))
