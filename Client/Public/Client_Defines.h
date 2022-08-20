@@ -20,5 +20,7 @@ using namespace FMOD;
 
 extern HWND			g_hWnd;
 extern HINSTANCE	g_hInst;
+//extern int g_iFrame;
+
 #define     fSOUND  0.1f
 using namespace Client;

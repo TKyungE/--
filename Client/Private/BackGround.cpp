@@ -34,31 +34,6 @@ HRESULT CBackGround::Initialize(void* pArg)
 void CBackGround::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-
-	// 카메라의 트랜스폼을 찾아(CCamera::m_pTransformTag);
-
-	if (GetKeyState(VK_UP) < 0)
-	{
-		m_pTransformCom->Go_Straight(fTimeDelta);
-	}
-
-	if (GetKeyState(VK_DOWN) < 0)
-	{
-		m_pTransformCom->Go_Backward(fTimeDelta);
-	}
-
-	if (GetKeyState(VK_LEFT) < 0)
-	{
-		m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * -1.f);
-		// m_pTransformCom->Go_Left(fTimeDelta);
-	}
-
-	if (GetKeyState(VK_RIGHT) < 0)
-	{
-		m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta);
-		// m_pTransformCom->Go_Right(fTimeDelta);
-	}
-
 }
 
 void CBackGround::Late_Tick(_float fTimeDelta)
@@ -73,17 +48,9 @@ HRESULT CBackGround::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
-
-	_float4x4		ViewMatrix, ProjMatrix;
-
-	D3DXMatrixLookAtLH(&ViewMatrix, &_float3(0.f, 0.f, -1.0f), &_float3(0.f, 0.f, 0.f), &_float3(0.f, 1.f, 0.f));
-	D3DXMatrixPerspectiveFovLH(&ProjMatrix, D3DXToRadian(60.0f), (_float)g_iWinSizeX / g_iWinSizeY, 0.2f, 300.f);
-
 	
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
-	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
-	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &ProjMatrix);	
 
 	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(1)))
 		return E_FAIL;
@@ -144,6 +111,8 @@ HRESULT CBackGround::Release_RenderState()
 {
 	// m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+	m_pGraphic_Device->SetTexture(0, nullptr);
 
 	return S_OK;
 }

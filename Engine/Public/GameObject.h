@@ -22,6 +22,7 @@ public:
 public:
 	typedef struct tagInfo
 	{
+		CGameObject* pTerrain;
 		CGameObject* pTarget;
 		_float3		 vPos;
 		_float       fX; // (객체의 지름) 객체 생성할때 이니셜라이즈에서 스케일 맥인거 대입해줘야함.

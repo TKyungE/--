@@ -18,7 +18,7 @@ public:
 		_float				fNear;
 		_float				fFar;
 
-		CGameObject* pTarget;
+		CGameObject::INFO Info;
 
 		CTransform::TRANSFORMDESC		TransformDesc;
 	}CAMERADESC;

@@ -1,11 +1,6 @@
-﻿  Camera.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  Renderer.cpp
-  Object_Manager.cpp
-  Layer.cpp
-  GameObject.cpp
-  CollisionMgr.cpp
-  코드를 생성하고 있습니다...
-  Engine.vcxproj -> C:\Users\JJH\Desktop\라그(SR)\라그v1.0\Engine\Default\..\Bin\Engine.dll
+﻿  Onterrain.cpp
+c:\users\603jh\desktop\--\engine\private\onterrain.cpp(38): warning C4244: '초기화 중': 'float'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\603jh\desktop\--\engine\private\onterrain.cpp(45): warning C4838: 'int'에서 'Engine::_uint'(으)로의 변환에는 축소 변환이 필요합니다.
+c:\users\603jh\desktop\--\engine\private\onterrain.cpp(45): warning C4838: 'Engine::_int'에서 'Engine::_uint'(으)로의 변환에는 축소 변환이 필요합니다.
+  Engine.vcxproj -> C:\Users\603jh\Desktop\--\Engine\Default\..\Bin\Engine.dll
   Engine.vcxproj -> ..\Bin\Engine.pdb (Full PDB)

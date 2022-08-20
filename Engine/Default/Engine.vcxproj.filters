@@ -76,6 +76,12 @@
     <Filter Include="01.Utility\97.CollisionMgr">
       <UniqueIdentifier>{8ed6dac4-1bad-4894-81d8-a2fe64c6179d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\96. Picking">
+      <UniqueIdentifier>{ca9ff2c7-d78f-42f2-a09c-da38a5c53f75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Onterrain">
+      <UniqueIdentifier>{e004a411-aa14-44c0-8d76-f3dddb922cd6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -143,6 +149,12 @@
     </ClCompile>
     <ClCompile Include="..\private\CollisionMgr.cpp">
       <Filter>01.Utility\97.CollisionMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Picking.cpp">
+      <Filter>01.Utility\96. Picking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Onterrain.cpp">
+      <Filter>01.Utility\03.Components\Onterrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +238,12 @@
     </ClInclude>
     <ClInclude Include="..\public\CollisionMgr.h">
       <Filter>01.Utility\97.CollisionMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Picking.h">
+      <Filter>01.Utility\96. Picking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Onterrain.h">
+      <Filter>01.Utility\03.Components\Onterrain</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
