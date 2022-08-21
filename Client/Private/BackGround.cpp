@@ -87,16 +87,10 @@ HRESULT CBackGround::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	_float4x4		ViewMatrix, ProjMatrix;
 
-	D3DXMatrixLookAtLH(&ViewMatrix, &_float3(0.f, 0.f, -1.0f), &_float3(0.f, 0.f, 0.f), &_float3(0.f, 1.f, 0.f));
-	D3DXMatrixPerspectiveFovLH(&ProjMatrix, D3DXToRadian(60.0f), (_float)g_iWinSizeX / g_iWinSizeY, 0.2f, 300.f);
-
-	
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
-	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
-	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &ProjMatrix);	
+	
 	
 	//상태에 따라 바인드하는 함수
 	TextureRender();
