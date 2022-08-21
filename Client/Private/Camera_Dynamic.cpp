@@ -49,7 +49,7 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 	if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_X))
 		CameraRotationX(fTimeDelta, MouseMove);
 
-	if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y))
+	if ((GetKeyState(VK_LSHIFT)& 8000) &&  (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y)))
 		CameraRotationY(fTimeDelta, MouseMove);
 
 	if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_WHEEL))
@@ -96,7 +96,7 @@ void CCamera_Dynamic::CameraRotationX(_float fTimeDelta, _long MouseMove)
 
 void CCamera_Dynamic::CameraRotationY(_float fTimeDelta, _long MouseMove)
 {
-	m_YfAngle += fTimeDelta * -MouseMove * m_CameraDesc.TransformDesc.fRotationPerSec * 0.1f;
+	m_YfAngle += fTimeDelta * -MouseMove * m_CameraDesc.TransformDesc.fRotationPerSec * 0.05f;
 
 	if (m_YfAngle > D3DXToRadian(-5.f) && m_YfAngle < D3DXToRadian(25.f))
 		D3DXMatrixRotationAxis(&m_matRotY, &m_pTransform->Get_State(CTransform::STATE_RIGHT), m_YfAngle);

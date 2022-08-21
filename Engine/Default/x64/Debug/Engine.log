@@ -1,10 +1,2 @@
-﻿  Camera.cpp
-  코드를 생성하고 있습니다...
-  건너뛰고 있습니다... (관련된 변경 내용 없음)
-  Renderer.cpp
-  Object_Manager.cpp
-  Layer.cpp
-  GameObject.cpp
-  CollisionMgr.cpp
-  Engine.vcxproj -> C:\Users\603jh\Desktop\--\Engine\Default\..\Bin\Engine.dll
+﻿  Engine.vcxproj -> C:\Users\KING\Desktop\수업\라그SR\--\Engine\Default\..\Bin\Engine.dll
   Engine.vcxproj -> ..\Bin\Engine.pdb (Full PDB)
