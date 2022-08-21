@@ -61,6 +61,21 @@
     <Filter Include="04.UI\Inven">
       <UniqueIdentifier>{1bf3f18c-93ed-4069-8fb1-819e57454c4f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Effect\Skill">
+      <UniqueIdentifier>{d5c7b31c-652d-4394-afe1-1f9484230a71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\00.Thunder">
+      <UniqueIdentifier>{410f4cdb-9787-4780-bc44-2148eeb1b15d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\00.Thunder\ThunderCloud">
+      <UniqueIdentifier>{eb1a8f8c-7620-4ba9-9eee-039019d89b52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\00.Thunder\ThunderSword">
+      <UniqueIdentifier>{3695fb6b-b886-42cf-9531-07c24274e0e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\01.Tornado">
+      <UniqueIdentifier>{298d50ad-07d7-41d6-ab99-fdc894c6f8de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -120,6 +135,15 @@
     <ClInclude Include="..\Public\Player.h">
       <Filter>02.GameObject\Player</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\ThunderCloud.h">
+      <Filter>03.Effect\Skill\00.Thunder\ThunderCloud</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ThunderSword.h">
+      <Filter>03.Effect\Skill\00.Thunder\ThunderSword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Tornado.h">
+      <Filter>03.Effect\Skill\01.Tornado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -166,6 +190,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Player.cpp">
       <Filter>02.GameObject\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ThunderCloud.cpp">
+      <Filter>03.Effect\Skill\00.Thunder\ThunderCloud</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ThunderSword.cpp">
+      <Filter>03.Effect\Skill\00.Thunder\ThunderSword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Tornado.cpp">
+      <Filter>03.Effect\Skill\01.Tornado</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

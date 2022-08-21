@@ -28,6 +28,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
 		return E_FAIL;
 
+
 	/*if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;*/
 
@@ -149,6 +150,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_UI(const _tchar * pLayerTag)
 
 	return S_OK;
 }
+
 
 CLevel_GamePlay * CLevel_GamePlay::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {

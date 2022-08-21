@@ -74,9 +74,9 @@ void CTerrain::Tick(_float fTimeDelta)
 				wsprintf(m_szFPS, L"ÁÂÇ¥ : %d, %d, %d", (int)pInstance->Get_TargetPos().x, (int)pInstance->Get_TargetPos().y, (int)pInstance->Get_TargetPos().z);
 				ERR_MSG(m_szFPS);*/
 
-				pVertices[pIndices[i]._0].vPosition.y += 1.f;
-				pVertices[pIndices[i]._1].vPosition.y += 1.f;
-				pVertices[pIndices[i]._2].vPosition.y += 1.f;
+			//	pVertices[pIndices[i]._0].vPosition.y += 1.f;
+			//	pVertices[pIndices[i]._1].vPosition.y += 1.f;
+			//	pVertices[pIndices[i]._2].vPosition.y += 1.f;
 				break;
 			}
 		}

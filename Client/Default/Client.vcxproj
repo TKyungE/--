@@ -172,6 +172,9 @@
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\public\SoundMgr.h" />
     <ClInclude Include="..\Public\Terrain.h" />
+    <ClInclude Include="..\public\ThunderCloud.h" />
+    <ClInclude Include="..\Public\ThunderSword.h" />
+    <ClInclude Include="..\Public\Tornado.h" />
     <ClInclude Include="..\Public\UI.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Resource.h" />
@@ -191,6 +194,9 @@
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\private\SoundMgr.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
+    <ClCompile Include="..\private\ThunderCloud.cpp" />
+    <ClCompile Include="..\Private\ThunderSword.cpp" />
+    <ClCompile Include="..\Private\Tornado.cpp" />
     <ClCompile Include="..\Private\UI.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
