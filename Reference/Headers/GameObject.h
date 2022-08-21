@@ -32,11 +32,16 @@ public:
 		_int		 iExp;
 		_int		 iMaxExp;
 		_int		 iMoney;
-		_int		 iCurrentFrame;
 	}INFO;
+	typedef struct tagFrameInfo
+	{
+		_int				iFrameStart;
+		_int				iFrameEnd;
+		_float				fFrameSpeed;
+	}FrameInfo;
 protected:
 	INFO m_tInfo;
-	
+	FrameInfo				m_tFrame;
 public: // 여기에 갯 셋 만들어서 인포 +- 관리하면될듯
 	INFO	Get_Info() { return m_tInfo; }
 protected:

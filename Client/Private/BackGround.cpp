@@ -28,6 +28,13 @@ HRESULT CBackGround::Initialize(void* pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
+	m_ePreState = STATE_END;
+	m_eCurState = IDLE;
+	m_tFrame.iFrameStart = 0;
+	m_tFrame.iFrameEnd = 5;
+	m_tFrame.fFrameSpeed = 0.3f;
+
+
 	return S_OK;
 }
 
@@ -59,14 +66,17 @@ void CBackGround::Tick(_float fTimeDelta)
 		// m_pTransformCom->Go_Right(fTimeDelta);
 	}
 
-	// 스프라이트 사용 예시
-	//iCurrentFrame = m_pTextureCom->MoveFrame(fTimeDelta, 0.15f, 10);
-	//iCurrentFrame을 바인드 인자값으로 주면 됨;
+	//상태에따라 스프라이트 돌리는 함수
+	Move_Frame(fTimeDelta);
+	
 }
 
 void CBackGround::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
+
+	//상태변경 확인 함수
+	Motion_Change();
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
@@ -87,9 +97,9 @@ HRESULT CBackGround::Render()
 		return E_FAIL;
 	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
 	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &ProjMatrix);	
-
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(1)))
-		return E_FAIL;
+	
+	//상태에 따라 바인드하는 함수
+	TextureRender();
 
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
@@ -101,6 +111,75 @@ HRESULT CBackGround::Render()
 
 	return S_OK;
 }
+
+
+void CBackGround::Motion_Change()
+{
+	if (m_ePreState != m_eCurState)
+	{
+		switch (m_eCurState)
+		{//필요한 상태들 추가하고 값 지정해주면됨
+		case IDLE:
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 5;
+			m_tFrame.fFrameSpeed = 0.3f;
+			break;
+		case WALK:
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 5;
+			m_tFrame.fFrameSpeed = 0.3f;
+			break;
+		case ATTACK:
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 5;
+			m_tFrame.fFrameSpeed = 0.3f;
+			break;
+		}
+
+		m_ePreState = m_eCurState;
+	}
+}
+
+void CBackGround::Move_Frame(_float fTimeDelta)
+{
+	switch (m_eCurState)
+	{
+	case IDLE:
+		m_tFrame.iFrameStart = m_pTextureCom->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+		break;
+	case WALK:
+	//	m_tFrame.iFrameStart = m_pTextureCom2->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+		break;
+	case ATTACK:
+	//	m_tFrame.iFrameStart = m_pTextureCom3->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+		break;
+	default:
+		break;
+	}
+	
+}
+
+HRESULT CBackGround::TextureRender()
+{
+	switch (m_eCurState)
+	{
+	case IDLE:
+		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+			return E_FAIL;
+		break;
+	case WALK:
+	//	if (FAILED(m_pTextureCom2->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+	//		return E_FAIL;
+		break;
+	case ATTACK:
+	//	if (FAILED(m_pTextureCom3->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+	//		return E_FAIL;
+		break;
+	default:
+		break;
+	}
+}
+
 
 HRESULT CBackGround::SetUp_Components()
 {

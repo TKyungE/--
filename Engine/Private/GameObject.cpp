@@ -5,6 +5,8 @@ CGameObject::CGameObject(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
 {
 	Safe_AddRef(m_pGraphic_Device);
+	ZeroMemory(&m_tInfo, sizeof(INFO));
+	ZeroMemory(&m_tFrame, sizeof(FrameInfo));
 }
 
 CGameObject::CGameObject(const CGameObject & rhs)
