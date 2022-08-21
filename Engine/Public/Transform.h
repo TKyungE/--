@@ -38,6 +38,7 @@ public:
 	void Set_TransformDesc(const TRANSFORMDESC& TransformDesc) {
 		m_TransformDesc = TransformDesc;
 	}
+	const TRANSFORMDESC& Get_TransformDesc(void) const { return m_TransformDesc; }
 
 	void Set_Scaled(_float3 vScale);
 

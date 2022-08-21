@@ -49,6 +49,12 @@
     <Filter Include="03.Effect">
       <UniqueIdentifier>{19c16c69-0ab0-4827-baec-766f3a54cf77}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Player">
+      <UniqueIdentifier>{8da95a2d-a56e-4eaf-8b0c-47e3b5109aca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster">
+      <UniqueIdentifier>{35ad7b7d-4c09-4846-bff1-11c2783071de}</UniqueIdentifier>
+    </Filter>
     <Filter Include="04.UI">
       <UniqueIdentifier>{77d1b4b2-60a1-4444-bc37-285d0b4c20e6}</UniqueIdentifier>
     </Filter>
@@ -108,6 +114,12 @@
     <ClInclude Include="..\Public\UI.h">
       <Filter>04.UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Monster.h">
+      <Filter>02.GameObject\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Player.h">
+      <Filter>02.GameObject\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -148,6 +160,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\UI.cpp">
       <Filter>04.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster.cpp">
+      <Filter>02.GameObject\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Player.cpp">
+      <Filter>02.GameObject\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
