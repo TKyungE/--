@@ -36,6 +36,7 @@ private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
 	_float				m_fDelay = 0.f;
+	_float				m_fDeadTime = 0.f;
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();

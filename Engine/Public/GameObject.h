@@ -33,7 +33,7 @@ public:
 		_int		 iExp;
 		_int		 iMaxExp;
 		_int		 iMoney;
-		_bool		 bDead;
+		_bool		 bDead ;
 	}INFO;
 	typedef struct tagFrameInfo
 	{

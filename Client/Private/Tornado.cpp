@@ -50,7 +50,7 @@ void CTornado::Tick(_float fTimeDelta)
 
 	Move_Frame(fTimeDelta);
 	m_fDeadTime += fTimeDelta;
-	if (m_fDeadTime > 5.f)
+	if (m_fDeadTime > 3.f)
 		Set_Dead();
 }
 

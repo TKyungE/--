@@ -53,7 +53,11 @@ void CThunderCloud::Tick(_float fTimeDelta)
 
 	Move_Frame(fTimeDelta);
 	m_fDelay += fTimeDelta;
-	if (m_fDelay > 0.3f)
+	m_fDeadTime += fTimeDelta;
+	if (m_fDeadTime > 3.f)
+		Set_Dead();
+	m_fDelay += fTimeDelta;
+	if (m_fDelay > 0.2f)
 	{
 		Create_Sword(TEXT("Layer_Skill"));
 		m_fDelay = 0.f;
@@ -114,78 +118,25 @@ HRESULT CThunderCloud::Create_Sword(const _tchar * pLayerTag)
 
 	CGameObject::INFO tInfo;
 
-	_int iDest = rand() % 3;
-	
-	switch (iDest)
-	{
-	case 0:
-		tInfo.vPos.x = m_tInfo.vPos.x - 0.7f;
-		break;
-	case 1:
-		tInfo.vPos.x = m_tInfo.vPos.x + 0.7f;
-		break;
-	case 2:
-		tInfo.vPos.x = m_tInfo.vPos.x;
-		break;
-	default:
-		break;
-	}
+	_float iSour = rand() % 6000 * 0.0001;
+	_float iTemp = rand() % 4000 * 0.0001;
+
+	tInfo.vPos.x = m_tInfo.vPos.x + iSour;
 	tInfo.vPos.y = m_tInfo.vPos.y - 1.f;
-	tInfo.vPos.z = m_tInfo.vPos.z;
+	tInfo.vPos.z = m_tInfo.vPos.z + iTemp;;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ThunderSword"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	_int iSour = rand() % 3;
+	_float iSour1 = rand() % 6000 * 0.0001;
+	_float iTemp2 = rand() % 4000 * 0.0001;
 
-	switch (iSour)
-	{
-	case 0:
-		tInfo.vPos.x = m_tInfo.vPos.x - 0.55f;
-		tInfo.vPos.z = m_tInfo.vPos.z + 0.3f;
-		break;
-	case 1:
-		tInfo.vPos.x = m_tInfo.vPos.x + 0.55f;
-		tInfo.vPos.z = m_tInfo.vPos.z + 0.3f;;
-		break;
-	case 2:
-		tInfo.vPos.x = m_tInfo.vPos.x;
-		tInfo.vPos.z = m_tInfo.vPos.z + 0.3f;;
-		break;
-	default:
-		break;
-	}
+	tInfo.vPos.x = m_tInfo.vPos.x - iSour;
 	tInfo.vPos.y = m_tInfo.vPos.y - 1.f;
-	
+	tInfo.vPos.z = m_tInfo.vPos.z - iTemp;;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ThunderSword"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
-
-	_int iTemp = rand() % 3;
-
-	switch (iSour)
-	{
-	case 0:
-		tInfo.vPos.x = m_tInfo.vPos.x - 0.4f;
-		tInfo.vPos.z = m_tInfo.vPos.z - 0.3f;
-		break;
-	case 1:
-		tInfo.vPos.x = m_tInfo.vPos.x + 0.4f;
-		tInfo.vPos.z = m_tInfo.vPos.z - 0.3f;;
-		break;
-	case 2:
-		tInfo.vPos.x = m_tInfo.vPos.x;
-		tInfo.vPos.z = m_tInfo.vPos.z - 0.3f;;
-		break;
-	default:
-		break;
-	}
-	tInfo.vPos.y = m_tInfo.vPos.y - 1.f;
-
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ThunderSword"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
-		return E_FAIL;
-
 
 	Safe_Release(pGameInstance);
 
