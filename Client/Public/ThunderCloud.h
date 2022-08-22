@@ -35,6 +35,7 @@ private: /* For.Components */
 private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
+	_float				m_fDelay = 0.f;
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
@@ -44,6 +45,8 @@ private:
 	HRESULT TextureRender();
 	HRESULT On_SamplerState();
 	HRESULT Off_SamplerState();
+	HRESULT Create_Sword(const _tchar * pLayerTag);
+
 public:
 	static CThunderCloud* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

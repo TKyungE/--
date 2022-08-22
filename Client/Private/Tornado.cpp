@@ -39,7 +39,7 @@ HRESULT CTornado::Initialize(void* pArg)
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 25;
 	m_tFrame.fFrameSpeed = 0.05f;
-
+	m_tInfo.bDead = false;
 
 	return S_OK;
 }
@@ -49,7 +49,9 @@ void CTornado::Tick(_float fTimeDelta)
 	__super::Tick(fTimeDelta);
 
 	Move_Frame(fTimeDelta);
-
+	m_fDeadTime += fTimeDelta;
+	if (m_fDeadTime > 5.f)
+		Set_Dead();
 }
 
 void CTornado::Late_Tick(_float fTimeDelta)
@@ -142,6 +144,7 @@ HRESULT CTornado::TextureRender()
 	default:
 		break;
 	}
+	return S_OK;
 }
 
 HRESULT CTornado::On_SamplerState()

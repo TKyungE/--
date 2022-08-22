@@ -33,6 +33,7 @@ public:
 		_int		 iExp;
 		_int		 iMaxExp;
 		_int		 iMoney;
+		_bool		 bDead;
 	}INFO;
 	typedef struct tagFrameInfo
 	{
@@ -45,6 +46,7 @@ protected:
 	FrameInfo				m_tFrame;
 public: // 여기에 갯 셋 만들어서 인포 +- 관리하면될듯
 	INFO	Get_Info() { return m_tInfo; }
+	void	Set_Dead() { m_tInfo.bDead = true; }
 protected:
 	LPDIRECT3DDEVICE9			m_pGraphic_Device = nullptr;
 

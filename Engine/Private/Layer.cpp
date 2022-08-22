@@ -25,7 +25,11 @@ void CLayer::Tick(_float fTimeDelta)
 	for (auto& pGameObject : m_GameObjects)
 	{
 		if (nullptr != pGameObject)
+		{
 			pGameObject->Tick(fTimeDelta);
+			if (pGameObject->Get_Info().bDead)
+				Safe_Release(pGameObject); 
+		}
 	}
 }
 

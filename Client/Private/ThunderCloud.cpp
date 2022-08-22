@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Public\ThunderCloud.h"
 #include "GameInstance.h"
+#include "ThunderSword.h"
 
 CThunderCloud::CThunderCloud(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
@@ -29,8 +30,8 @@ HRESULT CThunderCloud::Initialize(void* pArg)
 		return E_FAIL;
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
-	m_tInfo.vPos.y += 3.f;
-	_float3 vScale = { 10.f,5.f,1.f };
+	m_tInfo.vPos.y += 3.5f;
+	_float3 vScale = { 100.f,5.f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
@@ -41,7 +42,7 @@ HRESULT CThunderCloud::Initialize(void* pArg)
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 17;
 	m_tFrame.fFrameSpeed = 0.1f;
-
+	m_tInfo.bDead = false;
 
 	return S_OK;
 }
@@ -51,6 +52,13 @@ void CThunderCloud::Tick(_float fTimeDelta)
 	__super::Tick(fTimeDelta);
 
 	Move_Frame(fTimeDelta);
+	m_fDelay += fTimeDelta;
+	if (m_fDelay > 0.3f)
+	{
+		Create_Sword(TEXT("Layer_Skill"));
+		m_fDelay = 0.f;
+	}
+
 
 }
 
@@ -99,7 +107,90 @@ HRESULT CThunderCloud::Render()
 	On_SamplerState();
 	return S_OK;
 }
+HRESULT CThunderCloud::Create_Sword(const _tchar * pLayerTag)
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
 
+	CGameObject::INFO tInfo;
+
+	_int iDest = rand() % 3;
+	
+	switch (iDest)
+	{
+	case 0:
+		tInfo.vPos.x = m_tInfo.vPos.x - 0.7f;
+		break;
+	case 1:
+		tInfo.vPos.x = m_tInfo.vPos.x + 0.7f;
+		break;
+	case 2:
+		tInfo.vPos.x = m_tInfo.vPos.x;
+		break;
+	default:
+		break;
+	}
+	tInfo.vPos.y = m_tInfo.vPos.y - 1.f;
+	tInfo.vPos.z = m_tInfo.vPos.z;
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ThunderSword"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+		return E_FAIL;
+
+	_int iSour = rand() % 3;
+
+	switch (iSour)
+	{
+	case 0:
+		tInfo.vPos.x = m_tInfo.vPos.x - 0.55f;
+		tInfo.vPos.z = m_tInfo.vPos.z + 0.3f;
+		break;
+	case 1:
+		tInfo.vPos.x = m_tInfo.vPos.x + 0.55f;
+		tInfo.vPos.z = m_tInfo.vPos.z + 0.3f;;
+		break;
+	case 2:
+		tInfo.vPos.x = m_tInfo.vPos.x;
+		tInfo.vPos.z = m_tInfo.vPos.z + 0.3f;;
+		break;
+	default:
+		break;
+	}
+	tInfo.vPos.y = m_tInfo.vPos.y - 1.f;
+	
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ThunderSword"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+		return E_FAIL;
+
+	_int iTemp = rand() % 3;
+
+	switch (iSour)
+	{
+	case 0:
+		tInfo.vPos.x = m_tInfo.vPos.x - 0.4f;
+		tInfo.vPos.z = m_tInfo.vPos.z - 0.3f;
+		break;
+	case 1:
+		tInfo.vPos.x = m_tInfo.vPos.x + 0.4f;
+		tInfo.vPos.z = m_tInfo.vPos.z - 0.3f;;
+		break;
+	case 2:
+		tInfo.vPos.x = m_tInfo.vPos.x;
+		tInfo.vPos.z = m_tInfo.vPos.z - 0.3f;;
+		break;
+	default:
+		break;
+	}
+	tInfo.vPos.y = m_tInfo.vPos.y - 1.f;
+
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ThunderSword"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+		return E_FAIL;
+
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
 
 void CThunderCloud::Motion_Change()
 {
@@ -142,6 +233,7 @@ HRESULT CThunderCloud::TextureRender()
 	default:
 		break;
 	}
+	return S_OK;
 }
 
 

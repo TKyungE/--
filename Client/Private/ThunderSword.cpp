@@ -29,14 +29,16 @@ HRESULT CThunderSword::Initialize(void* pArg)
 		return E_FAIL;
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
+	_float3 vScale = { 2.f,2.f,1.f };
+	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 17;
-	m_tFrame.fFrameSpeed = 0.3f;
-
+	m_tFrame.fFrameSpeed = 0.017f;
+	m_tInfo.bDead = false;
 
 	return S_OK;
 }
@@ -46,7 +48,9 @@ void CThunderSword::Tick(_float fTimeDelta)
 	__super::Tick(fTimeDelta);
 
 	Move_Frame(fTimeDelta);
-
+	m_pTransformCom->Go_Down(fTimeDelta);
+	if(m_pTransformCom->Get_State(CTransform::STATE_POSITION).y < 0.f)
+		Set_Dead();
 }
 
 void CThunderSword::Late_Tick(_float fTimeDelta)
@@ -105,8 +109,8 @@ void CThunderSword::Motion_Change()
 		{
 		case IDLE:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 5;
-			m_tFrame.fFrameSpeed = 0.3f;
+			m_tFrame.iFrameEnd = 17;
+			m_tFrame.fFrameSpeed = 0.017f;
 			break;
 		}
 
@@ -138,6 +142,7 @@ HRESULT CThunderSword::TextureRender()
 	default:
 		break;
 	}
+	return S_OK;
 }
 
 HRESULT CThunderSword::On_SamplerState()
@@ -170,7 +175,7 @@ HRESULT CThunderSword::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_LOGO, TEXT("Prototype_Component_Texture_BackGround"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_ThunderSword"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */
