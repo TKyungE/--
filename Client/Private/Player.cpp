@@ -186,15 +186,15 @@ void CPlayer::Use_Skill()
 			pInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);	
 		}
 	}
-	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON))
+	
+	if (CKeyMgr::Get_Instance()->Key_Down('4'))
 	{
-		if (CKeyMgr::Get_Instance()->Key_Down('4'))
-		{
-			CGameObject::INFO tInfo;
-			tInfo.vPos = pInstance->Get_TargetPos();
-			pInstance->Add_GameObject(TEXT("Prototype_GameObject_LevelUp"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
-		}
+		CGameObject::INFO tInfo;
+		tInfo.pTarget = this;
+		//tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		pInstance->Add_GameObject(TEXT("Prototype_GameObject_LevelUp"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
 	}
+	
 
 	Safe_Release(pInstance);
 }

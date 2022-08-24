@@ -43,7 +43,8 @@ public:
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
 	virtual _float4x4 Get_World(void) override;
 	virtual void Free(void) override;
-
+public:
+	_float3 Get_Pos() { return m_pTransformCom->Get_State(CTransform::STATE_POSITION); }
 private:
 	_bool	m_bUseSkill = false;
 	_bool	m_bThunder = false;
