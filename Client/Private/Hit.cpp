@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "..\Public\Hit.h"
 #include "GameInstance.h"
-//
+
 CHit::CHit(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
 {
