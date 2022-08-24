@@ -3,6 +3,8 @@
 
 #include "GameInstance.h"
 
+//update
+
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
 {
