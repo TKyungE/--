@@ -77,6 +77,20 @@ void CPlayer::Tick(_float fTimeDelta)
 	if (pInstance->Get_DIKState(DIK_E) < 0)
 		m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * 1.f);
 
+	//if (GetKeyState('1') & 8000)
+	//{
+	//	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	//	Safe_AddRef(pGameInstance);
+
+	//	CGameObject::INFO tInfo;
+	//	pInstance->Intersect();
+	//	tInfo.vPos = pInstance->Get_TargetPos();
+
+	//	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+
+	//	Safe_Release(pGameInstance);
+	//}
+
 	if (pInstance->Get_DIMKeyState(DIMK_LBUTTON) < 0)
 	{
 		if (pInstance->Get_DIKState(DIK_1) < 0)
@@ -96,7 +110,19 @@ void CPlayer::Tick(_float fTimeDelta)
 				
 			Safe_Release(pGameInstance);
 		}
-			
+		if (pInstance->Get_DIKState(DIK_4) < 0)
+		{
+			CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+			Safe_AddRef(pGameInstance);
+
+			CGameObject::INFO tInfo;
+
+			tInfo.vPos = pInstance->Get_TargetPos();
+
+			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+
+			Safe_Release(pGameInstance);
+		}
 	}
 
 	/*if (pInstance->Get_DIKState(DIK_TAB) < 0)

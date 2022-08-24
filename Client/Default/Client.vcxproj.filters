@@ -94,6 +94,9 @@
     <Filter Include="04.UI\XBox">
       <UniqueIdentifier>{bc7dcd93-f3bd-4991-ac2b-20ecb745d25b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Effect\Default\01.UseSkill">
+      <UniqueIdentifier>{32cd0ec5-2fce-41ab-96e9-b83230ad0813}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -180,6 +183,9 @@
     <ClInclude Include="..\public\XBox.h">
       <Filter>04.UI\XBox</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\UseSkill.h">
+      <Filter>03.Effect\Default\01.UseSkill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -253,6 +259,9 @@
     </ClCompile>
     <ClCompile Include="..\private\XBox.cpp">
       <Filter>04.UI\XBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UseSkill.cpp">
+      <Filter>03.Effect\Default\01.UseSkill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
