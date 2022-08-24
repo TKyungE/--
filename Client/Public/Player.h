@@ -34,6 +34,8 @@ private:
 
 private:
 	HRESULT SetUp_Components(void);
+	void Use_Skill();
+	void Key_Input(_float fTimeDelta);
 	HRESULT Skill_Thunder(const _tchar * pLayerTag, _float3 _vPos);
 	HRESULT Skill_Tornado(const _tchar * pLayerTag,_float3 _vPos);
 public:
@@ -41,6 +43,12 @@ public:
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
 	virtual _float4x4 Get_World(void) override;
 	virtual void Free(void) override;
+
+private:
+	_bool	m_bUseSkill = false;
+	_bool	m_bThunder = false;
+	_bool	m_bTornado = false;
+	
 };
 
 END

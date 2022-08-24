@@ -2,7 +2,7 @@
 #include "..\Public\Player.h"
 
 #include "GameInstance.h"
-
+#include "Layer.h"
 //update
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 _pGraphic_Device)
@@ -50,94 +50,9 @@ void CPlayer::Tick(_float fTimeDelta)
 	Position.y = a + (D3DXVec3Length(&m_pTransformCom->Get_State(CTransform::STATE_UP)) * 0.5f);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, Position);
-
-	CGameInstance* pInstance = CGameInstance::Get_Instance();
-
-	if (nullptr == pInstance)
-		return;
-
-	Safe_AddRef(pInstance);
 	
-
-	if (pInstance->Get_DIKState(DIK_W) < 0)
-		m_pTransformCom->Go_Straight(fTimeDelta);
-
-	if (pInstance->Get_DIKState(DIK_S) < 0)
-		m_pTransformCom->Go_Backward(fTimeDelta);
-
-	if (pInstance->Get_DIKState(DIK_A) < 0)
-		m_pTransformCom->Go_Left(fTimeDelta);
-
-	if (pInstance->Get_DIKState(DIK_D) < 0)
-		m_pTransformCom->Go_Right(fTimeDelta);
-
-	if (pInstance->Get_DIKState(DIK_Q) < 0)
-		m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * -1.f);
-
-	if (pInstance->Get_DIKState(DIK_E) < 0)
-		m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * 1.f);
-
-	//if (GetKeyState('1') & 8000)
-	//{
-	//	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
-	//	Safe_AddRef(pGameInstance);
-
-	//	CGameObject::INFO tInfo;
-	//	pInstance->Intersect();
-	//	tInfo.vPos = pInstance->Get_TargetPos();
-
-	//	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
-
-	//	Safe_Release(pGameInstance);
-	//}
-
-	if (pInstance->Get_DIMKeyState(DIMK_LBUTTON) < 0)
-	{
-		if (pInstance->Get_DIKState(DIK_1) < 0)
-			Skill_Thunder(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
-		if (pInstance->Get_DIKState(DIK_2) < 0)
-			Skill_Tornado(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
-		if (pInstance->Get_DIKState(DIK_3) < 0)
-		{
-			CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
-			Safe_AddRef(pGameInstance);
-
-			CGameObject::INFO tInfo;
-
-			tInfo.vPos = pInstance->Get_TargetPos();
-
-			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
-				
-			Safe_Release(pGameInstance);
-		}
-		if (pInstance->Get_DIKState(DIK_4) < 0)
-		{
-			CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
-			Safe_AddRef(pGameInstance);
-
-			CGameObject::INFO tInfo;
-
-			tInfo.vPos = pInstance->Get_TargetPos();
-
-			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
-
-			Safe_Release(pGameInstance);
-		}
-	}
-
-	/*if (pInstance->Get_DIKState(DIK_TAB) < 0)
-	{
-		if (30 == g_iFrame)
-		{
-			g_iFrame = 60;
-		}
-		else if (60 == g_iFrame)
-		{
-			g_iFrame = 30;
-		}
-	}*/
-
-	Safe_Release(pInstance);
+	Key_Input(fTimeDelta);
+	Use_Skill();
 }
 
 void CPlayer::Late_Tick(_float fTimeDelta)
@@ -212,6 +127,89 @@ HRESULT CPlayer::SetUp_Components(void)
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CPlayer::Use_Skill()
+{
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+
+	if ((pInstance->Get_DIKState(DIK_1) < 0) && !m_bUseSkill && !m_bThunder)
+	{
+		CGameObject::INFO tInfo;
+
+		tInfo.vPos = pInstance->Get_TargetPos();
+
+		pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"), &tInfo);
+
+		m_bUseSkill = true;
+		m_bThunder = true;
+	}
+
+	if ((pInstance->Get_DIMKeyState(DIMK_LBUTTON) < 0) && m_bUseSkill && m_bThunder)
+	{
+		pInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
+		Skill_Thunder(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
+		m_bUseSkill = false;
+		m_bThunder = false;
+	}
+
+	if ((pInstance->Get_DIKState(DIK_2) < 0) && !m_bUseSkill && !m_bTornado)
+	{
+		CGameObject::INFO tInfo;
+
+		tInfo.vPos = pInstance->Get_TargetPos();
+
+		pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"), &tInfo);
+
+		m_bUseSkill = true;
+		m_bTornado = true;
+	}
+
+	if ((pInstance->Get_DIMKeyState(DIMK_LBUTTON) < 0) && m_bUseSkill && m_bTornado)
+	{
+		pInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
+		Skill_Tornado(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
+		m_bUseSkill = false;
+		m_bTornado = false;
+	}
+
+	Safe_Release(pInstance);
+}
+
+void CPlayer::Key_Input(_float fTimeDelta)
+{
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+
+
+	if (pInstance->Get_DIKState(DIK_W) < 0)
+		m_pTransformCom->Go_Straight(fTimeDelta);
+
+	if (pInstance->Get_DIKState(DIK_S) < 0)
+		m_pTransformCom->Go_Backward(fTimeDelta);
+
+	if (pInstance->Get_DIKState(DIK_A) < 0)
+		m_pTransformCom->Go_Left(fTimeDelta);
+
+	if (pInstance->Get_DIKState(DIK_D) < 0)
+		m_pTransformCom->Go_Right(fTimeDelta);
+
+	if (pInstance->Get_DIKState(DIK_Q) < 0)
+		m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * -1.f);
+
+	if (pInstance->Get_DIKState(DIK_E) < 0)
+		m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * 1.f);
+
+	Safe_Release(pInstance);
 }
 
 HRESULT CPlayer::Skill_Thunder(const _tchar * pLayerTag, _float3 _vPos)

@@ -48,8 +48,8 @@ void CTerrain::Tick(_float fTimeDelta)
 
 	Safe_AddRef(pInstance);
 
-	if (pInstance->Get_DIMKeyState(DIMK_LBUTTON) < 0)
-	{
+	//if (pInstance->Get_DIMKeyState(DIMK_LBUTTON) < 0)
+	//{
 		_float4x4 matWorld = Get_World();
 		D3DXMatrixInverse(&matWorld, nullptr, &matWorld);
 
@@ -83,7 +83,7 @@ void CTerrain::Tick(_float fTimeDelta)
 
 		VB->Unlock();
 		IB->Unlock();
-	}
+	//}
 
 	Safe_Release(pInstance);
 }
