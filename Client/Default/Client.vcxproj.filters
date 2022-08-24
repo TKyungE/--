@@ -58,9 +58,6 @@
     <Filter Include="04.UI">
       <UniqueIdentifier>{77d1b4b2-60a1-4444-bc37-285d0b4c20e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.UI\Inven">
-      <UniqueIdentifier>{1bf3f18c-93ed-4069-8fb1-819e57454c4f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.Effect\Skill">
       <UniqueIdentifier>{d5c7b31c-652d-4394-afe1-1f9484230a71}</UniqueIdentifier>
     </Filter>
@@ -75,6 +72,27 @@
     </Filter>
     <Filter Include="03.Effect\Skill\01.Tornado">
       <UniqueIdentifier>{298d50ad-07d7-41d6-ab99-fdc894c6f8de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StateUi">
+      <UniqueIdentifier>{2588c7a6-b6f3-4fc7-9816-f44560f97fb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StateUi\HpBar">
+      <UniqueIdentifier>{47dc1375-241f-4be3-bc43-be76b258f617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StateUi\ExpBar">
+      <UniqueIdentifier>{f7f9c315-e20e-4593-b80e-a0636e83855d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StateUi\IconBar">
+      <UniqueIdentifier>{be086d0f-68e9-464b-bc90-86f9b9be300c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\Inventory">
+      <UniqueIdentifier>{1bf3f18c-93ed-4069-8fb1-819e57454c4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StateUi\IconBar\InventoryIcon">
+      <UniqueIdentifier>{80d877b8-6d17-4dcc-b255-bb46e711b53f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\XBox">
+      <UniqueIdentifier>{bc7dcd93-f3bd-4991-ac2b-20ecb745d25b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -126,9 +144,6 @@
     <ClInclude Include="..\public\SoundMgr.h">
       <Filter>97.Utility\SoundMgr</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\UI.h">
-      <Filter>04.UI</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Monster.h">
       <Filter>02.GameObject\Monster</Filter>
     </ClInclude>
@@ -143,6 +158,27 @@
     </ClInclude>
     <ClInclude Include="..\Public\Tornado.h">
       <Filter>03.Effect\Skill\01.Tornado</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\IconBar.h">
+      <Filter>04.UI\StateUi\IconBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\HpBar.h">
+      <Filter>04.UI\StateUi\HpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ExpBar.h">
+      <Filter>04.UI\StateUi\ExpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UI.h">
+      <Filter>04.UI\StateUi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Inventory.h">
+      <Filter>04.UI\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\InventoryIcon.h">
+      <Filter>04.UI\StateUi\IconBar\InventoryIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\XBox.h">
+      <Filter>04.UI\XBox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -182,9 +218,6 @@
     <ClCompile Include="..\private\SoundMgr.cpp">
       <Filter>97.Utility\SoundMgr</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\UI.cpp">
-      <Filter>04.UI</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Monster.cpp">
       <Filter>02.GameObject\Monster</Filter>
     </ClCompile>
@@ -199,6 +232,27 @@
     </ClCompile>
     <ClCompile Include="..\Private\Tornado.cpp">
       <Filter>03.Effect\Skill\01.Tornado</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\IconBar.cpp">
+      <Filter>04.UI\StateUi\IconBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\HpBar.cpp">
+      <Filter>04.UI\StateUi\HpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ExpBar.cpp">
+      <Filter>04.UI\StateUi\ExpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI.cpp">
+      <Filter>04.UI\StateUi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Inventory.cpp">
+      <Filter>04.UI\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\InventoryIcon.cpp">
+      <Filter>04.UI\StateUi\IconBar\InventoryIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\XBox.cpp">
+      <Filter>04.UI\XBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
