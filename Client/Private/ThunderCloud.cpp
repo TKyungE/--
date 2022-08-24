@@ -118,8 +118,8 @@ HRESULT CThunderCloud::Create_Sword(const _tchar * pLayerTag)
 
 	CGameObject::INFO tInfo;
 
-	_float iSour = rand() % 6000 * 0.0001;
-	_float iTemp = rand() % 4000 * 0.0001;
+	_float iSour = rand() % 6000 * 0.0001f;
+	_float iTemp = rand() % 4000 * 0.0001f;
 
 	tInfo.vPos.x = m_tInfo.vPos.x + iSour;
 	tInfo.vPos.y = m_tInfo.vPos.y - 1.f;
@@ -128,8 +128,8 @@ HRESULT CThunderCloud::Create_Sword(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ThunderSword"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	_float iSour1 = rand() % 6000 * 0.0001;
-	_float iTemp1 = rand() % 4000 * 0.0001;
+	_float iSour1 = rand() % 6000 * 0.0001f;
+	_float iTemp1 = rand() % 4000 * 0.0001f;
 
 	tInfo.vPos.x = m_tInfo.vPos.x - iSour1;
 	tInfo.vPos.y = m_tInfo.vPos.y - 1.f;
