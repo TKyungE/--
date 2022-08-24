@@ -162,7 +162,11 @@
     <ClInclude Include="..\public\BackGround.h" />
     <ClInclude Include="..\Public\Camera_Dynamic.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
-    <ClInclude Include="..\public\Hit.h" />
+    <ClInclude Include="..\public\ExpBar.h" />
+    <ClInclude Include="..\public\HpBar.h" />
+    <ClInclude Include="..\public\IconBar.h" />
+    <ClInclude Include="..\public\Inventory.h" />
+    <ClInclude Include="..\public\InventoryIcon.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
     <ClInclude Include="..\public\Level_Logo.h" />
@@ -177,6 +181,7 @@
     <ClInclude Include="..\Public\ThunderSword.h" />
     <ClInclude Include="..\Public\Tornado.h" />
     <ClInclude Include="..\Public\UI.h" />
+    <ClInclude Include="..\public\XBox.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -185,7 +190,11 @@
   <ItemGroup>
     <ClCompile Include="..\private\BackGround.cpp" />
     <ClCompile Include="..\Private\Camera_Dynamic.cpp" />
-    <ClCompile Include="..\private\Hit.cpp" />
+    <ClCompile Include="..\private\ExpBar.cpp" />
+    <ClCompile Include="..\private\HpBar.cpp" />
+    <ClCompile Include="..\private\IconBar.cpp" />
+    <ClCompile Include="..\private\Inventory.cpp" />
+    <ClCompile Include="..\private\InventoryIcon.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
     <ClCompile Include="..\private\Level_Logo.cpp" />
@@ -200,6 +209,7 @@
     <ClCompile Include="..\Private\ThunderSword.cpp" />
     <ClCompile Include="..\Private\Tornado.cpp" />
     <ClCompile Include="..\Private\UI.cpp" />
+    <ClCompile Include="..\private\XBox.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

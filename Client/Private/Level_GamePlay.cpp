@@ -29,8 +29,8 @@ HRESULT CLevel_GamePlay::Initialize()
 		return E_FAIL;
 
 
-	/*if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
-		return E_FAIL;*/
+	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
+		return E_FAIL;
 
 	/*fSound = fSOUND;
 	CSoundMgr::Get_Instance()->BGM_Pause();
@@ -141,10 +141,31 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _tchar * pLayerTag)
 HRESULT CLevel_GamePlay::Ready_Layer_UI(const _tchar * pLayerTag)
 {
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+
 	Safe_AddRef(pGameInstance);
 
+	//if(FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_XBox"), LEVEL_GAMEPLAY, pLayerTag)))
+		//return E_FAIL;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_GAMEPLAY, pLayerTag)))
 		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpBar"), LEVEL_GAMEPLAY, pLayerTag)))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpBar"), LEVEL_GAMEPLAY, pLayerTag)))
+		return E_FAIL;
+
+
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_IconBar"), LEVEL_GAMEPLAY, pLayerTag, &m_IconRender)))
+		return E_FAIL;
+
+	//if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Inventory"), LEVEL_GAMEPLAY, pLayerTag)))
+	//return E_FAIL;
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_InventoryIcon"), LEVEL_GAMEPLAY, pLayerTag, &m_IconRender)))
+		return E_FAIL;
+
+	
 
 	Safe_Release(pGameInstance);
 
