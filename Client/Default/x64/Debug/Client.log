@@ -1,12 +1,20 @@
 ﻿  stdafx.cpp
   Client.cpp
+  ThunderCloud.cpp
+c:\users\shout\desktop\과제\--\client\private\thundercloud.cpp(121): warning C4244: '초기화 중': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\shout\desktop\과제\--\client\private\thundercloud.cpp(122): warning C4244: '초기화 중': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\shout\desktop\과제\--\client\private\thundercloud.cpp(131): warning C4244: '초기화 중': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\shout\desktop\과제\--\client\private\thundercloud.cpp(132): warning C4244: '초기화 중': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   SoundMgr.cpp
-c:\users\603jh\desktop\--\client\private\soundmgr.cpp(111): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\603jh\desktop\--\client\private\soundmgr.cpp(145): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\shout\desktop\과제\--\client\private\soundmgr.cpp(111): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\shout\desktop\과제\--\client\private\soundmgr.cpp(145): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   Loader.cpp
   Level_Logo.cpp
+  Hit.cpp
   BackGround.cpp
   UI.cpp
+  Tornado.cpp
+  ThunderSword.cpp
   Terrain.cpp
   Sky.cpp
   Player.cpp
@@ -16,7 +24,6 @@ c:\users\603jh\desktop\--\client\private\soundmgr.cpp(145): warning C4267: '초�
   Level_GamePlay.cpp
   Camera_Dynamic.cpp
   코드를 생성하고 있습니다...
-c:\users\603jh\desktop\--\client\private\background.cpp(175): warning C4715: 'Client::CBackGround::TextureRender': 모든 제어 경로에서 값을 반환하지는 않습니다.
-  LINK : ..\Bin\Client.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
-  Client.vcxproj -> C:\Users\603jh\Desktop\--\Client\Default\..\Bin\Client.exe
+c:\users\shout\desktop\과제\--\client\private\background.cpp(175): warning C4715: 'Client::CBackGround::TextureRender': 모든 제어 경로에서 값을 반환하지는 않습니다.
+  Client.vcxproj -> C:\Users\shout\Desktop\과제\--\Client\Default\..\Bin\Client.exe
   Client.vcxproj -> ..\Bin\Client.pdb (Full PDB)

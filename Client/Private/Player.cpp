@@ -3,6 +3,8 @@
 
 #include "GameInstance.h"
 
+//update
+
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
 {
@@ -55,6 +57,7 @@ void CPlayer::Tick(_float fTimeDelta)
 		return;
 
 	Safe_AddRef(pInstance);
+	
 
 	if (pInstance->Get_DIKState(DIK_W) < 0)
 		m_pTransformCom->Go_Straight(fTimeDelta);
@@ -73,6 +76,28 @@ void CPlayer::Tick(_float fTimeDelta)
 
 	if (pInstance->Get_DIKState(DIK_E) < 0)
 		m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * 1.f);
+
+	if (pInstance->Get_DIMKeyState(DIMK_LBUTTON) < 0)
+	{
+		if (pInstance->Get_DIKState(DIK_1) < 0)
+			Skill_Thunder(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
+		if (pInstance->Get_DIKState(DIK_2) < 0)
+			Skill_Tornado(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
+		if (pInstance->Get_DIKState(DIK_3) < 0)
+		{
+			CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+			Safe_AddRef(pGameInstance);
+
+			CGameObject::INFO tInfo;
+
+			tInfo.vPos = pInstance->Get_TargetPos();
+
+			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+				
+			Safe_Release(pGameInstance);
+		}
+			
+	}
 
 	/*if (pInstance->Get_DIKState(DIK_TAB) < 0)
 	{
@@ -106,7 +131,7 @@ HRESULT CPlayer::Render(void)
 		return E_FAIL;
 
 	m_pVIBufferCom->Render();
-
+	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
 }
 
@@ -159,6 +184,40 @@ HRESULT CPlayer::SetUp_Components(void)
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CPlayer::Skill_Thunder(const _tchar * pLayerTag, _float3 _vPos)
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	CGameObject::INFO tInfo;
+
+	tInfo.vPos = _vPos;
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ThunderCloud"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+
+HRESULT CPlayer::Skill_Tornado(const _tchar * pLayerTag, _float3 _vPos)
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	CGameObject::INFO tInfo;
+
+	tInfo.vPos = _vPos;
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Tornado"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
 
 	return S_OK;
 }

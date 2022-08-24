@@ -34,7 +34,8 @@ private:
 
 private:
 	HRESULT SetUp_Components(void);
-
+	HRESULT Skill_Thunder(const _tchar * pLayerTag, _float3 _vPos);
+	HRESULT Skill_Tornado(const _tchar * pLayerTag,_float3 _vPos);
 public:
 	static CPlayer* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

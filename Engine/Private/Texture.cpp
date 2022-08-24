@@ -57,7 +57,10 @@ _int CTexture::MoveFrame(_float fTimeDelta, _float MoveSpeed, _int MaxFrame)
 {
 	m_fFrameTime += fTimeDelta;
 	if (m_fFrameTime > MoveSpeed)
+	{
 		++m_iFrame;
+		m_fFrameTime = 0.f;
+	}
 	if (m_iFrame > MaxFrame)
 		m_iFrame = 0;
 	return m_iFrame;
