@@ -177,6 +177,7 @@
     <ClInclude Include="..\Public\ThunderSword.h" />
     <ClInclude Include="..\Public\Tornado.h" />
     <ClInclude Include="..\Public\UI.h" />
+    <ClInclude Include="..\public\UseSkill.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="..\Private\ThunderSword.cpp" />
     <ClCompile Include="..\Private\Tornado.cpp" />
     <ClCompile Include="..\Private\UI.cpp" />
+    <ClCompile Include="..\private\UseSkill.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
