@@ -76,6 +76,12 @@
     <Filter Include="03.Effect\Skill\01.Tornado">
       <UniqueIdentifier>{298d50ad-07d7-41d6-ab99-fdc894c6f8de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Effect\Default">
+      <UniqueIdentifier>{868e0f35-7657-4db1-9c4f-8b454a58adc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\00.Hit">
+      <UniqueIdentifier>{86fc4c8e-18be-42b1-8b21-29221defbc98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -144,6 +150,9 @@
     <ClInclude Include="..\Public\Tornado.h">
       <Filter>03.Effect\Skill\01.Tornado</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Hit.h">
+      <Filter>03.Effect\Default\00.Hit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -199,6 +208,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Tornado.cpp">
       <Filter>03.Effect\Skill\01.Tornado</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Hit.cpp">
+      <Filter>03.Effect\Default\00.Hit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
