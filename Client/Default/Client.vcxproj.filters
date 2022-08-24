@@ -177,6 +177,24 @@
     <ClInclude Include="..\public\UseSkill.h">
       <Filter>03.Effect\Default\01.UseSkill</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Inventory.h">
+      <Filter>04.UI\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\InventoryIcon.h">
+      <Filter>04.UI\StateUi\IconBar\InventoryIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\HpBar.h">
+      <Filter>04.UI\StateUi\HpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ExpBar.h">
+      <Filter>04.UI\StateUi\ExpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\XBox.h">
+      <Filter>04.UI\XBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IconBar.h">
+      <Filter>04.UI\StateUi\IconBar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -238,6 +256,24 @@
     </ClCompile>
     <ClCompile Include="..\private\UseSkill.cpp">
       <Filter>03.Effect\Default\01.UseSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Inventory.cpp">
+      <Filter>04.UI\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ExpBar.cpp">
+      <Filter>04.UI\StateUi\ExpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\HpBar.cpp">
+      <Filter>04.UI\StateUi\HpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\InventoryIcon.cpp">
+      <Filter>04.UI\StateUi\IconBar\InventoryIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IconBar.cpp">
+      <Filter>04.UI\StateUi\IconBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\XBox.cpp">
+      <Filter>04.UI\XBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

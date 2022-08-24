@@ -1,8 +1,6 @@
-﻿  Client.cpp
-  XBox.cpp
+﻿  XBox.cpp
 c:\users\남수현\desktop\--\client\private\xbox.cpp(29): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\남수현\desktop\--\client\private\xbox.cpp(49): warning C4244: '인수': 'Engine::_float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Loader.cpp
   InventoryIcon.cpp
 c:\users\남수현\desktop\--\client\private\inventoryicon.cpp(29): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\남수현\desktop\--\client\private\inventoryicon.cpp(51): warning C4244: '인수': 'Engine::_float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
@@ -17,10 +15,6 @@ c:\users\남수현\desktop\--\client\private\hpbar.cpp(30): warning C4244: '인�
 c:\users\남수현\desktop\--\client\private\hpbar.cpp(71): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   ExpBar.cpp
 c:\users\남수현\desktop\--\client\private\expbar.cpp(30): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  BackGround.cpp
-  Camera_Dynamic.cpp
   코드를 생성하고 있습니다...
-c:\users\남수현\desktop\--\client\private\background.cpp(175): warning C4715: 'Client::CBackGround::TextureRender': 모든 제어 경로에서 값을 반환하지는 않습니다.
-  LINK : ..\Bin\Client.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
   Client.vcxproj -> C:\Users\남수현\Desktop\--\Client\Default\..\Bin\Client.exe
   Client.vcxproj -> ..\Bin\Client.pdb (Full PDB)
