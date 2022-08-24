@@ -278,3 +278,8 @@ void CPlayer::Free(void)
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pVIBufferCom);
 }
+
+_float3 CPlayer::Get_Pos()
+{
+	return m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+}
