@@ -94,8 +94,14 @@
     <Filter Include="04.UI\XBox">
       <UniqueIdentifier>{bc7dcd93-f3bd-4991-ac2b-20ecb745d25b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Effect\Default">
+      <UniqueIdentifier>{1d5bb93e-95f1-4235-b35f-3080bc92d0a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\00.Hit">
+      <UniqueIdentifier>{8bbd8cbe-53f6-4141-b865-c91209f1d3a6}</UniqueIdentifier>
+    </Filter>
     <Filter Include="03.Effect\Default\01.UseSkill">
-      <UniqueIdentifier>{32cd0ec5-2fce-41ab-96e9-b83230ad0813}</UniqueIdentifier>
+      <UniqueIdentifier>{1f04635c-218c-4f7a-9ad2-0601352bd9b0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -162,26 +168,11 @@
     <ClInclude Include="..\Public\Tornado.h">
       <Filter>03.Effect\Skill\01.Tornado</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\IconBar.h">
-      <Filter>04.UI\StateUi\IconBar</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\HpBar.h">
-      <Filter>04.UI\StateUi\HpBar</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\ExpBar.h">
-      <Filter>04.UI\StateUi\ExpBar</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\UI.h">
       <Filter>04.UI\StateUi</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Inventory.h">
-      <Filter>04.UI\Inventory</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\InventoryIcon.h">
-      <Filter>04.UI\StateUi\IconBar\InventoryIcon</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\XBox.h">
-      <Filter>04.UI\XBox</Filter>
+    <ClInclude Include="..\public\Hit.h">
+      <Filter>03.Effect\Default\00.Hit</Filter>
     </ClInclude>
     <ClInclude Include="..\public\UseSkill.h">
       <Filter>03.Effect\Default\01.UseSkill</Filter>
@@ -239,26 +230,11 @@
     <ClCompile Include="..\Private\Tornado.cpp">
       <Filter>03.Effect\Skill\01.Tornado</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\IconBar.cpp">
-      <Filter>04.UI\StateUi\IconBar</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\HpBar.cpp">
-      <Filter>04.UI\StateUi\HpBar</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\ExpBar.cpp">
-      <Filter>04.UI\StateUi\ExpBar</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\UI.cpp">
       <Filter>04.UI\StateUi</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Inventory.cpp">
-      <Filter>04.UI\Inventory</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\InventoryIcon.cpp">
-      <Filter>04.UI\StateUi\IconBar\InventoryIcon</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\XBox.cpp">
-      <Filter>04.UI\XBox</Filter>
+    <ClCompile Include="..\private\Hit.cpp">
+      <Filter>03.Effect\Default\00.Hit</Filter>
     </ClCompile>
     <ClCompile Include="..\private\UseSkill.cpp">
       <Filter>03.Effect\Default\01.UseSkill</Filter>
