@@ -29,8 +29,8 @@ HRESULT CUseSkill::Initialize(void* pArg)
 		return E_FAIL;
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
-	m_tInfo.vPos.y += 0.1f;
-	_float3 vScale = { 1.f,1.f,1.f };
+	m_tInfo.vPos.y += 0.01f;
+	_float3 vScale = { 2.f,2.f,1.f };
 	_float3 vRight = { 1.f,0.f,0.f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Turn(vRight, 1.f);
@@ -50,10 +50,10 @@ void CUseSkill::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
+	LockPos();
 	Move_Frame(fTimeDelta);
-	m_fDeadTime += fTimeDelta;
-	if (m_fDeadTime > 3.f)
-		Set_Dead();
+	
+	
 }
 
 void CUseSkill::Late_Tick(_float fTimeDelta)
@@ -171,6 +171,18 @@ HRESULT CUseSkill::Off_SamplerState()
 	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
 
 	return S_OK;
+}
+
+void CUseSkill::LockPos()
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	m_tInfo.vPos = pGameInstance->Get_TargetPos();
+	m_tInfo.vPos.y += 0.01f;
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
+
+	Safe_Release(pGameInstance);
 }
 
 
