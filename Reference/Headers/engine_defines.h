@@ -18,6 +18,7 @@ enum DIMM { DIMM_X, DIMM_Y, DIMM_WHEEL, DIMM_END };
 #include <algorithm>
 using namespace std;
 
+#define		VK_MAX		0xff
 
 #include "Engine_Macro.h"
 #include "Engine_Function.h"

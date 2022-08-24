@@ -1,34 +1,4 @@
-﻿  VIBuffer_Terrain.cpp
-c:\users\shout\desktop\과제\--\engine\private\vibuffer_terrain.cpp(40): warning C4244: '인수': 'Engine::_uint'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  VIBuffer_Rect.cpp
-  VIBuffer_Cube.cpp
-  VIBuffer.cpp
-  Transform.cpp
-  Timer_Manager.cpp
-  Timer.cpp
-  Texture.cpp
-  Renderer.cpp
-  Picking.cpp
-  Onterrain.cpp
-c:\users\shout\desktop\과제\--\engine\private\onterrain.cpp(38): warning C4244: '초기화 중': 'float'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\engine\private\onterrain.cpp(45): warning C4838: 'int'에서 'Engine::_uint'(으)로의 변환에는 축소 변환이 필요합니다.
-c:\users\shout\desktop\과제\--\engine\private\onterrain.cpp(45): warning C4838: 'Engine::_int'에서 'Engine::_uint'(으)로의 변환에는 축소 변환이 필요합니다.
-  Object_Manager.cpp
-  Level_Manager.cpp
-  Level.cpp
-  Layer.cpp
-  Input_Device.cpp
-  Graphic_Device.cpp
-  GameObject.cpp
-  GameInstance.cpp
-  Component_Manager.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  Component.cpp
-  CollisionMgr.cpp
-  Camera.cpp
-  Base.cpp
-  코드를 생성하고 있습니다...
+﻿  KeyMgr.cpp
   LINK : ..\Bin\Engine.dll을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
      ..\Bin\Engine.lib 라이브러리 및 ..\Bin\Engine.exp 개체를 생성하고 있습니다.
   Engine.vcxproj -> C:\Users\shout\Desktop\과제\--\Engine\Default\..\Bin\Engine.dll

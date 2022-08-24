@@ -3,7 +3,7 @@
 
 #include "GameInstance.h"
 #include "Layer.h"
-//update
+#include "KeyMgr.h"
 
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -138,7 +138,7 @@ void CPlayer::Use_Skill()
 
 	Safe_AddRef(pInstance);
 
-	if ((pInstance->Get_DIKState(DIK_1) < 0) && !m_bUseSkill && !m_bThunder)
+	if (CKeyMgr::Get_Instance()->Key_Down('1') && !m_bUseSkill && !m_bThunder)
 	{
 		CGameObject::INFO tInfo;
 
@@ -150,15 +150,8 @@ void CPlayer::Use_Skill()
 		m_bThunder = true;
 	}
 
-	if ((pInstance->Get_DIMKeyState(DIMK_LBUTTON) < 0) && m_bUseSkill && m_bThunder)
-	{
-		pInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
-		Skill_Thunder(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
-		m_bUseSkill = false;
-		m_bThunder = false;
-	}
 
-	if ((pInstance->Get_DIKState(DIK_2) < 0) && !m_bUseSkill && !m_bTornado)
+	if (CKeyMgr::Get_Instance()->Key_Down('2') && !m_bUseSkill && !m_bTornado)
 	{
 		CGameObject::INFO tInfo;
 
@@ -169,13 +162,38 @@ void CPlayer::Use_Skill()
 		m_bUseSkill = true;
 		m_bTornado = true;
 	}
-
-	if ((pInstance->Get_DIMKeyState(DIMK_LBUTTON) < 0) && m_bUseSkill && m_bTornado)
+	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bThunder)
+	{
+		pInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
+		Skill_Thunder(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
+		m_bUseSkill = false;
+		m_bThunder = false;
+	}
+	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bTornado)
 	{
 		pInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
 		Skill_Tornado(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
 		m_bUseSkill = false;
 		m_bTornado = false;
+	}
+
+	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON))
+	{
+		if (CKeyMgr::Get_Instance()->Key_Down('3'))
+		{
+			CGameObject::INFO tInfo;
+			tInfo.vPos = pInstance->Get_TargetPos();
+			pInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);	
+		}
+	}
+	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON))
+	{
+		if (CKeyMgr::Get_Instance()->Key_Down('4'))
+		{
+			CGameObject::INFO tInfo;
+			tInfo.vPos = pInstance->Get_TargetPos();
+			pInstance->Add_GameObject(TEXT("Prototype_GameObject_LevelUp"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+		}
 	}
 
 	Safe_Release(pInstance);
@@ -191,22 +209,22 @@ void CPlayer::Key_Input(_float fTimeDelta)
 	Safe_AddRef(pInstance);
 
 
-	if (pInstance->Get_DIKState(DIK_W) < 0)
+	if (CKeyMgr::Get_Instance()->Key_Pressing('W'))
 		m_pTransformCom->Go_Straight(fTimeDelta);
 
-	if (pInstance->Get_DIKState(DIK_S) < 0)
+	if (CKeyMgr::Get_Instance()->Key_Pressing('S'))
 		m_pTransformCom->Go_Backward(fTimeDelta);
 
-	if (pInstance->Get_DIKState(DIK_A) < 0)
+	if (CKeyMgr::Get_Instance()->Key_Pressing('A'))
 		m_pTransformCom->Go_Left(fTimeDelta);
 
-	if (pInstance->Get_DIKState(DIK_D) < 0)
+	if (CKeyMgr::Get_Instance()->Key_Pressing('D'))
 		m_pTransformCom->Go_Right(fTimeDelta);
 
-	if (pInstance->Get_DIKState(DIK_Q) < 0)
+	if (CKeyMgr::Get_Instance()->Key_Pressing('Q'))
 		m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * -1.f);
 
-	if (pInstance->Get_DIKState(DIK_E) < 0)
+	if (CKeyMgr::Get_Instance()->Key_Pressing('E'))
 		m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * 1.f);
 
 	Safe_Release(pInstance);

@@ -103,6 +103,9 @@
     <Filter Include="04.UI\StateUi\HpBar">
       <UniqueIdentifier>{9be82122-acd2-4a44-92fa-c1aa06d8340f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Effect\Default\02.LevelUp">
+      <UniqueIdentifier>{5b590f51-993c-46bd-935f-d21e6519d9f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -195,6 +198,9 @@
     <ClInclude Include="..\Public\UI.h">
       <Filter>04.UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\LevelUp.h">
+      <Filter>03.Effect\Default\02.LevelUp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -274,6 +280,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\UI.cpp">
       <Filter>04.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\LevelUp.cpp">
+      <Filter>03.Effect\Default\02.LevelUp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

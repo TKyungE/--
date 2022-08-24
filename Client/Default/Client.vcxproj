@@ -168,6 +168,7 @@
     <ClInclude Include="..\Public\IconBar.h" />
     <ClInclude Include="..\Public\Inventory.h" />
     <ClInclude Include="..\Public\InventoryIcon.h" />
+    <ClInclude Include="..\public\LevelUp.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
     <ClInclude Include="..\public\Level_Logo.h" />
@@ -198,6 +199,7 @@
     <ClCompile Include="..\Private\IconBar.cpp" />
     <ClCompile Include="..\Private\Inventory.cpp" />
     <ClCompile Include="..\Private\InventoryIcon.cpp" />
+    <ClCompile Include="..\private\LevelUp.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
     <ClCompile Include="..\private\Level_Logo.cpp" />
