@@ -81,6 +81,20 @@ void CPlayer::Tick(_float fTimeDelta)
 			Skill_Thunder(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
 		if (pInstance->Get_DIKState(DIK_2) < 0)
 			Skill_Tornado(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
+		if (pInstance->Get_DIKState(DIK_3) < 0)
+		{
+			CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+			Safe_AddRef(pGameInstance);
+
+			CGameObject::INFO tInfo;
+
+			tInfo.vPos = pInstance->Get_TargetPos();
+
+			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+				
+			Safe_Release(pGameInstance);
+		}
+			
 	}
 
 	/*if (pInstance->Get_DIKState(DIK_TAB) < 0)
