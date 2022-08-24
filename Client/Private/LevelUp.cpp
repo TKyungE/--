@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Public\LevelUp.h"
 #include "GameInstance.h"
+#include "Player.h"
 
 CLevelUp::CLevelUp(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
@@ -29,8 +30,10 @@ HRESULT CLevelUp::Initialize(void* pArg)
 		return E_FAIL;
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
-	m_tInfo.vPos.y += 0.85f;
-	_float3 vScale = { 2.f,2.f,2.f };
+
+	m_tInfo.vPos = dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Get_Pos();
+	m_tInfo.vPos.y += 1.f;
+	_float3 vScale = { 3.f,3.f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
@@ -48,6 +51,7 @@ void CLevelUp::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
+	Find_Pos();
 	Move_Frame(fTimeDelta);
 	m_fDeadTime += fTimeDelta;
 	if (m_fDeadTime > 1.1f)
@@ -169,6 +173,13 @@ HRESULT CLevelUp::Off_SamplerState()
 	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
 
 	return S_OK;
+}
+
+void CLevelUp::Find_Pos()
+{
+	m_tInfo.vPos = dynamic_cast<CPlayer*>(m_tInfo.pTarget)->Get_Pos();
+	m_tInfo.vPos.y += 1.f;
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 }
 
 
