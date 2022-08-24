@@ -19,10 +19,12 @@ public:
 
 public:
 	HRESULT Bind_OnGraphicDev(_uint iIndex = 0);
-
+	_int MoveFrame(_float fTimeDelta, _float MoveSpeed, _int MaxFrame);
 private:
 	_uint										m_iNumTextures = 0;
 	vector<IDirect3DBaseTexture9*>				m_Textures;
+	_float										m_fFrameTime = 0.f;
+	_int										m_iFrame = 0;
 	//LPDIRECT3DCUBETEXTURE9
 	//LPDIRECT3DTEXTURE9
 

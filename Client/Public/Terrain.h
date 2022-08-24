@@ -7,6 +7,7 @@ BEGIN(Engine)
 class CTexture;
 class CRenderer;
 class CTransform;
+class COnterrain;
 class CVIBuffer_Terrain;
 END
 
@@ -31,6 +32,7 @@ private: /* For.Components */
 	CRenderer*				m_pRendererCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
 	CVIBuffer_Terrain*		m_pVIBufferCom = nullptr;
+	COnterrain*				m_pOnTerrain = nullptr;
 
 private:
 	HRESULT SetUp_Components();

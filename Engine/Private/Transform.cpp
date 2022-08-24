@@ -67,7 +67,15 @@ void CTransform::Go_Straight(_float fTimeDelta)
 
 	Set_State(CTransform::STATE_POSITION, vPosition);
 }
+void CTransform::Go_Down(_float fTimeDelta)
+{
+	_float3		vPosition = Get_State(CTransform::STATE_POSITION);
+	_float3		vUp = Get_State(CTransform::STATE_UP);
 
+	vPosition -= *D3DXVec3Normalize(&vUp, &vUp) * m_TransformDesc.fSpeedPerSec * fTimeDelta;
+
+	Set_State(CTransform::STATE_POSITION, vPosition);
+}
 void CTransform::Go_Backward(_float fTimeDelta)
 {
 	_float3		vPosition = Get_State(CTransform::STATE_POSITION);

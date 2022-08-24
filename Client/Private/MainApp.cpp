@@ -5,6 +5,7 @@
 #include "Level_Loading.h"
 #include "SoundMgr.h"
 
+
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::Get_Instance())
 {
@@ -33,8 +34,9 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(Ready_Prototype_Component()))
 		return E_FAIL;
 
-	if (FAILED(Open_Level(LEVEL_LOGO)))
+	if (FAILED(Open_Level(LEVEL_GAMEPLAY)))
 		return E_FAIL;
+
 	CSoundMgr::Get_Instance()->Initialize();
 	return S_OK;
 }
@@ -81,6 +83,7 @@ HRESULT CMainApp::Open_Level(LEVEL eLevel)
 		return E_FAIL;
 
 	CLevel_Loading*			pLevel_Loading = CLevel_Loading::Create(m_pGraphic_Device, eLevel);
+
 	if (nullptr == pLevel_Loading)
 		return E_FAIL;
 
@@ -106,6 +109,9 @@ HRESULT CMainApp::Ready_Prototype_Component()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Transform"), CTransform::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Onterrain"), COnterrain::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
 	Safe_AddRef(m_pRenderer);
 
 	return S_OK;
@@ -118,9 +124,11 @@ HRESULT CMainApp::SetUp_RenderState()
 
 	m_pGraphic_Device->SetRenderState(D3DRS_LIGHTING, FALSE);
 
-	// m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 	m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	// m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+
+	m_pGraphic_Device->SetRenderState(D3DRS_SHADEMODE, D3DSHADE_FLAT);
 
 	return S_OK;
 }
@@ -154,6 +162,7 @@ void CMainApp::Free()
 {
 	CSoundMgr::Get_Instance()->Free();
 	CSoundMgr::Get_Instance()->Destroy_Instance();
+
 	Safe_Release(m_pRenderer);
 	Safe_Release(m_pGraphic_Device);
 	Safe_Release(m_pGameInstance);

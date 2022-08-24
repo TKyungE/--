@@ -31,8 +31,8 @@ HRESULT CCamera_Dynamic::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(&((CAMERADESC_DERIVED*)pArg)->CameraDesc)))
 		return E_FAIL;
 	
-	/*m_vecCameraNormal = *(_float3*)&m_CameraDesc.pTarget->Get_World().m[2][0] * -1.f;
-	D3DXVec3Normalize(&m_vecCameraNormal, &m_vecCameraNormal);*/
+	m_vecCameraNormal = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[2][0] * -1.f;
+	D3DXVec3Normalize(&m_vecCameraNormal, &m_vecCameraNormal);
 
 	return S_OK;
 }
@@ -46,10 +46,10 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 
 	_long MouseMove = 0;
 
-	/*if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_X))
+	if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_X))
 		CameraRotationX(fTimeDelta, MouseMove);
 
-	if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y))
+	if ((GetKeyState(VK_LSHIFT)& 8000) &&  (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y)))
 		CameraRotationY(fTimeDelta, MouseMove);
 
 	if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_WHEEL))
@@ -62,11 +62,11 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 	CameraRotationMatrix *= m_matRotY;
 	D3DXVec3TransformNormal(&Camera, &m_vecCameraNormal, &CameraRotationMatrix);
 
-	m_pTransform->Set_State(CTransform::STATE_POSITION, (Camera * 5.f) + *(_float3*)&m_CameraDesc.pTarget->Get_World().m[3][0]);
-
-	m_pTransform->LookAt(*(_float3*)&m_CameraDesc.pTarget->Get_World().m[3][0]);*/
+	m_pTransform->Set_State(CTransform::STATE_POSITION, (Camera * 5.f) + *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
 
 	Safe_Release(pGameInstance);
+
+	m_pTransform->LookAt(*(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
 
 	if (FAILED(Bind_OnGraphicDev()))
 		return;
@@ -96,7 +96,7 @@ void CCamera_Dynamic::CameraRotationX(_float fTimeDelta, _long MouseMove)
 
 void CCamera_Dynamic::CameraRotationY(_float fTimeDelta, _long MouseMove)
 {
-	m_YfAngle += fTimeDelta * -MouseMove * m_CameraDesc.TransformDesc.fRotationPerSec * 0.1f;
+	m_YfAngle += fTimeDelta * -MouseMove * m_CameraDesc.TransformDesc.fRotationPerSec * 0.05f;
 
 	if (m_YfAngle > D3DXToRadian(-5.f) && m_YfAngle < D3DXToRadian(25.f))
 		D3DXMatrixRotationAxis(&m_matRotY, &m_pTransform->Get_State(CTransform::STATE_RIGHT), m_YfAngle);

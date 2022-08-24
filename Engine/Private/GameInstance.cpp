@@ -9,7 +9,9 @@ CGameInstance::CGameInstance()
 	, m_pObject_Manager(CObject_Manager::Get_Instance())
 	, m_pTimer_Manager(CTimer_Manager::Get_Instance())
 	, m_pComponent_Manager(CComponent_Manager::Get_Instance())
+	, m_pPicking(CPicking::Get_Instance())
 {
+	Safe_AddRef(m_pPicking);
 	Safe_AddRef(m_pComponent_Manager);
 	Safe_AddRef(m_pTimer_Manager);
 	Safe_AddRef(m_pObject_Manager);
@@ -20,8 +22,7 @@ CGameInstance::CGameInstance()
 
 HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, const GRAPHIC_DESC& GraphicDesc, LPDIRECT3DDEVICE9* ppOut)
 {
-	if (nullptr == m_pGraphic_Device || 
-		nullptr == m_pObject_Manager)
+	if (nullptr == m_pGraphic_Device || nullptr == m_pObject_Manager)
 		return E_FAIL;
 
 	/* 그래픽 디바이스를 초기화한다. */
@@ -32,6 +33,8 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 	if (FAILED(m_pInput_Device->Initialize(hInst, GraphicDesc.hWnd)))
 		return E_FAIL;
 
+	if (FAILED(m_pPicking->Initialize(GraphicDesc, ppOut)))
+		return E_FAIL;
 
 	/* 사운드 디바이스를 초기화한다. */
 
@@ -43,16 +46,12 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 	if (FAILED(m_pComponent_Manager->Reserve_Container(iNumLevels)))
 		return E_FAIL;
 
-	
-
-
 	return S_OK;
 }
 
 void CGameInstance::Tick_Engine(_float fTimeDelta)
 {
-	if (nullptr == m_pLevel_Manager || 
-		nullptr == m_pObject_Manager)
+	if (nullptr == m_pLevel_Manager || nullptr == m_pObject_Manager)
 		return;
 
 	m_pInput_Device->Update();
@@ -60,6 +59,7 @@ void CGameInstance::Tick_Engine(_float fTimeDelta)
 	m_pLevel_Manager->Tick(fTimeDelta);
 	m_pObject_Manager->Tick(fTimeDelta);
 
+	m_pPicking->Tick();
 
 	m_pLevel_Manager->Late_Tick(fTimeDelta);
 	m_pObject_Manager->Late_Tick(fTimeDelta);
@@ -67,8 +67,7 @@ void CGameInstance::Tick_Engine(_float fTimeDelta)
 
 void CGameInstance::Clear(_uint iLevelIndex)
 {
-	if (nullptr == m_pObject_Manager || 
-		nullptr == m_pComponent_Manager)
+	if (nullptr == m_pObject_Manager || nullptr == m_pComponent_Manager)
 		return;
 
 	m_pComponent_Manager->Clear(iLevelIndex);
@@ -187,6 +186,22 @@ CComponent * CGameInstance::Clone_Component(_uint iLevelIndex, const _tchar * pP
 	return m_pComponent_Manager->Clone_Component(iLevelIndex, pPrototypeTag, pArg);
 }
 
+HRESULT CGameInstance::Intersect(_float4x4 InvWorld, _float3 * LU, _float3 * RU, _float3 * RD)
+{
+	if (nullptr == m_pPicking)
+		return E_FAIL;
+
+	return m_pPicking->Intersect(InvWorld, LU, RU, RD);
+}
+
+_float3 CGameInstance::Get_TargetPos(void)
+{
+	if (nullptr == m_pPicking)
+		return _float3();
+
+	return m_pPicking->Get_TargetPos();
+}
+
 void CGameInstance::Release_Engine()
 {
 	CGameInstance::Get_Instance()->Destroy_Instance();
@@ -201,6 +216,8 @@ void CGameInstance::Release_Engine()
 
 	CInput_Device::Get_Instance()->Destroy_Instance();
 
+	CPicking::Get_Instance()->Destroy_Instance();
+
 	CGraphic_Device::Get_Instance()->Destroy_Instance();
 }
 
@@ -211,7 +228,6 @@ void CGameInstance::Free()
 	Safe_Release(m_pObject_Manager);
 	Safe_Release(m_pLevel_Manager);
 	Safe_Release(m_pInput_Device);
+	Safe_Release(m_pPicking);
 	Safe_Release(m_pGraphic_Device);
-
-
 }

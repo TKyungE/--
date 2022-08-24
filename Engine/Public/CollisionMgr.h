@@ -14,7 +14,6 @@ public:
 	static bool	Collision_Sphere(CLayer::GAMEOBJECTS _Dest, CLayer::GAMEOBJECTS _Sour);
 	//개별 충돌 검사
 	static bool Check_Sphere(CGameObject* pDest, CGameObject* pSour);
-
 };
 
 END

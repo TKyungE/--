@@ -54,8 +54,6 @@ HRESULT CObject_Manager::Add_GameObject(const _tchar * pPrototypeTag, _uint iLev
 		pLayer->Add_GameObject(pGameObject);
 	}
 
-
-
 	return S_OK;
 }
 
@@ -65,10 +63,13 @@ void CObject_Manager::Tick(_float fTimeDelta)
 	{
 		for (auto& Pair : m_pLayers[i])
 		{
-			Pair.second->Tick(fTimeDelta);			
+			Pair.second->Tick(fTimeDelta);	
+
+
+
+
 		}
 	}
-
 }
 
 void CObject_Manager::Late_Tick(_float fTimeDelta)
@@ -84,8 +85,7 @@ void CObject_Manager::Late_Tick(_float fTimeDelta)
 
 void CObject_Manager::Clear(_uint iLevelIndex)
 {
-	if (iLevelIndex >= m_iNumLevels || 
-		nullptr == m_pLayers)
+	if (iLevelIndex >= m_iNumLevels || nullptr == m_pLayers)
 		return;
 
 	for (auto& Pair : m_pLayers[iLevelIndex])	
@@ -111,13 +111,12 @@ CLayer * CObject_Manager::Find_Layer(_uint iLevelIndex, const _tchar * pLayerTag
 		return nullptr;
 
 	auto	iter = find_if(m_pLayers[iLevelIndex].begin(), m_pLayers[iLevelIndex].end(), CTag_Finder(pLayerTag));
+	
 	if (iter == m_pLayers[iLevelIndex].end())
 		return nullptr;
 
 	return iter->second;
 }
-
-
 
 void CObject_Manager::Free()
 {
@@ -134,7 +133,5 @@ void CObject_Manager::Free()
 
 	m_Prototypes.clear();
 
-
 	Safe_Delete_Array(m_pLayers);
-
 }

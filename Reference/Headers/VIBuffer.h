@@ -15,6 +15,12 @@ protected:
 	virtual ~CVIBuffer() = default;
 
 public:
+	LPDIRECT3DVERTEXBUFFER9 Get_VB(void) { return m_pVB; }
+	LPDIRECT3DINDEXBUFFER9 Get_IB(void) { return m_pIB; }
+	const _uint Get_NumPrimitive(void) const { return m_iNumPrimitive; }
+	const _uint Get_NumVecrtices(void) const { return m_iNumVertices; }
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render();
@@ -35,8 +41,6 @@ protected:
 protected:
 	HRESULT Ready_Vertex_Buffer();
 	HRESULT Ready_Index_Buffer();
-
-
 
 public:
 	virtual CComponent* Clone(void* pArg) = 0;
