@@ -48,16 +48,7 @@ void CUI::Tick(_float fTimeDelta)
 	RECT		rcRect;
 	SetRect(&rcRect, m_fX - m_fSizeX * 0.5f, m_fY - m_fSizeY * 0.5f, m_fX + m_fSizeX * 0.5f, m_fY + m_fSizeY * 0.5f);
 
-	/*POINT		ptMouse;
-	GetCursorPos(&ptMouse);
-	ScreenToClient(g_hWnd, &ptMouse);
-
-	if (PtInRect(&rcRect, ptMouse))
-	{
-	ERR_MSG(L"Ãæµ¹");
-	}
-	*/
-
+	
 }
 
 void CUI::Late_Tick(_float fTimeDelta)
@@ -140,7 +131,7 @@ HRESULT CUI::SetUp_RenderState()
 HRESULT CUI::Release_RenderState()
 {
 	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
-	m_pGraphic_Device->SetTexture(0, nullptr);
+
 	return S_OK;
 }
 

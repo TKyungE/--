@@ -1,3 +1,5 @@
-﻿  Loader.cpp
+﻿  UI.cpp
+c:\users\shout\desktop\과제\--\client\private\ui.cpp(28): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\shout\desktop\과제\--\client\private\ui.cpp(49): warning C4244: '인수': 'Engine::_float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   Client.vcxproj -> C:\Users\shout\Desktop\과제\--\Client\Default\..\Bin\Client.exe
   Client.vcxproj -> ..\Bin\Client.pdb (Full PDB)

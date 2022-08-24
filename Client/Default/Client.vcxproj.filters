@@ -73,35 +73,35 @@
     <Filter Include="03.Effect\Skill\01.Tornado">
       <UniqueIdentifier>{298d50ad-07d7-41d6-ab99-fdc894c6f8de}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.UI\StateUi">
-      <UniqueIdentifier>{2588c7a6-b6f3-4fc7-9816-f44560f97fb9}</UniqueIdentifier>
+    <Filter Include="03.Effect\Default">
+      <UniqueIdentifier>{868e0f35-7657-4db1-9c4f-8b454a58adc0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.UI\StateUi\HpBar">
-      <UniqueIdentifier>{47dc1375-241f-4be3-bc43-be76b258f617}</UniqueIdentifier>
+    <Filter Include="03.Effect\Default\00.Hit">
+      <UniqueIdentifier>{86fc4c8e-18be-42b1-8b21-29221defbc98}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.UI\StateUi\ExpBar">
-      <UniqueIdentifier>{f7f9c315-e20e-4593-b80e-a0636e83855d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\StateUi\IconBar">
-      <UniqueIdentifier>{be086d0f-68e9-464b-bc90-86f9b9be300c}</UniqueIdentifier>
+    <Filter Include="03.Effect\Default\01.UseSkill">
+      <UniqueIdentifier>{32cd0ec5-2fce-41ab-96e9-b83230ad0813}</UniqueIdentifier>
     </Filter>
     <Filter Include="04.UI\Inventory">
       <UniqueIdentifier>{1bf3f18c-93ed-4069-8fb1-819e57454c4f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.UI\StateUi\IconBar\InventoryIcon">
-      <UniqueIdentifier>{80d877b8-6d17-4dcc-b255-bb46e711b53f}</UniqueIdentifier>
+    <Filter Include="04.UI\StateUi">
+      <UniqueIdentifier>{c93947ac-9ef8-4cc2-a4f6-24426048ddc3}</UniqueIdentifier>
     </Filter>
     <Filter Include="04.UI\XBox">
-      <UniqueIdentifier>{bc7dcd93-f3bd-4991-ac2b-20ecb745d25b}</UniqueIdentifier>
+      <UniqueIdentifier>{3c789132-7195-434c-9375-2b055b0a36c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.Effect\Default">
-      <UniqueIdentifier>{1d5bb93e-95f1-4235-b35f-3080bc92d0a4}</UniqueIdentifier>
+    <Filter Include="04.UI\StateUi\ExpBar">
+      <UniqueIdentifier>{9f16c13f-6e81-4e8a-988f-6ad324ceba14}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.Effect\Default\00.Hit">
-      <UniqueIdentifier>{8bbd8cbe-53f6-4141-b865-c91209f1d3a6}</UniqueIdentifier>
+    <Filter Include="04.UI\StateUi\IconBar">
+      <UniqueIdentifier>{e7dc98ab-bd50-495a-b6d8-42396e40bb6f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.Effect\Default\01.UseSkill">
-      <UniqueIdentifier>{1f04635c-218c-4f7a-9ad2-0601352bd9b0}</UniqueIdentifier>
+    <Filter Include="04.UI\StateUi\IconBar\InventoryIcon">
+      <UniqueIdentifier>{549b4616-248e-43fc-b67f-f16e616f0477}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StateUi\HpBar">
+      <UniqueIdentifier>{9be82122-acd2-4a44-92fa-c1aa06d8340f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -168,9 +168,6 @@
     <ClInclude Include="..\Public\Tornado.h">
       <Filter>03.Effect\Skill\01.Tornado</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\UI.h">
-      <Filter>04.UI\StateUi</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Hit.h">
       <Filter>03.Effect\Default\00.Hit</Filter>
     </ClInclude>
@@ -180,20 +177,23 @@
     <ClInclude Include="..\Public\Inventory.h">
       <Filter>04.UI\Inventory</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\InventoryIcon.h">
-      <Filter>04.UI\StateUi\IconBar\InventoryIcon</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\HpBar.h">
-      <Filter>04.UI\StateUi\HpBar</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\ExpBar.h">
       <Filter>04.UI\StateUi\ExpBar</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\XBox.h">
       <Filter>04.UI\XBox</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\InventoryIcon.h">
+      <Filter>04.UI\StateUi\IconBar\InventoryIcon</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\IconBar.h">
       <Filter>04.UI\StateUi\IconBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\HpBar.h">
+      <Filter>04.UI\StateUi\HpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UI.h">
+      <Filter>04.UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -248,17 +248,14 @@
     <ClCompile Include="..\Private\Tornado.cpp">
       <Filter>03.Effect\Skill\01.Tornado</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\UI.cpp">
-      <Filter>04.UI\StateUi</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Hit.cpp">
       <Filter>03.Effect\Default\00.Hit</Filter>
     </ClCompile>
     <ClCompile Include="..\private\UseSkill.cpp">
       <Filter>03.Effect\Default\01.UseSkill</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Inventory.cpp">
-      <Filter>04.UI\Inventory</Filter>
+    <ClCompile Include="..\Private\XBox.cpp">
+      <Filter>04.UI\XBox</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ExpBar.cpp">
       <Filter>04.UI\StateUi\ExpBar</Filter>
@@ -266,14 +263,17 @@
     <ClCompile Include="..\Private\HpBar.cpp">
       <Filter>04.UI\StateUi\HpBar</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\InventoryIcon.cpp">
-      <Filter>04.UI\StateUi\IconBar\InventoryIcon</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\IconBar.cpp">
       <Filter>04.UI\StateUi\IconBar</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\XBox.cpp">
-      <Filter>04.UI\XBox</Filter>
+    <ClCompile Include="..\Private\Inventory.cpp">
+      <Filter>04.UI\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\InventoryIcon.cpp">
+      <Filter>04.UI\StateUi\IconBar\InventoryIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI.cpp">
+      <Filter>04.UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
