@@ -255,7 +255,7 @@ HRESULT CThunderCloud::Release_RenderState()
 {
 	// m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
+	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
 }
 
