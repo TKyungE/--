@@ -128,6 +128,7 @@ HRESULT CSky::Release_RenderState()
 	m_pGraphic_Device->SetRenderState(D3DRS_ZENABLE, TRUE);
 
 	m_pGraphic_Device->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
 }
 

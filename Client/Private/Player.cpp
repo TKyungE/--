@@ -129,7 +129,7 @@ HRESULT CPlayer::Render(void)
 		return E_FAIL;
 
 	m_pVIBufferCom->Render();
-
+	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
 }
 

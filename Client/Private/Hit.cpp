@@ -37,7 +37,7 @@ HRESULT CHit::Initialize(void* pArg)
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;
 	m_tFrame.iFrameStart = 0;
-	m_tFrame.iFrameEnd = 3;
+	m_tFrame.iFrameEnd = 2;
 	m_tFrame.fFrameSpeed = 0.1f;
 	m_tInfo.bDead = false;
 
@@ -111,7 +111,7 @@ void CHit::Motion_Change()
 		{
 		case IDLE:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 3;
+			m_tFrame.iFrameEnd = 2;
 			m_tFrame.fFrameSpeed = 0.1f;
 			break;
 		}
@@ -217,7 +217,7 @@ HRESULT CHit::Release_RenderState()
 {
 	// m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
+	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
 }
 
