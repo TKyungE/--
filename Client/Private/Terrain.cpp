@@ -31,8 +31,7 @@ HRESULT CTerrain::Initialize(void* pArg)
 	if (FAILED(m_pOnTerrain->Set_TerrainVIBuffer(m_pVIBufferCom)))
 		return E_FAIL;
 
-	m_tInfo.pTerrain = this;
-	memcpy(pArg, &m_tInfo, sizeof(INFO));
+	*(CGameObject**)pArg = this;
 
 	return S_OK;
 }
