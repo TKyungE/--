@@ -513,7 +513,3 @@ HRESULT CPlayer::TextureRender()
 	return S_OK;
 }
 
-_float3 CPlayer::Get_Pos()
-{
-	return m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-}
