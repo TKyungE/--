@@ -12,11 +12,11 @@ CVIBuffer_Cube::CVIBuffer_Cube(const CVIBuffer_Cube & rhs)
 
 HRESULT CVIBuffer_Cube::Initialize_Prototype()
 {
-	m_iNumVertices = 8;
-	m_iStride = sizeof(VTXCUBETEX);
-	m_dwFVF = D3DFVF_XYZ | D3DFVF_TEX1 | D3DFVF_TEXCOORDSIZE3(0);
-	m_ePrimitiveType = D3DPT_TRIANGLELIST;
-	m_iNumPrimitive = 12;
+	m_tVIBInfo.m_iNumVertices = 8;
+	m_tVIBInfo.m_iStride = sizeof(VTXCUBETEX);
+	m_tVIBInfo.m_dwFVF = D3DFVF_XYZ | D3DFVF_TEX1 | D3DFVF_TEXCOORDSIZE3(0);
+	m_tVIBInfo.m_ePrimitiveType = D3DPT_TRIANGLELIST;
+	m_tVIBInfo.m_iNumPrimitive = 12;
 
 	/* 정점들을 할당했다. */
 	if (FAILED(__super::Ready_Vertex_Buffer()))
@@ -52,8 +52,8 @@ HRESULT CVIBuffer_Cube::Initialize_Prototype()
 
 	m_pVB->Unlock();
 
-	m_iIndicesByte = sizeof(FACEINDICES16);	
-	m_eIndexFormat = D3DFMT_INDEX16;
+	m_tVIBInfo.m_iIndicesByte = sizeof(FACEINDICES16);
+	m_tVIBInfo.m_eIndexFormat = D3DFMT_INDEX16;
 
 	if (FAILED(__super::Ready_Index_Buffer()))
 		return E_FAIL;

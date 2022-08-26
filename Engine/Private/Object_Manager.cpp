@@ -118,6 +118,19 @@ CLayer * CObject_Manager::Find_Layer(_uint iLevelIndex, const _tchar * pLayerTag
 	return iter->second;
 }
 
+CGameObject * CObject_Manager::Find_Object(const _tchar * pLayerTag, _uint iIndex)
+{
+	CLayer* pLayer = Find_Layer(iIndex,pLayerTag);
+	if (nullptr == pLayer)
+		return nullptr;
+
+	CGameObject* pGameObject = pLayer->Find_GameObject(iIndex);
+	if (nullptr == pGameObject)
+		return nullptr;
+
+	return pGameObject;
+}
+
 void CObject_Manager::Free()
 {
 	for (_uint i = 0; i < m_iNumLevels; ++i)
