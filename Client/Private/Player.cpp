@@ -69,8 +69,11 @@ void CPlayer::Tick(_float fTimeDelta)
 void CPlayer::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
+
 	Motion_Change();
+
 	Use_Skill();
+
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }

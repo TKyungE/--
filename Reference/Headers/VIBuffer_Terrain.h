@@ -6,22 +6,30 @@ BEGIN(Engine)
 
 class ENGINE_DLL CVIBuffer_Terrain final : public CVIBuffer
 {
+public:
+	typedef struct tagVIBufferInfo_Derived
+	{
+		_uint m_iNumVerticesX;
+		_uint m_iNumVerticesZ;
+	}VIBINFO_DERIVED;
 private:
 	CVIBuffer_Terrain(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CVIBuffer_Terrain(const CVIBuffer_Terrain& rhs);
 	virtual ~CVIBuffer_Terrain() = default;
 
 public:
-	const _uint Get_NumVerticesX(void) const { return m_iNumVerticesX; }
-	const _uint Get_NumVerticesZ(void) const { return m_iNumVerticesZ; }
+	VIBINFO_DERIVED Get_VIBInfoDerived(void) { return m_tVIBInfo_Derived; }
+	void Set_VIBInfoDerived(VIBINFO_DERIVED& tVIBInfo_Derived);
+
+	HRESULT Load_Terrain(void);
+	void Release_Buffer(void);
 
 public:
 	virtual HRESULT Initialize_Prototype(_uint iNumVerticesX, _uint iNumVerticesZ);
 	virtual HRESULT Initialize(void* pArg) override;
 
 private:
-	_uint		m_iNumVerticesX = 0;
-	_uint		m_iNumVerticesZ = 0;
+	VIBINFO_DERIVED m_tVIBInfo_Derived;
 public:
 	static CVIBuffer_Terrain* Create(LPDIRECT3DDEVICE9 pGraphic_Device, _uint iNumVerticesX, _uint iNumVerticesZ);
 	virtual CComponent* Clone(void* pArg);
