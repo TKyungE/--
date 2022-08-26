@@ -75,7 +75,7 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	Use_Skill();
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
 HRESULT CPlayer::Render(void)
@@ -86,14 +86,20 @@ HRESULT CPlayer::Render(void)
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
 
-	TextureRender();
+	BodyRender();
 
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
 
 	m_pVIBufferBody->Render();
+	
+	Set_HeadPos();
+	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+		return E_FAIL;
+	HeadRender();
 	m_pVIBufferHead->Render();
-
+	_float3 vScale = { 1.f,1.f ,1.f };
+	m_pTransformCom->Set_Scaled(vScale);
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
 	
@@ -394,6 +400,14 @@ _float3 CPlayer::Get_Pos()
 	return m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 }
 
+void CPlayer::Set_HeadPos()
+{
+	_float3 HeadPos = { -0.01f,0.32f,0.f };
+	_float3 vScale = { 0.45f,0.45f ,1.f };
+	m_pTransformCom->Set_Scaled(vScale);
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_pTransformCom->Get_State(CTransform::STATE_POSITION)+ HeadPos);
+}
+
 void CPlayer::Player_Move(_float fTimeDelta)
 {
 	_float3 vLook;
@@ -470,7 +484,7 @@ void CPlayer::Move_Frame(_float fTimeDelta)
 	}
 }
 
-HRESULT CPlayer::TextureRender()
+HRESULT CPlayer::BodyRender()
 {
 	switch (m_eCurState)
 	{
@@ -515,4 +529,48 @@ HRESULT CPlayer::TextureRender()
 	}
 	return S_OK;
 }
-
+HRESULT CPlayer::HeadRender()
+{
+	switch (m_eCurState)
+	{
+	case IDLE:
+		if (m_bFront)
+		{
+			if (FAILED(m_pTextureComHeadIDLE_Front->Bind_OnGraphicDev(0)))
+				return E_FAIL;
+		}
+		else
+		{
+			if (FAILED(m_pTextureComHeadIDLE_Back->Bind_OnGraphicDev(0)))
+				return E_FAIL;
+		}
+		break;
+	case MOVE:
+		if (m_bFront)
+		{
+			if (FAILED(m_pTextureComHeadIDLE_Front->Bind_OnGraphicDev(0)))
+				return E_FAIL;
+		}
+		else
+		{
+			if (FAILED(m_pTextureComHeadIDLE_Back->Bind_OnGraphicDev(0)))
+				return E_FAIL;
+		}
+		break;
+	case SKILL:
+		if (m_bFront)
+		{
+			if (FAILED(m_pTextureComHeadSkill_Front->Bind_OnGraphicDev(0)))
+				return E_FAIL;
+		}
+		else
+		{
+			if (FAILED(m_pTextureComHeadSkill_Back->Bind_OnGraphicDev(0)))
+				return E_FAIL;
+		}
+		break;
+	default:
+		break;
+	}
+	return S_OK;
+}

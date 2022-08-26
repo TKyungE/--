@@ -75,10 +75,12 @@ private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
 private:
+	void Set_HeadPos();
 	void Player_Move(_float fTimeDelta);
 	void Motion_Change();
 	void Move_Frame(_float fTimeDelta);
-	HRESULT TextureRender();
+	HRESULT BodyRender();
+	HRESULT HeadRender();
 };
 
 END
