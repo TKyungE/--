@@ -40,6 +40,8 @@ private:
 	_float m_fMoveFrame = 0.f;
 	_int m_iFrame = 0;
 
+	CGameObject::SINFO m_tSInfo;
+
 private:
 	HRESULT SetUp_Components(void);
 	HRESULT SetUp_RenderState(void);

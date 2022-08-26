@@ -69,6 +69,8 @@ private:
 	_bool	m_bFront = false;
 	STATE				m_ePreState;
 	STATE				m_eCurState;
+
+	CGameObject::SINFO m_tSInfo;
 private:
 	void Player_Move(_float fTimeDelta);
 	void Motion_Change();

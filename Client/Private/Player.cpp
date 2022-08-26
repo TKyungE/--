@@ -8,11 +8,13 @@
 CPlayer::CPlayer(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
 {
+	ZeroMemory(&m_tSInfo, sizeof(CGameObject::SINFO));
 }
 
 CPlayer::CPlayer(const CPlayer& rhs)
 	: CGameObject(rhs)
 {
+	memcpy(&m_tSInfo, &rhs.m_tSInfo, sizeof(CGameObject::SINFO));
 }
 
 HRESULT CPlayer::Initialize_Prototype(void)
@@ -30,8 +32,10 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-	*(CGameObject**)pArg = this;
 
+	memcpy(&m_tSInfo, &pArg, sizeof(SINFO));
+	m_tSInfo.pTarget = this;
+	memcpy(&pArg, &m_tSInfo, sizeof(SINFO));
 
 	m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	m_ePreState = STATE_END;
@@ -61,7 +65,6 @@ void CPlayer::Tick(_float fTimeDelta)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, Position);
 	Move_Frame(fTimeDelta);
 	Key_Input(fTimeDelta);
-	
 	
 	Player_Move(fTimeDelta);
 }
@@ -362,6 +365,8 @@ _float4x4 CPlayer::Get_World(void)
 void CPlayer::Free(void)
 {
 	__super::Free();
+
+	CKeyMgr::Get_Instance()->Release();
 
 	Safe_Release(m_pOnTerrain);
 	Safe_Release(m_pTransformCom);

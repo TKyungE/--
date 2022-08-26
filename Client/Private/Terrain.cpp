@@ -5,11 +5,13 @@
 CTerrain::CTerrain(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
 {
+	ZeroMemory(&m_tTerrainInfo, sizeof(TERRAININFO));
 }
 
 CTerrain::CTerrain(const CTerrain & rhs)
 	: CGameObject(rhs)
 {
+	memcpy(&m_tTerrainInfo, &rhs.m_tTerrainInfo, sizeof(TERRAININFO));
 }
 
 HRESULT CTerrain::Initialize_Prototype()
@@ -30,8 +32,6 @@ HRESULT CTerrain::Initialize(void* pArg)
 
 	if (FAILED(m_pOnTerrain->Set_TerrainVIBuffer(m_pVIBufferCom)))
 		return E_FAIL;
-
-	*(CGameObject**)pArg = this;
 	
 	//여기서 링크를 가져와서 대입하는 방식이 현명해보임,, 밑에는 임시방편
 
@@ -40,6 +40,8 @@ HRESULT CTerrain::Initialize(void* pArg)
 		ERR_MSG(TEXT("Failed to OnLoadData"));
 		return E_FAIL;
 	}
+
+
 
 	return S_OK;
 }

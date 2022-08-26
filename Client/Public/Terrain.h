@@ -40,6 +40,9 @@ private:
 	HRESULT SetUp_RenderState();
 	HRESULT Release_RenderState();
 
+private:
+	TERRAININFO m_tTerrainInfo;
+
 public:
 	static CTerrain* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

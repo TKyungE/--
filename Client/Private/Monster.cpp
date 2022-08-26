@@ -6,6 +6,7 @@
 CMonster::CMonster(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
 {
+	ZeroMemory(&m_tSInfo, sizeof(SINFO));
 }
 
 CMonster::CMonster(const CMonster& rhs)
@@ -15,6 +16,7 @@ CMonster::CMonster(const CMonster& rhs)
 	, m_fMoveFrame(rhs.m_fMoveFrame)
 	, m_iFrame(rhs.m_iFrame)
 {
+	memcpy(&m_tSInfo, &rhs.m_tSInfo, sizeof(SINFO));
 }
 
 HRESULT CMonster::SetUp_Components(void)
@@ -77,12 +79,12 @@ HRESULT CMonster::Release_RenderState(void)
 
 void CMonster::Chase(_float fTimeDelta)
 {
-	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
+	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tSInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
 
 	if (1.25f < Distance)
 	{
 		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+		_float3 vTargetPos = *(_float3*)&m_tSInfo.pTarget->Get_World().m[3][0];
 
 		vPosition += *D3DXVec3Normalize(&vTargetPos, &(vTargetPos - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
 
@@ -118,7 +120,7 @@ CGameObject * CMonster::Clone(void * pArg)
 
 _float4x4 CMonster::Get_World(void)
 {
-	return _float4x4();
+	return m_pTransformCom->Get_WorldMatrix();
 }
 
 void CMonster::Free(void)
@@ -148,7 +150,7 @@ HRESULT CMonster::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	memcpy(&m_tInfo, pArg, sizeof(INFO));
+	memcpy(&m_tSInfo, &pArg, sizeof(SINFO));
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(0.f, 0.f, 5.f));
 
@@ -178,7 +180,7 @@ void CMonster::Tick(_float fTimeDelta)
 
 	m_pTransformCom->LookAt(*(_float3*)&matCameraPos.m[3][0]);
 
-	if (nullptr != m_tInfo.pTarget)
+	if (nullptr != m_tSInfo.pTarget)
 		Chase(fTimeDelta);
 
 	if (0 > m_pTransformCom->Get_State(CTransform::STATE_LOOK).x && !m_bXTurn)
