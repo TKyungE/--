@@ -36,7 +36,7 @@ HRESULT CThunderSword::Initialize(void* pArg)
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;
 	m_tFrame.iFrameStart = 0;
-	m_tFrame.iFrameEnd = 17;
+	m_tFrame.iFrameEnd = 16;
 	m_tFrame.fFrameSpeed = 0.06f;
 	m_tInfo.bDead = false;
 	
@@ -109,7 +109,7 @@ void CThunderSword::Motion_Change()
 		{
 		case IDLE:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 17;
+			m_tFrame.iFrameEnd = 16;
 			m_tFrame.fFrameSpeed = 0.06f;
 			break;
 		}
