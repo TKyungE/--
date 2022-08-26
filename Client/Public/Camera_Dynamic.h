@@ -31,12 +31,13 @@ public:
 private:
 	void CameraRotationX(_float fTimeDelta, _long MouseMove);
 	void CameraRotationY(_float fTimeDelta, _long MouseMove);
-
+	
 private:
 	_float3 m_vecCameraNormal;
 	_float m_YfAngle = 0.f;
+	_float m_XfAngle = 0.f;
 	_float4x4 m_matRotY;
-
+	_float4x4 m_matRotX;
 public:
 	static CCamera_Dynamic* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

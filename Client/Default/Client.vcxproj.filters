@@ -58,9 +58,6 @@
     <Filter Include="04.UI">
       <UniqueIdentifier>{77d1b4b2-60a1-4444-bc37-285d0b4c20e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.UI\Inven">
-      <UniqueIdentifier>{1bf3f18c-93ed-4069-8fb1-819e57454c4f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.Effect\Skill">
       <UniqueIdentifier>{d5c7b31c-652d-4394-afe1-1f9484230a71}</UniqueIdentifier>
     </Filter>
@@ -81,6 +78,33 @@
     </Filter>
     <Filter Include="03.Effect\Default\00.Hit">
       <UniqueIdentifier>{86fc4c8e-18be-42b1-8b21-29221defbc98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\01.UseSkill">
+      <UniqueIdentifier>{32cd0ec5-2fce-41ab-96e9-b83230ad0813}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\Inventory">
+      <UniqueIdentifier>{1bf3f18c-93ed-4069-8fb1-819e57454c4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StateUi">
+      <UniqueIdentifier>{c93947ac-9ef8-4cc2-a4f6-24426048ddc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\XBox">
+      <UniqueIdentifier>{3c789132-7195-434c-9375-2b055b0a36c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StateUi\ExpBar">
+      <UniqueIdentifier>{9f16c13f-6e81-4e8a-988f-6ad324ceba14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StateUi\IconBar">
+      <UniqueIdentifier>{e7dc98ab-bd50-495a-b6d8-42396e40bb6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StateUi\IconBar\InventoryIcon">
+      <UniqueIdentifier>{549b4616-248e-43fc-b67f-f16e616f0477}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StateUi\HpBar">
+      <UniqueIdentifier>{9be82122-acd2-4a44-92fa-c1aa06d8340f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\02.LevelUp">
+      <UniqueIdentifier>{5b590f51-993c-46bd-935f-d21e6519d9f6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -132,9 +156,6 @@
     <ClInclude Include="..\public\SoundMgr.h">
       <Filter>97.Utility\SoundMgr</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\UI.h">
-      <Filter>04.UI</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Monster.h">
       <Filter>02.GameObject\Monster</Filter>
     </ClInclude>
@@ -152,6 +173,33 @@
     </ClInclude>
     <ClInclude Include="..\public\Hit.h">
       <Filter>03.Effect\Default\00.Hit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\UseSkill.h">
+      <Filter>03.Effect\Default\01.UseSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Inventory.h">
+      <Filter>04.UI\Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ExpBar.h">
+      <Filter>04.UI\StateUi\ExpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\XBox.h">
+      <Filter>04.UI\XBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\InventoryIcon.h">
+      <Filter>04.UI\StateUi\IconBar\InventoryIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\IconBar.h">
+      <Filter>04.UI\StateUi\IconBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\HpBar.h">
+      <Filter>04.UI\StateUi\HpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UI.h">
+      <Filter>04.UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\LevelUp.h">
+      <Filter>03.Effect\Default\02.LevelUp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -191,9 +239,6 @@
     <ClCompile Include="..\private\SoundMgr.cpp">
       <Filter>97.Utility\SoundMgr</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\UI.cpp">
-      <Filter>04.UI</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Monster.cpp">
       <Filter>02.GameObject\Monster</Filter>
     </ClCompile>
@@ -211,6 +256,33 @@
     </ClCompile>
     <ClCompile Include="..\private\Hit.cpp">
       <Filter>03.Effect\Default\00.Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\UseSkill.cpp">
+      <Filter>03.Effect\Default\01.UseSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\XBox.cpp">
+      <Filter>04.UI\XBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ExpBar.cpp">
+      <Filter>04.UI\StateUi\ExpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\HpBar.cpp">
+      <Filter>04.UI\StateUi\HpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\IconBar.cpp">
+      <Filter>04.UI\StateUi\IconBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Inventory.cpp">
+      <Filter>04.UI\Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\InventoryIcon.cpp">
+      <Filter>04.UI\StateUi\IconBar\InventoryIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UI.cpp">
+      <Filter>04.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\LevelUp.cpp">
+      <Filter>03.Effect\Default\02.LevelUp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

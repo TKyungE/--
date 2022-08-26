@@ -31,8 +31,15 @@ HRESULT CTerrain::Initialize(void* pArg)
 	if (FAILED(m_pOnTerrain->Set_TerrainVIBuffer(m_pVIBufferCom)))
 		return E_FAIL;
 
-	m_tInfo.pTerrain = this;
-	memcpy(pArg, &m_tInfo, sizeof(INFO));
+	*(CGameObject**)pArg = this;
+	
+	//여기서 링크를 가져와서 대입하는 방식이 현명해보임,, 밑에는 임시방편
+
+	if(FAILED(OnLoadData(TEXT("../../Data/Test.dat"))))
+	{ 
+		ERR_MSG(TEXT("Failed to OnLoadData"));
+		return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -48,8 +55,8 @@ void CTerrain::Tick(_float fTimeDelta)
 
 	Safe_AddRef(pInstance);
 
-	if (pInstance->Get_DIMKeyState(DIMK_LBUTTON) < 0)
-	{
+	//if (pInstance->Get_DIMKeyState(DIMK_LBUTTON) < 0)
+	//{
 		_float4x4 matWorld = Get_World();
 		D3DXMatrixInverse(&matWorld, nullptr, &matWorld);
 
@@ -62,7 +69,7 @@ void CTerrain::Tick(_float fTimeDelta)
 		VB->Lock(0, 0, (void**)&pVertices, 0);
 		IB->Lock(0, 0, (void**)&pIndices, 0);
 
-		for (_uint i = 0; i < m_pVIBufferCom->Get_NumPrimitive(); ++i)
+		for (_uint i = 0; i < m_pVIBufferCom->Get_VIBInfo().m_iNumPrimitive; ++i)
 		{
 			_float3 LU = pVertices[pIndices[i]._0].vPosition;
 			_float3 RU = pVertices[pIndices[i]._1].vPosition;
@@ -83,7 +90,7 @@ void CTerrain::Tick(_float fTimeDelta)
 
 		VB->Unlock();
 		IB->Unlock();
-	}
+	//}
 
 	Safe_Release(pInstance);
 }
@@ -114,6 +121,83 @@ HRESULT CTerrain::Render()
 
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CTerrain::OnLoadData(const _tchar* pFilePath)
+{
+	HANDLE hFile = CreateFile(pFilePath, GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+
+	if (INVALID_HANDLE_VALUE == hFile)
+		return E_FAIL;
+
+	DWORD dwByte = 0;
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pInstance);
+
+	//CTerrain* pTerrain = dynamic_cast<CTerrain*>(pInstance->Find_Object(TEXT("Layer_BackGround"), 0));
+	/*if (nullptr == pTerrain)
+	{
+		ERR_MSG(TEXT("Failed to Load"));
+		return;
+	}*/
+
+	CVIBuffer::VIBINFO VIBInfo;
+	CVIBuffer_Terrain::VIBINFO_DERIVED VIBInfo_Derived;
+	ZeroMemory(&VIBInfo, sizeof(CVIBuffer::VIBINFO));
+	ZeroMemory(&VIBInfo_Derived, sizeof(CVIBuffer_Terrain::VIBINFO_DERIVED));
+
+	ReadFile(hFile, &VIBInfo, sizeof(CVIBuffer::VIBINFO), &dwByte, nullptr);
+	ReadFile(hFile, &VIBInfo_Derived, sizeof(CVIBuffer_Terrain::VIBINFO_DERIVED), &dwByte, nullptr);
+
+
+	m_pVIBufferCom->Release_Buffer();
+	m_pVIBufferCom->Set_VIBInfo(VIBInfo);
+	m_pVIBufferCom->Set_VIBInfoDerived(VIBInfo_Derived);
+
+	if (FAILED(m_pVIBufferCom->Load_Terrain()))
+	{
+		ERR_MSG(TEXT("Failed to Load Terrain"));
+		return E_FAIL;
+	}
+
+	LPDIRECT3DVERTEXBUFFER9 VB = m_pVIBufferCom->Get_VB();
+	LPDIRECT3DINDEXBUFFER9 IB = m_pVIBufferCom->Get_IB();
+
+	VTXTEX* pVertices = nullptr;
+	FACEINDICES32* pIndices = nullptr;
+
+	VB->Lock(0, 0, (void**)&pVertices, 0);
+
+	for (_uint i = 0; i < m_pVIBufferCom->Get_VIBInfo().m_iNumVertices; ++i)
+	{
+		_float3 vPos;
+		_float2 vTex;
+		ReadFile(hFile, vPos, sizeof(_float3), &dwByte, nullptr);
+		ReadFile(hFile, vTex, sizeof(_float2), &dwByte, nullptr);
+
+		pVertices[i].vPosition = vPos;
+		pVertices[i].vTexture = vTex;
+	}
+
+	VB->Unlock();
+
+	IB->Lock(0, 0, (void**)&pIndices, 0);
+
+	for (_uint i = 0; i < m_pVIBufferCom->Get_VIBInfo().m_iNumPrimitive; ++i)
+	{
+		ReadFile(hFile, &pIndices[i]._0, sizeof(_uint), &dwByte, nullptr);
+		ReadFile(hFile, &pIndices[i]._1, sizeof(_uint), &dwByte, nullptr);
+		ReadFile(hFile, &pIndices[i]._2, sizeof(_uint), &dwByte, nullptr);
+	}
+
+	IB->Unlock();
+
+	Safe_Release(pInstance);
+
+	CloseHandle(hFile);
 
 	return S_OK;
 }
