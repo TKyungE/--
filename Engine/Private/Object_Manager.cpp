@@ -64,10 +64,6 @@ void CObject_Manager::Tick(_float fTimeDelta)
 		for (auto& Pair : m_pLayers[i])
 		{
 			Pair.second->Tick(fTimeDelta);	
-
-
-
-
 		}
 	}
 }
