@@ -28,6 +28,11 @@ HRESULT CTerrain::Initialize(void* pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
+	if (FAILED(m_pOnTerrain->Set_TerrainVIBuffer(m_pVIBufferCom)))
+		return E_FAIL;
+
+	*(CGameObject**)pArg = this;
+
 	return S_OK;
 }
 
@@ -35,6 +40,51 @@ void CTerrain::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);		
 
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+
+	//if (pInstance->Get_DIMKeyState(DIMK_LBUTTON) < 0)
+	//{
+		_float4x4 matWorld = Get_World();
+		D3DXMatrixInverse(&matWorld, nullptr, &matWorld);
+
+		LPDIRECT3DVERTEXBUFFER9 VB = m_pVIBufferCom->Get_VB();
+		LPDIRECT3DINDEXBUFFER9 IB = m_pVIBufferCom->Get_IB();
+
+		VTXTEX* pVertices = nullptr;
+		FACEINDICES32* pIndices = nullptr;
+
+		VB->Lock(0, 0, (void**)&pVertices, 0);
+		IB->Lock(0, 0, (void**)&pIndices, 0);
+
+		for (_uint i = 0; i < m_pVIBufferCom->Get_NumPrimitive(); ++i)
+		{
+			_float3 LU = pVertices[pIndices[i]._0].vPosition;
+			_float3 RU = pVertices[pIndices[i]._1].vPosition;
+			_float3 RD = pVertices[pIndices[i]._2].vPosition;
+
+			if (!FAILED(pInstance->Intersect(matWorld, &LU, &RU, &RD)))
+			{
+				/*_tchar m_szFPS[MAX_PATH] = L"";
+				wsprintf(m_szFPS, L"ÁÂÇ¥ : %d, %d, %d", (int)pInstance->Get_TargetPos().x, (int)pInstance->Get_TargetPos().y, (int)pInstance->Get_TargetPos().z);
+				ERR_MSG(m_szFPS);*/
+
+			//	pVertices[pIndices[i]._0].vPosition.y += 1.f;
+			//	pVertices[pIndices[i]._1].vPosition.y += 1.f;
+			//	pVertices[pIndices[i]._2].vPosition.y += 1.f;
+				break;
+			}
+		}
+
+		VB->Unlock();
+		IB->Unlock();
+	//}
+
+	Safe_Release(pInstance);
 }
 
 void CTerrain::Late_Tick(_float fTimeDelta)
@@ -81,6 +131,8 @@ HRESULT CTerrain::SetUp_Components()
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
+	if (FAILED(__super::Add_Components(TEXT("Com_Onterrain"), LEVEL_STATIC, TEXT("Prototype_Component_Onterrain"), (CComponent**)&m_pOnTerrain)))
+		return E_FAIL;
 
 	/* For.Com_Transform */
 	CTransform::TRANSFORMDESC		TransformDesc;
@@ -109,6 +161,7 @@ HRESULT CTerrain::SetUp_RenderState()
 HRESULT CTerrain::Release_RenderState()
 {
 	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+	m_pGraphic_Device->SetTexture(0, nullptr);
 
 	return S_OK;
 }
@@ -141,13 +194,14 @@ CGameObject * CTerrain::Clone(void* pArg)
 
 _float4x4 CTerrain::Get_World(void)
 {
-	return _float4x4();
+	return m_pTransformCom->Get_WorldMatrix();
 }
 
 void CTerrain::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pOnTerrain);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pRendererCom);

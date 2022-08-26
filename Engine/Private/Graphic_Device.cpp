@@ -6,7 +6,7 @@ IMPLEMENT_SINGLETON(CGraphic_Device)
 CGraphic_Device::CGraphic_Device()
 	: m_p3D(nullptr) , m_pDevice(nullptr), m_pSprite(nullptr), m_pFont(nullptr)
 {
-
+	ZeroMemory(&m_GraphicDesc, sizeof(GRAPHIC_DESC));
 }
 
 HRESULT CGraphic_Device::InitDevice(const GRAPHIC_DESC& GraphicDesc, LPDIRECT3DDEVICE9* ppOut)

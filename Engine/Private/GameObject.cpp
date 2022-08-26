@@ -5,12 +5,16 @@ CGameObject::CGameObject(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
 {
 	Safe_AddRef(m_pGraphic_Device);
+	ZeroMemory(&m_tInfo, sizeof(INFO));
+	ZeroMemory(&m_tFrame, sizeof(FrameInfo));
 }
 
 CGameObject::CGameObject(const CGameObject & rhs)
 	: m_pGraphic_Device(rhs.m_pGraphic_Device)
 {
 	Safe_AddRef(m_pGraphic_Device);
+	memcpy(&m_tInfo, &rhs.m_tInfo, sizeof(INFO));
+	memcpy(&m_tFrame, &rhs.m_tFrame, sizeof(FrameInfo));
 }
 
 HRESULT CGameObject::Initialize_Prototype()

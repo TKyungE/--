@@ -38,6 +38,7 @@ public:
 	void Set_TransformDesc(const TRANSFORMDESC& TransformDesc) {
 		m_TransformDesc = TransformDesc;
 	}
+	const TRANSFORMDESC& Get_TransformDesc(void) const { return m_TransformDesc; }
 
 	void Set_Scaled(_float3 vScale);
 
@@ -53,6 +54,7 @@ public:
 	void Go_Backward(_float fTimeDelta);
 	void Go_Right(_float fTimeDelta);
 	void Go_Left(_float fTimeDelta);
+	void Go_Down(_float fTimeDelta);
 	void Turn(_float3 vAxis, _float fTimeDelta);
 	void LookAt(_float3 vPoint);
 
