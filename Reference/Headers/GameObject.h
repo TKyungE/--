@@ -22,6 +22,7 @@ public:
 public:
 	typedef struct tagInfo
 	{
+		CGameObject* pTerrain;
 		CGameObject* pTarget;
 		_float3		 vPos;
 		_float       fX; // (객체의 지름) 객체 생성할때 이니셜라이즈에서 스케일 맥인거 대입해줘야함.
@@ -32,13 +33,20 @@ public:
 		_int		 iExp;
 		_int		 iMaxExp;
 		_int		 iMoney;
-		_int		 iCurrentFrame;
+		_bool		 bDead ;
 	}INFO;
+	typedef struct tagFrameInfo
+	{
+		_int				iFrameStart;
+		_int				iFrameEnd;
+		_float				fFrameSpeed;
+	}FrameInfo;
 protected:
 	INFO m_tInfo;
-	
+	FrameInfo				m_tFrame;
 public: // 여기에 갯 셋 만들어서 인포 +- 관리하면될듯
 	INFO	Get_Info() { return m_tInfo; }
+	void	Set_Dead() { m_tInfo.bDead = true; }
 protected:
 	LPDIRECT3DDEVICE9			m_pGraphic_Device = nullptr;
 

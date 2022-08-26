@@ -34,6 +34,11 @@ HRESULT CSky::Initialize(void* pArg)
 void CSky::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+}
+
+void CSky::Late_Tick(_float fTimeDelta)
+{
+	__super::Late_Tick(fTimeDelta);
 
 	_float4x4		ViewMatrix;
 
@@ -42,14 +47,6 @@ void CSky::Tick(_float fTimeDelta)
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, *(_float3*)&ViewMatrix.m[3][0]);
-
-	
-
-}
-
-void CSky::Late_Tick(_float fTimeDelta)
-{
-	__super::Late_Tick(fTimeDelta);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
@@ -126,11 +123,12 @@ HRESULT CSky::SetUp_RenderState()
 
 HRESULT CSky::Release_RenderState()
 {
-	m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+	m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
 	m_pGraphic_Device->SetRenderState(D3DRS_ZENABLE, TRUE);
 
 	m_pGraphic_Device->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
 }
 

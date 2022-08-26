@@ -10,6 +10,11 @@ private:
 	CVIBuffer_Terrain(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CVIBuffer_Terrain(const CVIBuffer_Terrain& rhs);
 	virtual ~CVIBuffer_Terrain() = default;
+
+public:
+	const _uint Get_NumVerticesX(void) const { return m_iNumVerticesX; }
+	const _uint Get_NumVerticesZ(void) const { return m_iNumVerticesZ; }
+
 public:
 	virtual HRESULT Initialize_Prototype(_uint iNumVerticesX, _uint iNumVerticesZ);
 	virtual HRESULT Initialize(void* pArg) override;
