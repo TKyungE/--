@@ -72,20 +72,20 @@ void CLevel_GamePlay::Late_Tick(_float fTimeDelta)
 
 	CGameObject* Dest;
 	CGameObject* Sour;
-	_float3* vPos;
-	if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour,&vPos))
+	_float3* vPos = nullptr;
+	if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour, &vPos))
 	{
 		//Dest->Set_Dead();
 		//Sour->Set_Dead();
 	}
 	if (pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill")) != nullptr)
 	{
-		if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour,&vPos))
+		if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour, &vPos))
 		{
 			Dest->Set_Dead();
 			//Sour->Set_Dead();
 			CGameObject::INFO tInfo;
-			tInfo.vPos = *vPos;
+			tInfo.vPos = Get_CollisionPos(Dest, Sour);
 			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
 		}
 	}
@@ -184,6 +184,24 @@ HRESULT CLevel_GamePlay::Ready_Layer_UI(const _tchar * pLayerTag)
 	Safe_Release(pGameInstance);
 
 	return S_OK;
+}
+
+_float3 CLevel_GamePlay::Get_CollisionPos(CGameObject * pDest, CGameObject * pSour)
+{
+	_float3 vLook = *(_float3*)&pDest->Get_World().m[3][0] - *(_float3*)&pSour->Get_World().m[3][0];
+	D3DXVec3Normalize(&vLook, &vLook);
+
+	vLook = vLook * 0.5f;
+
+	_float Angle = D3DXVec3Dot(&vLook, (_float3*)&pSour->Get_World().m[1][0]);
+	_float3 SourUp = *(_float3*)&pSour->Get_World().m[1][0];
+	_float3 Proj = (Angle / D3DXVec3Length(&SourUp) * D3DXVec3Length(&SourUp)) * *(_float3*)&pSour->Get_World().m[1][0];
+	
+	_float3 CollisionPos = *(_float3*)&pSour->Get_World().m[3][0] + Proj;
+	CollisionPos.y -= 0.5;
+	CollisionPos.x = pDest->Get_World().m[3][0];
+
+	return CollisionPos;
 }
 
 
