@@ -68,10 +68,22 @@ void CLevel_GamePlay::Late_Tick(_float fTimeDelta)
 	//충돌 사용법
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
-	//Layer_Player,Layer_Monster 가 있다는 가정하에 적은 예외코드;
-	if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects()))
+	
+
+	CGameObject* Dest;
+	CGameObject* Sour;
+	if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour))
 	{
-		int a = 10;
+		//Dest->Set_Dead();
+		//Sour->Set_Dead();
+	}
+	if (pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill")) != nullptr)
+	{
+		if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour))
+		{
+			//Dest->Set_Dead();
+			Sour->Set_Dead();
+		}
 	}
 
 	Safe_Release(pGameInstance);

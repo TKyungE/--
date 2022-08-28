@@ -55,7 +55,7 @@ protected:
 	map<const _tchar*, class CComponent*>				m_Components;
 
 protected:
-	HRESULT Add_Components(const _tchar* pComponentTag, _uint iLevelIndex, const _tchar* pPrototypeTag, CComponent** ppOut, void* pArg = nullptr);
+	HRESULT Add_Components(const _tchar* pComponentTag, _uint iLevelIndex, const _tchar* pPrototypeTag,class CComponent** ppOut, void* pArg = nullptr);
 
 protected:
 	class CComponent* Find_Component(const _tchar* pComponentTag);

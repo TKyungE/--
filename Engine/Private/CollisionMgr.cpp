@@ -13,7 +13,7 @@ CCollisionMgr::~CCollisionMgr()
 }
 
 
-bool CCollisionMgr::Collision_Sphere(CLayer::GAMEOBJECTS _Dest, CLayer::GAMEOBJECTS _Sour)
+bool CCollisionMgr::Collision_Sphere(CLayer::GAMEOBJECTS _Dest, CLayer::GAMEOBJECTS _Sour, CGameObject** pDest, CGameObject** pSour)
 {
 	for (auto& Dest : _Dest)
 	{
@@ -21,6 +21,8 @@ bool CCollisionMgr::Collision_Sphere(CLayer::GAMEOBJECTS _Dest, CLayer::GAMEOBJE
 		{
 			if (Check_Sphere(Dest, Sour))
 			{
+				*pDest = Dest;
+				*pSour = Sour;
 				return true;
 			}
 		}
