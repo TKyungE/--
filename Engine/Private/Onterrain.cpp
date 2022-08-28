@@ -35,11 +35,11 @@ HRESULT COnterrain::Set_TerrainVIBuffer(CVIBuffer_Terrain * _pVIBuffer)
 
 HRESULT COnterrain::Get_OnTerrainY(_float3 vecTarget, _float* pOut)
 {
-	_int iLDIndex = _int(vecTarget.z) * m_pVIBuffer->Get_NumVerticesX() + vecTarget.x;
+	_int iLDIndex = _int(vecTarget.z) * m_pVIBuffer->Get_VIBInfoDerived().m_iNumVerticesX + vecTarget.x;
 
 	_uint iTargetIndices[4] = {
-		iLDIndex + m_pVIBuffer->Get_NumVerticesX(),
-		iLDIndex + m_pVIBuffer->Get_NumVerticesX() + 1,
+		iLDIndex + m_pVIBuffer->Get_VIBInfoDerived().m_iNumVerticesX,
+		iLDIndex + m_pVIBuffer->Get_VIBInfoDerived().m_iNumVerticesX + 1,
 		iLDIndex + 1,
 		iLDIndex
 	};

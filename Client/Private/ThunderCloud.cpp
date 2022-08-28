@@ -57,7 +57,7 @@ void CThunderCloud::Tick(_float fTimeDelta)
 	if (m_fDeadTime > 3.f)
 		Set_Dead();
 	m_fDelay += fTimeDelta;
-	if (m_fDelay > 0.2f)
+	if (m_fDelay > 0.3f)
 	{
 		Create_Sword(TEXT("Layer_Skill"));
 		m_fDelay = 0.f;
@@ -118,22 +118,22 @@ HRESULT CThunderCloud::Create_Sword(const _tchar * pLayerTag)
 
 	CGameObject::INFO tInfo;
 
-	_float iSour = rand() % 6000 * 0.0001;
-	_float iTemp = rand() % 4000 * 0.0001;
+	_float iSour = rand() % 6000 * 0.0001f;
+	_float iTemp = rand() % 4000 * 0.0001f;
 
 	tInfo.vPos.x = m_tInfo.vPos.x + iSour;
 	tInfo.vPos.y = m_tInfo.vPos.y - 1.f;
-	tInfo.vPos.z = m_tInfo.vPos.z + iTemp;;
+	tInfo.vPos.z = m_tInfo.vPos.z + iTemp;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ThunderSword"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	_float iSour1 = rand() % 6000 * 0.0001;
-	_float iTemp2 = rand() % 4000 * 0.0001;
+	_float iSour1 = rand() % 6000 * 0.0001f;
+	_float iTemp1 = rand() % 4000 * 0.0001f;
 
-	tInfo.vPos.x = m_tInfo.vPos.x - iSour;
+	tInfo.vPos.x = m_tInfo.vPos.x - iSour1;
 	tInfo.vPos.y = m_tInfo.vPos.y - 1.f;
-	tInfo.vPos.z = m_tInfo.vPos.z - iTemp;;
+	tInfo.vPos.z = m_tInfo.vPos.z - iTemp1;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ThunderSword"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
@@ -255,7 +255,7 @@ HRESULT CThunderCloud::Release_RenderState()
 {
 	// m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
+	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
 }
 

@@ -8,6 +8,7 @@ class CRenderer;
 class CTransform;
 class CVIBuffer_Rect;
 class CTexture;
+class COnterrain;
 END
 
 BEGIN(Client)
@@ -31,6 +32,7 @@ private:
 	CTransform* m_pTransformCom = nullptr;
 	CVIBuffer_Rect* m_pVIBufferCom = nullptr;
 	CTexture* m_pTextureCom = nullptr;
+	COnterrain*	m_pOnTerrain = nullptr;
 
 	bool m_bXTurn = false;
 	bool m_bZTurn = false;

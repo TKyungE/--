@@ -33,7 +33,8 @@ private: /* For.Components */
 	CTransform*				m_pTransformCom = nullptr;
 	CVIBuffer_Terrain*		m_pVIBufferCom = nullptr;
 	COnterrain*				m_pOnTerrain = nullptr;
-
+private:
+	HRESULT OnLoadData(const _tchar* pFilePath);
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();

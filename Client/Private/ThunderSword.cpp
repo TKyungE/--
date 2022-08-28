@@ -36,8 +36,8 @@ HRESULT CThunderSword::Initialize(void* pArg)
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;
 	m_tFrame.iFrameStart = 0;
-	m_tFrame.iFrameEnd = 17;
-	m_tFrame.fFrameSpeed = 0.017f;
+	m_tFrame.iFrameEnd = 16;
+	m_tFrame.fFrameSpeed = 0.06f;
 	m_tInfo.bDead = false;
 	
 	return S_OK;
@@ -109,8 +109,8 @@ void CThunderSword::Motion_Change()
 		{
 		case IDLE:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 17;
-			m_tFrame.fFrameSpeed = 0.017f;
+			m_tFrame.iFrameEnd = 16;
+			m_tFrame.fFrameSpeed = 0.06f;
 			break;
 		}
 
@@ -187,7 +187,7 @@ HRESULT CThunderSword::SetUp_Components()
 	CTransform::TRANSFORMDESC		TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
 
-	TransformDesc.fSpeedPerSec = 5.f;
+	TransformDesc.fSpeedPerSec = 3.f;
 	TransformDesc.fRotationPerSec = D3DXToRadian(90.0f);
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
@@ -213,7 +213,7 @@ HRESULT CThunderSword::Release_RenderState()
 {
 	// m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
+	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
 }
 
