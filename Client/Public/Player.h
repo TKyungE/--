@@ -32,21 +32,16 @@ public:
 private:
 	CRenderer* m_pRendererCom = nullptr;
 	CTransform* m_pTransformCom = nullptr;
-	CVIBuffer_Rect* m_pVIBufferBody = nullptr;
-	CVIBuffer_Rect* m_pVIBufferHead = nullptr;
+	CVIBuffer_Rect* m_pVIBuffer = nullptr;
 	COnterrain* m_pOnTerrain = nullptr;
 
-	CTexture* m_pTextureComBodyIDLE_Front = nullptr;
-	CTexture* m_pTextureComBodyIDLE_Back = nullptr;
-	CTexture* m_pTextureComBodyMove_Front = nullptr;
-	CTexture* m_pTextureComBodyMove_Back = nullptr;
-	CTexture* m_pTextureComBodySkill_Front = nullptr;
-	CTexture* m_pTextureComBodySkill_Back = nullptr;
+	CTexture* m_pTextureComIDLE_Front = nullptr;
+	CTexture* m_pTextureComIDLE_Back = nullptr;
+	CTexture* m_pTextureComMove_Front = nullptr;
+	CTexture* m_pTextureComMove_Back = nullptr;
+	CTexture* m_pTextureComSkill_Front = nullptr;
+	CTexture* m_pTextureComSkill_Back = nullptr;
 
-	CTexture* m_pTextureComHeadIDLE_Front = nullptr;
-	CTexture* m_pTextureComHeadIDLE_Back = nullptr;
-	CTexture* m_pTextureComHeadSkill_Front = nullptr;
-	CTexture* m_pTextureComHeadSkill_Back = nullptr;
 private:
 	HRESULT SetUp_Components(void);
 	HRESULT SetUp_RenderState();
@@ -79,6 +74,7 @@ private:
 	void Motion_Change();
 	void Move_Frame(_float fTimeDelta);
 	HRESULT TextureRender();
+	
 };
 
 END

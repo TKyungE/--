@@ -75,7 +75,7 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	Use_Skill();
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
 HRESULT CPlayer::Render(void)
@@ -91,8 +91,7 @@ HRESULT CPlayer::Render(void)
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
 
-	m_pVIBufferBody->Render();
-	m_pVIBufferHead->Render();
+	m_pVIBuffer->Render();
 
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
@@ -133,35 +132,25 @@ HRESULT CPlayer::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Renderer"), LEVEL_STATIC, TEXT("Prototype_Component_Renderer"), (CComponent**)&m_pRendererCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer_Body"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferBody)))
-		return E_FAIL;
-
-	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer_Head"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferHead)))
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBuffer)))
 		return E_FAIL;
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Onterrain"), LEVEL_STATIC, TEXT("Prototype_Component_Onterrain"), (CComponent**)&m_pOnTerrain)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Body_IDLE_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Body_IDLE_Front"), (CComponent**)&m_pTextureComBodyIDLE_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_IDLE_Front"), (CComponent**)&m_pTextureComIDLE_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Body_IDLE_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Body_IDLE_Back"), (CComponent**)&m_pTextureComBodyIDLE_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_IDLE_Back"), (CComponent**)&m_pTextureComIDLE_Back)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Body_Move_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Body_Move_Front"), (CComponent**)&m_pTextureComBodyMove_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Move_Front"), (CComponent**)&m_pTextureComMove_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Body_Move_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Body_Move_Back"), (CComponent**)&m_pTextureComBodyMove_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Move_Back"), (CComponent**)&m_pTextureComMove_Back)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Body_Skill_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Body_Skill_Front"), (CComponent**)&m_pTextureComBodySkill_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Skill_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Skill_Front"), (CComponent**)&m_pTextureComSkill_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Body_Skill_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Body_Skill_Back"), (CComponent**)&m_pTextureComBodySkill_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Skill_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Skill_Back"), (CComponent**)&m_pTextureComSkill_Back)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Head_IDLE_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Head_IDLE_Front"), (CComponent**)&m_pTextureComHeadIDLE_Front)))
-		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Head_IDLE_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Head_IDLE_Back"), (CComponent**)&m_pTextureComHeadIDLE_Back)))
-		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Head_Skill_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Head_Skill_Front"), (CComponent**)&m_pTextureComHeadSkill_Front)))
-		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Head_Skill_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Head_Skill_Back"), (CComponent**)&m_pTextureComHeadSkill_Back)))
-		return E_FAIL;
+
 
 
 	CTransform::TRANSFORMDESC TransformDesc;
@@ -259,6 +248,7 @@ void CPlayer::Use_Skill()
 		m_bUseSkill = false;
 		m_bThunder = false;
 		m_eCurState = SKILL;
+		m_tFrame.iFrameStart = 0;
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bTornado)
 	{
@@ -267,6 +257,7 @@ void CPlayer::Use_Skill()
 		m_bUseSkill = false;
 		m_bTornado = false;
 		m_eCurState = SKILL;
+		m_tFrame.iFrameStart = 0;
 	}
 
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON))
@@ -300,10 +291,11 @@ void CPlayer::Key_Input(_float fTimeDelta)
 
 	Safe_AddRef(pInstance);
 
-	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RBUTTON))
+	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RBUTTON) && m_eCurState != SKILL)
 	{
 		m_vTarget = pInstance->Get_TargetPos();
 		m_eCurState = MOVE;
+		m_tFrame.iFrameStart = 0;
 	}
 	
 
@@ -374,18 +366,13 @@ void CPlayer::Free(void)
 	Safe_Release(m_pOnTerrain);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pRendererCom);
-	Safe_Release(m_pVIBufferHead);
-	Safe_Release(m_pVIBufferBody);
-	Safe_Release(m_pTextureComBodyIDLE_Front);
-	Safe_Release(m_pTextureComBodyIDLE_Back);
-	Safe_Release(m_pTextureComBodyMove_Front);
-	Safe_Release(m_pTextureComBodyMove_Back);
-	Safe_Release(m_pTextureComBodySkill_Front);
-	Safe_Release(m_pTextureComBodySkill_Back);
-	Safe_Release(m_pTextureComHeadIDLE_Front);
-	Safe_Release(m_pTextureComHeadIDLE_Back);
-	Safe_Release(m_pTextureComHeadSkill_Front);
-	Safe_Release(m_pTextureComHeadSkill_Back);
+	Safe_Release(m_pVIBuffer);
+	Safe_Release(m_pTextureComIDLE_Front);
+	Safe_Release(m_pTextureComIDLE_Back);
+	Safe_Release(m_pTextureComMove_Front);
+	Safe_Release(m_pTextureComMove_Back);
+	Safe_Release(m_pTextureComSkill_Front);
+	Safe_Release(m_pTextureComSkill_Back);
 	
 }
 
@@ -393,6 +380,7 @@ _float3 CPlayer::Get_Pos()
 {
 	return m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 }
+
 
 void CPlayer::Player_Move(_float fTimeDelta)
 {
@@ -407,10 +395,14 @@ void CPlayer::Player_Move(_float fTimeDelta)
 			if (m_tFrame.iFrameStart == 4)
 			{
 				m_eCurState = IDLE;
+				m_tFrame.iFrameStart = 0;
 			}
 		}
 		else
+		{
 			m_eCurState = IDLE;
+			m_tFrame.iFrameStart = 0;
+		}
 		
 	}
 	m_pTransformCom->Go_Straight(fTimeDelta);
@@ -449,21 +441,21 @@ void CPlayer::Move_Frame(_float fTimeDelta)
 	{
 	case IDLE:
 		if(m_bFront)
-			m_tFrame.iFrameStart = m_pTextureComBodyIDLE_Front->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+			m_tFrame.iFrameStart = m_pTextureComIDLE_Front->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
 		else
-			m_tFrame.iFrameStart = m_pTextureComBodyIDLE_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+			m_tFrame.iFrameStart = m_pTextureComIDLE_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
 		break;
 	case MOVE:
 		if (m_bFront)
-			m_tFrame.iFrameStart = m_pTextureComBodyMove_Front->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+			m_tFrame.iFrameStart = m_pTextureComMove_Front->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
 		else
-			m_tFrame.iFrameStart = m_pTextureComBodyMove_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+			m_tFrame.iFrameStart = m_pTextureComMove_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
 		break;
 	case SKILL:
 		if (m_bFront)
-			m_tFrame.iFrameStart = m_pTextureComBodySkill_Front->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+			m_tFrame.iFrameStart = m_pTextureComSkill_Front->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
 		else
-			m_tFrame.iFrameStart = m_pTextureComBodySkill_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+			m_tFrame.iFrameStart = m_pTextureComSkill_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
 		break;
 	default:
 		break;
@@ -477,36 +469,36 @@ HRESULT CPlayer::TextureRender()
 	case IDLE:
 		if (m_bFront)
 		{
-			if (FAILED(m_pTextureComBodyIDLE_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+			if (FAILED(m_pTextureComIDLE_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
 				return E_FAIL;
 		}
 		else
 		{
-			if (FAILED(m_pTextureComBodyIDLE_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+			if (FAILED(m_pTextureComIDLE_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
 				return E_FAIL;
 		}
 		break;
 	case MOVE:
 		if (m_bFront)
 		{
-			if (FAILED(m_pTextureComBodyMove_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+			if (FAILED(m_pTextureComMove_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
 				return E_FAIL;
 		}
 		else
 		{
-			if (FAILED(m_pTextureComBodyMove_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+			if (FAILED(m_pTextureComMove_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
 				return E_FAIL;
 		}
 		break;
 	case SKILL:
 		if (m_bFront)
 		{
-			if (FAILED(m_pTextureComBodySkill_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+			if (FAILED(m_pTextureComSkill_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
 				return E_FAIL;
 		}
 		else
 		{
-			if (FAILED(m_pTextureComBodySkill_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+			if (FAILED(m_pTextureComSkill_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
 				return E_FAIL;
 		}
 		break;
