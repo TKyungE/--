@@ -250,7 +250,7 @@ CGameObject * CTornado::Clone(void* pArg)
 
 _float4x4 CTornado::Get_World(void)
 {
-	return _float4x4();
+	return m_pTransformCom->Get_WorldMatrix();
 }
 
 void CTornado::Free()
