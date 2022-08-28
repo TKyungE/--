@@ -13,13 +13,13 @@ CCollisionMgr::~CCollisionMgr()
 }
 
 
-bool CCollisionMgr::Collision_Sphere(CLayer::GAMEOBJECTS _Dest, CLayer::GAMEOBJECTS _Sour, CGameObject** pDest, CGameObject** pSour)
+bool CCollisionMgr::Collision_Sphere(CLayer::GAMEOBJECTS _Dest, CLayer::GAMEOBJECTS _Sour, CGameObject** pDest, CGameObject** pSour, _float3** vPos)
 {
 	for (auto& Dest : _Dest)
 	{
 		for (auto& Sour : _Sour)
 		{
-			if (Check_Sphere(Dest, Sour))
+			if (Check_Sphere(Dest, Sour,vPos))
 			{
 				*pDest = Dest;
 				*pSour = Sour;
@@ -30,19 +30,25 @@ bool CCollisionMgr::Collision_Sphere(CLayer::GAMEOBJECTS _Dest, CLayer::GAMEOBJE
 	return false;
 }
 
-bool CCollisionMgr::Check_Sphere(CGameObject * pDest, CGameObject * pSour)
+bool CCollisionMgr::Check_Sphere(CGameObject * pDest, CGameObject * pSour, _float3** vPos)
 {
 	_float fDist = D3DXVec3Length(&(*(_float3*)&pDest->Get_World().m[3][0] - *(_float3*)&pSour->Get_World().m[3][0]));
+	_float	fRadius = (pDest->Get_Info().fX + pSour->Get_Info().fX);
+
 	
-	//// abs : 절대값을 만들어주는 함수
-	//float	fWidth = fabs(pDest->Get_Info().vPos.x - pSour->Get_Info().vPos.x);
-	//float	fHeight = fabs(pDest->Get_Info().vPos.y - pSour->Get_Info().vPos.y);
-	//float   fDeep	= fabs(pDest->Get_Info().vPos.z - pSour->Get_Info().vPos.z);
-	//// sqrt : 루트를 씌워주는 함수
-	//float	fDiagonal = sqrtf(fWidth * fWidth + fHeight * fHeight + fDeep * fDeep);
 
-	float	fRadius = (pDest->Get_Info().fX + pSour->Get_Info().fX);// * 0.5f;
+	if (fRadius >= fDist)
+	{
+		_float3 vLook = *(_float3*)&pDest->Get_World().m[3][0] - *(_float3*)&pSour->Get_World().m[3][0];
+		D3DXVec3Normalize(&vLook, &vLook);
+		vLook = vLook * 0.5f;
+		_float Angle = D3DXVec3Dot(&vLook, (_float3*)&pSour->Get_World().m[1][0]);
+		_float3 Proj = (Angle / D3DXVec3Length((_float3*)&pSour->Get_World().m[1][0]) * D3DXVec3Length((_float3*)&pSour->Get_World().m[1][0])) * *(_float3*)&pSour->Get_World().m[1][0];
+		Proj = *(_float3*)&pSour->Get_World().m[3][0] + Proj;
 
+		*vPos = &Proj;
+	}
+	
 	return fRadius >= fDist;	// 충돌을 한 경우
 }
 

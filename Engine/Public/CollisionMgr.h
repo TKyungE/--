@@ -11,9 +11,9 @@ public:
 
 public:
 	//리스트끼리 충돌 검사
-	static bool	Collision_Sphere(CLayer::GAMEOBJECTS _Dest, CLayer::GAMEOBJECTS _Sour, CGameObject** pDest, CGameObject** pSour);
+	static bool	Collision_Sphere(CLayer::GAMEOBJECTS _Dest, CLayer::GAMEOBJECTS _Sour, CGameObject** pDest, CGameObject** pSour,_float3** vPos);
 	//개별 충돌 검사
-	static bool Check_Sphere(CGameObject* pDest, CGameObject* pSour);
+	static bool Check_Sphere(CGameObject* pDest, CGameObject* pSour, _float3** vPos);
 };
 
 END

@@ -39,7 +39,7 @@ HRESULT CThunderSword::Initialize(void* pArg)
 	m_tFrame.iFrameEnd = 16;
 	m_tFrame.fFrameSpeed = 0.06f;
 	m_tInfo.bDead = false;
-	m_tInfo.fX = 1.f;
+	m_tInfo.fX = 0.5f;
 	return S_OK;
 }
 

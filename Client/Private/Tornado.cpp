@@ -29,7 +29,7 @@ HRESULT CTornado::Initialize(void* pArg)
 		return E_FAIL;
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
-	m_tInfo.vPos.y += 0.85f;
+	m_tInfo.vPos.y += 0.55f;
 	_float3 vScale = { 4.f,3.f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
@@ -40,7 +40,7 @@ HRESULT CTornado::Initialize(void* pArg)
 	m_tFrame.iFrameEnd = 24;
 	m_tFrame.fFrameSpeed = 0.05f;
 	m_tInfo.bDead = false;
-	m_tInfo.fX = 1.f;
+	m_tInfo.fX = 0.5f;
 
 	return S_OK;
 }

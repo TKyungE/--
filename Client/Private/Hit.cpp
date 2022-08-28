@@ -37,8 +37,8 @@ HRESULT CHit::Initialize(void* pArg)
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;
 	m_tFrame.iFrameStart = 0;
-	m_tFrame.iFrameEnd = 2;
-	m_tFrame.fFrameSpeed = 0.1f;
+	m_tFrame.iFrameEnd = 14;
+	m_tFrame.fFrameSpeed = 0.05f;
 	m_tInfo.bDead = false;
 
 	return S_OK;
@@ -50,7 +50,7 @@ void CHit::Tick(_float fTimeDelta)
 
 	Move_Frame(fTimeDelta);
 	m_fDeadTime += fTimeDelta;
-	if (m_fDeadTime > 0.4f)
+	if (m_fDeadTime > 0.7f)
 		Set_Dead();
 }
 
@@ -111,8 +111,8 @@ void CHit::Motion_Change()
 		{
 		case IDLE:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 2;
-			m_tFrame.fFrameSpeed = 0.1f;
+			m_tFrame.iFrameEnd = 14;
+			m_tFrame.fFrameSpeed = 0.05f;
 			break;
 		}
 
@@ -179,7 +179,7 @@ HRESULT CHit::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Hit"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_ThunderEff"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */
