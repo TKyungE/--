@@ -79,7 +79,7 @@ void CMonster::Chase(_float fTimeDelta)
 {
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
 
-	if (1.25f < Distance)
+	if (0.25f < Distance)
 	{
 		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
@@ -118,7 +118,7 @@ CGameObject * CMonster::Clone(void * pArg)
 
 _float4x4 CMonster::Get_World(void)
 {
-	return _float4x4();
+	return m_pTransformCom->Get_WorldMatrix();
 }
 
 void CMonster::Free(void)
@@ -151,6 +151,8 @@ HRESULT CMonster::Initialize(void * pArg)
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(0.f, 0.f, 5.f));
+
+	m_tInfo.fX = 0.5f;
 
 	return S_OK;
 }
