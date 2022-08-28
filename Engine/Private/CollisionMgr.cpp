@@ -30,16 +30,18 @@ bool CCollisionMgr::Collision_Sphere(CLayer::GAMEOBJECTS _Dest, CLayer::GAMEOBJE
 
 bool CCollisionMgr::Check_Sphere(CGameObject * pDest, CGameObject * pSour)
 {
-	// abs : 절대값을 만들어주는 함수
-	float	fWidth = fabs(pDest->Get_Info().vPos.x - pSour->Get_Info().vPos.x);
-	float	fHeight = fabs(pDest->Get_Info().vPos.y - pSour->Get_Info().vPos.y);
-	float   fDeep	= fabs(pDest->Get_Info().vPos.z - pSour->Get_Info().vPos.z);
-	// sqrt : 루트를 씌워주는 함수
-	float	fDiagonal = sqrtf(fWidth * fWidth + fHeight * fHeight + fDeep * fDeep);
+	_float fDist = D3DXVec3Length(&(*(_float3*)&pDest->Get_World().m[3][0] - *(_float3*)&pSour->Get_World().m[3][0]));
+	
+	//// abs : 절대값을 만들어주는 함수
+	//float	fWidth = fabs(pDest->Get_Info().vPos.x - pSour->Get_Info().vPos.x);
+	//float	fHeight = fabs(pDest->Get_Info().vPos.y - pSour->Get_Info().vPos.y);
+	//float   fDeep	= fabs(pDest->Get_Info().vPos.z - pSour->Get_Info().vPos.z);
+	//// sqrt : 루트를 씌워주는 함수
+	//float	fDiagonal = sqrtf(fWidth * fWidth + fHeight * fHeight + fDeep * fDeep);
 
-	float	fRadius = (pDest->Get_Info().fX + pSour->Get_Info().fX) * 0.5f;
+	float	fRadius = (pDest->Get_Info().fX + pSour->Get_Info().fX);// * 0.5f;
 
-	return fRadius >= fDiagonal;	// 충돌을 한 경우
+	return fRadius >= fDist;	// 충돌을 한 경우
 }
 
 

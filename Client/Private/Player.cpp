@@ -40,6 +40,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	m_tFrame.iFrameEnd = 0;
 	m_tFrame.fFrameSpeed = 0.1f;
 
+	m_tInfo.fX = 0.5f;
+
 	return S_OK;
 }
 
