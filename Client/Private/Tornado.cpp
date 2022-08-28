@@ -41,14 +41,14 @@ HRESULT CTornado::Initialize(void* pArg)
 	m_tFrame.fFrameSpeed = 0.05f;
 	m_tInfo.bDead = false;
 	m_tInfo.fX = 0.5f;
-
+	m_tInfo.iDmg = 123;
 	return S_OK;
 }
 
 void CTornado::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-
+	m_tInfo.bDead = false;
 	Move_Frame(fTimeDelta);
 	m_fDeadTime += fTimeDelta;
 	if (m_fDeadTime > 3.f)

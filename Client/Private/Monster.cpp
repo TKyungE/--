@@ -75,6 +75,21 @@ HRESULT CMonster::Release_RenderState(void)
 	return S_OK;
 }
 
+void CMonster::Check_Hit()
+{
+	if (m_tInfo.bHit)
+	{
+		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+		CGameObject::INFO tInfo;
+		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);;
+		tInfo.iTargetDmg = m_tInfo.iTargetDmg;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), LEVEL_GAMEPLAY, TEXT("Layer_DmgFont"), &tInfo);
+		m_tInfo.bHit = false;
+		Safe_Release(pGameInstance);
+	}
+}
+
 void CMonster::Chase(_float fTimeDelta)
 {
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
@@ -153,14 +168,14 @@ HRESULT CMonster::Initialize(void * pArg)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(0.f, 0.f, 5.f));
 
 	m_tInfo.fX = 0.5f;
-
+	m_tInfo.iHp = 9999;
 	return S_OK;
 }
 
 void CMonster::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-
+	
 	_float3 Position = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	_float a;
@@ -219,7 +234,7 @@ void CMonster::Tick(_float fTimeDelta)
 void CMonster::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-
+	Check_Hit();
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }

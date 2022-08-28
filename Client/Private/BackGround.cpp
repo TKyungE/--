@@ -172,6 +172,7 @@ HRESULT CBackGround::TextureRender()
 	default:
 		break;
 	}
+	return S_OK;
 }
 
 

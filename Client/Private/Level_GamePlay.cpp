@@ -83,10 +83,14 @@ void CLevel_GamePlay::Late_Tick(_float fTimeDelta)
 		if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour,&vPos))
 		{
 			Dest->Set_Dead();
-			//Sour->Set_Dead();
+			
 			CGameObject::INFO tInfo;
-			tInfo.vPos = *vPos;
+			tInfo.vPos = *(_float3*)&Sour->Get_World().m[3][0];
 			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+			Sour->Set_Hit(Dest->Get_Info().iDmg);
+			Sour->Set_Hp(Dest->Get_Info().iDmg);
+			if(Sour->Get_Info().iHp <= 0)
+				Sour->Set_Dead();
 		}
 	}
 
