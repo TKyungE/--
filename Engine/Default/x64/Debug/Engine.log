@@ -1,11 +1,3 @@
-﻿  Camera.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  Renderer.cpp
-  Object_Manager.cpp
-  Layer.cpp
-  GameObject.cpp
-  CollisionMgr.cpp
-  코드를 생성하고 있습니다...
-  Engine.vcxproj -> C:\Users\KING\Desktop\수업\라그SR\--\Engine\Default\..\Bin\Engine.dll
+﻿  CollisionMgr.cpp
+  Engine.vcxproj -> C:\Users\603jh\Desktop\--\Engine\Default\..\Bin\Engine.dll
   Engine.vcxproj -> ..\Bin\Engine.pdb (Full PDB)
