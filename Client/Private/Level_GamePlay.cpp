@@ -62,6 +62,8 @@ void CLevel_GamePlay::Tick(_float fTimeDelta)
 
 	CSoundMgr::Get_Instance()->SetSoundVolume(SOUND_BGM, fSound);
  	
+	Create_Rain(fTimeDelta);
+
 	Safe_Release(pGameInstance);
 }
 
@@ -226,6 +228,33 @@ _float3 CLevel_GamePlay::Get_CollisionPos(CGameObject * pDest, CGameObject * pSo
 	CollisionPos.x = pDest->Get_World().m[3][0];
 
 	return CollisionPos;
+}
+
+void CLevel_GamePlay::Create_Rain(_float fTimeDelta)
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	CGameObject::INFO tInfo;
+	fRainTime += fTimeDelta;
+	if (fRainTime > 0.3f)
+	{
+		fRainTime = 0.f;
+		for (int i = 0; i < 30; ++i)
+		{
+			_float iSour = rand() % 60000 * 0.001f;
+			_float iTemp = rand() % 40000 * 0.001f;
+
+			_float3 vPos = { 0.f,0.f,0.f };
+			tInfo.vPos.x = vPos.x + iSour;
+			tInfo.vPos.y = vPos.y;
+			tInfo.vPos.z = vPos.z + iTemp;
+
+			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Rain"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+				
+		}
+	}
+	Safe_Release(pGameInstance);
 }
 
 
