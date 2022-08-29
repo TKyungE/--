@@ -38,6 +38,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	/*CSoundMgr::Get_Instance()->BGM_Pause();
 	CSoundMgr::Get_Instance()->PlayBGM(L"Stage1_Sound.wav", fSOUND);*/
 	CSoundMgr::Get_Instance()->PlayBGM(L"Boss_Sound1.wav", fSOUND);
+
+	SpawnData();
 	return S_OK;
 }
 
@@ -124,7 +126,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar * pLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_GAMEPLAY, pLayerTag, (CGameObject**)&Info.pTarget)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_GAMEPLAY, pLayerTag, (CGameObject**)&Info)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -212,6 +214,46 @@ _float3 CLevel_GamePlay::Get_CollisionPos(CGameObject * pDest, CGameObject * pSo
 	CollisionPos.x = pDest->Get_World().m[3][0];
 
 	return CollisionPos;
+}
+
+void CLevel_GamePlay::SpawnData()
+{
+	HANDLE hFile = CreateFile(TEXT("../../Data/Pos.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+
+	if (INVALID_HANDLE_VALUE == hFile)
+		return;
+
+	DWORD	dwByte = 0;
+	DWORD	dwStrByte = 0;
+
+	_float3 Pos{};
+
+	while (true)
+	{
+		ReadFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
+
+		_tchar* pTag = new _tchar[dwStrByte];
+		ReadFile(hFile, pTag, dwStrByte, &dwByte, nullptr);
+
+		ReadFile(hFile, &Pos, sizeof(_float3), &dwByte, nullptr);
+
+
+		if (0 == dwByte)
+		{
+			delete[]pTag;
+			break;
+		}
+		_float3* vPos = new _float3;
+		_tchar* pSpawnTag = new _tchar;
+		vPos = &Pos;
+		pSpawnTag = pTag;
+		delete[]pTag;
+
+		m_mapSpawn.insert({pSpawnTag,vPos});
+		
+	}
+
+	CloseHandle(hFile);
 }
 
 

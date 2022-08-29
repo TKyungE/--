@@ -29,7 +29,8 @@ private:
 
 private:
 	_float3 Get_CollisionPos(CGameObject* pDest, CGameObject* pSour);
-
+	void SpawnData();
+	map<_tchar*, _float3> m_mapSpawn;
 public:
 	static CLevel_GamePlay* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual void Free() override;
