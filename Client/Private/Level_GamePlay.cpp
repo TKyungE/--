@@ -126,7 +126,10 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar * pLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_GAMEPLAY, pLayerTag, (CGameObject**)&Info)))
+	_float3 vPos = { 5.f, 0.f, 3.f };
+	Info.vPos = vPos;
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -138,6 +141,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 {
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
+
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Monster"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
@@ -168,7 +172,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _tchar * pLayerTag)
 	CameraDesc.CameraDesc.TransformDesc.fSpeedPerSec = 10.f;
 	CameraDesc.CameraDesc.TransformDesc.fRotationPerSec = D3DXToRadian(90.0f);
 
-	memcpy(&CameraDesc.CameraDesc.Info, &Info, sizeof(CGameObject::INFO));
+	CameraDesc.CameraDesc.Info.pTarget = Info.pTarget;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Camera_Dynamic"), LEVEL_GAMEPLAY, pLayerTag, &CameraDesc)))
 		return E_FAIL;
@@ -249,7 +253,7 @@ void CLevel_GamePlay::SpawnData()
 		pSpawnTag = pTag;
 		delete[]pTag;
 
-		m_mapSpawn.insert({pSpawnTag,vPos});
+		m_mapSpawn.insert({pSpawnTag,*vPos});
 		
 	}
 
