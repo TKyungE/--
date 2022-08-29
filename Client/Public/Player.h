@@ -52,6 +52,8 @@ private:
 	void Key_Input(_float fTimeDelta);
 	HRESULT Skill_Thunder(const _tchar * pLayerTag, _float3 _vPos);
 	HRESULT Skill_Tornado(const _tchar * pLayerTag,_float3 _vPos);
+	HRESULT Skill_FireSpear(const _tchar * pLayerTag, _float3 _vPos);
+	HRESULT Skill_Meteor(const _tchar * pLayerTag, _float3 _vPos);
 public:
 	static CPlayer* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
@@ -63,6 +65,8 @@ private:
 	_bool	m_bUseSkill = false;
 	_bool	m_bThunder = false;
 	_bool	m_bTornado = false;
+	_bool	m_bFireSpear = false;
+	_bool	m_bMeteor = false;
 	_bool	m_bFront = false;
 	_bool	m_bCamera = false;
 	STATE				m_ePreState;

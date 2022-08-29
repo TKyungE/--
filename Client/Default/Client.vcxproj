@@ -164,6 +164,8 @@
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\public\DmgFont.h" />
     <ClInclude Include="..\Public\ExpBar.h" />
+    <ClInclude Include="..\public\Fire.h" />
+    <ClInclude Include="..\public\FireSpear.h" />
     <ClInclude Include="..\public\Hit.h" />
     <ClInclude Include="..\Public\HpBar.h" />
     <ClInclude Include="..\Public\IconBar.h" />
@@ -175,6 +177,8 @@
     <ClInclude Include="..\public\Level_Logo.h" />
     <ClInclude Include="..\public\Loader.h" />
     <ClInclude Include="..\Public\MainApp.h" />
+    <ClInclude Include="..\public\Meteor.h" />
+    <ClInclude Include="..\public\MeteorEff.h" />
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\Public\Sky.h" />
@@ -196,6 +200,8 @@
     <ClCompile Include="..\Private\Camera_Dynamic.cpp" />
     <ClCompile Include="..\private\DmgFont.cpp" />
     <ClCompile Include="..\Private\ExpBar.cpp" />
+    <ClCompile Include="..\private\Fire.cpp" />
+    <ClCompile Include="..\private\FireSpear.cpp" />
     <ClCompile Include="..\private\Hit.cpp" />
     <ClCompile Include="..\Private\HpBar.cpp" />
     <ClCompile Include="..\Private\IconBar.cpp" />
@@ -207,6 +213,8 @@
     <ClCompile Include="..\private\Level_Logo.cpp" />
     <ClCompile Include="..\private\Loader.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
+    <ClCompile Include="..\private\Meteor.cpp" />
+    <ClCompile Include="..\private\MeteorEff.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />

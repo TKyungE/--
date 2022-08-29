@@ -248,6 +248,28 @@ void CPlayer::Use_Skill()
 		m_bUseSkill = true;
 		m_bTornado = true;
 	}
+	if (CKeyMgr::Get_Instance()->Key_Down('3') && !m_bUseSkill && !m_bFireSpear)
+	{
+		CGameObject::INFO tInfo;
+
+		tInfo.vPos = pInstance->Get_TargetPos();
+
+		pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"), &tInfo);
+
+		m_bUseSkill = true;
+		m_bFireSpear = true;
+	}
+	if (CKeyMgr::Get_Instance()->Key_Down('4') && !m_bUseSkill && !m_bMeteor)
+	{
+		CGameObject::INFO tInfo;
+
+		tInfo.vPos = pInstance->Get_TargetPos();
+
+		pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"), &tInfo);
+
+		m_bUseSkill = true;
+		m_bMeteor = true;
+	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bThunder)
 	{
 		pInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
@@ -268,18 +290,28 @@ void CPlayer::Use_Skill()
 		m_tFrame.iFrameStart = 0;
 		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	}
-
-	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON))
+	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bFireSpear)
 	{
-		if (CKeyMgr::Get_Instance()->Key_Down('3'))
-		{
-			CGameObject::INFO tInfo;
-			tInfo.vPos = pInstance->Get_TargetPos();
-			pInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);	
-		}
+		pInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
+		Skill_FireSpear(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
+		m_bUseSkill = false;
+		m_bFireSpear = false;
+		m_eCurState = SKILL;
+		m_tFrame.iFrameStart = 0;
+		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	}
+	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bMeteor)
+	{
+		pInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
+		Skill_Meteor(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
+		m_bUseSkill = false;
+		m_bMeteor = false;
+		m_eCurState = SKILL;
+		m_tFrame.iFrameStart = 0;
+		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	}
 	
-	if (CKeyMgr::Get_Instance()->Key_Down('4'))
+	if (CKeyMgr::Get_Instance()->Key_Down('L'))
 	{
 		CGameObject::INFO tInfo;
 		tInfo.pTarget = this;
@@ -345,7 +377,53 @@ HRESULT CPlayer::Skill_Tornado(const _tchar * pLayerTag, _float3 _vPos)
 
 	return S_OK;
 }
+HRESULT CPlayer::Skill_FireSpear(const _tchar * pLayerTag, _float3 _vPos)
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
 
+	CGameObject::INFO tInfo;
+
+	for (int i = 0; i < 100; ++i)
+	{
+		_float iSour = rand() % 60000 * 0.001f;
+		_float iTemp = rand() % 60000 * 0.001f;
+		_float3 vPos = { 0.f,0.f,0.f };
+		tInfo.vPos.x = vPos.x + iSour;
+		tInfo.vPos.y = vPos.y;
+		tInfo.vPos.z = vPos.z + iTemp;
+
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_FireSpear"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+			return E_FAIL;
+	}
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+HRESULT CPlayer::Skill_Meteor(const _tchar * pLayerTag, _float3 _vPos)
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	CGameObject::INFO tInfo;
+	for (int i = 0; i < 100; ++i)
+	{
+		_float iSour = rand() % 60000 * 0.001f;
+		_float iTemp = rand() % 40000 * 0.001f;
+
+		_float3 vPos = { 0.f,0.f,0.f };
+		tInfo.vPos.x = vPos.x + iSour;
+		tInfo.vPos.y = vPos.y;
+		tInfo.vPos.z = vPos.z + iTemp;
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Meteor"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+			return E_FAIL;
+	}
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
 _float4x4 CPlayer::Get_World(void)
 {
 	return m_pTransformCom->Get_WorldMatrix();
