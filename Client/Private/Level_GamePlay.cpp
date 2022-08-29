@@ -88,14 +88,28 @@ void CLevel_GamePlay::Late_Tick(_float fTimeDelta)
 	{
 		if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour))
 		{
+			
 			Dest->Set_Dead();
-			
-			_float3 vPos = Get_CollisionPos(Dest, Sour);
-			
-			
-			Sour->Set_Hit(Dest->Get_Info().iDmg, vPos);
-			Sour->Set_Hp(Dest->Get_Info().iDmg);
-			if(Sour->Get_Info().iHp <= 0)
+			if(Dest->Get_Info().iMoney == 33)
+			{ 
+				fCollTime += fTimeDelta;
+				if (fCollTime > 0.1f)
+				{
+					_float3 vPos = Get_CollisionPos(Dest, Sour);
+
+					Sour->Set_Hit(Dest->Get_Info().iDmg, vPos);
+					Sour->Set_Hp(Dest->Get_Info().iDmg);
+					fCollTime = 0.f;
+				}
+			}
+			else
+			{
+				_float3 vPos = Get_CollisionPos(Dest, Sour);
+
+				Sour->Set_Hit(Dest->Get_Info().iDmg, vPos);
+				Sour->Set_Hp(Dest->Get_Info().iDmg);
+			}
+			if (Sour->Get_Info().iHp <= 0)
 				Sour->Set_Dead();
 		}
 	}

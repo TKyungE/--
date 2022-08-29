@@ -43,7 +43,7 @@ HRESULT CThunderCloud::Initialize(void* pArg)
 	m_tFrame.iFrameEnd = 17;
 	m_tFrame.fFrameSpeed = 0.1f;
 	m_tInfo.bDead = false;
-
+	m_tInfo.iMoney = 11;
 	return S_OK;
 }
 

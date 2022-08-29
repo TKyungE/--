@@ -57,19 +57,21 @@ public:
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
 	virtual _float4x4 Get_World(void) override;
 	virtual void Free(void) override;
-public:
-	_float3 Get_Pos();
-	void Set_Front(_bool bfront) { m_bFront = bfront; }
 private:
 	_float3 m_vTargetLook;
 	_float3 m_vTarget;
-	_float3 m_vLook;
 	_bool	m_bUseSkill = false;
 	_bool	m_bThunder = false;
 	_bool	m_bTornado = false;
 	_bool	m_bFront = false;
+	_bool	m_bCamera = false;
 	STATE				m_ePreState;
 	STATE				m_eCurState;
+public:
+	_float3 Get_Pos();
+	_bool Get_Front() { return m_bFront; }
+	void Set_Front(_bool bfront) { m_bFront = bfront; }
+	void Set_Camera(_bool bCamera) { m_bCamera = bCamera; }
 private:
 	void Player_Move(_float fTimeDelta);
 	void Motion_Change();

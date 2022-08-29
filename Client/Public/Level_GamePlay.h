@@ -35,6 +35,7 @@ public:
 	virtual void Free() override;
 private:
 	_float fSound = 0.f;
+	_float fCollTime = 0.f;
 	bool m_IconRender = false;
 };
 

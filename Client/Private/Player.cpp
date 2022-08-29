@@ -76,6 +76,13 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 
 	Use_Skill();
 
+	_float4x4		ViewMatrix;
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
@@ -295,7 +302,6 @@ void CPlayer::Key_Input(_float fTimeDelta)
 
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RBUTTON) && m_eCurState != SKILL)
 	{
-		m_vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 		m_vTarget = pInstance->Get_TargetPos();
 		m_eCurState = MOVE;
 		m_tFrame.iFrameStart = 0;
@@ -453,16 +459,20 @@ void CPlayer::Move_Frame(_float fTimeDelta)
 void CPlayer::Check_Front()
 {
 	
-	_float3 vLook;
-	m_vTargetLook = m_vTarget - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	D3DXVec3Normalize(&vLook, &m_vTargetLook);
-	_float cos = D3DXVec3Dot(&vLook, &m_vLook);
-	_float Angle = 0.f;
-	Angle = acosf(Angle);
-	if (Angle < D3DXToRadian(90.f) && Angle > D3DXToRadian(-90.f))
+	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+		
+	if (m_vTarget.z > vPos.z && !m_bCamera)
 		m_bFront = false;
-	else if (Angle < D3DXToRadian(-90.f))
+	else if (m_vTarget.z <= vPos.z && !m_bCamera)
 		m_bFront = true;
+	else if (m_vTarget.z > vPos.z && m_bCamera)
+		m_bFront = true;
+	else if (m_vTarget.z <= vPos.z && m_bCamera)
+		m_bFront = false;
+
+
+
 }
 
 HRESULT CPlayer::TextureRender()

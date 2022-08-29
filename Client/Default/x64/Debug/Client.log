@@ -1,3 +1,5 @@
-﻿  Player.cpp
+﻿  Level_GamePlay.cpp
+c:\users\shout\desktop\과제\--\client\private\level_gameplay.cpp(54): warning C4305: '+=': 'double'에서 'Engine::_float'(으)로 잘립니다.
+c:\users\shout\desktop\과제\--\client\private\level_gameplay.cpp(56): warning C4305: '-=': 'double'에서 'Engine::_float'(으)로 잘립니다.
   Client.vcxproj -> C:\Users\shout\Desktop\과제\--\Client\Default\..\Bin\Client.exe
   Client.vcxproj -> ..\Bin\Client.pdb (Full PDB)

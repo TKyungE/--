@@ -41,6 +41,7 @@ HRESULT CThunderSword::Initialize(void* pArg)
 	m_tInfo.bDead = false;
 	m_tInfo.fX = 0.5f;
 	m_tInfo.iDmg = 5678;
+	m_tInfo.iMoney = 22;
 	return S_OK;
 }
 

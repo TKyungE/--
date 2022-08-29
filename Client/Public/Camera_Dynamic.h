@@ -38,6 +38,7 @@ private:
 	_float m_XfAngle = 0.f;
 	_float4x4 m_matRotY;
 	_float4x4 m_matRotX;
+	_bool  m_bTrue = false;
 public:
 	static CCamera_Dynamic* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
