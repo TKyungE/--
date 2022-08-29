@@ -3,6 +3,7 @@
 #include "GameInstance.h"
 #include "Player.h"
 #include "KeyMgr.h"
+
 CCamera_Dynamic::CCamera_Dynamic(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CCamera(pGraphic_Device)
 {

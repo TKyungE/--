@@ -20,6 +20,7 @@ public:
 		_uint m_iIndicesByte;
 		D3DFORMAT m_eIndexFormat;
 	}VIBINFO;
+
 protected:
 	CVIBuffer(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CVIBuffer(const CVIBuffer& rhs);
@@ -28,6 +29,7 @@ protected:
 public:
 	LPDIRECT3DVERTEXBUFFER9 Get_VB(void) { return m_pVB; }
 	LPDIRECT3DINDEXBUFFER9 Get_IB(void) { return m_pIB; }
+	
 	VIBINFO Get_VIBInfo(void) { return m_tVIBInfo; }
 	void Set_VIBInfo(VIBINFO& tVIBInfo);
 
@@ -35,6 +37,11 @@ public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render();
+
+public:
+	_float3*					m_pVerticesPos = nullptr;
+	FACEINDICES16* m_pIndices16 = nullptr;
+	FACEINDICES32* m_pIndices32 = nullptr;
 
 protected:
 	LPDIRECT3DVERTEXBUFFER9		m_pVB = nullptr;

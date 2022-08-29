@@ -14,6 +14,9 @@ protected:
 	virtual ~CGameObject() = default;
 
 public:
+	class CComponent* Find_Component(const _tchar* pComponentTag);
+
+public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
 	virtual void Tick(_float fTimeDelta);
@@ -60,9 +63,6 @@ protected:
 
 protected:
 	HRESULT Add_Components(const _tchar* pComponentTag, _uint iLevelIndex, const _tchar* pPrototypeTag,class CComponent** ppOut, void* pArg = nullptr);
-
-protected:
-	class CComponent* Find_Component(const _tchar* pComponentTag);
 
 public:	
 	virtual CGameObject* Clone(void* pArg = nullptr) = 0;
