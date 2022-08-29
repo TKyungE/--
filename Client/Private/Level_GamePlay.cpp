@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Camera_Dynamic.h"
 #include "SoundMgr.h"
+#include "CollisionMgr.h"
 
 CLevel_GamePlay::CLevel_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -63,6 +64,37 @@ void CLevel_GamePlay::Late_Tick(_float fTimeDelta)
 	__super::Late_Tick(fTimeDelta);
 
 	SetWindowText(g_hWnd, TEXT("게임플레이레벨입니다."));
+
+	//충돌 사용법
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+	
+
+	CGameObject* Dest;
+	CGameObject* Sour;
+	_float3* vPos;
+	if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour,&vPos))
+	{
+		//Dest->Set_Dead();
+		//Sour->Set_Dead();
+	}
+	if (pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill")) != nullptr)
+	{
+		if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour,&vPos))
+		{
+			Dest->Set_Dead();
+			
+			CGameObject::INFO tInfo;
+			tInfo.vPos = *(_float3*)&Sour->Get_World().m[3][0];
+			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+			Sour->Set_Hit(Dest->Get_Info().iDmg);
+			Sour->Set_Hp(Dest->Get_Info().iDmg);
+			if(Sour->Get_Info().iHp <= 0)
+				Sour->Set_Dead();
+		}
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)

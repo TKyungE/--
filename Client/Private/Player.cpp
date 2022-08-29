@@ -40,6 +40,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	m_tFrame.iFrameEnd = 0;
 	m_tFrame.fFrameSpeed = 0.1f;
 
+	m_tInfo.fX = 0.5f;
+
 	return S_OK;
 }
 
@@ -384,6 +386,7 @@ _float3 CPlayer::Get_Pos()
 
 void CPlayer::Player_Move(_float fTimeDelta)
 {
+	
 	_float3 vLook;
 	m_vTargetLook = m_vTarget - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	D3DXVec3Normalize(&vLook, &m_vTargetLook);
@@ -405,6 +408,7 @@ void CPlayer::Player_Move(_float fTimeDelta)
 		}
 		
 	}
+
 	m_pTransformCom->Go_Straight(fTimeDelta);
 }
 

@@ -44,7 +44,7 @@ private:
 	HRESULT SetUp_Components(void);
 	HRESULT SetUp_RenderState(void);
 	HRESULT Release_RenderState(void);
-
+	void Check_Hit();
 	void Chase(_float fTimeDelta);
 
 public:

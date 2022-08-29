@@ -39,7 +39,8 @@ HRESULT CThunderSword::Initialize(void* pArg)
 	m_tFrame.iFrameEnd = 16;
 	m_tFrame.fFrameSpeed = 0.06f;
 	m_tInfo.bDead = false;
-	
+	m_tInfo.fX = 0.5f;
+	m_tInfo.iDmg = 5678;
 	return S_OK;
 }
 
@@ -245,7 +246,7 @@ CGameObject * CThunderSword::Clone(void* pArg)
 
 _float4x4 CThunderSword::Get_World(void)
 {
-	return _float4x4();
+	return m_pTransformCom->Get_WorldMatrix();
 }
 
 void CThunderSword::Free()

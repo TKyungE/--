@@ -5,7 +5,6 @@
 #include "Level_Loading.h"
 #include "SoundMgr.h"
 
-
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::Get_Instance())
 {
