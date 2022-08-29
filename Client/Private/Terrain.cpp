@@ -28,9 +28,6 @@ HRESULT CTerrain::Initialize(void* pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	if (FAILED(m_pOnTerrain->Set_TerrainVIBuffer(m_pVIBufferCom)))
-		return E_FAIL;
-
 	*(CGameObject**)pArg = this;
 	
 	//여기서 링크를 가져와서 대입하는 방식이 현명해보임,, 밑에는 임시방편
@@ -178,7 +175,7 @@ HRESULT CTerrain::OnLoadData(const _tchar* pFilePath)
 		ReadFile(hFile, vPos, sizeof(_float3), &dwByte, nullptr);
 		ReadFile(hFile, vTex, sizeof(_float2), &dwByte, nullptr);
 
-		pVertices[i].vPosition = vPos;
+		pVertices[i].vPosition = m_pVIBufferCom->m_pVerticesPos[i] = vPos;
 		pVertices[i].vTexture = vTex;
 	}
 
@@ -191,6 +188,10 @@ HRESULT CTerrain::OnLoadData(const _tchar* pFilePath)
 		ReadFile(hFile, &pIndices[i]._0, sizeof(_uint), &dwByte, nullptr);
 		ReadFile(hFile, &pIndices[i]._1, sizeof(_uint), &dwByte, nullptr);
 		ReadFile(hFile, &pIndices[i]._2, sizeof(_uint), &dwByte, nullptr);
+
+		m_pVIBufferCom->m_pIndices32[i]._0 = pIndices[i]._0;
+		m_pVIBufferCom->m_pIndices32[i]._1 = pIndices[i]._1;
+		m_pVIBufferCom->m_pIndices32[i]._2 = pIndices[i]._2;
 	}
 
 	IB->Unlock();
@@ -214,9 +215,6 @@ HRESULT CTerrain::SetUp_Components()
 
 	/* For.Com_VIBuffer */
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"), (CComponent**)&m_pVIBufferCom)))
-		return E_FAIL;
-
-	if (FAILED(__super::Add_Components(TEXT("Com_Onterrain"), LEVEL_STATIC, TEXT("Prototype_Component_Onterrain"), (CComponent**)&m_pOnTerrain)))
 		return E_FAIL;
 
 	/* For.Com_Transform */
@@ -286,7 +284,6 @@ void CTerrain::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pOnTerrain);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pRendererCom);

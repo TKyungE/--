@@ -108,9 +108,6 @@ HRESULT CMainApp::Ready_Prototype_Component()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Transform"), CTransform::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Onterrain"), COnterrain::Create(m_pGraphic_Device))))
-		return E_FAIL;
-
 	Safe_AddRef(m_pRenderer);
 
 	return S_OK;

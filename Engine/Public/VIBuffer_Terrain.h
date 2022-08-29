@@ -25,6 +25,9 @@ public:
 	void Release_Buffer(void);
 
 public:
+	_float Compute_Height(const _float3& vWorldPos, const _float4x4& WorldMatrix, _float fOffset = 0.f);
+
+public:
 	virtual HRESULT Initialize_Prototype(_uint iNumVerticesX, _uint iNumVerticesZ);
 	virtual HRESULT Initialize(void* pArg) override;
 

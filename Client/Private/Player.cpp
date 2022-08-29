@@ -49,18 +49,24 @@ void CPlayer::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
-	_float3 Position = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	_float a;
-	if (FAILED(m_pOnTerrain->Get_OnTerrainY(Position, &a)))
-	{
-		ERR_MSG(TEXT("Failed to OnTerrain"));
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
 		return;
-	}
 
-	Position.y = a + (D3DXVec3Length(&m_pTransformCom->Get_State(CTransform::STATE_UP)) * 0.5f);
+	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
+	if (nullptr == pVIBuffer_Terrain)
+		return;
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, Position);
+	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
+	if (nullptr == pTransform_Terrain)
+		return;
+
+	_float3			vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.5f);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+	
 	Move_Frame(fTimeDelta);
 	Key_Input(fTimeDelta);
 	//Check_Front();
@@ -135,9 +141,6 @@ HRESULT CPlayer::SetUp_Components(void)
 		return E_FAIL;
 
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBuffer)))
-		return E_FAIL;
-
-	if (FAILED(__super::Add_Components(TEXT("Com_Onterrain"), LEVEL_STATIC, TEXT("Prototype_Component_Onterrain"), (CComponent**)&m_pOnTerrain)))
 		return E_FAIL;
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_IDLE_Front"), (CComponent**)&m_pTextureComIDLE_Front)))
@@ -349,7 +352,6 @@ void CPlayer::Free(void)
 {
 	__super::Free();
 
-	Safe_Release(m_pOnTerrain);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pVIBuffer);
