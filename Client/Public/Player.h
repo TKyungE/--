@@ -63,6 +63,7 @@ public:
 private:
 	_float3 m_vTargetLook;
 	_float3 m_vTarget;
+	_float3 m_vLook;
 	_bool	m_bUseSkill = false;
 	_bool	m_bThunder = false;
 	_bool	m_bTornado = false;
@@ -73,6 +74,7 @@ private:
 	void Player_Move(_float fTimeDelta);
 	void Motion_Change();
 	void Move_Frame(_float fTimeDelta);
+	void Check_Front();
 	HRESULT TextureRender();
 	
 };

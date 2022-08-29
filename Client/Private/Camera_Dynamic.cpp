@@ -68,12 +68,12 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 	if (CKeyMgr::Get_Instance()->Key_Pressing('B'))
 	{
 		m_pTransform->Set_State(CTransform::STATE_POSITION, (Camera * -5.f) + *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
-		dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Front(true);
+	//	dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Front(true);
 	}
 	else
 	{
 		m_pTransform->Set_State(CTransform::STATE_POSITION, (Camera * 5.f) + *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
-		dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Front(false);
+	//	dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Front(false);
 	}
 	Safe_Release(pGameInstance);
 

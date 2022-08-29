@@ -106,6 +106,9 @@
     <Filter Include="03.Effect\Default\02.LevelUp">
       <UniqueIdentifier>{5b590f51-993c-46bd-935f-d21e6519d9f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Effect\Default\03.DmgFont">
+      <UniqueIdentifier>{d4f5d2b8-7db9-408b-b7c1-92b6532b836e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -201,6 +204,9 @@
     <ClInclude Include="..\public\LevelUp.h">
       <Filter>03.Effect\Default\02.LevelUp</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\DmgFont.h">
+      <Filter>03.Effect\Default\03.DmgFont</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -283,6 +289,9 @@
     </ClCompile>
     <ClCompile Include="..\private\LevelUp.cpp">
       <Filter>03.Effect\Default\02.LevelUp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\DmgFont.cpp">
+      <Filter>03.Effect\Default\03.DmgFont</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

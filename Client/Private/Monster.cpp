@@ -2,6 +2,7 @@
 #include "..\Public\Monster.h"
 #include "..\Public\Player.h"
 #include "GameInstance.h"
+#include "SoundMgr.h"
 
 CMonster::CMonster(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -40,7 +41,7 @@ HRESULT CMonster::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
 
-	m_pTransformCom->Set_Scaled({ 1.f, 2.f, 1.f });
+	m_pTransformCom->Set_Scaled({ 1.f, 1.f, 1.f });
 
 	return S_OK;
 }
@@ -73,6 +74,24 @@ HRESULT CMonster::Release_RenderState(void)
 	m_pGraphic_Device->SetTexture(0, nullptr);
 
 	return S_OK;
+}
+
+void CMonster::Check_Hit()
+{
+	if (m_tInfo.bHit)
+	{
+		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+		CGameObject::INFO tInfo;
+		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);;
+		tInfo.iTargetDmg = m_tInfo.iTargetDmg;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), LEVEL_GAMEPLAY, TEXT("Layer_DmgFont"), &tInfo);
+		tInfo.vPos = m_tInfo.vTargetPos;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+		CSoundMgr::Get_Instance()->PlayEffect(L"Hit_Sound.wav", fSOUND);
+		m_tInfo.bHit = false;
+		Safe_Release(pGameInstance);
+	}
 }
 
 void CMonster::Chase(_float fTimeDelta)
@@ -153,14 +172,14 @@ HRESULT CMonster::Initialize(void * pArg)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(0.f, 0.f, 5.f));
 
 	m_tInfo.fX = 0.5f;
-
+	m_tInfo.iHp = 99999;
 	return S_OK;
 }
 
 void CMonster::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-
+	
 	_float3 Position = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	_float a;
@@ -219,7 +238,7 @@ void CMonster::Tick(_float fTimeDelta)
 void CMonster::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-
+	Check_Hit();
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
