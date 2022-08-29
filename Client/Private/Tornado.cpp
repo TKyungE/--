@@ -48,6 +48,7 @@ HRESULT CTornado::Initialize(void* pArg)
 void CTornado::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+
 	m_tInfo.bDead = false;
 	Move_Frame(fTimeDelta);
 	m_fDeadTime += fTimeDelta;

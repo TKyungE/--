@@ -40,7 +40,7 @@ HRESULT CMonster::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
 
-	m_pTransformCom->Set_Scaled({ 1.f, 2.f, 1.f });
+	m_pTransformCom->Set_Scaled({ 1.f, 1.f, 1.f });
 
 	return S_OK;
 }

@@ -23,8 +23,12 @@ public:
 	HRESULT Ready_Layer_Monster(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Camera(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_UI(const _tchar* pLayerTag);
+
 private:
 	CGameObject::INFO Info;
+
+private:
+	_float3 Get_CollisionPos(CGameObject* pDest, CGameObject* pSour);
 
 public:
 	static CLevel_GamePlay* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
