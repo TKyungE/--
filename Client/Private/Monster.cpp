@@ -2,6 +2,7 @@
 #include "..\Public\Monster.h"
 #include "..\Public\Player.h"
 #include "GameInstance.h"
+#include "SoundMgr.h"
 
 CMonster::CMonster(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -85,6 +86,9 @@ void CMonster::Check_Hit()
 		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);;
 		tInfo.iTargetDmg = m_tInfo.iTargetDmg;
 		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), LEVEL_GAMEPLAY, TEXT("Layer_DmgFont"), &tInfo);
+		tInfo.vPos = m_tInfo.vTargetPos;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+		CSoundMgr::Get_Instance()->PlayEffect(L"Hit_Sound.wav", fSOUND);
 		m_tInfo.bHit = false;
 		Safe_Release(pGameInstance);
 	}
@@ -168,7 +172,7 @@ HRESULT CMonster::Initialize(void * pArg)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(0.f, 0.f, 5.f));
 
 	m_tInfo.fX = 0.5f;
-	m_tInfo.iHp = 9999;
+	m_tInfo.iHp = 99999;
 	return S_OK;
 }
 

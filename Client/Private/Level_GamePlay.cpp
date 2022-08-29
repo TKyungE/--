@@ -5,6 +5,7 @@
 #include "Camera_Dynamic.h"
 #include "SoundMgr.h"
 #include "CollisionMgr.h"
+#include "KeyMgr.h"
 
 CLevel_GamePlay::CLevel_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -33,10 +34,10 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
 
-	/*fSound = fSOUND;
-	CSoundMgr::Get_Instance()->BGM_Pause();
+	fSound = fSOUND;
+	/*CSoundMgr::Get_Instance()->BGM_Pause();
 	CSoundMgr::Get_Instance()->PlayBGM(L"Stage1_Sound.wav", fSOUND);*/
-
+	CSoundMgr::Get_Instance()->PlayBGM(L"Boss_Sound1.wav", fSOUND);
 	return S_OK;
 }
 
@@ -47,8 +48,13 @@ void CLevel_GamePlay::Tick(_float fTimeDelta)
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	fSound += (pGameInstance->Get_DIMMoveState(DIMM_WHEEL)*fTimeDelta) / 100;
+	//fSound += (pGameInstance->Get_DIMMoveState(DIMM_WHEEL)*fTimeDelta) / 100;
 
+	if (CKeyMgr::Get_Instance()->Key_Down('O'))
+		fSound += 0.01;
+	if (CKeyMgr::Get_Instance()->Key_Down('P'))
+		fSound -= 0.01;
+	
 	if (fSound > 1.f)
 		fSound = 1.f;
 	if (fSound < 0.f)
@@ -72,26 +78,22 @@ void CLevel_GamePlay::Late_Tick(_float fTimeDelta)
 
 	CGameObject* Dest;
 	CGameObject* Sour;
-	_float3* vPos = nullptr;
-	if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour, &vPos))
+	
+	if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour))
 	{
 		//Dest->Set_Dead();
 		//Sour->Set_Dead();
 	}
 	if (pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill")) != nullptr)
 	{
-		if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour, &vPos))
+		if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour))
 		{
 			Dest->Set_Dead();
 			
-			CGameObject::INFO tInfo;
-
-			tInfo.vPos = *(_float3*)&Sour->Get_World().m[3][0];
-
-			tInfo.vPos = Get_CollisionPos(Dest, Sour);
-
-			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
-			Sour->Set_Hit(Dest->Get_Info().iDmg);
+			_float3 vPos = Get_CollisionPos(Dest, Sour);
+			
+			
+			Sour->Set_Hit(Dest->Get_Info().iDmg, vPos);
 			Sour->Set_Hp(Dest->Get_Info().iDmg);
 			if(Sour->Get_Info().iHp <= 0)
 				Sour->Set_Dead();

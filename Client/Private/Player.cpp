@@ -63,7 +63,7 @@ void CPlayer::Tick(_float fTimeDelta)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, Position);
 	Move_Frame(fTimeDelta);
 	Key_Input(fTimeDelta);
-	
+	//Check_Front();
 	
 	Player_Move(fTimeDelta);
 }
@@ -295,29 +295,13 @@ void CPlayer::Key_Input(_float fTimeDelta)
 
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RBUTTON) && m_eCurState != SKILL)
 	{
+		m_vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 		m_vTarget = pInstance->Get_TargetPos();
 		m_eCurState = MOVE;
 		m_tFrame.iFrameStart = 0;
+		Check_Front();
 	}
 	
-
-	//if (CKeyMgr::Get_Instance()->Key_Pressing('W'))
-	//	m_pTransformCom->Go_Straight(fTimeDelta);
-
-	//if (CKeyMgr::Get_Instance()->Key_Pressing('S'))
-	//	m_pTransformCom->Go_Backward(fTimeDelta);
-
-	//if (CKeyMgr::Get_Instance()->Key_Pressing('A'))
-	//	m_pTransformCom->Go_Left(fTimeDelta);
-
-	//if (CKeyMgr::Get_Instance()->Key_Pressing('D'))
-	//	m_pTransformCom->Go_Right(fTimeDelta);
-
-	//if (CKeyMgr::Get_Instance()->Key_Pressing('Q'))
-	//	m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * -1.f);
-
-	//if (CKeyMgr::Get_Instance()->Key_Pressing('E'))
-	//	m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), fTimeDelta * 1.f);
 
 	Safe_Release(pInstance);
 }
@@ -464,6 +448,21 @@ void CPlayer::Move_Frame(_float fTimeDelta)
 	default:
 		break;
 	}
+}
+
+void CPlayer::Check_Front()
+{
+	
+	_float3 vLook;
+	m_vTargetLook = m_vTarget - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	D3DXVec3Normalize(&vLook, &m_vTargetLook);
+	_float cos = D3DXVec3Dot(&vLook, &m_vLook);
+	_float Angle = 0.f;
+	Angle = acosf(Angle);
+	if (Angle < D3DXToRadian(90.f) && Angle > D3DXToRadian(-90.f))
+		m_bFront = false;
+	else if (Angle < D3DXToRadian(-90.f))
+		m_bFront = true;
 }
 
 HRESULT CPlayer::TextureRender()

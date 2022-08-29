@@ -45,9 +45,11 @@ void CDmgFont::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 	Set_State();
+	Jump();
 	
+
 	m_fDeadTime += fTimeDelta;
-	if (m_fDeadTime > 0.7f)
+	if (m_fDeadTime > 0.25f)
 		Set_Dead();
 }
 
@@ -151,6 +153,19 @@ void CDmgFont::Set_State()
 		m_eCurState = THREE;
 	if (m_iDraw[0] != 0)
 		m_eCurState = FOUR;
+}
+
+void CDmgFont::Jump()
+{
+	m_fMoveX += 0.1f;
+	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	vPos.y += 4 * m_fTime - (5.8f * m_fTime * m_fTime * 0.5f);
+	vPos.x += m_fMoveX;
+	m_fTime += 0.1f;
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+	
+	
 }
 
 HRESULT CDmgFont::TextureRender()
