@@ -175,8 +175,9 @@ HRESULT CTerrain::OnLoadData(const _tchar* pFilePath)
 		ReadFile(hFile, vPos, sizeof(_float3), &dwByte, nullptr);
 		ReadFile(hFile, vTex, sizeof(_float2), &dwByte, nullptr);
 
-		pVertices[i].vPosition = m_pVIBufferCom->m_pVerticesPos[i] = vPos;
+		pVertices[i].vPosition = vPos;
 		pVertices[i].vTexture = vTex;
+		m_pVIBufferCom->m_pVerticesPos.push_back(pVertices[i].vPosition);
 	}
 
 	VB->Unlock();
@@ -189,9 +190,7 @@ HRESULT CTerrain::OnLoadData(const _tchar* pFilePath)
 		ReadFile(hFile, &pIndices[i]._1, sizeof(_uint), &dwByte, nullptr);
 		ReadFile(hFile, &pIndices[i]._2, sizeof(_uint), &dwByte, nullptr);
 
-		m_pVIBufferCom->m_pIndices32[i]._0 = pIndices[i]._0;
-		m_pVIBufferCom->m_pIndices32[i]._1 = pIndices[i]._1;
-		m_pVIBufferCom->m_pIndices32[i]._2 = pIndices[i]._2;
+		m_pVIBufferCom->m_pIndices32.push_back(pIndices[i]);
 	}
 
 	IB->Unlock();
