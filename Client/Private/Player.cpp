@@ -63,17 +63,15 @@ void CPlayer::Tick(_float fTimeDelta)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, Position);
 	Move_Frame(fTimeDelta);
 	Key_Input(fTimeDelta);
-	//Check_Front();
-	
 	Player_Move(fTimeDelta);
 }
 
 void CPlayer::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-
+	
 	Motion_Change();
-
+	
 	Use_Skill();
 
 	_float4x4		ViewMatrix;
@@ -258,6 +256,7 @@ void CPlayer::Use_Skill()
 		m_bThunder = false;
 		m_eCurState = SKILL;
 		m_tFrame.iFrameStart = 0;
+		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bTornado)
 	{
@@ -267,6 +266,7 @@ void CPlayer::Use_Skill()
 		m_bTornado = false;
 		m_eCurState = SKILL;
 		m_tFrame.iFrameStart = 0;
+		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	}
 
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON))
