@@ -181,6 +181,7 @@
     <ClInclude Include="..\public\MeteorEff.h" />
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\Player.h" />
+    <ClInclude Include="..\public\Rain.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\public\SoundMgr.h" />
     <ClInclude Include="..\Public\Terrain.h" />
@@ -217,6 +218,7 @@
     <ClCompile Include="..\private\MeteorEff.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
+    <ClCompile Include="..\private\Rain.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\private\SoundMgr.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />

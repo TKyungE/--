@@ -121,6 +121,9 @@
     <Filter Include="03.Effect\Skill\03.Meteor\MeteorEff">
       <UniqueIdentifier>{59afe265-12a3-4ee1-92df-c139b6702621}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Effect\Default\04.Rain">
+      <UniqueIdentifier>{50fc2f1f-a364-4bde-b65c-da29ee1ea6e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -231,6 +234,9 @@
     <ClInclude Include="..\public\MeteorEff.h">
       <Filter>03.Effect\Skill\03.Meteor\MeteorEff</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Rain.h">
+      <Filter>03.Effect\Default\04.Rain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -328,6 +334,9 @@
     </ClCompile>
     <ClCompile Include="..\private\MeteorEff.cpp">
       <Filter>03.Effect\Skill\03.Meteor\MeteorEff</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Rain.cpp">
+      <Filter>03.Effect\Default\04.Rain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

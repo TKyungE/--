@@ -29,13 +29,14 @@ private:
 
 private:
 	_float3 Get_CollisionPos(CGameObject* pDest, CGameObject* pSour);
-
+	void Create_Rain(_float fTimeDelta);
 public:
 	static CLevel_GamePlay* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual void Free() override;
 private:
 	_float fSound = 0.f;
 	_float fCollTime = 0.f;
+	_float fRainTime = 0.f;
 	bool m_IconRender = false;
 };
 

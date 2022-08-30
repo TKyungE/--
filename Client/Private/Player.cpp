@@ -49,24 +49,7 @@ void CPlayer::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
-	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-	if (nullptr == pGameInstance)
-		return;
-
-	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
-	if (nullptr == pVIBuffer_Terrain)
-		return;
-
-	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
-	if (nullptr == pTransform_Terrain)
-		return;
-
-	_float3			vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.5f);
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-	
+	OnTerrain();
 	Move_Frame(fTimeDelta);
 	Key_Input(fTimeDelta);
 	Player_Move(fTimeDelta);
@@ -138,6 +121,28 @@ CGameObject * CPlayer::Clone(void * pArg)
 	
 
 	return pInstance;
+}
+
+void CPlayer::OnTerrain()
+{
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return;
+	Safe_AddRef(pGameInstance);
+	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
+	if (nullptr == pVIBuffer_Terrain)
+		return;
+
+	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
+	if (nullptr == pTransform_Terrain)
+		return;
+
+	_float3			vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.5f);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CPlayer::SetUp_Components(void)

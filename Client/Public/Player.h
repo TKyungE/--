@@ -41,6 +41,7 @@ private:
 	CTexture* m_pTextureComSkill_Back = nullptr;
 
 private:
+	void OnTerrain();
 	HRESULT SetUp_Components(void);
 	HRESULT SetUp_RenderState();
 	HRESULT Release_RenderState();

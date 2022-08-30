@@ -39,6 +39,7 @@ private:
 	_int m_iFrame = 0;
 
 private:
+	void OnTerrain();
 	HRESULT SetUp_Components(void);
 	HRESULT SetUp_RenderState(void);
 	HRESULT Release_RenderState(void);
