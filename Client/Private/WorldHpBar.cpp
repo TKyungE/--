@@ -28,9 +28,9 @@ HRESULT CWorldHpBar::Initialize(void * pArg)
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-	memcpy(&m_Recive, pArg, sizeof(HpPos));
+	memcpy(&m_tInfo, pArg, sizeof(INFO));
 
-	m_Recive.vPos.y += 1.f;
+	m_tInfo.vPos.y += 1.f;
 
 
 
@@ -47,18 +47,14 @@ void CWorldHpBar::Tick(_float fTimeDelta)
 		Set_Dead();
 	}
 
-	_float4x4 matCameraPos;
-	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &matCameraPos);
-	D3DXMatrixInverse(&matCameraPos, nullptr, &matCameraPos);
+	
 
-	m_pTransformCom->LookAt(*(_float3*)&matCameraPos.m[3][0]);
-
-	m_fSizeX = m_Recive.iHp / 50.f;
-
+	m_fSizeX = m_tInfo.iHp/ (float)m_tInfo.iMaxHp;
+	
 
 	m_pTransformCom->Set_Scaled({ m_fSizeX, 0.2f, 1.f });
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_Recive.vPos);
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
 }
 void CWorldHpBar::Late_Tick(_float fTimeDelta)

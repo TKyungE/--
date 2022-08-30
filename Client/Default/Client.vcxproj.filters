@@ -133,6 +133,9 @@
     <Filter Include="03.Effect\Default\05.Wind">
       <UniqueIdentifier>{b3b81a1a-fbb2-4b96-8cd2-1d831f9b6cc6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\WorldHpBar\PlayerMpBar">
+      <UniqueIdentifier>{2e5788da-5b6d-49c5-b4b0-283748e421bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -252,6 +255,9 @@
     <ClInclude Include="..\public\Wind.h">
       <Filter>03.Effect\Default\05.Wind</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\PlayerMpBar.h">
+      <Filter>04.UI\WorldHpBar\PlayerMpBar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -358,6 +364,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Wind.cpp">
       <Filter>03.Effect\Default\05.Wind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\PlayerMpBar.cpp">
+      <Filter>04.UI\WorldHpBar\PlayerMpBar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

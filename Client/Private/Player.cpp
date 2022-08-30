@@ -30,12 +30,9 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-	
-	memcpy(&m_tInfo, pArg, sizeof(INFO));
-	m_tInfo.pTarget = this;
-	memcpy(pArg, &m_tInfo, sizeof(INFO));
+	*(CGameObject**)pArg = this;
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
+
 	m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;
@@ -44,18 +41,27 @@ HRESULT CPlayer::Initialize(void * pArg)
 	m_tFrame.fFrameSpeed = 0.1f;
 
 	m_tInfo.fX = 0.5f;
-
+	m_tInfo.iMaxHp = 500;
+	m_tInfo.iHp = 500;
+	m_tInfo.iMp = 100;
 	return S_OK;
 }
 
 void CPlayer::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-
+	
 	OnTerrain();
 	Move_Frame(fTimeDelta);
 	Key_Input(fTimeDelta);
 	Player_Move(fTimeDelta);
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+
+	Safe_AddRef(pGameInstance);
+	m_tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_PlayerMpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Monster"), &m_tInfo);
+	Safe_Release(pGameInstance);
 }
 
 void CPlayer::Late_Tick(_float fTimeDelta)
@@ -63,10 +69,16 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	__super::Late_Tick(fTimeDelta);
 	
 	Motion_Change();
-	
-	Use_Skill();
-
-	OnBillboard();
+	if (m_tInfo.iMp > 0)
+	{
+		Use_Skill();
+	}
+	_float4x4		ViewMatrix;
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -117,6 +129,7 @@ CGameObject * CPlayer::Clone(void * pArg)
 		Safe_Release(pInstance);
 	}
 	
+
 	return pInstance;
 }
 
@@ -284,6 +297,7 @@ void CPlayer::Use_Skill()
 		m_eCurState = SKILL;
 		m_tFrame.iFrameStart = 0;
 		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_tInfo.iMp -= 5;
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bTornado)
 	{
@@ -294,6 +308,7 @@ void CPlayer::Use_Skill()
 		m_eCurState = SKILL;
 		m_tFrame.iFrameStart = 0;
 		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_tInfo.iMp -= 5;
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bFireSpear)
 	{
@@ -304,6 +319,7 @@ void CPlayer::Use_Skill()
 		m_eCurState = SKILL;
 		m_tFrame.iFrameStart = 0;
 		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_tInfo.iMp -= 5;
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bMeteor)
 	{
@@ -314,6 +330,7 @@ void CPlayer::Use_Skill()
 		m_eCurState = SKILL;
 		m_tFrame.iFrameStart = 0;
 		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_tInfo.iMp -= 5;
 	}
 	
 	if (CKeyMgr::Get_Instance()->Key_Down('L'))
@@ -447,6 +464,7 @@ void CPlayer::Free(void)
 	Safe_Release(m_pTextureComMove_Back);
 	Safe_Release(m_pTextureComSkill_Front);
 	Safe_Release(m_pTextureComSkill_Back);
+	
 }
 
 _float3 CPlayer::Get_Pos()
@@ -602,15 +620,3 @@ HRESULT CPlayer::TextureRender()
 	return S_OK;
 }
 
-void CPlayer::OnBillboard()
-{
-	_float4x4		ViewMatrix;
-
-	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
-
-	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-	_float3 vScale = { 1.f,1.f,1.f };
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
-	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
-}
