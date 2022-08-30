@@ -42,6 +42,7 @@ private:
 
 private:
 	void OnTerrain();
+	void	OnBillboard();
 	HRESULT SetUp_Components(void);
 	HRESULT SetUp_RenderState();
 	HRESULT Release_RenderState();
