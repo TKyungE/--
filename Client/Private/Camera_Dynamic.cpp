@@ -3,6 +3,7 @@
 #include "GameInstance.h"
 #include "Player.h"
 #include "KeyMgr.h"
+
 CCamera_Dynamic::CCamera_Dynamic(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CCamera(pGraphic_Device)
 {
@@ -68,12 +69,28 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 	if (CKeyMgr::Get_Instance()->Key_Pressing('B'))
 	{
 		m_pTransform->Set_State(CTransform::STATE_POSITION, (Camera * -5.f) + *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
-	//	dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Front(true);
+		if (!m_bTrue)
+		{
+			dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Camera(true);
+			if (dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Get_Front())
+				dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Front(false);
+			else
+				dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Front(true);
+			m_bTrue = true;
+		}
 	}
 	else
 	{
 		m_pTransform->Set_State(CTransform::STATE_POSITION, (Camera * 5.f) + *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[3][0]);
-	//	dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Front(false);
+		if (m_bTrue)
+		{
+			dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Camera(false);
+			if (dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Get_Front())
+				dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Front(false);
+			else
+				dynamic_cast<CPlayer*>(m_CameraDesc.Info.pTarget)->Set_Front(true);
+			m_bTrue = false;
+		}
 	}
 	Safe_Release(pGameInstance);
 

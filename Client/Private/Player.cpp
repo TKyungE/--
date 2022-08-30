@@ -52,32 +52,26 @@ void CPlayer::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
-	_float3 Position = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	_float a;
-	if (FAILED(m_pOnTerrain->Get_OnTerrainY(Position, &a)))
-	{
-		ERR_MSG(TEXT("Failed to OnTerrain"));
-		return;
-	}
-
-	Position.y = a + (D3DXVec3Length(&m_pTransformCom->Get_State(CTransform::STATE_UP)) * 0.5f);
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, Position);
+	OnTerrain();
 	Move_Frame(fTimeDelta);
 	Key_Input(fTimeDelta);
-	//Check_Front();
-	
 	Player_Move(fTimeDelta);
 }
 
 void CPlayer::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-
+	
 	Motion_Change();
-
+	
 	Use_Skill();
+
+	_float4x4		ViewMatrix;
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -131,15 +125,34 @@ CGameObject * CPlayer::Clone(void * pArg)
 	return pInstance;
 }
 
+void CPlayer::OnTerrain()
+{
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return;
+	Safe_AddRef(pGameInstance);
+	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
+	if (nullptr == pVIBuffer_Terrain)
+		return;
+
+	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
+	if (nullptr == pTransform_Terrain)
+		return;
+
+	_float3			vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.5f);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+	Safe_Release(pGameInstance);
+}
+
 HRESULT CPlayer::SetUp_Components(void)
 {
 	if (FAILED(__super::Add_Components(TEXT("Com_Renderer"), LEVEL_STATIC, TEXT("Prototype_Component_Renderer"), (CComponent**)&m_pRendererCom)))
 		return E_FAIL;
 
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBuffer)))
-		return E_FAIL;
-
-	if (FAILED(__super::Add_Components(TEXT("Com_Onterrain"), LEVEL_STATIC, TEXT("Prototype_Component_Onterrain"), (CComponent**)&m_pOnTerrain)))
 		return E_FAIL;
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_IDLE_Front"), (CComponent**)&m_pTextureComIDLE_Front)))
@@ -245,6 +258,28 @@ void CPlayer::Use_Skill()
 		m_bUseSkill = true;
 		m_bTornado = true;
 	}
+	if (CKeyMgr::Get_Instance()->Key_Down('3') && !m_bUseSkill && !m_bFireSpear)
+	{
+		CGameObject::INFO tInfo;
+
+		tInfo.vPos = pInstance->Get_TargetPos();
+
+		pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"), &tInfo);
+
+		m_bUseSkill = true;
+		m_bFireSpear = true;
+	}
+	if (CKeyMgr::Get_Instance()->Key_Down('4') && !m_bUseSkill && !m_bMeteor)
+	{
+		CGameObject::INFO tInfo;
+
+		tInfo.vPos = pInstance->Get_TargetPos();
+
+		pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"), &tInfo);
+
+		m_bUseSkill = true;
+		m_bMeteor = true;
+	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bThunder)
 	{
 		pInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
@@ -253,6 +288,7 @@ void CPlayer::Use_Skill()
 		m_bThunder = false;
 		m_eCurState = SKILL;
 		m_tFrame.iFrameStart = 0;
+		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bTornado)
 	{
@@ -262,19 +298,30 @@ void CPlayer::Use_Skill()
 		m_bTornado = false;
 		m_eCurState = SKILL;
 		m_tFrame.iFrameStart = 0;
+		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	}
-
-	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON))
+	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bFireSpear)
 	{
-		if (CKeyMgr::Get_Instance()->Key_Down('3'))
-		{
-			CGameObject::INFO tInfo;
-			tInfo.vPos = pInstance->Get_TargetPos();
-			pInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);	
-		}
+		pInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
+		Skill_FireSpear(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
+		m_bUseSkill = false;
+		m_bFireSpear = false;
+		m_eCurState = SKILL;
+		m_tFrame.iFrameStart = 0;
+		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	}
+	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bMeteor)
+	{
+		pInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
+		Skill_Meteor(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
+		m_bUseSkill = false;
+		m_bMeteor = false;
+		m_eCurState = SKILL;
+		m_tFrame.iFrameStart = 0;
+		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	}
 	
-	if (CKeyMgr::Get_Instance()->Key_Down('4'))
+	if (CKeyMgr::Get_Instance()->Key_Down('L'))
 	{
 		CGameObject::INFO tInfo;
 		tInfo.pTarget = this;
@@ -297,7 +344,6 @@ void CPlayer::Key_Input(_float fTimeDelta)
 
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RBUTTON) && m_eCurState != SKILL)
 	{
-		m_vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 		m_vTarget = pInstance->Get_TargetPos();
 		m_eCurState = MOVE;
 		m_tFrame.iFrameStart = 0;
@@ -341,7 +387,53 @@ HRESULT CPlayer::Skill_Tornado(const _tchar * pLayerTag, _float3 _vPos)
 
 	return S_OK;
 }
+HRESULT CPlayer::Skill_FireSpear(const _tchar * pLayerTag, _float3 _vPos)
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
 
+	CGameObject::INFO tInfo;
+
+	for (int i = 0; i < 100; ++i)
+	{
+		_float iSour = rand() % 60000 * 0.001f;
+		_float iTemp = rand() % 60000 * 0.001f;
+		_float3 vPos = { 0.f,0.f,0.f };
+		tInfo.vPos.x = vPos.x + iSour;
+		tInfo.vPos.y = vPos.y;
+		tInfo.vPos.z = vPos.z + iTemp;
+
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_FireSpear"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+			return E_FAIL;
+	}
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+HRESULT CPlayer::Skill_Meteor(const _tchar * pLayerTag, _float3 _vPos)
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	CGameObject::INFO tInfo;
+	for (int i = 0; i < 100; ++i)
+	{
+		_float iSour = rand() % 60000 * 0.001f;
+		_float iTemp = rand() % 40000 * 0.001f;
+
+		_float3 vPos = { 0.f,0.f,0.f };
+		tInfo.vPos.x = vPos.x + iSour;
+		tInfo.vPos.y = vPos.y;
+		tInfo.vPos.z = vPos.z + iTemp;
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Meteor"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+			return E_FAIL;
+	}
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
 _float4x4 CPlayer::Get_World(void)
 {
 	return m_pTransformCom->Get_WorldMatrix();
@@ -350,8 +442,7 @@ _float4x4 CPlayer::Get_World(void)
 void CPlayer::Free(void)
 {
 	__super::Free();
-
-	Safe_Release(m_pOnTerrain);
+	CKeyMgr::Get_Instance()->Destroy_Instance();
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pVIBuffer);
@@ -454,16 +545,20 @@ void CPlayer::Move_Frame(_float fTimeDelta)
 void CPlayer::Check_Front()
 {
 	
-	_float3 vLook;
-	m_vTargetLook = m_vTarget - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	D3DXVec3Normalize(&vLook, &m_vTargetLook);
-	_float cos = D3DXVec3Dot(&vLook, &m_vLook);
-	_float Angle = 0.f;
-	Angle = acosf(Angle);
-	if (Angle < D3DXToRadian(90.f) && Angle > D3DXToRadian(-90.f))
+	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+		
+	if (m_vTarget.z > vPos.z && !m_bCamera)
 		m_bFront = false;
-	else if (Angle < D3DXToRadian(-90.f))
+	else if (m_vTarget.z <= vPos.z && !m_bCamera)
 		m_bFront = true;
+	else if (m_vTarget.z > vPos.z && m_bCamera)
+		m_bFront = true;
+	else if (m_vTarget.z <= vPos.z && m_bCamera)
+		m_bFront = false;
+
+
+
 }
 
 HRESULT CPlayer::TextureRender()

@@ -29,8 +29,12 @@ HRESULT CVIBuffer_Terrain::Load_Terrain(void)
 	if (FAILED(__super::Ready_Vertex_Buffer()))
 		return E_FAIL;
 
+	m_pVerticesPos = new _float3[m_tVIBInfo.m_iNumVertices];
+
 	m_tVIBInfo.m_iIndicesByte = m_tVIBInfo.m_iIndicesByte;
 	m_tVIBInfo.m_eIndexFormat = m_tVIBInfo.m_eIndexFormat;
+
+	m_pIndices32 = new FACEINDICES32[m_tVIBInfo.m_iNumPrimitive];
 
 	if (FAILED(__super::Ready_Index_Buffer()))
 		return E_FAIL;
@@ -44,6 +48,39 @@ void CVIBuffer_Terrain::Release_Buffer(void)
 	m_pIB->Release();
 }
 
+_float CVIBuffer_Terrain::Compute_Height(const _float3 & vWorldPos, const _float4x4 & WorldMatrix, _float fOffset)
+{
+	_float4x4	WorldMatrixInv = *D3DXMatrixInverse(&WorldMatrixInv, nullptr, &WorldMatrix);
+	_float3		vPosition = *D3DXVec3TransformCoord(&vPosition, &vWorldPos, &WorldMatrixInv);
+
+	_uint		iIndex = _uint(vWorldPos.z) * m_tVIBInfo_Derived.m_iNumVerticesX + _uint(vWorldPos.x);
+
+	_uint		iIndices[] = {
+		iIndex + m_tVIBInfo_Derived.m_iNumVerticesX,
+		iIndex + m_tVIBInfo_Derived.m_iNumVerticesX + 1,
+		iIndex + 1,
+		iIndex
+	};
+
+	_float		fWidth = vPosition.x - m_pVerticesPos[iIndices[0]].x;
+	_float		fDepth = m_pVerticesPos[iIndices[0]].z - vPosition.z;
+
+	D3DXPLANE			Plane;
+
+	/*  오른쪽 위 삼각형에 존재한다. */
+	if (fWidth > fDepth)
+		D3DXPlaneFromPoints(&Plane, &m_pVerticesPos[iIndices[0]], &m_pVerticesPos[iIndices[1]], &m_pVerticesPos[iIndices[2]]);
+
+	/* 왼쪽 아래 삼각형에 존재한다. */
+	else
+		D3DXPlaneFromPoints(&Plane, &m_pVerticesPos[iIndices[0]], &m_pVerticesPos[iIndices[2]], &m_pVerticesPos[iIndices[3]]);
+
+	// _float		fHeight = (-ax - cz - d) / b;
+	_float		fHeight = (-Plane.a * vPosition.x - Plane.c * vPosition.z - Plane.d) / Plane.b + fOffset;
+
+	return fHeight;
+}
+
 HRESULT CVIBuffer_Terrain::Initialize_Prototype(_uint iNumVerticesX, _uint iNumVerticesZ)
 {
 	m_tVIBInfo_Derived.m_iNumVerticesX = iNumVerticesX;
@@ -54,6 +91,8 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(_uint iNumVerticesX, _uint iNumV
 	m_tVIBInfo.m_dwFVF = D3DFVF_XYZ | D3DFVF_TEX1;
 	m_tVIBInfo.m_ePrimitiveType = D3DPT_TRIANGLELIST;
 	m_tVIBInfo.m_iNumPrimitive = (m_tVIBInfo_Derived.m_iNumVerticesX - 1) * (m_tVIBInfo_Derived.m_iNumVerticesZ - 1) * 2;
+
+	m_pVerticesPos = new _float3[m_tVIBInfo.m_iNumVertices];
 
 	if (FAILED(__super::Ready_Vertex_Buffer()))
 		return E_FAIL;
@@ -68,7 +107,7 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(_uint iNumVerticesX, _uint iNumV
 		{
 			_uint iIndex = i * m_tVIBInfo_Derived.m_iNumVerticesX + j;
 
-			pVertices[iIndex].vPosition = _float3((_float)j, 0.f, (_float)i);
+			pVertices[iIndex].vPosition = m_pVerticesPos[iIndex] = _float3((_float)j, 0.f, (_float)i);
 			pVertices[iIndex].vTexture = _float2((_float)j, (_float)i);
 		}
 	}
@@ -77,6 +116,8 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(_uint iNumVerticesX, _uint iNumV
 
 	m_tVIBInfo.m_iIndicesByte = sizeof(FACEINDICES32);
 	m_tVIBInfo.m_eIndexFormat = D3DFMT_INDEX32;
+
+	m_pIndices32 = new FACEINDICES32[m_tVIBInfo.m_iNumPrimitive];
 
 	if (FAILED(__super::Ready_Index_Buffer()))
 		return E_FAIL;
@@ -100,14 +141,14 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(_uint iNumVerticesX, _uint iNumV
 				iIndex
 			};
 
-			pIndices[iNumFaces]._0 = iIndices[0];
-			pIndices[iNumFaces]._1 = iIndices[1];
-			pIndices[iNumFaces]._2 = iIndices[2];
+			pIndices[iNumFaces]._0 = m_pIndices32[iNumFaces]._0 = iIndices[0];
+			pIndices[iNumFaces]._1 = m_pIndices32[iNumFaces]._1 = iIndices[1];
+			pIndices[iNumFaces]._2 = m_pIndices32[iNumFaces]._2 = iIndices[2];
 			++iNumFaces;
 
-			pIndices[iNumFaces]._0 = iIndices[0];
-			pIndices[iNumFaces]._1 = iIndices[2];
-			pIndices[iNumFaces]._2 = iIndices[3];
+			pIndices[iNumFaces]._0 = m_pIndices32[iNumFaces]._0 = iIndices[0];
+			pIndices[iNumFaces]._1 = m_pIndices32[iNumFaces]._1 = iIndices[2];
+			pIndices[iNumFaces]._2 = m_pIndices32[iNumFaces]._2 = iIndices[3];
 			++iNumFaces;
 		}
 	}
@@ -152,4 +193,9 @@ void CVIBuffer_Terrain::Free()
 {
 	__super::Free();
 
+	if (false == m_isCloned)
+	{
+		Safe_Delete_Array(m_pVerticesPos);
+		Safe_Delete_Array(m_pIndices32);
+	}
 }

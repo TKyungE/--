@@ -6,7 +6,6 @@
 BEGIN(Engine)
 class CRenderer;
 class CTransform;
-class COnterrain;
 class CVIBuffer_Rect;
 class CTexture;
 END
@@ -33,7 +32,6 @@ private:
 	CRenderer* m_pRendererCom = nullptr;
 	CTransform* m_pTransformCom = nullptr;
 	CVIBuffer_Rect* m_pVIBuffer = nullptr;
-	COnterrain* m_pOnTerrain = nullptr;
 
 	CTexture* m_pTextureComIDLE_Front = nullptr;
 	CTexture* m_pTextureComIDLE_Back = nullptr;
@@ -43,6 +41,7 @@ private:
 	CTexture* m_pTextureComSkill_Back = nullptr;
 
 private:
+	void OnTerrain();
 	HRESULT SetUp_Components(void);
 	HRESULT SetUp_RenderState();
 	HRESULT Release_RenderState();
@@ -52,24 +51,30 @@ private:
 	void Key_Input(_float fTimeDelta);
 	HRESULT Skill_Thunder(const _tchar * pLayerTag, _float3 _vPos);
 	HRESULT Skill_Tornado(const _tchar * pLayerTag,_float3 _vPos);
+	HRESULT Skill_FireSpear(const _tchar * pLayerTag, _float3 _vPos);
+	HRESULT Skill_Meteor(const _tchar * pLayerTag, _float3 _vPos);
 public:
 	static CPlayer* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
 	virtual _float4x4 Get_World(void) override;
 	virtual void Free(void) override;
-public:
-	_float3 Get_Pos();
-	void Set_Front(_bool bfront) { m_bFront = bfront; }
 private:
 	_float3 m_vTargetLook;
 	_float3 m_vTarget;
-	_float3 m_vLook;
 	_bool	m_bUseSkill = false;
 	_bool	m_bThunder = false;
 	_bool	m_bTornado = false;
+	_bool	m_bFireSpear = false;
+	_bool	m_bMeteor = false;
 	_bool	m_bFront = false;
+	_bool	m_bCamera = false;
 	STATE				m_ePreState;
 	STATE				m_eCurState;
+public:
+	_float3 Get_Pos();
+	_bool Get_Front() { return m_bFront; }
+	void Set_Front(_bool bfront) { m_bFront = bfront; }
+	void Set_Camera(_bool bCamera) { m_bCamera = bCamera; }
 private:
 	void Player_Move(_float fTimeDelta);
 	void Motion_Change();

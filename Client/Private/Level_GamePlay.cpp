@@ -66,6 +66,8 @@ void CLevel_GamePlay::Tick(_float fTimeDelta)
 
 	CSoundMgr::Get_Instance()->SetSoundVolume(SOUND_BGM, fSound);
  	
+	Create_Rain(fTimeDelta);
+
 	Safe_Release(pGameInstance);
 }
 
@@ -83,23 +85,33 @@ void CLevel_GamePlay::Late_Tick(_float fTimeDelta)
 	CGameObject* Dest;
 	CGameObject* Sour;
 	
-	if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour))
-	{
-		//Dest->Set_Dead();
-		//Sour->Set_Dead();
-	}
+	
 	if (pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill")) != nullptr)
 	{
 		if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour))
 		{
+			
 			Dest->Set_Dead();
-			
-			_float3 vPos = Get_CollisionPos(Dest, Sour);
-			
-			
-			Sour->Set_Hit(Dest->Get_Info().iDmg, vPos);
-			Sour->Set_Hp(Dest->Get_Info().iDmg);
-			if(Sour->Get_Info().iHp <= 0)
+			if(Dest->Get_Info().iMoney == 33)
+			{ 
+				fCollTime += fTimeDelta;
+				if (fCollTime > 0.1f)
+				{
+					_float3 vPos = Get_CollisionPos(Dest, Sour);
+
+					Sour->Set_Hit(Dest->Get_Info().iDmg, vPos);
+					Sour->Set_Hp(Dest->Get_Info().iDmg);
+					fCollTime = 0.f;
+				}
+			}
+			else
+			{
+				_float3 vPos = Get_CollisionPos(Dest, Sour);
+
+				Sour->Set_Hit(Dest->Get_Info().iDmg, vPos);
+				Sour->Set_Hp(Dest->Get_Info().iDmg);
+			}
+			if (Sour->Get_Info().iHp <= 0)
 				Sour->Set_Dead();
 		}
 	}
@@ -112,10 +124,10 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_GAMEPLAY, pLayerTag)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_GAMEPLAY, pLayerTag, (CGameObject**)&Info.pTerrain)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_GAMEPLAY, pLayerTag, (CGameObject**)&Info.pTerrain)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_GAMEPLAY, pLayerTag)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -196,14 +208,31 @@ HRESULT CLevel_GamePlay::Ready_Layer_UI(const _tchar * pLayerTag)
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_GAMEPLAY, pLayerTag)))
 		return E_FAIL;
+
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpBar"), LEVEL_GAMEPLAY, pLayerTag)))
 		return E_FAIL;
+
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpBar"), LEVEL_GAMEPLAY, pLayerTag)))
 		return E_FAIL;
+
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_IconBar"), LEVEL_GAMEPLAY, pLayerTag, &m_IconRender)))
 		return E_FAIL;
+
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_InventoryIcon"), LEVEL_GAMEPLAY, pLayerTag, &m_IconRender)))
 		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_EquipIcon"), LEVEL_GAMEPLAY, pLayerTag, &m_IconRender)))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkillIcon"), LEVEL_GAMEPLAY, pLayerTag, &m_IconRender)))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_StatsIcon"), LEVEL_GAMEPLAY, pLayerTag, &m_IconRender)))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuickSlot"), LEVEL_GAMEPLAY, pLayerTag)))
+		return E_FAIL;
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -227,6 +256,7 @@ _float3 CLevel_GamePlay::Get_CollisionPos(CGameObject * pDest, CGameObject * pSo
 	return CollisionPos;
 }
 
+
 void CLevel_GamePlay::SpawnData()
 {
 	HANDLE hFile = CreateFile(TEXT("../../Data/Pos.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
@@ -247,15 +277,43 @@ void CLevel_GamePlay::SpawnData()
 
 		if (0 == dwByte)
 			break;
-		
+
 		_float3 vPos;
-		
+
 		vPos = Pos;
 
 		m_vMonsterPos1.push_back(vPos);
 	}
 
 	CloseHandle(hFile);
+}
+
+void CLevel_GamePlay::Create_Rain(_float fTimeDelta)
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	CGameObject::INFO tInfo;
+	fRainTime += fTimeDelta;
+	if (fRainTime > 0.3f)
+	{
+		fRainTime = 0.f;
+		for (int i = 0; i < 30; ++i)
+		{
+			_float iSour = rand() % 60000 * 0.001f;
+			_float iTemp = rand() % 40000 * 0.001f;
+
+			_float3 vPos = { 0.f,0.f,0.f };
+			tInfo.vPos.x = vPos.x + iSour;
+			tInfo.vPos.y = vPos.y;
+			tInfo.vPos.z = vPos.z + iTemp;
+
+			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Rain"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+				
+		}
+	}
+	Safe_Release(pGameInstance);
+
 }
 
 

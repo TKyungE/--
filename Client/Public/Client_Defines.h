@@ -24,4 +24,13 @@ extern HINSTANCE	g_hInst;
 //extern int g_iFrame;
 
 #define     fSOUND  0.1f
+typedef struct UiPos
+{
+	float fPosX;
+	float fPosY;
+	bool  bNext;
+
+}Pos;
+
+
 using namespace Client;

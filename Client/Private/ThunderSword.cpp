@@ -29,7 +29,7 @@ HRESULT CThunderSword::Initialize(void* pArg)
 		return E_FAIL;
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
-	_float3 vScale = { 2.f,2.f,1.f };
+	_float3 vScale = { 1.5f,1.5f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
@@ -41,6 +41,7 @@ HRESULT CThunderSword::Initialize(void* pArg)
 	m_tInfo.bDead = false;
 	m_tInfo.fX = 0.5f;
 	m_tInfo.iDmg = 5678;
+	m_tInfo.iMoney = 22;
 	return S_OK;
 }
 
@@ -60,19 +61,10 @@ void CThunderSword::Late_Tick(_float fTimeDelta)
 
 
 	Motion_Change();
-
-	_float4x4		ViewMatrix;
-
-	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
-
-	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
-	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+	OnBillboard();
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
 HRESULT CThunderSword::Render()
@@ -131,7 +123,18 @@ void CThunderSword::Move_Frame(_float fTimeDelta)
 	}
 
 }
+void CThunderSword::OnBillboard()
+{
+	_float4x4		ViewMatrix;
 
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+
+	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
+	_float3 vScale = { 1.5f,1.5f,1.f };
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+}
 HRESULT CThunderSword::TextureRender()
 {
 	switch (m_eCurState)

@@ -8,7 +8,6 @@ class CRenderer;
 class CTransform;
 class CVIBuffer_Rect;
 class CTexture;
-class COnterrain;
 END
 
 BEGIN(Client)
@@ -32,15 +31,20 @@ private:
 	CTransform* m_pTransformCom = nullptr;
 	CVIBuffer_Rect* m_pVIBufferCom = nullptr;
 	CTexture* m_pTextureCom = nullptr;
-	COnterrain*	m_pOnTerrain = nullptr;
 
 	bool m_bXTurn = false;
 	bool m_bZTurn = false;
 
 	_float m_fMoveFrame = 0.f;
 	_int m_iFrame = 0;
-
+	typedef struct HpPos
+	{
+		_float3 vPos;
+		_int	iHp;
+	}HpPos;
+	HpPos  m_PassH;
 private:
+	void OnTerrain();
 	HRESULT SetUp_Components(void);
 	HRESULT SetUp_RenderState(void);
 	HRESULT Release_RenderState(void);
