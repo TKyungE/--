@@ -1,5 +1,4 @@
-﻿  SoundMgr.cpp
-c:\users\shout\desktop\과제\--\client\private\soundmgr.cpp(111): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\soundmgr.cpp(145): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-UseSkill.obj : error LNK2011: 미리 컴파일된 개체가 링크되지 않았습니다. 이미지가 실행되지 않을 수 있습니다.
-..\Bin\Client.exe : fatal error LNK1120: 1개의 확인할 수 없는 외부 참조입니다.
+﻿WorldHpBar.obj : error LNK2011: 미리 컴파일된 개체가 링크되지 않았습니다. 이미지가 실행되지 않을 수 있습니다.
+Loader.obj : error LNK2019: "public: static class Client::CFireDragon * __cdecl Client::CFireDragon::Create(struct IDirect3DDevice9 *)" (?Create@CFireDragon@Client@@SAPEAV12@PEAUIDirect3DDevice9@@@Z) 외부 기호(참조 위치: "public: long __cdecl Client::CLoader::Loading_ForGamePlayLevel(void)" (?Loading_ForGamePlayLevel@CLoader@Client@@QEAAJXZ) 함수)에서 확인하지 못했습니다.
+Loader.obj : error LNK2019: "public: static class Client::CWind * __cdecl Client::CWind::Create(struct IDirect3DDevice9 *)" (?Create@CWind@Client@@SAPEAV12@PEAUIDirect3DDevice9@@@Z) 외부 기호(참조 위치: "public: long __cdecl Client::CLoader::Loading_ForGamePlayLevel(void)" (?Loading_ForGamePlayLevel@CLoader@Client@@QEAAJXZ) 함수)에서 확인하지 못했습니다.
+..\Bin\Client.exe : fatal error LNK1120: 3개의 확인할 수 없는 외부 참조입니다.
