@@ -37,12 +37,8 @@ private:
 
 	_float m_fMoveFrame = 0.f;
 	_int m_iFrame = 0;
-	typedef struct HpPos
-	{
-		_float3 vPos;
-		_int	iHp;
-	}HpPos;
-	HpPos  m_PassH;
+
+
 private:
 	void OnTerrain();
 	HRESULT SetUp_Components(void);

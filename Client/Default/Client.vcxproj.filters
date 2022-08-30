@@ -151,6 +151,9 @@
     <Filter Include="04.UI\StateUi\IconBar\SkillIcon">
       <UniqueIdentifier>{8dac9f36-66d8-4f59-a707-4312bbc7f81b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\WorldHpBar\PlayerMpBar">
+      <UniqueIdentifier>{2e5788da-5b6d-49c5-b4b0-283748e421bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -288,6 +291,9 @@
     <ClInclude Include="..\public\EquipIcon.h">
       <Filter>04.UI\StateUi\IconBar\EquipIcon</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\PlayerMpBar.h">
+      <Filter>04.UI\WorldHpBar\PlayerMpBar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -412,6 +418,9 @@
     </ClCompile>
     <ClCompile Include="..\private\EquipIcon.cpp">
       <Filter>04.UI\StateUi\IconBar\EquipIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\PlayerMpBar.cpp">
+      <Filter>04.UI\WorldHpBar\PlayerMpBar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

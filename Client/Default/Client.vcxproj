@@ -182,6 +182,7 @@
     <ClInclude Include="..\public\MeteorEff.h" />
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\Player.h" />
+    <ClInclude Include="..\public\PlayerMpBar.h" />
     <ClInclude Include="..\public\PlusBox.h" />
     <ClInclude Include="..\public\QuickSlot.h" />
     <ClInclude Include="..\public\Rain.h" />
@@ -227,6 +228,7 @@
     <ClCompile Include="..\private\MeteorEff.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
+    <ClCompile Include="..\private\PlayerMpBar.cpp" />
     <ClCompile Include="..\private\PlusBox.cpp" />
     <ClCompile Include="..\private\QuickSlot.cpp" />
     <ClCompile Include="..\private\Rain.cpp" />

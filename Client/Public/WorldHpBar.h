@@ -32,11 +32,6 @@ private: /* For.Components */
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
 
 private:
-	typedef struct HpPos
-	{
-		_float3 vPos;
-		_int	iHp;
-	}HpPos;
 
 	_float4x4				m_ProjMatrix;
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
@@ -44,7 +39,7 @@ private:
 	_ushort					m_Check = 0;
 
 	short					m_Temp = 0;
-	HpPos					m_Recive;
+
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
