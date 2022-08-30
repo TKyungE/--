@@ -27,16 +27,17 @@
 #include "Meteor.h"
 #include "MeteorEff.h"
 #include "Rain.h"
-#include"EquipIcon.h"
-#include"SkillIcon.h"
-#include"StatsIcon.h"
-#include"QuickSlot.h"
-#include"SkillWnd.h"
-#include"StatsWnd.h"
-#include"PlusBox.h"
-#include"WorldHpBar.h"
 #include "FireDragon.h"
 #include "Wind.h"
+
+#include "EquipIcon.h"
+#include "SkillIcon.h"
+#include "StatsIcon.h"
+#include "QuickSlot.h"
+#include "SkillWnd.h"
+#include "StatsWnd.h"
+#include "PlusBox.h"
+#include "WorldHpBar.h"
 
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
