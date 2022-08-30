@@ -168,7 +168,8 @@ HRESULT CMonster::Initialize(void * pArg)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(0.f, 0.f, 5.f));
 
 	m_tInfo.fX = 0.5f;
-	m_tInfo.iHp = 99999;
+	m_tInfo.iHp = 100;
+	m_PassH.iHp = m_tInfo.iHp;
 	return S_OK;
 }
 
@@ -199,6 +200,12 @@ void CMonster::Tick(_float fTimeDelta)
 	D3DXMatrixInverse(&matCameraPos, nullptr, &matCameraPos);
 
 	m_pTransformCom->LookAt(*(_float3*)&matCameraPos.m[3][0]);
+
+	
+	m_PassH.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Monster"), &m_PassH);
+
 
 	if (nullptr != m_tInfo.pTarget)
 		Chase(fTimeDelta);

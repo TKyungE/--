@@ -30,7 +30,7 @@ HRESULT CWorldHpBar::Initialize(void * pArg)
 		return E_FAIL;
 	memcpy(&m_Recive, pArg, sizeof(HpPos));
 
-	m_Recive.vPos.y += 2.f;
+	m_Recive.vPos.y += 1.f;
 
 
 
