@@ -361,7 +361,6 @@ void CPlayer::Free(void)
 	Safe_Release(m_pTextureComMove_Back);
 	Safe_Release(m_pTextureComSkill_Front);
 	Safe_Release(m_pTextureComSkill_Back);
-	
 }
 
 _float3 CPlayer::Get_Pos()

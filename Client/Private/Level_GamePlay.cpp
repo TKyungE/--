@@ -18,6 +18,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
+	SpawnData();
+
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
 
@@ -39,7 +41,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	CSoundMgr::Get_Instance()->PlayBGM(L"Stage1_Sound.wav", fSOUND);*/
 	CSoundMgr::Get_Instance()->PlayBGM(L"Boss_Sound1.wav", fSOUND);
 
-	SpawnData();
+	
 	return S_OK;
 }
 
@@ -126,8 +128,9 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar * pLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	_float3 vPos = { 5.f, 0.f, 3.f };
-	Info.vPos = vPos;
+	auto iter = find_if(m_mapSpawn.begin(), m_mapSpawn.end(), CTag_Finder(TEXT("PlayerSpawn")));
+	
+	Info.vPos = iter->second;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
@@ -244,16 +247,16 @@ void CLevel_GamePlay::SpawnData()
 
 		if (0 == dwByte)
 		{
-			delete[]pTag;
+			Safe_Delete_Array(pTag);
 			break;
 		}
-		_float3* vPos = new _float3;
+		_float3 vPos;
 		_tchar* pSpawnTag = new _tchar;
-		vPos = &Pos;
+		vPos = Pos;
 		pSpawnTag = pTag;
-		delete[]pTag;
+	
+		m_mapSpawn.insert({pSpawnTag,vPos});
 
-		m_mapSpawn.insert({pSpawnTag,*vPos});
 		
 	}
 
@@ -278,5 +281,6 @@ void CLevel_GamePlay::Free()
 {
 	__super::Free();
 
+	m_mapSpawn.clear();
 
 }
