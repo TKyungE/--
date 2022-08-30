@@ -4,6 +4,8 @@
 #include "GameInstance.h"
 #include "Camera_Dynamic.h"
 #include "SoundMgr.h"
+#include "CollisionMgr.h"
+#include "KeyMgr.h"
 
 CLevel_GamePlay::CLevel_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -16,10 +18,10 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
+	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
@@ -32,10 +34,10 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
 
-	/*fSound = fSOUND;
-	CSoundMgr::Get_Instance()->BGM_Pause();
+	fSound = fSOUND;
+	/*CSoundMgr::Get_Instance()->BGM_Pause();
 	CSoundMgr::Get_Instance()->PlayBGM(L"Stage1_Sound.wav", fSOUND);*/
-
+	CSoundMgr::Get_Instance()->PlayBGM(L"Boss_Sound1.wav", fSOUND);
 	return S_OK;
 }
 
@@ -46,8 +48,13 @@ void CLevel_GamePlay::Tick(_float fTimeDelta)
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	fSound += (pGameInstance->Get_DIMMoveState(DIMM_WHEEL)*fTimeDelta) / 100;
+	//fSound += (pGameInstance->Get_DIMMoveState(DIMM_WHEEL)*fTimeDelta) / 100;
 
+	if (CKeyMgr::Get_Instance()->Key_Down('O'))
+		fSound += 0.01;
+	if (CKeyMgr::Get_Instance()->Key_Down('P'))
+		fSound -= 0.01;
+	
 	if (fSound > 1.f)
 		fSound = 1.f;
 	if (fSound < 0.f)
@@ -55,6 +62,8 @@ void CLevel_GamePlay::Tick(_float fTimeDelta)
 
 	CSoundMgr::Get_Instance()->SetSoundVolume(SOUND_BGM, fSound);
  	
+	Create_Rain(fTimeDelta);
+
 	Safe_Release(pGameInstance);
 }
 
@@ -63,6 +72,47 @@ void CLevel_GamePlay::Late_Tick(_float fTimeDelta)
 	__super::Late_Tick(fTimeDelta);
 
 	SetWindowText(g_hWnd, TEXT("게임플레이레벨입니다."));
+
+	//충돌 사용법
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+	
+
+	CGameObject* Dest;
+	CGameObject* Sour;
+	
+	
+	if (pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill")) != nullptr)
+	{
+		if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour))
+		{
+			
+			Dest->Set_Dead();
+			if(Dest->Get_Info().iMoney == 33)
+			{ 
+				fCollTime += fTimeDelta;
+				if (fCollTime > 0.1f)
+				{
+					_float3 vPos = Get_CollisionPos(Dest, Sour);
+
+					Sour->Set_Hit(Dest->Get_Info().iDmg, vPos);
+					Sour->Set_Hp(Dest->Get_Info().iDmg);
+					fCollTime = 0.f;
+				}
+			}
+			else
+			{
+				_float3 vPos = Get_CollisionPos(Dest, Sour);
+
+				Sour->Set_Hit(Dest->Get_Info().iDmg, vPos);
+				Sour->Set_Hp(Dest->Get_Info().iDmg);
+			}
+			if (Sour->Get_Info().iHp <= 0)
+				Sour->Set_Dead();
+		}
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
@@ -70,10 +120,10 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_GAMEPLAY, pLayerTag)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_GAMEPLAY, pLayerTag, (CGameObject**)&Info.pTerrain)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_GAMEPLAY, pLayerTag)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -86,7 +136,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar * pLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_GAMEPLAY, pLayerTag, (CGameObject**)&Info.pTarget)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -156,6 +206,51 @@ HRESULT CLevel_GamePlay::Ready_Layer_UI(const _tchar * pLayerTag)
 	Safe_Release(pGameInstance);
 
 	return S_OK;
+}
+
+_float3 CLevel_GamePlay::Get_CollisionPos(CGameObject * pDest, CGameObject * pSour)
+{
+	_float3 vLook = *(_float3*)&pDest->Get_World().m[3][0] - *(_float3*)&pSour->Get_World().m[3][0];
+	D3DXVec3Normalize(&vLook, &vLook);
+
+	vLook = vLook * 0.5f;
+
+	_float Angle = D3DXVec3Dot(&vLook, (_float3*)&pSour->Get_World().m[1][0]);
+	_float3 SourUp = *(_float3*)&pSour->Get_World().m[1][0];
+	_float3 Proj = (Angle / D3DXVec3Length(&SourUp) * D3DXVec3Length(&SourUp)) * *(_float3*)&pSour->Get_World().m[1][0];
+	
+	_float3 CollisionPos = *(_float3*)&pSour->Get_World().m[3][0] + Proj;
+	CollisionPos.y -= 0.5;
+	CollisionPos.x = pDest->Get_World().m[3][0];
+
+	return CollisionPos;
+}
+
+void CLevel_GamePlay::Create_Rain(_float fTimeDelta)
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	CGameObject::INFO tInfo;
+	fRainTime += fTimeDelta;
+	if (fRainTime > 0.3f)
+	{
+		fRainTime = 0.f;
+		for (int i = 0; i < 30; ++i)
+		{
+			_float iSour = rand() % 60000 * 0.001f;
+			_float iTemp = rand() % 40000 * 0.001f;
+
+			_float3 vPos = { 0.f,0.f,0.f };
+			tInfo.vPos.x = vPos.x + iSour;
+			tInfo.vPos.y = vPos.y;
+			tInfo.vPos.z = vPos.z + iTemp;
+
+			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Rain"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+				
+		}
+	}
+	Safe_Release(pGameInstance);
 }
 
 

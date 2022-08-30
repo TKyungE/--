@@ -103,6 +103,27 @@
     <Filter Include="04.UI\StateUi\HpBar">
       <UniqueIdentifier>{9be82122-acd2-4a44-92fa-c1aa06d8340f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Effect\Default\02.LevelUp">
+      <UniqueIdentifier>{5b590f51-993c-46bd-935f-d21e6519d9f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\03.DmgFont">
+      <UniqueIdentifier>{d4f5d2b8-7db9-408b-b7c1-92b6532b836e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\02.FireSpear">
+      <UniqueIdentifier>{e5888198-ef0d-4a28-ad94-e966a8d41215}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\02.FireSpear\Fire">
+      <UniqueIdentifier>{4f88c934-0d0b-4abf-ab7a-aac9645c8a3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\03.Meteor">
+      <UniqueIdentifier>{58c9eec7-8375-47e3-9017-dc756e607a3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\03.Meteor\MeteorEff">
+      <UniqueIdentifier>{59afe265-12a3-4ee1-92df-c139b6702621}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\04.Rain">
+      <UniqueIdentifier>{50fc2f1f-a364-4bde-b65c-da29ee1ea6e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -195,6 +216,27 @@
     <ClInclude Include="..\Public\UI.h">
       <Filter>04.UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\LevelUp.h">
+      <Filter>03.Effect\Default\02.LevelUp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\DmgFont.h">
+      <Filter>03.Effect\Default\03.DmgFont</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\FireSpear.h">
+      <Filter>03.Effect\Skill\02.FireSpear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Fire.h">
+      <Filter>03.Effect\Skill\02.FireSpear\Fire</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Meteor.h">
+      <Filter>03.Effect\Skill\03.Meteor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\MeteorEff.h">
+      <Filter>03.Effect\Skill\03.Meteor\MeteorEff</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Rain.h">
+      <Filter>03.Effect\Default\04.Rain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -274,6 +316,27 @@
     </ClCompile>
     <ClCompile Include="..\Private\UI.cpp">
       <Filter>04.UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\LevelUp.cpp">
+      <Filter>03.Effect\Default\02.LevelUp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\DmgFont.cpp">
+      <Filter>03.Effect\Default\03.DmgFont</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\FireSpear.cpp">
+      <Filter>03.Effect\Skill\02.FireSpear</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Fire.cpp">
+      <Filter>03.Effect\Skill\02.FireSpear\Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Meteor.cpp">
+      <Filter>03.Effect\Skill\03.Meteor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\MeteorEff.cpp">
+      <Filter>03.Effect\Skill\03.Meteor\MeteorEff</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Rain.cpp">
+      <Filter>03.Effect\Default\04.Rain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

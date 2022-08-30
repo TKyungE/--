@@ -29,8 +29,8 @@ HRESULT CTornado::Initialize(void* pArg)
 		return E_FAIL;
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
-	m_tInfo.vPos.y += 0.85f;
-	_float3 vScale = { 4.f,3.f,1.f };
+	m_tInfo.vPos.y += 0.7f;
+	_float3 vScale = { 3.5f,4.f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 	
@@ -40,7 +40,9 @@ HRESULT CTornado::Initialize(void* pArg)
 	m_tFrame.iFrameEnd = 24;
 	m_tFrame.fFrameSpeed = 0.05f;
 	m_tInfo.bDead = false;
-
+	m_tInfo.fX = 0.5f;
+	m_tInfo.iDmg = 123;
+	m_tInfo.iMoney = 33;
 	return S_OK;
 }
 
@@ -48,6 +50,7 @@ void CTornado::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
+	m_tInfo.bDead = false;
 	Move_Frame(fTimeDelta);
 	m_fDeadTime += fTimeDelta;
 	if (m_fDeadTime > 3.f)
@@ -60,20 +63,12 @@ void CTornado::Late_Tick(_float fTimeDelta)
 
 
 	Motion_Change();
+	OnBillboard();
 
-	_float4x4		ViewMatrix;
-
-	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
-
-	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
-	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
 
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }
 
 HRESULT CTornado::Render()
@@ -200,12 +195,23 @@ HRESULT CTornado::SetUp_Components()
 
 	return S_OK;
 }
+void CTornado::OnBillboard()
+{
+	_float4x4		ViewMatrix;
 
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+
+	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
+	_float3 vScale = { 3.5f,4.f,1.f };
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+}
 HRESULT CTornado::SetUp_RenderState()
 {
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
-
+//	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
@@ -215,7 +221,7 @@ HRESULT CTornado::SetUp_RenderState()
 
 HRESULT CTornado::Release_RenderState()
 {
-	// m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+//	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
@@ -249,7 +255,7 @@ CGameObject * CTornado::Clone(void* pArg)
 
 _float4x4 CTornado::Get_World(void)
 {
-	return _float4x4();
+	return m_pTransformCom->Get_WorldMatrix();
 }
 
 void CTornado::Free()

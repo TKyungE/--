@@ -79,8 +79,8 @@
     <Filter Include="01.Utility\96. Picking">
       <UniqueIdentifier>{ca9ff2c7-d78f-42f2-a09c-da38a5c53f75}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.Components\Onterrain">
-      <UniqueIdentifier>{e004a411-aa14-44c0-8d76-f3dddb922cd6}</UniqueIdentifier>
+    <Filter Include="01.Utility\95.KeyMgr">
+      <UniqueIdentifier>{6bea3816-ac4b-4676-a2e6-bb9977de212f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -153,8 +153,8 @@
     <ClCompile Include="..\Private\Picking.cpp">
       <Filter>01.Utility\96. Picking</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Onterrain.cpp">
-      <Filter>01.Utility\03.Components\Onterrain</Filter>
+    <ClCompile Include="..\private\KeyMgr.cpp">
+      <Filter>01.Utility\95.KeyMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -242,8 +242,8 @@
     <ClInclude Include="..\Public\Picking.h">
       <Filter>01.Utility\96. Picking</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Onterrain.h">
-      <Filter>01.Utility\03.Components\Onterrain</Filter>
+    <ClInclude Include="..\public\KeyMgr.h">
+      <Filter>01.Utility\95.KeyMgr</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

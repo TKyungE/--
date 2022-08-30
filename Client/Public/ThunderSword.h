@@ -45,6 +45,7 @@ private:
 	HRESULT TextureRender();
 	HRESULT On_SamplerState();
 	HRESULT Off_SamplerState();
+	void	OnBillboard();
 public:
 	static CThunderSword* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

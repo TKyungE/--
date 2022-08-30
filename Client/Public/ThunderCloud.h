@@ -47,7 +47,7 @@ private:
 	HRESULT On_SamplerState();
 	HRESULT Off_SamplerState();
 	HRESULT Create_Sword(const _tchar * pLayerTag);
-
+	void	OnBillboard();
 public:
 	static CThunderCloud* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

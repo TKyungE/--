@@ -10,6 +10,10 @@ class CLayer final : public CBase
 private:
 	CLayer();
 	virtual ~CLayer() = default;
+
+public:
+	class CComponent* Get_Component(const _tchar* pComponentTag, _uint iIndex = 0);
+
 public:
 	typedef list<class CGameObject*>	GAMEOBJECTS;
 public:
@@ -18,6 +22,8 @@ public:
 	void Tick(_float fTimeDelta);
 	void Late_Tick(_float fTimeDelta);
 	GAMEOBJECTS Get_Objects() { return m_GameObjects; }
+
+	class CGameObject* Find_GameObject(_uint iIndex);
 private:
 	list<class CGameObject*>			m_GameObjects;
 public:

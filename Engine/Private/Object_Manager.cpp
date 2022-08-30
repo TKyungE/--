@@ -8,6 +8,16 @@ CObject_Manager::CObject_Manager()
 {
 }
 
+CComponent * CObject_Manager::Get_Component(_uint iLevelIndex, const _tchar * pLayerTag, const _tchar * pComponentTag, _uint iIndex)
+{
+	CLayer*		pLayer = Find_Layer(iLevelIndex, pLayerTag);
+	if (nullptr == pLayer)
+		return nullptr;
+
+	return pLayer->Get_Component(pComponentTag, iIndex);
+}
+
+
 HRESULT CObject_Manager::Reserve_Container(_uint iNumLevels)
 {
 	if (nullptr != m_pLayers)
@@ -116,6 +126,19 @@ CLayer * CObject_Manager::Find_Layer(_uint iLevelIndex, const _tchar * pLayerTag
 		return nullptr;
 
 	return iter->second;
+}
+
+CGameObject * CObject_Manager::Find_Object(const _tchar * pLayerTag, _uint iIndex)
+{
+	CLayer* pLayer = Find_Layer(iIndex,pLayerTag);
+	if (nullptr == pLayer)
+		return nullptr;
+
+	CGameObject* pGameObject = pLayer->Find_GameObject(iIndex);
+	if (nullptr == pGameObject)
+		return nullptr;
+
+	return pGameObject;
 }
 
 void CObject_Manager::Free()

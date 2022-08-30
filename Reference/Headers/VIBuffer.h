@@ -9,6 +9,18 @@ BEGIN(Engine)
 
 class ENGINE_DLL CVIBuffer abstract : public CComponent
 {
+public:
+	typedef struct VIBufferInfo
+	{
+		_uint m_iNumVertices;
+		_uint m_iStride;
+		_ulong m_dwFVF;
+		D3DPRIMITIVETYPE m_ePrimitiveType;
+		_uint m_iNumPrimitive;
+		_uint m_iIndicesByte;
+		D3DFORMAT m_eIndexFormat;
+	}VIBINFO;
+
 protected:
 	CVIBuffer(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CVIBuffer(const CVIBuffer& rhs);
@@ -17,27 +29,28 @@ protected:
 public:
 	LPDIRECT3DVERTEXBUFFER9 Get_VB(void) { return m_pVB; }
 	LPDIRECT3DINDEXBUFFER9 Get_IB(void) { return m_pIB; }
-	const _uint Get_NumPrimitive(void) const { return m_iNumPrimitive; }
-	const _uint Get_NumVecrtices(void) const { return m_iNumVertices; }
+	
+	VIBINFO Get_VIBInfo(void) { return m_tVIBInfo; }
+	void Set_VIBInfo(VIBINFO& tVIBInfo);
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render();
 
+public:
+	_float3*					m_pVerticesPos = nullptr;
+	FACEINDICES16* m_pIndices16 = nullptr;
+	FACEINDICES32* m_pIndices32 = nullptr;
+
 protected:
 	LPDIRECT3DVERTEXBUFFER9		m_pVB = nullptr;
-	_uint						m_iNumVertices = 0;
-	_uint						m_iStride = 0; /* 정점의 크기(byte) */
-	_ulong						m_dwFVF = 0;
-	D3DPRIMITIVETYPE			m_ePrimitiveType;
-	_uint						m_iNumPrimitive = 0;
 
 protected:
 	LPDIRECT3DINDEXBUFFER9		m_pIB = nullptr;
-	_uint						m_iIndicesByte = 0;
-	D3DFORMAT					m_eIndexFormat;
 
+protected:
+	VIBINFO m_tVIBInfo;
 protected:
 	HRESULT Ready_Vertex_Buffer();
 	HRESULT Ready_Index_Buffer();

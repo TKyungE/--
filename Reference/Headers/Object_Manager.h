@@ -14,6 +14,9 @@ private:
 	virtual ~CObject_Manager() = default;
 
 public:
+	class CComponent* Get_Component(_uint iLevelIndex, const _tchar* pLayerTag, const _tchar* pComponentTag, _uint iIndex = 0);
+
+public:
 	HRESULT Reserve_Container(_uint iNumLevels);
 	HRESULT Add_Prototype(const _tchar* pPrototypeTag, class CGameObject* pPrototype);
 	HRESULT Add_GameObject(const _tchar* pPrototypeTag, _uint iLevelIndex, const _tchar* pLayerTag, void* pArg = nullptr);
@@ -21,6 +24,7 @@ public:
 	void Late_Tick(_float fTimeDelta);
 	void Clear(_uint iLevelIndex);
 	class CLayer* Find_Layer(_uint iLevelIndex, const _tchar* pLayerTag);
+	class CGameObject* Find_Object(const _tchar* pLayerTag, _uint iIndex);
 
 private:
 	map<const _tchar*, class CGameObject*>			m_Prototypes;
