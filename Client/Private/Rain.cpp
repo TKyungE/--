@@ -33,7 +33,7 @@ HRESULT CRain::Initialize(void* pArg)
 	m_tInfo.vPos.y += 7.f;
 	m_tInfo.vPos.x += 2.f;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
-	_float3 vScale = { 0.5f,0.5f,1.f };
+	_float3 vScale = { 0.25f,0.25f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 
 	m_ePreState = STATE_END;
@@ -53,13 +53,7 @@ void CRain::Tick(_float fTimeDelta)
 
 	Move_Frame(fTimeDelta);
 
-	m_pTransformCom->Go_Down(fTimeDelta);
-	_float3 vUp = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	vUp.x -= 0.03f;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vUp);
-	
-//	if (m_tFrame.iFrameStart == 7)
-//		Set_Dead();
+	Move(fTimeDelta);
 
 	m_fDeadTime += fTimeDelta;
 	if (m_fDeadTime > 2.5f)
@@ -72,16 +66,7 @@ void CRain::Late_Tick(_float fTimeDelta)
 
 
 	Motion_Change();
-
-	_float4x4		ViewMatrix;
-
-	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
-
-	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
-	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+	OnBillboard();
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -178,7 +163,7 @@ HRESULT CRain::SetUp_Components()
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
 
 	TransformDesc.fSpeedPerSec = 4.f;
-	TransformDesc.fRotationPerSec = D3DXToRadian(90.0f);
+	TransformDesc.fRotationPerSec = D3DXToRadian(180.0f);
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
@@ -208,6 +193,30 @@ HRESULT CRain::Off_SamplerState()
 	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
 
 	return S_OK;
+}
+void CRain::OnBillboard()
+{
+	_float4x4		ViewMatrix;
+
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+
+	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
+	_float3 vScale = { 0.25f,0.25f,1.f };
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+}
+void CRain::Move(_float fTimeDelta)
+{
+	_float3 vRight = { -1.f,0.f,0.f };
+	_float3 vLook = { 0.f,0.f,1.f };
+	m_pTransformCom->Turn(vRight, fTimeDelta);
+	m_pTransformCom->Turn(vLook, fTimeDelta);
+	_float3 vUp = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	vUp.x -= 0.03f;
+	vUp.y -= 0.05f;
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vUp);
+	
 }
 HRESULT CRain::SetUp_RenderState()
 {

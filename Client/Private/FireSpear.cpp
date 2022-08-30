@@ -30,16 +30,16 @@ HRESULT CFireSpear::Initialize(void* pArg)
 		return E_FAIL;
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
-	m_tInfo.vPos.y += 1.5f;
-	_float3 vScale = { 3.f,3.f,1.f };
+	m_tInfo.vPos.y += 5.5f;
+	_float3 vScale = { 2.f,3.f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;
 	m_tFrame.iFrameStart = 0;
-	m_tFrame.iFrameEnd = 11;
-	m_tFrame.fFrameSpeed = 0.05f;
+	m_tFrame.iFrameEnd = 10;
+	m_tFrame.fFrameSpeed = 0.08f;
 	m_tInfo.bDead = false;
 	m_tInfo.fX = 1.f;
 	m_tInfo.iDmg = 66;
@@ -52,16 +52,19 @@ void CFireSpear::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 	m_tInfo.bDead = false;
+	OnTerrain();
+
+	m_pTransformCom->Go_Down(fTimeDelta);
 	Move_Frame(fTimeDelta);
-	
 	m_fDeadTime += fTimeDelta;
-	if (m_tFrame.iFrameStart == 11)
+	if (m_fDeadTime > 2.f)
 	{
-		Create_Fire(TEXT("Layer_Skill"));
 		Set_Dead();
 	}
-	
-		
+	if (m_tInfo.bDead)
+	{
+		Create_Fire(TEXT("Layer_Skill"));
+	}
 
 }
 
@@ -71,16 +74,8 @@ void CFireSpear::Late_Tick(_float fTimeDelta)
 
 
 	Motion_Change();
+	OnBillboard();
 
-	_float4x4		ViewMatrix;
-
-	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
-
-	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
-	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -118,7 +113,7 @@ HRESULT CFireSpear::Create_Fire(const _tchar * pLayerTag)
 	CGameObject::INFO tInfo;
 
 	tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	
+	tInfo.vPos.y += 0.5f;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Fire"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
@@ -135,8 +130,8 @@ void CFireSpear::Motion_Change()
 		{
 		case IDLE:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 11;
-			m_tFrame.fFrameSpeed = 0.05f;
+			m_tFrame.iFrameEnd = 10;
+			m_tFrame.fFrameSpeed = 0.08f;
 			break;
 		}
 
@@ -170,8 +165,39 @@ HRESULT CFireSpear::TextureRender()
 	}
 	return S_OK;
 }
+void CFireSpear::OnBillboard()
+{
+	_float4x4		ViewMatrix;
 
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
 
+	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
+	_float3 vScale = { 2.f,3.f,1.f };
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+}
+void CFireSpear::OnTerrain()
+{
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return;
+	Safe_AddRef(pGameInstance);
+	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
+	if (nullptr == pVIBuffer_Terrain)
+		return;
+
+	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
+	if (nullptr == pTransform_Terrain)
+		return;
+
+	_float3			vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	if (vPosition.y < pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 1.f))
+		Set_Dead();
+
+	Safe_Release(pGameInstance);
+}
 HRESULT CFireSpear::SetUp_Components()
 {
 	/* For.Com_Renderer */

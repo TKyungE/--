@@ -37,7 +37,7 @@ HRESULT CTerrain::Initialize(void* pArg)
 		ERR_MSG(TEXT("Failed to OnLoadData"));
 		return E_FAIL;
 	}
-
+	
 	return S_OK;
 }
 

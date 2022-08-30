@@ -45,7 +45,8 @@ private:
 	HRESULT TextureRender();
 	HRESULT On_SamplerState();
 	HRESULT Off_SamplerState();
-	
+	void	OnBillboard();
+	void	Move(_float fTimeDelta);
 public:
 	static CRain* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

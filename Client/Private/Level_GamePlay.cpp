@@ -81,11 +81,7 @@ void CLevel_GamePlay::Late_Tick(_float fTimeDelta)
 	CGameObject* Dest;
 	CGameObject* Sour;
 	
-	if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour))
-	{
-		//Dest->Set_Dead();
-		//Sour->Set_Dead();
-	}
+	
 	if (pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill")) != nullptr)
 	{
 		if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour))

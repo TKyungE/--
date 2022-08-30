@@ -64,16 +64,7 @@ void CLevelUp::Late_Tick(_float fTimeDelta)
 
 
 	Motion_Change();
-
-	_float4x4		ViewMatrix;
-
-	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
-
-	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
-	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+	OnBillboard();
 
 
 	if (nullptr != m_pRendererCom)
@@ -105,7 +96,18 @@ HRESULT CLevelUp::Render()
 	On_SamplerState();
 	return S_OK;
 }
+void CLevelUp::OnBillboard()
+{
+	_float4x4		ViewMatrix;
 
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+
+	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
+	_float3 vScale = { 3.f,3.f,1.f };
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+}
 
 void CLevelUp::Motion_Change()
 {
