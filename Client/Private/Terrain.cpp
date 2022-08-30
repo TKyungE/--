@@ -35,7 +35,7 @@ HRESULT CTerrain::Initialize(void* pArg)
 	
 	//여기서 링크를 가져와서 대입하는 방식이 현명해보임,, 밑에는 임시방편
 
-	if(FAILED(OnLoadData(TEXT("../../Data/Test.dat"))))
+	if(FAILED(OnLoadData(TEXT("../../Data/TestMap.dat"))))
 	{ 
 		ERR_MSG(TEXT("Failed to OnLoadData"));
 		return E_FAIL;

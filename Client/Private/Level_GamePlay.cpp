@@ -128,9 +128,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar * pLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	auto iter = find_if(m_mapSpawn.begin(), m_mapSpawn.end(), CTag_Finder(TEXT("PlayerSpawn")));
-	
-	Info.vPos = iter->second;
+	Info.vPos = m_vPlayerPos;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
@@ -145,7 +143,13 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-
+	
+	for (auto& iter : m_vMonsterPos1)
+	{
+		Info.vPos = iter;
+	}
+	
+	
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Monster"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
 
@@ -231,33 +235,24 @@ void CLevel_GamePlay::SpawnData()
 		return;
 
 	DWORD	dwByte = 0;
-	DWORD	dwStrByte = 0;
 
 	_float3 Pos{};
+	_float3 vPos1;
 
+	ReadFile(hFile, vPos1, sizeof(_float3), &dwByte, nullptr);
+	m_vPlayerPos = vPos1;
 	while (true)
 	{
-		ReadFile(hFile, &dwStrByte, sizeof(DWORD), &dwByte, nullptr);
-
-		_tchar* pTag = new _tchar[dwStrByte];
-		ReadFile(hFile, pTag, dwStrByte, &dwByte, nullptr);
-
 		ReadFile(hFile, &Pos, sizeof(_float3), &dwByte, nullptr);
 
-
 		if (0 == dwByte)
-		{
-			Safe_Delete_Array(pTag);
 			break;
-		}
-		_float3 vPos;
-		_tchar* pSpawnTag = new _tchar;
-		vPos = Pos;
-		pSpawnTag = pTag;
-	
-		m_mapSpawn.insert({pSpawnTag,vPos});
-
 		
+		_float3 vPos;
+		
+		vPos = Pos;
+
+		m_vMonsterPos1.push_back(vPos);
 	}
 
 	CloseHandle(hFile);
@@ -281,6 +276,6 @@ void CLevel_GamePlay::Free()
 {
 	__super::Free();
 
-	m_mapSpawn.clear();
+	
 
 }

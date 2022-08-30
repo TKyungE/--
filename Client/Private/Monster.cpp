@@ -169,7 +169,7 @@ HRESULT CMonster::Initialize(void * pArg)
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(0.f, 0.f, 5.f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
 	m_tInfo.fX = 0.5f;
 	m_tInfo.iHp = 99999;
