@@ -8,6 +8,7 @@ class CRenderer;
 class CTransform;
 class CVIBuffer_Rect;
 END
+
 BEGIN(Client)
 
 class CInventory : public CGameObject
@@ -33,7 +34,11 @@ private: /* For.Components */
 private:
 	_float4x4				m_ProjMatrix;
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
-	bool*					m_Delete = false;
+	_float					m_fPrePosX = 0, m_fPrePosY = 0;
+	Pos						m_Pass;
+
+
+
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();

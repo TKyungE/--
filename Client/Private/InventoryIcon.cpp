@@ -56,6 +56,7 @@ void CInventoryIcon::Tick(_float fTimeDelta)
 
 		if (PtInRect(&rcRect, ptMouse))
 		{
+			m_Check = 2;
 			if (GetKeyState(VK_LBUTTON) & 0x8000)
 			{
 				CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
@@ -65,6 +66,8 @@ void CInventoryIcon::Tick(_float fTimeDelta)
 				Safe_Release(pGameInstance);
 			}
 		}
+		else
+			m_Check = 3;
 	}
 }
 
@@ -95,7 +98,7 @@ HRESULT CInventoryIcon::Render()
 		m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
 		m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
 
-		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(1)))
+		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_Check)))
 			return E_FAIL;
 
 		if (FAILED(SetUp_RenderState()))
