@@ -171,6 +171,15 @@ HRESULT CMonster::Initialize(void * pArg)
 	m_tInfo.iMaxHp = 9999;
 	m_tInfo.iHp = 100;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return E_FAIL;
+	Safe_AddRef(pGameInstance);
+	CGameObject::INFO tInfo;
+	tInfo.pTarget = this;
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_UI"), &tInfo);
+	Safe_Release(pGameInstance);
+
 	return S_OK;
 }
 
@@ -181,7 +190,7 @@ void CMonster::Tick(_float fTimeDelta)
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return;
-
+	Safe_AddRef(pGameInstance);
 	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
 	if (nullptr == pVIBuffer_Terrain)
 		return;
@@ -202,14 +211,11 @@ void CMonster::Tick(_float fTimeDelta)
 
 	m_pTransformCom->LookAt(*(_float3*)&matCameraPos.m[3][0]);
 	
-	
-	m_tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
 	if (GetKeyState('9'))
 	{
 		int a = 10;
 	}
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Monster"), &m_tInfo);
-
 
 	if (nullptr != m_tInfo.pTarget)
 		Chase(fTimeDelta);
@@ -245,6 +251,7 @@ void CMonster::Tick(_float fTimeDelta)
 	{
 		m_iFrame = 0;
 	}
+	Safe_Release(pGameInstance);
 }
 
 void CMonster::Late_Tick(_float fTimeDelta)

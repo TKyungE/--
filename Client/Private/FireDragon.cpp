@@ -205,9 +205,17 @@ HRESULT CFireDragon::Initialize(void * pArg)
 	m_tInfo.iDmg = 66;
 	m_tInfo.iMoney = 4444;
 	m_tInfo.fX = 1.f;
-	m_tInfo.iHp = 999999;
+	m_tInfo.iMaxHp = 999999;
+	m_tInfo.iHp = m_tInfo.iMaxHp;
 
-
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return E_FAIL;
+	Safe_AddRef(pGameInstance);
+	CGameObject::INFO tInfo;
+	tInfo.pTarget = this;
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_UI"), &tInfo);
+	Safe_Release(pGameInstance);
 
 	
 	return S_OK;
@@ -216,7 +224,7 @@ HRESULT CFireDragon::Initialize(void * pArg)
 void CFireDragon::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-
+	
 	OnTerrain();
 	Check_Front();
 	if (m_eCurState == DEAD)

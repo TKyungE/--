@@ -30,8 +30,8 @@ HRESULT CWorldHpBar::Initialize(void * pArg)
 		return E_FAIL;
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 
-	m_tInfo.vPos.y += 1.f;
-
+	m_tInfo.bDead = false;
+	
 
 
 	return S_OK;
@@ -40,21 +40,23 @@ HRESULT CWorldHpBar::Initialize(void * pArg)
 void CWorldHpBar::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	m_Temp++;
-
-	if (m_Temp == 2)
+	
+	
+	if (m_tInfo.pTarget->Get_Info().iHp <= 0)
 	{
 		Set_Dead();
 	}
 
+	_float3 vPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+	vPos.y += 1.f;
+	
+	
+	m_fSizeX = m_tInfo.pTarget->Get_Info().iHp / (float)m_tInfo.pTarget->Get_Info().iMaxHp;
 	
 
-	m_fSizeX = m_tInfo.iHp/ (float)m_tInfo.iMaxHp;
-	
+	m_pTransformCom->Set_Scaled({ m_fSizeX, 0.1f, 1.f });
 
-	m_pTransformCom->Set_Scaled({ m_fSizeX, 0.2f, 1.f });
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 
 }
 void CWorldHpBar::Late_Tick(_float fTimeDelta)
