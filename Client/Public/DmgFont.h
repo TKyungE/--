@@ -49,6 +49,7 @@ private:
 	HRESULT On_SamplerState();
 	HRESULT Off_SamplerState();
 	HRESULT TextureRender();
+	void	OnBillboard();
 	void	Set_State();
 	void	Jump();
 public:

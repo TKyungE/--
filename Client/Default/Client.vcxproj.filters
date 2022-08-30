@@ -124,6 +124,15 @@
     <Filter Include="03.Effect\Default\04.Rain">
       <UniqueIdentifier>{50fc2f1f-a364-4bde-b65c-da29ee1ea6e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Boss">
+      <UniqueIdentifier>{ff47cc89-caae-48a7-8208-1e8c3a22b2c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Boss\FireDragon">
+      <UniqueIdentifier>{51ae774e-4c6b-4c27-8efd-526921d3d00d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\05.Wind">
+      <UniqueIdentifier>{b3b81a1a-fbb2-4b96-8cd2-1d831f9b6cc6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -237,6 +246,12 @@
     <ClInclude Include="..\public\Rain.h">
       <Filter>03.Effect\Default\04.Rain</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\FireDragon.h">
+      <Filter>02.GameObject\Boss\FireDragon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Wind.h">
+      <Filter>03.Effect\Default\05.Wind</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -337,6 +352,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Rain.cpp">
       <Filter>03.Effect\Default\04.Rain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\FireDragon.cpp">
+      <Filter>02.GameObject\Boss\FireDragon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Wind.cpp">
+      <Filter>03.Effect\Default\05.Wind</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

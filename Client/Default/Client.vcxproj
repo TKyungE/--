@@ -165,6 +165,7 @@
     <ClInclude Include="..\public\DmgFont.h" />
     <ClInclude Include="..\Public\ExpBar.h" />
     <ClInclude Include="..\public\Fire.h" />
+    <ClInclude Include="..\public\FireDragon.h" />
     <ClInclude Include="..\public\FireSpear.h" />
     <ClInclude Include="..\public\Hit.h" />
     <ClInclude Include="..\Public\HpBar.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="..\Public\Tornado.h" />
     <ClInclude Include="..\Public\UI.h" />
     <ClInclude Include="..\public\UseSkill.h" />
+    <ClInclude Include="..\public\Wind.h" />
     <ClInclude Include="..\Public\XBox.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Resource.h" />
@@ -202,6 +204,7 @@
     <ClCompile Include="..\private\DmgFont.cpp" />
     <ClCompile Include="..\Private\ExpBar.cpp" />
     <ClCompile Include="..\private\Fire.cpp" />
+    <ClCompile Include="..\private\FireDragon.cpp" />
     <ClCompile Include="..\private\FireSpear.cpp" />
     <ClCompile Include="..\private\Hit.cpp" />
     <ClCompile Include="..\Private\HpBar.cpp" />
@@ -227,6 +230,7 @@
     <ClCompile Include="..\Private\Tornado.cpp" />
     <ClCompile Include="..\Private\UI.cpp" />
     <ClCompile Include="..\private\UseSkill.cpp" />
+    <ClCompile Include="..\private\Wind.cpp" />
     <ClCompile Include="..\Private\XBox.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
