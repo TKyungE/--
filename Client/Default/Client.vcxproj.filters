@@ -133,9 +133,6 @@
     <Filter Include="03.Effect\Default\05.Wind">
       <UniqueIdentifier>{b3b81a1a-fbb2-4b96-8cd2-1d831f9b6cc6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.UI\WorldHpBar\PlayerMpBar">
-      <UniqueIdentifier>{2e5788da-5b6d-49c5-b4b0-283748e421bb}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -249,14 +246,20 @@
     <ClInclude Include="..\public\Rain.h">
       <Filter>03.Effect\Default\04.Rain</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\FireDragon.h">
+    <ClInclude Include="..\public\EquipIcon.h" />
+    <ClInclude Include="..\public\PlayerMpBar.h" />
+    <ClInclude Include="..\public\PlusBox.h" />
+    <ClInclude Include="..\public\QuickSlot.h" />
+    <ClInclude Include="..\public\SkillIcon.h" />
+    <ClInclude Include="..\public\SkillWnd.h" />
+    <ClInclude Include="..\public\StatsIcon.h" />
+    <ClInclude Include="..\public\StatsWnd.h" />
+    <ClInclude Include="..\public\WorldHpBar.h" />
+    <ClInclude Include="..\Public\FireDragon.h">
       <Filter>02.GameObject\Boss\FireDragon</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Wind.h">
+    <ClInclude Include="..\Public\Wind.h">
       <Filter>03.Effect\Default\05.Wind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\PlayerMpBar.h">
-      <Filter>04.UI\WorldHpBar\PlayerMpBar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -359,14 +362,20 @@
     <ClCompile Include="..\private\Rain.cpp">
       <Filter>03.Effect\Default\04.Rain</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\FireDragon.cpp">
+    <ClCompile Include="..\private\EquipIcon.cpp" />
+    <ClCompile Include="..\private\PlayerMpBar.cpp" />
+    <ClCompile Include="..\private\PlusBox.cpp" />
+    <ClCompile Include="..\private\QuickSlot.cpp" />
+    <ClCompile Include="..\private\SkillIcon.cpp" />
+    <ClCompile Include="..\private\SkillWnd.cpp" />
+    <ClCompile Include="..\private\StatsIcon.cpp" />
+    <ClCompile Include="..\private\StatsWnd.cpp" />
+    <ClCompile Include="..\private\WorldHpBar.cpp" />
+    <ClCompile Include="..\Private\FireDragon.cpp">
       <Filter>02.GameObject\Boss\FireDragon</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Wind.cpp">
+    <ClCompile Include="..\Private\Wind.cpp">
       <Filter>03.Effect\Default\05.Wind</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\PlayerMpBar.cpp">
-      <Filter>04.UI\WorldHpBar\PlayerMpBar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

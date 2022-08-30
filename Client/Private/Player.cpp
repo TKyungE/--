@@ -30,9 +30,11 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-	*(CGameObject**)pArg = this;
+	memcpy(&m_tInfo, pArg, sizeof(INFO));
+	m_tInfo.pTarget = this;
+	memcpy(pArg, &m_tInfo, sizeof(INFO));
 
-
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 	m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;
