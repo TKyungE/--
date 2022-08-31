@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "..\Public\ExpBar.h"
-
-#include "GameInstance.h"
-
+#include"GameInstance.h"
 
 CExpBar::CExpBar(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:CGameObject(pGraphic_Device)
@@ -13,7 +11,6 @@ CExpBar::CExpBar(const CExpBar & rhs)
 	: CGameObject(rhs)
 {
 }
-
 HRESULT CExpBar::Initialize_Prototype()
 {
 	if (FAILED(__super::Initialize_Prototype()))
@@ -26,19 +23,17 @@ HRESULT CExpBar::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
-
+	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	D3DXMatrixOrthoLH(&m_ProjMatrix, g_iWinSizeX, g_iWinSizeY, 0.f, 1.f);
 
-	m_fSizeX = 186.0f;
-	m_fSizeY = 16.0f;
-	m_fX = 140.f;
-	m_fY = 114.f;
+	m_fSizeX = (float)m_tInfo.pTarget->Get_Info().iExp;//나중에 늘어나고 줄어듦을 여기서 조절한다
+	m_fSizeY = 8.f;
+	m_fX = 20.f;
+	m_fY = 715.f;
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));//이걸 시작점으로 만들기
 
 	return S_OK;
 }
@@ -46,6 +41,21 @@ HRESULT CExpBar::Initialize(void * pArg)
 void CExpBar::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+
+
+	m_fSizeX = (float)m_tInfo.pTarget->Get_Info().iExp;
+
+
+	if (m_fSizeX <= 0.f)
+	{
+		m_fSizeX = 0.00001f;
+	}
+
+
+
+	m_pTransformCom->Set_Scaled({ m_fSizeX, m_fSizeY, 1.f });
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
 }
 
 void CExpBar::Late_Tick(_float fTimeDelta)
@@ -55,6 +65,7 @@ void CExpBar::Late_Tick(_float fTimeDelta)
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 }
+
 
 HRESULT CExpBar::Render()
 {
@@ -149,7 +160,7 @@ CGameObject * CExpBar::Clone(void * pArg)
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		ERR_MSG(TEXT("Failed to Cloned : CExpBar"));
+		ERR_MSG(TEXT("Failed to Cloned : CUI"));
 		Safe_Release(pInstance);
 	}
 

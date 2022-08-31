@@ -44,6 +44,8 @@ private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
 	HRESULT Release_RenderState();
+public:
+	void OnBillboard();
 
 public:
 	static CWorldHpBar* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

@@ -164,7 +164,10 @@
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\public\DmgFont.h" />
     <ClInclude Include="..\public\EquipIcon.h" />
-    <ClInclude Include="..\Public\ExpBar.h" />
+    <ClInclude Include="..\public\ExpBar.h" />
+    <ClInclude Include="..\public\ExpBlank.h" />
+    <ClInclude Include="..\public\ExpLogo.h" />
+    <ClInclude Include="..\Public\MpBar.h" />
     <ClInclude Include="..\public\Fire.h" />
     <ClInclude Include="..\Public\FireDragon.h" />
     <ClInclude Include="..\public\FireSpear.h" />
@@ -213,7 +216,10 @@
     <ClCompile Include="..\Private\Camera_Dynamic.cpp" />
     <ClCompile Include="..\private\DmgFont.cpp" />
     <ClCompile Include="..\private\EquipIcon.cpp" />
-    <ClCompile Include="..\Private\ExpBar.cpp" />
+    <ClCompile Include="..\private\ExpBar.cpp" />
+    <ClCompile Include="..\private\ExpBlank.cpp" />
+    <ClCompile Include="..\private\ExpLogo.cpp" />
+    <ClCompile Include="..\Private\MpBar.cpp" />
     <ClCompile Include="..\private\Fire.cpp" />
     <ClCompile Include="..\Private\FireDragon.cpp" />
     <ClCompile Include="..\private\FireSpear.cpp" />

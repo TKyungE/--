@@ -1,5 +1,4 @@
 #pragma once
-
 #include"GameObject.h"
 #include"Client_Defines.h"
 
@@ -9,7 +8,6 @@ class CRenderer;
 class CTransform;
 class CVIBuffer_Rect;
 END
-
 BEGIN(Client)
 class CExpBar : public CGameObject
 {
@@ -34,7 +32,7 @@ private: /* For.Components */
 private:
 	_float4x4				m_ProjMatrix;
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
-
+	bool					m_SaveTest = false;
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
@@ -48,4 +46,3 @@ public:
 };
 
 END
-

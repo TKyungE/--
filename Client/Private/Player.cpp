@@ -43,10 +43,10 @@ HRESULT CPlayer::Initialize(void * pArg)
 	m_tFrame.fFrameSpeed = 0.1f;
 
 	m_tInfo.fX = 0.5f;
-	m_tInfo.iMaxHp = 500000;
+	m_tInfo.iMaxHp = 186;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
-	m_tInfo.iMp = 100;
-
+	m_tInfo.iMp = 186;
+	m_tInfo.iExp = 0.f;
 
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
@@ -57,6 +57,12 @@ HRESULT CPlayer::Initialize(void * pArg)
 	tInfo.vPos = { 0.7f,0.7f,1.f };
 
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_MpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpLogo"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
+
 
 	Safe_Release(pGameInstance);
 
@@ -71,13 +77,24 @@ void CPlayer::Tick(_float fTimeDelta)
 	Move_Frame(fTimeDelta);
 	Key_Input(fTimeDelta);
 	Player_Move(fTimeDelta);
-	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (GetKeyState('N') & 0x8000)
+	{
+		if (m_tInfo.iHp > 0)
+		{
+			m_tInfo.iHp -= 10;
+		}
 
-	Safe_AddRef(pGameInstance);
-	m_tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	}
+	if (GetKeyState('M') & 0x8000)
+	{
+		if (m_tInfo.iHp<m_tInfo.iMaxHp)
+		{
+			m_tInfo.iHp += 10;
+			
+		}
+		m_tInfo.iExp += 100.f;
+	}
 
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_PlayerMpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Monster"), &m_tInfo);
-	Safe_Release(pGameInstance);
 }
 
 void CPlayer::Late_Tick(_float fTimeDelta)
