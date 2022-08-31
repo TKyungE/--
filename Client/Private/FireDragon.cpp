@@ -204,7 +204,7 @@ HRESULT CFireDragon::Initialize(void * pArg)
 	m_tInfo.bDead = false;
 	m_tInfo.iDmg = 66;
 	m_tInfo.iMoney = 4444;
-	m_tInfo.fX = 1.f;
+	m_tInfo.fX = 2.f;
 	m_tInfo.iMaxHp = 999999;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 
@@ -215,6 +215,10 @@ HRESULT CFireDragon::Initialize(void * pArg)
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_UI"), &tInfo);
+	tInfo.vPos = { 3.f,3.f,1.f };
+
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+
 	Safe_Release(pGameInstance);
 
 	

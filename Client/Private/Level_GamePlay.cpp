@@ -95,7 +95,7 @@ void CLevel_GamePlay::Late_Tick(_float fTimeDelta)
 			if(Dest->Get_Info().iMoney == 33)
 			{ 
 				fCollTime += fTimeDelta;
-				if (fCollTime > 0.1f)
+				if (fCollTime > 0.3f)
 				{
 					_float3 vPos = Get_CollisionPos(Dest, Sour);
 
