@@ -169,6 +169,9 @@
     <Filter Include="04.UI\StateUi\ExpBar\ExpBlank">
       <UniqueIdentifier>{ffe43e6f-a3f8-4def-9565-322f0a72bc4a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Effect\Default\06.Shadow">
+      <UniqueIdentifier>{8a1b9025-6689-40a5-bf28-4e654d699c4c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -324,6 +327,9 @@
     <ClInclude Include="..\public\ExpBlank.h">
       <Filter>04.UI\StateUi\ExpBar\ExpBlank</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Shadow.h">
+      <Filter>03.Effect\Default\06.Shadow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -466,6 +472,9 @@
     </ClCompile>
     <ClCompile Include="..\private\ExpBlank.cpp">
       <Filter>04.UI\StateUi\ExpBar\ExpBlank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Shadow.cpp">
+      <Filter>03.Effect\Default\06.Shadow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

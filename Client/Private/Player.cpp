@@ -49,7 +49,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	m_tInfo.iMp = 186;
 	m_tInfo.iExp = 0.f;
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-
+	if (nullptr == pGameInstance)
+		return E_FAIL;
 	Safe_AddRef(pGameInstance);
 	m_tInfo.pTarget = this;
 
@@ -58,13 +59,6 @@ HRESULT CPlayer::Initialize(void * pArg)
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpLogo"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
 
-
-
-
-	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-	if (nullptr == pGameInstance)
-		return E_FAIL;
-	Safe_AddRef(pGameInstance);
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
 	tInfo.vPos = { 0.7f,0.7f,1.f };
