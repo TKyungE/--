@@ -29,9 +29,8 @@ HRESULT CTree::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 	
-	srand(time(NULL));
-	int X = (rand() % 50) + 1;
-	int Z = (rand() % 50) + 1;
+	int X = (rand() % 50000) * 0.0015;
+	int Z = (rand() % 50000) * 0.0015;
 	_float3 vPos = _float3(X, 0.f, Z);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
