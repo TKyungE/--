@@ -92,6 +92,7 @@ void CLevel_GamePlay::Late_Tick(_float fTimeDelta)
 		{
 			
 			Dest->Set_Dead();
+
 			if(Dest->Get_Info().iMoney == 33)
 			{ 
 				fCollTime += fTimeDelta;

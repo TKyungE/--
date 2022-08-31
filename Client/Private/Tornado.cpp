@@ -40,7 +40,7 @@ HRESULT CTornado::Initialize(void* pArg)
 	m_tFrame.iFrameEnd = 24;
 	m_tFrame.fFrameSpeed = 0.05f;
 	m_tInfo.bDead = false;
-	m_tInfo.fX = 0.5f;
+	m_tInfo.fX = 1.f;
 	m_tInfo.iDmg = 123;
 	m_tInfo.iMoney = 33;
 	return S_OK;
