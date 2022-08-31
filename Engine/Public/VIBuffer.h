@@ -39,9 +39,9 @@ public:
 	virtual HRESULT Render();
 
 public:
-	_float3*					m_pVerticesPos = nullptr;
-	FACEINDICES16* m_pIndices16 = nullptr;
-	FACEINDICES32* m_pIndices32 = nullptr;
+	vector<_float3> m_pVerticesPos;
+	vector<FACEINDICES16> m_pIndices16;
+	vector<FACEINDICES32> m_pIndices32;
 
 protected:
 	LPDIRECT3DVERTEXBUFFER9		m_pVB = nullptr;
