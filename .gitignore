@@ -68,3 +68,11 @@ Client/Default/x64/Debug/vc140.pdb
 Client/Default/x64/Debug/Wind.obj
 Client/Default/x64/Debug/WorldHpBar.obj
 Client/Default/x64/Debug/XBox.obj
+Client/Bin/Client.exe
+Client/Bin/Client.ilk
+Client/Bin/Client.pdb
+Client/Default/x64/Debug/Client.tlog/CL.write.1.tlog
+Client/Default/x64/Debug/Client.tlog/link.write.1.tlog
+Client/Default/x64/Debug/UseSkill.obj
+Client/Default/x64/Debug/vc140.idb
+Client/Default/x64/Debug/vc140.pdb
