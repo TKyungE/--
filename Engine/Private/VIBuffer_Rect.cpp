@@ -18,7 +18,6 @@ HRESULT CVIBuffer_Rect::Initialize_Prototype()
 	m_tVIBInfo.m_ePrimitiveType = D3DPT_TRIANGLELIST;
 	m_tVIBInfo.m_iNumPrimitive = 2;
 
-	m_pVerticesPos = new _float3[m_tVIBInfo.m_iNumVertices];
 
 	/* 정점들을 할당했다. */
 	if (FAILED(__super::Ready_Vertex_Buffer()))
@@ -28,24 +27,26 @@ HRESULT CVIBuffer_Rect::Initialize_Prototype()
 
 	m_pVB->Lock(0, /*m_iNumVertices * m_iStride*/0, (void**)&pVertices, 0);
 
-	pVertices[0].vPosition = m_pVerticesPos[0] = _float3(-0.5f, 0.5f, 0.f);
+	pVertices[0].vPosition = _float3(-0.5f, 0.5f, 0.f);
 	pVertices[0].vTexture = _float2(0.0f, 0.f);
+	m_pVerticesPos.push_back(_float3(-0.5f, 0.5f, 0.f));
 
-	pVertices[1].vPosition = m_pVerticesPos[1] = _float3(0.5f, 0.5f, 0.f);
+	pVertices[1].vPosition = _float3(0.5f, 0.5f, 0.f);
 	pVertices[1].vTexture = _float2(1.f, 0.f);
+	m_pVerticesPos.push_back(_float3(0.5f, 0.5f, 0.f));
 
-	pVertices[2].vPosition = m_pVerticesPos[2] = _float3(0.5f, -0.5f, 0.f);
+	pVertices[2].vPosition = _float3(0.5f, -0.5f, 0.f);
 	pVertices[2].vTexture = _float2(1.f, 1.f);
+	m_pVerticesPos.push_back(_float3(0.5f, -0.5f, 0.f));
 
-	pVertices[3].vPosition = m_pVerticesPos[3] = _float3(-0.5f, -0.5f, 0.f);
+	pVertices[3].vPosition = _float3(-0.5f, -0.5f, 0.f);
 	pVertices[3].vTexture = _float2(0.f, 1.f);
+	m_pVerticesPos.push_back(_float3(-0.5f, -0.5f, 0.f));
 
 	m_pVB->Unlock();
 
 	m_tVIBInfo.m_iIndicesByte = sizeof(FACEINDICES16);
 	m_tVIBInfo.m_eIndexFormat = D3DFMT_INDEX16;
-
-	m_pIndices16 = new FACEINDICES16[m_tVIBInfo.m_iNumPrimitive];
 
 	if (FAILED(__super::Ready_Index_Buffer()))
 		return E_FAIL;
@@ -54,13 +55,15 @@ HRESULT CVIBuffer_Rect::Initialize_Prototype()
 
 	m_pIB->Lock(0, 0, (void**)&pIndices, 0);
 
-	pIndices[0]._0 = m_pIndices16[0]._0 = 0;
-	pIndices[0]._1 = m_pIndices16[0]._1 = 1;
-	pIndices[0]._2 = m_pIndices16[0]._2 = 2;
+	pIndices[0]._0 = 0;
+	pIndices[0]._1 = 1;
+	pIndices[0]._2 = 2;
+	m_pIndices16.push_back(pIndices[0]);
 
-	pIndices[1]._0 = m_pIndices16[1]._0 = 0;
-	pIndices[1]._1 = m_pIndices16[1]._1 = 2;
-	pIndices[1]._2 = m_pIndices16[1]._2 = 3;
+	pIndices[1]._0 = 0;
+	pIndices[1]._1 = 2;
+	pIndices[1]._2 = 3;
+	m_pIndices16.push_back(pIndices[1]);
 
 	m_pIB->Unlock();
 
@@ -104,7 +107,7 @@ void CVIBuffer_Rect::Free()
 
 	if (false == m_isCloned)
 	{
-		Safe_Delete_Array(m_pVerticesPos);
-		Safe_Delete_Array(m_pIndices16);
+		m_pVerticesPos.clear();
+		m_pIndices16.clear();
 	}
 }

@@ -29,12 +29,14 @@ HRESULT CVIBuffer_Terrain::Load_Terrain(void)
 	if (FAILED(__super::Ready_Vertex_Buffer()))
 		return E_FAIL;
 
-	m_pVerticesPos = new _float3[m_tVIBInfo.m_iNumVertices];
+	m_pVerticesPos.clear();
+	m_pVerticesPos.shrink_to_fit();
 
 	m_tVIBInfo.m_iIndicesByte = m_tVIBInfo.m_iIndicesByte;
 	m_tVIBInfo.m_eIndexFormat = m_tVIBInfo.m_eIndexFormat;
 
-	m_pIndices32 = new FACEINDICES32[m_tVIBInfo.m_iNumPrimitive];
+	m_pIndices32.clear();
+	m_pIndices32.shrink_to_fit();
 
 	if (FAILED(__super::Ready_Index_Buffer()))
 		return E_FAIL;
@@ -92,8 +94,6 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(_uint iNumVerticesX, _uint iNumV
 	m_tVIBInfo.m_ePrimitiveType = D3DPT_TRIANGLELIST;
 	m_tVIBInfo.m_iNumPrimitive = (m_tVIBInfo_Derived.m_iNumVerticesX - 1) * (m_tVIBInfo_Derived.m_iNumVerticesZ - 1) * 2;
 
-	m_pVerticesPos = new _float3[m_tVIBInfo.m_iNumVertices];
-
 	if (FAILED(__super::Ready_Vertex_Buffer()))
 		return E_FAIL;
 
@@ -107,8 +107,9 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(_uint iNumVerticesX, _uint iNumV
 		{
 			_uint iIndex = i * m_tVIBInfo_Derived.m_iNumVerticesX + j;
 
-			pVertices[iIndex].vPosition = m_pVerticesPos[iIndex] = _float3((_float)j, 0.f, (_float)i);
+			pVertices[iIndex].vPosition = _float3((_float)j, 0.f, (_float)i);
 			pVertices[iIndex].vTexture = _float2((_float)j, (_float)i);
+			m_pVerticesPos.push_back(_float3((_float)j, 0.f, (_float)i));
 		}
 	}
 
@@ -116,8 +117,6 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(_uint iNumVerticesX, _uint iNumV
 
 	m_tVIBInfo.m_iIndicesByte = sizeof(FACEINDICES32);
 	m_tVIBInfo.m_eIndexFormat = D3DFMT_INDEX32;
-
-	m_pIndices32 = new FACEINDICES32[m_tVIBInfo.m_iNumPrimitive];
 
 	if (FAILED(__super::Ready_Index_Buffer()))
 		return E_FAIL;
@@ -141,14 +140,16 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(_uint iNumVerticesX, _uint iNumV
 				iIndex
 			};
 
-			pIndices[iNumFaces]._0 = m_pIndices32[iNumFaces]._0 = iIndices[0];
-			pIndices[iNumFaces]._1 = m_pIndices32[iNumFaces]._1 = iIndices[1];
-			pIndices[iNumFaces]._2 = m_pIndices32[iNumFaces]._2 = iIndices[2];
+			pIndices[iNumFaces]._0 = iIndices[0];
+			pIndices[iNumFaces]._1 = iIndices[1];
+			pIndices[iNumFaces]._2 = iIndices[2];
+			m_pIndices32.push_back(pIndices[iNumFaces]);
 			++iNumFaces;
 
-			pIndices[iNumFaces]._0 = m_pIndices32[iNumFaces]._0 = iIndices[0];
-			pIndices[iNumFaces]._1 = m_pIndices32[iNumFaces]._1 = iIndices[2];
-			pIndices[iNumFaces]._2 = m_pIndices32[iNumFaces]._2 = iIndices[3];
+			pIndices[iNumFaces]._0 = iIndices[0];
+			pIndices[iNumFaces]._1 = iIndices[2];
+			pIndices[iNumFaces]._2 = iIndices[3];
+			m_pIndices32.push_back(pIndices[iNumFaces]);
 			++iNumFaces;
 		}
 	}
@@ -195,7 +196,7 @@ void CVIBuffer_Terrain::Free()
 
 	if (false == m_isCloned)
 	{
-		Safe_Delete_Array(m_pVerticesPos);
-		Safe_Delete_Array(m_pIndices32);
+		m_pVerticesPos.clear();
+		m_pIndices32.clear();
 	}
 }
