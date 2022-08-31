@@ -63,6 +63,12 @@ HRESULT CPlayer::Initialize(void * pArg)
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpLogo"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
 
+	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	tInfo.vPos = vPos;
+	tInfo.vPos.z += 0.35f;
+	tInfo.vPos.x += 0.35f;
+	//Pet
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Poring"), LEVEL_GAMEPLAY, TEXT("Layer_Pet"), &m_tInfo);
 
 	Safe_Release(pGameInstance);
 
@@ -90,8 +96,8 @@ void CPlayer::Tick(_float fTimeDelta)
 		if (m_tInfo.iHp<m_tInfo.iMaxHp)
 		{
 			m_tInfo.iHp += 10;
-			
 		}
+		m_tInfo.iMp += 10;
 		m_tInfo.iExp += 100.f;
 	}
 

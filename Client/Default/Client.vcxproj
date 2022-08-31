@@ -188,6 +188,7 @@
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\public\PlayerMpBar.h" />
     <ClInclude Include="..\public\PlusBox.h" />
+    <ClInclude Include="..\public\Poring.h" />
     <ClInclude Include="..\public\QuickSlot.h" />
     <ClInclude Include="..\public\Rain.h" />
     <ClInclude Include="..\public\Shadow.h" />
@@ -241,6 +242,7 @@
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\private\PlayerMpBar.cpp" />
     <ClCompile Include="..\private\PlusBox.cpp" />
+    <ClCompile Include="..\private\Poring.cpp" />
     <ClCompile Include="..\private\QuickSlot.cpp" />
     <ClCompile Include="..\private\Rain.cpp" />
     <ClCompile Include="..\private\Shadow.cpp" />

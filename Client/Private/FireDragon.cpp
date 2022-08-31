@@ -438,7 +438,7 @@ void CFireDragon::Use_Skill(_float fTimeDelta)
 	m_fMeteorCool += fTimeDelta;
 	m_fFireSpearCool += fTimeDelta;
 
-	if (m_fFireSpearCool > 2.f && m_eCurState != SKILL)
+	if (m_fFireSpearCool > 10.f && m_eCurState != SKILL)
 	{
 		Skill_FireSpear(TEXT("Layer_MonsterSkill"));
 		m_fFireSpearCool = 0.f;
