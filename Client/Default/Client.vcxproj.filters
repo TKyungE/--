@@ -88,6 +88,9 @@
     <Filter Include="04.UI\StateUi">
       <UniqueIdentifier>{c93947ac-9ef8-4cc2-a4f6-24426048ddc3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\StateUi\ExpBar">
+      <UniqueIdentifier>{9f16c13f-6e81-4e8a-988f-6ad324ceba14}</UniqueIdentifier>
+    </Filter>
     <Filter Include="04.UI\StateUi\IconBar">
       <UniqueIdentifier>{e7dc98ab-bd50-495a-b6d8-42396e40bb6f}</UniqueIdentifier>
     </Filter>
@@ -157,17 +160,8 @@
     <Filter Include="04.UI\WorldHpBar">
       <UniqueIdentifier>{59e40b13-2353-4d51-9ce7-e372dc9a23d7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.UI\StateUi\MpBar">
-      <UniqueIdentifier>{9f16c13f-6e81-4e8a-988f-6ad324ceba14}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\StateUi\ExpBar">
-      <UniqueIdentifier>{372e51b1-8cc0-4800-ad9f-4c6ac0fadf7b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\StateUi\ExpBar\ExpLogo">
-      <UniqueIdentifier>{4113e447-cb1a-4204-8bbb-900f8330adb6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\StateUi\ExpBar\ExpBlank">
-      <UniqueIdentifier>{ffe43e6f-a3f8-4def-9565-322f0a72bc4a}</UniqueIdentifier>
+    <Filter Include="03.Effect\Default\06.Shadow">
+      <UniqueIdentifier>{71afcecb-9d8c-4b4e-8463-874539fb788f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -243,6 +237,9 @@
     <ClInclude Include="..\Public\Inventory.h">
       <Filter>04.UI\Inventory</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\ExpBar.h">
+      <Filter>04.UI\StateUi\ExpBar</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\XBox.h">
       <Filter>04.UI\Box\XBox</Filter>
     </ClInclude>
@@ -312,17 +309,8 @@
     <ClInclude Include="..\public\PlayerMpBar.h">
       <Filter>04.UI\WorldHpBar</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\MpBar.h">
-      <Filter>04.UI\StateUi\MpBar</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\ExpBar.h">
-      <Filter>04.UI\StateUi\ExpBar</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\ExpLogo.h">
-      <Filter>04.UI\StateUi\ExpBar\ExpLogo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\ExpBlank.h">
-      <Filter>04.UI\StateUi\ExpBar\ExpBlank</Filter>
+    <ClInclude Include="..\public\Shadow.h">
+      <Filter>03.Effect\Default\06.Shadow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -385,6 +373,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\XBox.cpp">
       <Filter>04.UI\Box\XBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ExpBar.cpp">
+      <Filter>04.UI\StateUi\ExpBar</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\HpBar.cpp">
       <Filter>04.UI\StateUi\HpBar</Filter>
@@ -455,17 +446,8 @@
     <ClCompile Include="..\private\PlayerMpBar.cpp">
       <Filter>04.UI\WorldHpBar</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\MpBar.cpp">
-      <Filter>04.UI\StateUi\MpBar</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\ExpBar.cpp">
-      <Filter>04.UI\StateUi\ExpBar</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\ExpLogo.cpp">
-      <Filter>04.UI\StateUi\ExpBar\ExpLogo</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\ExpBlank.cpp">
-      <Filter>04.UI\StateUi\ExpBar\ExpBlank</Filter>
+    <ClCompile Include="..\private\Shadow.cpp">
+      <Filter>03.Effect\Default\06.Shadow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

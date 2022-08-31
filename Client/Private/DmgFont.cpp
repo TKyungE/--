@@ -156,12 +156,12 @@ void CDmgFont::Set_State()
 
 void CDmgFont::Jump()
 {
-	m_fMoveX += 0.1f;
+	m_fMoveX += 0.015f;
 	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	vPos.y += 4 * m_fTime - (5.8f * m_fTime * m_fTime * 0.5f);
+	vPos.y += 2.5 * m_fTime - (7.8f * m_fTime * m_fTime * 0.5f);
 	vPos.x += m_fMoveX;
-	m_fTime += 0.1f;
+	m_fTime += 0.025f;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 	
 	
@@ -271,7 +271,7 @@ HRESULT CDmgFont::SetUp_Components()
 	CTransform::TRANSFORMDESC		TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
 
-	TransformDesc.fSpeedPerSec = 5.f;
+	TransformDesc.fSpeedPerSec = 3.f;
 	TransformDesc.fRotationPerSec = D3DXToRadian(90.0f);
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))

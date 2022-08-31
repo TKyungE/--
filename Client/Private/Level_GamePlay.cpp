@@ -95,7 +95,7 @@ void CLevel_GamePlay::Late_Tick(_float fTimeDelta)
 			if(Dest->Get_Info().iMoney == 33)
 			{ 
 				fCollTime += fTimeDelta;
-				if (fCollTime > 0.1f)
+				if (fCollTime > 0.3f)
 				{
 					_float3 vPos = Get_CollisionPos(Dest, Sour);
 
@@ -130,6 +130,14 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_GAMEPLAY, pLayerTag)))
 		return E_FAIL;
 
+
+	for (_uint i = 0; i < 100; ++i)
+	{
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Tree"), LEVEL_GAMEPLAY, pLayerTag)))
+			return E_FAIL;
+	}
+
+	
 	Safe_Release(pGameInstance);
 
 	return S_OK;
