@@ -65,7 +65,7 @@ void CFireSpear::Tick(_float fTimeDelta)
 	{
 		Create_Fire(TEXT("Layer_Skill"));
 	}
-
+	
 }
 
 void CFireSpear::Late_Tick(_float fTimeDelta)
@@ -74,11 +74,11 @@ void CFireSpear::Late_Tick(_float fTimeDelta)
 
 
 	Motion_Change();
-	OnBillboard();
+	//OnBillboard();
 
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }
 
 HRESULT CFireSpear::Render()
@@ -99,6 +99,14 @@ HRESULT CFireSpear::Render()
 
 	m_pVIBufferCom->Render();
 
+	_float3 vUp = { 0.f,1.f,0.f };
+	m_pTransformCom->Turn(vUp, 1.f);
+	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+		return E_FAIL;
+
+	m_pVIBufferCom2->Render();
+	_float3 vUp2 = { 0.f,-1.f,0.f };
+	m_pTransformCom->Turn(vUp, 1.f);
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
 
@@ -211,7 +219,8 @@ HRESULT CFireSpear::SetUp_Components()
 	/* For.Com_VIBuffer */
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
-
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer2"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom2)))
+		return E_FAIL;
 
 	/* For.Com_Transform */
 	CTransform::TRANSFORMDESC		TransformDesc;
@@ -253,7 +262,9 @@ HRESULT CFireSpear::SetUp_RenderState()
 {
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
-
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
@@ -263,7 +274,7 @@ HRESULT CFireSpear::SetUp_RenderState()
 
 HRESULT CFireSpear::Release_RenderState()
 {
-	// m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
@@ -306,6 +317,7 @@ void CFireSpear::Free()
 
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pVIBufferCom2);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pTextureCom);
 }
