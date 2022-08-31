@@ -10,7 +10,9 @@ CGameInstance::CGameInstance()
 	, m_pTimer_Manager(CTimer_Manager::Get_Instance())
 	, m_pComponent_Manager(CComponent_Manager::Get_Instance())
 	, m_pPicking(CPicking::Get_Instance())
+	, m_pKeyMgr(CKeyMgr::Get_Instance())
 {
+	Safe_AddRef(m_pKeyMgr);
 	Safe_AddRef(m_pPicking);
 	Safe_AddRef(m_pComponent_Manager);
 	Safe_AddRef(m_pTimer_Manager);
@@ -233,12 +235,15 @@ void CGameInstance::Release_Engine()
 	CInput_Device::Get_Instance()->Destroy_Instance();
 
 	CPicking::Get_Instance()->Destroy_Instance();
+	
+	CKeyMgr::Get_Instance()->Destroy_Instance();
 
 	CGraphic_Device::Get_Instance()->Destroy_Instance();
 }
 
 void CGameInstance::Free()
 {
+	Safe_Release(m_pKeyMgr);
 	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pTimer_Manager);
 	Safe_Release(m_pObject_Manager);

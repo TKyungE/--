@@ -29,7 +29,15 @@ private:
 
 private:
 	_float3 Get_CollisionPos(CGameObject* pDest, CGameObject* pSour);
+
+	void SpawnData();
+
+	_float3	m_vPlayerPos;
+	vector<_float3> m_vMonsterPos1;
+	
+
 	void Create_Rain(_float fTimeDelta);
+
 public:
 	static CLevel_GamePlay* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual void Free() override;

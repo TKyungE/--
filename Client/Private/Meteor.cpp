@@ -32,7 +32,7 @@ HRESULT CMeteor::Initialize(void* pArg)
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	m_tInfo.vPos.y += 4.f;
 	m_tInfo.vPos.x += 2.f;
-	_float3 vScale = { 1.f,1.f,1.f };
+	_float3 vScale = { 2.f,2.f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
@@ -52,14 +52,14 @@ HRESULT CMeteor::Initialize(void* pArg)
 void CMeteor::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	
+	OnTerrain();
 	Move_Frame(fTimeDelta);
 
 	m_pTransformCom->Go_Down(fTimeDelta);
 	_float3 vUp = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	vUp.x -= 0.03f;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vUp);
-	if (vUp.y < 0.5f)
+	if (vUp.y < 0.f)
 		Set_Dead();
 	
 	if(m_tInfo.bDead)
@@ -74,16 +74,7 @@ void CMeteor::Late_Tick(_float fTimeDelta)
 
 
 	Motion_Change();
-
-	_float4x4		ViewMatrix;
-
-	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
-
-	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
-	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+	OnBillboard();
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -129,7 +120,27 @@ HRESULT CMeteor::Create_Eff(const _tchar * pLayerTag)
 
 	return S_OK;
 }
+void CMeteor::OnTerrain()
+{
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return;
+	Safe_AddRef(pGameInstance);
+	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
+	if (nullptr == pVIBuffer_Terrain)
+		return;
 
+	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
+	if (nullptr == pTransform_Terrain)
+		return;
+
+	_float3			vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	
+	if (vPosition.y < pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.5f))
+		Set_Dead();
+	
+	Safe_Release(pGameInstance);
+}
 void CMeteor::Motion_Change()
 {
 	if (m_ePreState != m_eCurState)
@@ -245,7 +256,18 @@ HRESULT CMeteor::Release_RenderState()
 	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
 }
+void CMeteor::OnBillboard()
+{
+	_float4x4		ViewMatrix;
 
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+
+	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
+	_float3 vScale = { 2.f,2.f,1.f };
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+}
 CMeteor * CMeteor::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
 	CMeteor*	pInstance = new CMeteor(pGraphic_Device);

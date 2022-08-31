@@ -30,7 +30,7 @@ HRESULT CMeteorEff::Initialize(void* pArg)
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	m_tInfo.vPos.y += 1.f;
-	_float3 vScale = { 5.f,4.f,1.f };
+	_float3 vScale = { 3.f,4.f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
@@ -61,16 +61,7 @@ void CMeteorEff::Late_Tick(_float fTimeDelta)
 
 
 	Motion_Change();
-
-	_float4x4		ViewMatrix;
-
-	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
-
-	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
-	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+	OnBillboard();
 
 
 	if (nullptr != m_pRendererCom)
@@ -171,7 +162,18 @@ HRESULT CMeteorEff::Off_SamplerState()
 
 	return S_OK;
 }
+void CMeteorEff::OnBillboard()
+{
+	_float4x4		ViewMatrix;
 
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+
+	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
+	_float3 vScale = { 3.f,4.f,1.f };
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+}
 
 HRESULT CMeteorEff::SetUp_Components()
 {

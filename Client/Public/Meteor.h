@@ -46,7 +46,8 @@ private:
 	HRESULT On_SamplerState();
 	HRESULT Off_SamplerState();
 	HRESULT Create_Eff(const _tchar * pLayerTag);
-
+	void	OnBillboard();
+	void    OnTerrain();
 public:
 	static CMeteor* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

@@ -38,6 +38,7 @@ private:
 	_float m_fMoveFrame = 0.f;
 	_int m_iFrame = 0;
 
+
 private:
 	void OnTerrain();
 	HRESULT SetUp_Components(void);

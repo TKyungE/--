@@ -30,9 +30,11 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-	*(CGameObject**)pArg = this;
+	memcpy(&m_tInfo, pArg, sizeof(INFO));
+	m_tInfo.pTarget = this;
+	memcpy(pArg, &m_tInfo, sizeof(INFO));
 
-
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 	m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;
@@ -41,18 +43,27 @@ HRESULT CPlayer::Initialize(void * pArg)
 	m_tFrame.fFrameSpeed = 0.1f;
 
 	m_tInfo.fX = 0.5f;
-
+	m_tInfo.iMaxHp = 500000;
+	m_tInfo.iHp = m_tInfo.iMaxHp;
+	m_tInfo.iMp = 100;
 	return S_OK;
 }
 
 void CPlayer::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-
+	
 	OnTerrain();
 	Move_Frame(fTimeDelta);
 	Key_Input(fTimeDelta);
 	Player_Move(fTimeDelta);
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+
+	Safe_AddRef(pGameInstance);
+	m_tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_PlayerMpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Monster"), &m_tInfo);
+	Safe_Release(pGameInstance);
 }
 
 void CPlayer::Late_Tick(_float fTimeDelta)
@@ -60,9 +71,10 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	__super::Late_Tick(fTimeDelta);
 	
 	Motion_Change();
-	
-	Use_Skill();
-
+	if (m_tInfo.iMp > 0)
+	{
+		Use_Skill();
+	}
 	_float4x4		ViewMatrix;
 	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
@@ -287,6 +299,7 @@ void CPlayer::Use_Skill()
 		m_eCurState = SKILL;
 		m_tFrame.iFrameStart = 0;
 		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_tInfo.iMp -= 5;
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bTornado)
 	{
@@ -297,6 +310,7 @@ void CPlayer::Use_Skill()
 		m_eCurState = SKILL;
 		m_tFrame.iFrameStart = 0;
 		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_tInfo.iMp -= 5;
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bFireSpear)
 	{
@@ -307,6 +321,7 @@ void CPlayer::Use_Skill()
 		m_eCurState = SKILL;
 		m_tFrame.iFrameStart = 0;
 		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_tInfo.iMp -= 5;
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bMeteor)
 	{
@@ -317,6 +332,7 @@ void CPlayer::Use_Skill()
 		m_eCurState = SKILL;
 		m_tFrame.iFrameStart = 0;
 		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_tInfo.iMp -= 5;
 	}
 	
 	if (CKeyMgr::Get_Instance()->Key_Down('L'))

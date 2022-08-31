@@ -1,8 +1,5 @@
 #include "..\Public\CollisionMgr.h"
 
-
-
-
 CCollisionMgr::CCollisionMgr()
 {
 }
