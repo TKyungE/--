@@ -14,6 +14,13 @@ BEGIN(Client)
 
 class CTree final : public CGameObject
 {
+public:
+	typedef struct tagIndexPos
+	{
+		_float3		vPos;
+		_uint	iIndex;
+	}INDEXPOS;
+
 private:
 	CTree(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	CTree(const CTree& rhs);
@@ -31,6 +38,8 @@ private:
 	CTransform* m_pTransformCom = nullptr;
 	CVIBuffer_Rect* m_pVIBuffer = nullptr;
 	CTexture* m_pTextureCom = nullptr;
+private:
+	INDEXPOS	m_IndexPos;
 
 private:
 	HRESULT SetUp_Components(void);

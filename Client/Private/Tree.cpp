@@ -29,11 +29,13 @@ HRESULT CTree::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 	
-	int X = (rand() % 50000) * 0.001;
-	int Z = (rand() % 50000) * 0.001;
-	_float3 vPos = _float3(X, 0.f, Z);
+	memcpy(&m_IndexPos, pArg, sizeof(INDEXPOS));
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+	//int X = (rand() % 50000) * 0.001;
+	//int Z = (rand() % 50000) * 0.001;
+	//_float3 vPos = _float3(X, 0.f, Z);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_IndexPos.vPos);
 
 	return S_OK;
 }
@@ -63,7 +65,7 @@ HRESULT CTree::Render(void)
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_IndexPos.iIndex)))
 		return E_FAIL;
 	
 	if (FAILED(SetUp_RenderState()))
