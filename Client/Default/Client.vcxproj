@@ -197,6 +197,7 @@
     <ClInclude Include="..\public\ThunderCloud.h" />
     <ClInclude Include="..\Public\ThunderSword.h" />
     <ClInclude Include="..\Public\Tornado.h" />
+    <ClInclude Include="..\Public\Tree.h" />
     <ClInclude Include="..\Public\UI.h" />
     <ClInclude Include="..\public\UseSkill.h" />
     <ClInclude Include="..\Public\Wind.h" />
@@ -245,6 +246,7 @@
     <ClCompile Include="..\private\ThunderCloud.cpp" />
     <ClCompile Include="..\Private\ThunderSword.cpp" />
     <ClCompile Include="..\Private\Tornado.cpp" />
+    <ClCompile Include="..\Private\Tree.cpp" />
     <ClCompile Include="..\Private\UI.cpp" />
     <ClCompile Include="..\private\UseSkill.cpp" />
     <ClCompile Include="..\Private\Wind.cpp" />

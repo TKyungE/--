@@ -160,6 +160,9 @@
     <Filter Include="04.UI\WorldHpBar">
       <UniqueIdentifier>{59e40b13-2353-4d51-9ce7-e372dc9a23d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Tree">
+      <UniqueIdentifier>{77008662-a1ab-41ee-b2eb-5a0181481183}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -306,6 +309,9 @@
     <ClInclude Include="..\public\PlayerMpBar.h">
       <Filter>04.UI\WorldHpBar</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Tree.h">
+      <Filter>02.GameObject\Tree</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -439,6 +445,9 @@
     </ClCompile>
     <ClCompile Include="..\private\PlayerMpBar.cpp">
       <Filter>04.UI\WorldHpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Tree.cpp">
+      <Filter>02.GameObject\Tree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
