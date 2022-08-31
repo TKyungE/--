@@ -278,13 +278,17 @@ void CLevel_GamePlay::SpawnData()
 	DWORD	dwByte = 0;
 
 	_float3 Pos{};
+	_float3 BackPos{};
 	_float3 vPos1;
+	_uint Index{};
 
 	ReadFile(hFile, vPos1, sizeof(_float3), &dwByte, nullptr);
 	m_vPlayerPos = vPos1;
 	while (true)
 	{
 		ReadFile(hFile, &Pos, sizeof(_float3), &dwByte, nullptr);
+		ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+		ReadFile(hFile, &Index, sizeof(_uint), &dwByte, nullptr);
 
 		if (0 == dwByte)
 			break;
@@ -293,7 +297,17 @@ void CLevel_GamePlay::SpawnData()
 
 		vPos = Pos;
 
-		m_vMonsterPos1.push_back(vPos);
+		m_vMonsterPos1.push_back(vPos);	
+
+		//헷갈리지 않기 위해 해줌 혹시나..
+
+		INDEXPOS IndexPos;
+		
+
+		IndexPos.BackGroundPos = BackPos;
+		IndexPos.iIndex = Index;
+		
+		m_vecIndex.push_back(IndexPos);
 	}
 
 	CloseHandle(hFile);
