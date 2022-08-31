@@ -29,6 +29,13 @@ HRESULT CTree::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 	
+	srand(time(NULL));
+	int X = (rand() % 50) + 1;
+	int Z = (rand() % 50) + 1;
+	_float3 vPos = _float3(X, 0.f, Z);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+
 	return S_OK;
 }
 
@@ -99,11 +106,19 @@ HRESULT CTree::SetUp_RenderState(void)
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
 
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 	return S_OK;
 }
 
 HRESULT CTree::Release_RenderState(void)
 {
+	if (nullptr == m_pGraphic_Device)
+		return E_FAIL;
+
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
 	return S_OK;
 }
 
@@ -132,6 +147,14 @@ void CTree::OnTerrain(void)
 
 void CTree::OnBillBoard(void)
 {
+	_float4x4	ViewMatrix;
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+
+	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
+
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+
 }
 
 CTree * CTree::Create(LPDIRECT3DDEVICE9 _pGraphic_Device)
