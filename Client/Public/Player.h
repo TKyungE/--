@@ -40,6 +40,11 @@ private:
 	CTexture* m_pTextureComSkill_Front = nullptr;
 	CTexture* m_pTextureComSkill_Back = nullptr;
 
+	CTexture* m_pTextureComRide_IDLE_Front = nullptr;
+	CTexture* m_pTextureComRide_IDLE_Back = nullptr;
+	CTexture* m_pTextureComRide_Move_Front = nullptr;
+	CTexture* m_pTextureComRide_Move_Back = nullptr;
+
 private:
 	void OnTerrain();
 	void	OnBillboard();
@@ -69,6 +74,7 @@ private:
 	_bool	m_bMeteor = false;
 	_bool	m_bFront = false;
 	_bool	m_bCamera = false;
+	_bool   m_bRide = false;
 	STATE				m_ePreState;
 	STATE				m_eCurState;
 public:

@@ -75,12 +75,7 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	{
 		Use_Skill();
 	}
-	_float4x4		ViewMatrix;
-	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
-	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
-	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+	OnBillboard();
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -154,6 +149,12 @@ void CPlayer::OnTerrain()
 	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.5f);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+	if (m_bRide)
+	{
+		_float3 vUp = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		vUp.y += 0.2f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vUp);
+	}
 	Safe_Release(pGameInstance);
 }
 
@@ -178,7 +179,14 @@ HRESULT CPlayer::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Skill_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Skill_Back"), (CComponent**)&m_pTextureComSkill_Back)))
 		return E_FAIL;
 
-
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_IDLE_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Ride_IDLE_Front"), (CComponent**)&m_pTextureComRide_IDLE_Front)))
+		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_IDLE_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Ride_IDLE_Back"), (CComponent**)&m_pTextureComRide_IDLE_Back)))
+		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_Move_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Ride_Move_Front"), (CComponent**)&m_pTextureComRide_Move_Front)))
+		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_Move_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Ride_Move_Back"), (CComponent**)&m_pTextureComRide_Move_Back)))
+		return E_FAIL;
 
 	CTransform::TRANSFORMDESC TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
@@ -209,6 +217,18 @@ HRESULT CPlayer::Release_RenderState()
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
+}
+void CPlayer::OnBillboard()
+{
+	_float4x4		ViewMatrix;
+
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+
+	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
+	_float3 vScale = { 1.f,1.f,1.f };
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
 }
 
 HRESULT CPlayer::On_SamplerState()
@@ -363,7 +383,26 @@ void CPlayer::Key_Input(_float fTimeDelta)
 		m_tFrame.iFrameStart = 0;
 		Check_Front();
 	}
-	
+	if (CKeyMgr::Get_Instance()->Key_Down('R'))
+	{
+		switch (m_bRide)
+		{
+		case true:
+			m_bRide = false;
+			break;
+		case false:
+			m_bRide = true;
+			if (m_eCurState == MOVE)
+			{
+				m_tFrame.iFrameStart = 0;
+				m_tFrame.iFrameEnd = 4;
+				m_tFrame.fFrameSpeed = 0.07f;
+			}
+			break;
+		default:
+			break;
+		}
+	}
 
 	Safe_Release(pInstance);
 }
@@ -466,7 +505,10 @@ void CPlayer::Free(void)
 	Safe_Release(m_pTextureComMove_Back);
 	Safe_Release(m_pTextureComSkill_Front);
 	Safe_Release(m_pTextureComSkill_Back);
-	
+	Safe_Release(m_pTextureComRide_IDLE_Front);
+	Safe_Release(m_pTextureComRide_IDLE_Back);
+	Safe_Release(m_pTextureComRide_Move_Front);
+	Safe_Release(m_pTextureComRide_Move_Back);
 }
 
 _float3 CPlayer::Get_Pos()
@@ -482,25 +524,37 @@ void CPlayer::Player_Move(_float fTimeDelta)
 	m_vTargetLook = m_vTarget - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	D3DXVec3Normalize(&vLook, &m_vTargetLook);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, vLook);
-	if (D3DXVec3Length(&m_vTargetLook) < 0.55f)
-	{
-		if (m_eCurState == SKILL)
-		{
-			if (m_tFrame.iFrameStart == 4)
-			{
-				m_eCurState = IDLE;
-				m_tFrame.iFrameStart = 0;
-			}
-		}
-		else
+	if(m_bRide)
+	{ 
+		if (D3DXVec3Length(&m_vTargetLook) < 0.75f)
 		{
 			m_eCurState = IDLE;
 			m_tFrame.iFrameStart = 0;
 		}
-		
+		m_pTransformCom->Go_Straight(fTimeDelta * 1.8f);
 	}
+	else
+	{
+		if (D3DXVec3Length(&m_vTargetLook) < 0.55f)
+		{
+			if (m_eCurState == SKILL)
+			{
+				if (m_tFrame.iFrameStart == 4)
+				{
+					m_eCurState = IDLE;
+					m_tFrame.iFrameStart = 0;
+				}
+			}
+			else
+			{
+				m_eCurState = IDLE;
+				m_tFrame.iFrameStart = 0;
+			}
 
-	m_pTransformCom->Go_Straight(fTimeDelta);
+		}
+		m_pTransformCom->Go_Straight(fTimeDelta);
+	}
+	
 }
 
 void CPlayer::Motion_Change()
@@ -515,9 +569,18 @@ void CPlayer::Motion_Change()
 			m_tFrame.fFrameSpeed = 0.1f;
 			break;
 		case MOVE:
-			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 7;
-			m_tFrame.fFrameSpeed = 0.1f;
+			if (m_bRide)
+			{
+				m_tFrame.iFrameStart = 0;
+				m_tFrame.iFrameEnd = 4;
+				m_tFrame.fFrameSpeed = 0.07f;
+			}
+			else
+			{
+				m_tFrame.iFrameStart = 0;
+				m_tFrame.iFrameEnd = 7;
+				m_tFrame.fFrameSpeed = 0.1f;
+			}
 			break;
 		case SKILL:
 			m_tFrame.iFrameStart = 0;
@@ -536,15 +599,27 @@ void CPlayer::Move_Frame(_float fTimeDelta)
 	{
 	case IDLE:
 		if(m_bFront)
-			m_tFrame.iFrameStart = m_pTextureComIDLE_Front->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+			if(m_bRide)
+				m_tFrame.iFrameStart = m_pTextureComRide_IDLE_Front->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+			else
+				m_tFrame.iFrameStart = m_pTextureComIDLE_Front->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
 		else
-			m_tFrame.iFrameStart = m_pTextureComIDLE_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+			if (m_bRide)
+				m_tFrame.iFrameStart = m_pTextureComRide_IDLE_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+			else
+				m_tFrame.iFrameStart = m_pTextureComIDLE_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
 		break;
 	case MOVE:
 		if (m_bFront)
-			m_tFrame.iFrameStart = m_pTextureComMove_Front->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+			if(m_bRide)
+				m_tFrame.iFrameStart = m_pTextureComRide_Move_Front->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+			else
+				m_tFrame.iFrameStart = m_pTextureComMove_Front->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
 		else
-			m_tFrame.iFrameStart = m_pTextureComMove_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+			if (m_bRide)
+				m_tFrame.iFrameStart = m_pTextureComRide_Move_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+			else
+				m_tFrame.iFrameStart = m_pTextureComMove_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
 		break;
 	case SKILL:
 		if (m_bFront)
@@ -583,25 +658,57 @@ HRESULT CPlayer::TextureRender()
 	case IDLE:
 		if (m_bFront)
 		{
-			if (FAILED(m_pTextureComIDLE_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
-				return E_FAIL;
+			if (m_bRide)
+			{
+				if (FAILED(m_pTextureComRide_IDLE_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+					return E_FAIL;
+			}
+			else
+			{
+				if (FAILED(m_pTextureComIDLE_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+					return E_FAIL;
+			}
 		}
 		else
 		{
-			if (FAILED(m_pTextureComIDLE_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
-				return E_FAIL;
+			if (m_bRide)
+			{
+				if (FAILED(m_pTextureComRide_IDLE_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+					return E_FAIL;
+			}
+			else
+			{
+				if (FAILED(m_pTextureComIDLE_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+					return E_FAIL;
+			}
 		}
 		break;
 	case MOVE:
 		if (m_bFront)
 		{
-			if (FAILED(m_pTextureComMove_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
-				return E_FAIL;
+			if (m_bRide)
+			{
+				if (FAILED(m_pTextureComRide_Move_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+					return E_FAIL;
+			}
+			else
+			{
+				if (FAILED(m_pTextureComMove_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+					return E_FAIL;
+			}
 		}
 		else
 		{
-			if (FAILED(m_pTextureComMove_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
-				return E_FAIL;
+			if (m_bRide)
+			{
+				if (FAILED(m_pTextureComRide_Move_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+					return E_FAIL;
+			}
+			else
+			{
+				if (FAILED(m_pTextureComMove_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+					return E_FAIL;
+			}
 		}
 		break;
 	case SKILL:
