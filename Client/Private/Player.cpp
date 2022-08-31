@@ -46,6 +46,20 @@ HRESULT CPlayer::Initialize(void * pArg)
 	m_tInfo.iMaxHp = 500000;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 100;
+
+
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return E_FAIL;
+	Safe_AddRef(pGameInstance);
+	CGameObject::INFO tInfo;
+	tInfo.pTarget = this;
+	tInfo.vPos = { 0.7f,0.7f,1.f };
+
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+
+	Safe_Release(pGameInstance);
+
 	return S_OK;
 }
 
@@ -78,7 +92,7 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	OnBillboard();
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
 HRESULT CPlayer::Render(void)
@@ -153,6 +167,12 @@ void CPlayer::OnTerrain()
 	{
 		_float3 vUp = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		vUp.y += 0.2f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vUp);
+	}
+	else
+	{
+		_float3 vUp = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		vUp.y -= 0.1f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vUp);
 	}
 	Safe_Release(pGameInstance);

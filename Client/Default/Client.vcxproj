@@ -187,6 +187,7 @@
     <ClInclude Include="..\public\PlusBox.h" />
     <ClInclude Include="..\public\QuickSlot.h" />
     <ClInclude Include="..\public\Rain.h" />
+    <ClInclude Include="..\public\Shadow.h" />
     <ClInclude Include="..\public\SkillIcon.h" />
     <ClInclude Include="..\public\SkillWnd.h" />
     <ClInclude Include="..\Public\Sky.h" />
@@ -235,6 +236,7 @@
     <ClCompile Include="..\private\PlusBox.cpp" />
     <ClCompile Include="..\private\QuickSlot.cpp" />
     <ClCompile Include="..\private\Rain.cpp" />
+    <ClCompile Include="..\private\Shadow.cpp" />
     <ClCompile Include="..\private\SkillIcon.cpp" />
     <ClCompile Include="..\private\SkillWnd.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
