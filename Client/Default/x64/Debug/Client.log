@@ -1,5 +1,6 @@
-﻿  WorldHpBar.cpp
-  Monster.cpp
-  코드를 생성하고 있습니다...
+﻿  Player.cpp
+c:\users\dp951\desktop\--\client\private\player.cpp(49): warning C4244: '=': 'float'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\dp951\desktop\--\client\private\player.cpp(88): warning C4244: '+=': 'float'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\dp951\desktop\--\client\private\player.cpp(428): warning C4809: switch 문에 중복 'default' 레이블이 있습니다. 가능한 모든 'case' 레이블이 제공됩니다.
   Client.vcxproj -> C:\Users\dp951\Desktop\--\Client\Default\..\Bin\Client.exe
   Client.vcxproj -> ..\Bin\Client.pdb (Full PDB)
