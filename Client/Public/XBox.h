@@ -36,6 +36,7 @@ private:
 	_float4x4				m_ProjMatrix;
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
 	Pos*					m_Recive;
+	bool					m_bCheck = 0;
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();

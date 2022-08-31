@@ -57,12 +57,15 @@ void CWorldHpBar::Tick(_float fTimeDelta)
 	m_pTransformCom->Set_Scaled({ m_fSizeX, 0.1f, 1.f });
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+	
+
+
 
 }
 void CWorldHpBar::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-
+	OnBillboard();
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
@@ -139,6 +142,18 @@ HRESULT CWorldHpBar::Release_RenderState()
 
 	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
+}
+
+void CWorldHpBar::OnBillboard()
+{
+	_float4x4		ViewMatrix;
+
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+
+	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] );
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
 }
 
 CWorldHpBar * CWorldHpBar::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

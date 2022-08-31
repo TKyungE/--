@@ -58,11 +58,14 @@ void CXBox::Tick(_float fTimeDelta)
 
 	if (PtInRect(&rcRect, ptMouse))
 	{
+		m_bCheck = true;
 		if (GetKeyState(VK_LBUTTON) & 0x8000)
 		{
 			m_Recive->bNext = true;
 		}
 	}
+	else
+		m_bCheck = false;
 }
 
 void CXBox::Late_Tick(_float fTimeDelta)
@@ -91,7 +94,7 @@ HRESULT CXBox::Render()
 	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
 	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(1)))
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_bCheck)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_RenderState()))
@@ -140,14 +143,16 @@ HRESULT CXBox::SetUp_RenderState()
 		return E_FAIL;
 
 	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
-
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 	return S_OK;
 }
 
 HRESULT CXBox::Release_RenderState()
 {
 	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
-
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	return S_OK;
 }
 

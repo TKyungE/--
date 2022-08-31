@@ -211,12 +211,6 @@ void CMonster::Tick(_float fTimeDelta)
 
 	m_pTransformCom->LookAt(*(_float3*)&matCameraPos.m[3][0]);
 	
-
-	if (GetKeyState('9'))
-	{
-		int a = 10;
-	}
-
 	if (nullptr != m_tInfo.pTarget)
 		Chase(fTimeDelta);
 
