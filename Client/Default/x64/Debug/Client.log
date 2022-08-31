@@ -1,4 +1,5 @@
 ﻿  Client.cpp
+  WorldHpBar.cpp
   UseSkill.cpp
   ThunderCloud.cpp
   StatsWnd.cpp
@@ -27,17 +28,19 @@ c:\users\shout\desktop\과제\--\client\private\playermpbar.cpp(30): warning C42
 c:\users\shout\desktop\과제\--\client\private\playermpbar.cpp(53): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   MeteorEff.cpp
   Meteor.cpp
+  Loader.cpp
   Level_Logo.cpp
+  LevelUp.cpp
   Hit.cpp
   FireSpear.cpp
   Fire.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
   EquipIcon.cpp
 c:\users\shout\desktop\과제\--\client\private\equipicon.cpp(30): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\shout\desktop\과제\--\client\private\equipicon.cpp(52): warning C4244: '인수': 'Engine::_float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   DmgFont.cpp
   BackGround.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
   XBox.cpp
 c:\users\shout\desktop\과제\--\client\private\xbox.cpp(29): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\shout\desktop\과제\--\client\private\xbox.cpp(53): warning C4244: '인수': 'Engine::_float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
@@ -49,6 +52,9 @@ c:\users\shout\desktop\과제\--\client\private\ui.cpp(49): warning C4244: '인�
   ThunderSword.cpp
   Terrain.cpp
   Sky.cpp
+  Player.cpp
+c:\users\shout\desktop\과제\--\client\private\player.cpp(404): warning C4809: switch 문에 중복 'default' 레이블이 있습니다. 가능한 모든 'case' 레이블이 제공됩니다.
+  Monster.cpp
   MainApp.cpp
   Level_Loading.cpp
   Level_GamePlay.cpp
@@ -66,16 +72,14 @@ c:\users\shout\desktop\과제\--\client\private\iconbar.cpp(50): warning C4244: 
   HpBar.cpp
 c:\users\shout\desktop\과제\--\client\private\hpbar.cpp(30): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\shout\desktop\과제\--\client\private\hpbar.cpp(71): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  FireDragon.cpp
+  코드를 생성하고 있습니다...
+c:\users\shout\desktop\과제\--\client\private\firedragon.cpp(470): warning C4715: 'Client::CFireDragon::Create_Wind': 모든 제어 경로에서 값을 반환하지는 않습니다.
+  컴파일하고 있습니다...
   ExpBar.cpp
 c:\users\shout\desktop\과제\--\client\private\expbar.cpp(30): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  코드를 생성하고 있습니다...
-  건너뛰고 있습니다... (관련된 변경 내용 없음)
-  WorldHpBar.cpp
-  Loader.cpp
-  LevelUp.cpp
-  Player.cpp
-  Monster.cpp
-  FireDragon.cpp
   Camera_Dynamic.cpp
+  코드를 생성하고 있습니다...
+  LINK : ..\Bin\Client.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
   Client.vcxproj -> C:\Users\shout\Desktop\과제\--\Client\Default\..\Bin\Client.exe
   Client.vcxproj -> ..\Bin\Client.pdb (Full PDB)
