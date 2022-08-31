@@ -534,7 +534,9 @@ _float4x4 CPlayer::Get_World(void)
 void CPlayer::Free(void)
 {
 	__super::Free();
+
 	CKeyMgr::Get_Instance()->Destroy_Instance();
+
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pVIBuffer);

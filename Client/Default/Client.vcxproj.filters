@@ -171,6 +171,8 @@
     </Filter>
     <Filter Include="03.Effect\Default\06.Shadow">
       <UniqueIdentifier>{8a1b9025-6689-40a5-bf28-4e654d699c4c}</UniqueIdentifier>
+    <Filter Include="02.GameObject\Tree">
+      <UniqueIdentifier>{77008662-a1ab-41ee-b2eb-5a0181481183}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -329,6 +331,8 @@
     </ClInclude>
     <ClInclude Include="..\public\Shadow.h">
       <Filter>03.Effect\Default\06.Shadow</Filter>
+    <ClInclude Include="..\Public\Tree.h">
+      <Filter>02.GameObject\Tree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -475,6 +479,8 @@
     </ClCompile>
     <ClCompile Include="..\private\Shadow.cpp">
       <Filter>03.Effect\Default\06.Shadow</Filter>
+    <ClCompile Include="..\Private\Tree.cpp">
+      <Filter>02.GameObject\Tree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

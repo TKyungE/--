@@ -16,6 +16,7 @@ enum DIMM { DIMM_X, DIMM_Y, DIMM_WHEEL, DIMM_END };
 #include <map>
 #include <list>
 #include <algorithm>
+#include <time.h>
 using namespace std;
 
 #define		VK_MAX		0xff
