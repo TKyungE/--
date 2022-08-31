@@ -130,3 +130,5 @@ Client/Bin/Client.exe
 Client/Default/x64/Debug/UseSkill.obj
 Client/Default/x64/Debug/vc140.pdb
 Client/Default/x64/Debug/vc140.idb
+Framework.VC.db
+.vs/Framework/v14/.suo
