@@ -1,103 +1,16 @@
-﻿  Client.cpp
-  WorldHpBar.cpp
-  UseSkill.cpp
-  ThunderCloud.cpp
-  StatsWnd.cpp
-c:\users\shout\desktop\과제\--\client\private\statswnd.cpp(28): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\statswnd.cpp(76): warning C4244: '인수': 'Engine::_float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  StatsIcon.cpp
-c:\users\shout\desktop\과제\--\client\private\statsicon.cpp(28): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\statsicon.cpp(50): warning C4244: '인수': 'Engine::_float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  SoundMgr.cpp
-c:\users\shout\desktop\과제\--\client\private\soundmgr.cpp(111): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\soundmgr.cpp(145): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  SkillWnd.cpp
-c:\users\shout\desktop\과제\--\client\private\skillwnd.cpp(28): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\skillwnd.cpp(62): warning C4244: '인수': 'Engine::_float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  SkillIcon.cpp
-c:\users\shout\desktop\과제\--\client\private\skillicon.cpp(28): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\skillicon.cpp(50): warning C4244: '인수': 'Engine::_float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Shadow.cpp
-  Rain.cpp
-  QuickSlot.cpp
-c:\users\shout\desktop\과제\--\client\private\quickslot.cpp(28): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\quickslot.cpp(49): warning C4244: '=': 'Engine::_float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\quickslot.cpp(73): warning C4244: '인수': 'Engine::_float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  PlusBox.cpp
-c:\users\shout\desktop\과제\--\client\private\plusbox.cpp(30): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\plusbox.cpp(49): warning C4244: '인수': 'Engine::_float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  PlayerMpBar.cpp
-c:\users\shout\desktop\과제\--\client\private\playermpbar.cpp(28): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\playermpbar.cpp(30): warning C4244: '=': 'Engine::_int'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\playermpbar.cpp(53): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  MeteorEff.cpp
-  Meteor.cpp
-  Loader.cpp
-  Level_Logo.cpp
-  LevelUp.cpp
-  Hit.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  FireSpear.cpp
-  Fire.cpp
-  ExpLogo.cpp
-c:\users\shout\desktop\과제\--\client\private\explogo.cpp(28): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  ExpBlank.cpp
-c:\users\shout\desktop\과제\--\client\private\expblank.cpp(28): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  ExpBar.cpp
-c:\users\shout\desktop\과제\--\client\private\expbar.cpp(27): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  EquipIcon.cpp
-c:\users\shout\desktop\과제\--\client\private\equipicon.cpp(30): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\equipicon.cpp(52): warning C4244: '인수': 'Engine::_float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  DmgFont.cpp
-c:\users\shout\desktop\과제\--\client\private\dmgfont.cpp(162): warning C4244: '+=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  BackGround.cpp
-  XBox.cpp
-c:\users\shout\desktop\과제\--\client\private\xbox.cpp(29): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\xbox.cpp(53): warning C4244: '인수': 'Engine::_float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Wind.cpp
-  UI.cpp
-c:\users\shout\desktop\과제\--\client\private\ui.cpp(28): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\ui.cpp(49): warning C4244: '인수': 'Engine::_float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Tree.cpp
-c:\users\shout\desktop\과제\--\client\private\tree.cpp(32): warning C4244: '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\tree.cpp(33): warning C4244: '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\tree.cpp(34): warning C4244: '인수': 'int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Tornado.cpp
-  ThunderSword.cpp
-  Terrain.cpp
-  Sky.cpp
-  Player.cpp
-c:\users\shout\desktop\과제\--\client\private\player.cpp(49): warning C4244: '=': 'float'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\player.cpp(95): warning C4244: '+=': 'float'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\player.cpp(441): warning C4809: switch 문에 중복 'default' 레이블이 있습니다. 가능한 모든 'case' 레이블이 제공됩니다.
-  MpBar.cpp
-c:\users\shout\desktop\과제\--\client\private\mpbar.cpp(30): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\mpbar.cpp(59): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Monster.cpp
-  MainApp.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
-  Level_Loading.cpp
-  Level_GamePlay.cpp
-c:\users\shout\desktop\과제\--\client\private\level_gameplay.cpp(58): warning C4305: '+=': 'double'에서 'Engine::_float'(으)로 잘립니다.
-c:\users\shout\desktop\과제\--\client\private\level_gameplay.cpp(60): warning C4305: '-=': 'double'에서 'Engine::_float'(으)로 잘립니다.
-  InventoryIcon.cpp
-c:\users\shout\desktop\과제\--\client\private\inventoryicon.cpp(29): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\inventoryicon.cpp(51): warning C4244: '인수': 'Engine::_float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Inventory.cpp
-c:\users\shout\desktop\과제\--\client\private\inventory.cpp(28): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\inventory.cpp(62): warning C4244: '인수': 'Engine::_float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  IconBar.cpp
-c:\users\shout\desktop\과제\--\client\private\iconbar.cpp(29): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\iconbar.cpp(50): warning C4244: '인수': 'Engine::_float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  HpBar.cpp
-c:\users\shout\desktop\과제\--\client\private\hpbar.cpp(31): warning C4244: '인수': 'const unsigned int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\hpbar.cpp(62): warning C4244: '=': 'double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  FireDragon.cpp
-  Camera_Dynamic.cpp
-  코드를 생성하고 있습니다...
-c:\users\shout\desktop\과제\--\client\private\firedragon.cpp(474): warning C4715: 'Client::CFireDragon::Create_Wind': 모든 제어 경로에서 값을 반환하지는 않습니다.
-  LINK : ..\Bin\Client.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
+﻿Wind.obj : warning LNK4099: 'vc140.pdb' PDB瑜?'Wind.obj' ?먮뒗 'C:\Users\shout\Desktop\怨쇱젣\--\Client\Bin\vc140.pdb'?먯꽌 李얠쓣 ???놁뒿?덈떎. ?붾쾭洹??뺣낫媛 ?녿뒗 寃껋쿂??媛쒖껜瑜?留곹겕?⑸땲??
+UseSkill.obj : warning LNK4099: 'vc140.pdb' PDB瑜?'UseSkill.obj' ?먮뒗 'C:\Users\shout\Desktop\怨쇱젣\--\Client\Bin\vc140.pdb'?먯꽌 李얠쓣 ???놁뒿?덈떎. ?붾쾭洹??뺣낫媛 ?녿뒗 寃껋쿂??媛쒖껜瑜?留곹겕?⑸땲??
+Tornado.obj : warning LNK4099: 'vc140.pdb' PDB瑜?'Tornado.obj' ?먮뒗 'C:\Users\shout\Desktop\怨쇱젣\--\Client\Bin\vc140.pdb'?먯꽌 李얠쓣 ???놁뒿?덈떎. ?붾쾭洹??뺣낫媛 ?녿뒗 寃껋쿂??媛쒖껜瑜?留곹겕?⑸땲??
+ThunderSword.obj : warning LNK4099: 'vc140.pdb' PDB瑜?'ThunderSword.obj' ?먮뒗 'C:\Users\shout\Desktop\怨쇱젣\--\Client\Bin\vc140.pdb'?먯꽌 李얠쓣 ???놁뒿?덈떎. ?붾쾭洹??뺣낫媛 ?녿뒗 寃껋쿂??媛쒖껜瑜?留곹겕?⑸땲??
+ThunderCloud.obj : warning LNK4099: 'vc140.pdb' PDB瑜?'ThunderCloud.obj' ?먮뒗 'C:\Users\shout\Desktop\怨쇱젣\--\Client\Bin\vc140.pdb'?먯꽌 李얠쓣 ???놁뒿?덈떎. ?붾쾭洹??뺣낫媛 ?녿뒗 寃껋쿂??媛쒖껜瑜?留곹겕?⑸땲??
+Shadow.obj : warning LNK4099: 'vc140.pdb' PDB瑜?'Shadow.obj' ?먮뒗 'C:\Users\shout\Desktop\怨쇱젣\--\Client\Bin\vc140.pdb'?먯꽌 李얠쓣 ???놁뒿?덈떎. ?붾쾭洹??뺣낫媛 ?녿뒗 寃껋쿂??媛쒖껜瑜?留곹겕?⑸땲??
+MeteorEff.obj : warning LNK4099: 'vc140.pdb' PDB瑜?'MeteorEff.obj' ?먮뒗 'C:\Users\shout\Desktop\怨쇱젣\--\Client\Bin\vc140.pdb'?먯꽌 李얠쓣 ???놁뒿?덈떎. ?붾쾭洹??뺣낫媛 ?녿뒗 寃껋쿂??媛쒖껜瑜?留곹겕?⑸땲??
+Loader.obj : warning LNK4099: 'vc140.pdb' PDB瑜?'Loader.obj' ?먮뒗 'C:\Users\shout\Desktop\怨쇱젣\--\Client\Bin\vc140.pdb'?먯꽌 李얠쓣 ???놁뒿?덈떎. ?붾쾭洹??뺣낫媛 ?녿뒗 寃껋쿂??媛쒖껜瑜?留곹겕?⑸땲??
+LevelUp.obj : warning LNK4099: 'vc140.pdb' PDB瑜?'LevelUp.obj' ?먮뒗 'C:\Users\shout\Desktop\怨쇱젣\--\Client\Bin\vc140.pdb'?먯꽌 李얠쓣 ???놁뒿?덈떎. ?붾쾭洹??뺣낫媛 ?녿뒗 寃껋쿂??媛쒖껜瑜?留곹겕?⑸땲??
+Hit.obj : warning LNK4099: 'vc140.pdb' PDB瑜?'Hit.obj' ?먮뒗 'C:\Users\shout\Desktop\怨쇱젣\--\Client\Bin\vc140.pdb'?먯꽌 李얠쓣 ???놁뒿?덈떎. ?붾쾭洹??뺣낫媛 ?녿뒗 寃껋쿂??媛쒖껜瑜?留곹겕?⑸땲??
+FireSpear.obj : warning LNK4099: 'vc140.pdb' PDB瑜?'FireSpear.obj' ?먮뒗 'C:\Users\shout\Desktop\怨쇱젣\--\Client\Bin\vc140.pdb'?먯꽌 李얠쓣 ???놁뒿?덈떎. ?붾쾭洹??뺣낫媛 ?녿뒗 寃껋쿂??媛쒖껜瑜?留곹겕?⑸땲??
+FireDragon.obj : warning LNK4099: 'vc140.pdb' PDB瑜?'FireDragon.obj' ?먮뒗 'C:\Users\shout\Desktop\怨쇱젣\--\Client\Bin\vc140.pdb'?먯꽌 李얠쓣 ???놁뒿?덈떎. ?붾쾭洹??뺣낫媛 ?녿뒗 寃껋쿂??媛쒖껜瑜?留곹겕?⑸땲??
+Fire.obj : warning LNK4099: 'vc140.pdb' PDB瑜?'Fire.obj' ?먮뒗 'C:\Users\shout\Desktop\怨쇱젣\--\Client\Bin\vc140.pdb'?먯꽌 李얠쓣 ???놁뒿?덈떎. ?붾쾭洹??뺣낫媛 ?녿뒗 寃껋쿂??媛쒖껜瑜?留곹겕?⑸땲??
+DmgFont.obj : warning LNK4099: 'vc140.pdb' PDB瑜?'DmgFont.obj' ?먮뒗 'C:\Users\shout\Desktop\怨쇱젣\--\Client\Bin\vc140.pdb'?먯꽌 李얠쓣 ???놁뒿?덈떎. ?붾쾭洹??뺣낫媛 ?녿뒗 寃껋쿂??媛쒖껜瑜?留곹겕?⑸땲??
   Client.vcxproj -> C:\Users\shout\Desktop\과제\--\Client\Default\..\Bin\Client.exe
   Client.vcxproj -> ..\Bin\Client.pdb (Full PDB)
