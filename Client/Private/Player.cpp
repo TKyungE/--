@@ -46,24 +46,33 @@ HRESULT CPlayer::Initialize(void * pArg)
 	m_tInfo.iMaxHp = 186;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 
+
 	m_tInfo.iMp = 186;
 	m_tInfo.iExp = 0.f;
+
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
 	Safe_AddRef(pGameInstance);
-	m_tInfo.pTarget = this;
-
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_MpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpLogo"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
 
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
 	tInfo.vPos = { 0.7f,0.7f,1.f };
 
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+
+
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_MpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpLogo"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
+
+	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	tInfo.vPos = vPos;
+	tInfo.vPos.z += 0.35f;
+	tInfo.vPos.x += 0.35f;
+	//Pet
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Poring"), LEVEL_GAMEPLAY, TEXT("Layer_Pet"), &m_tInfo);
 
 
 	Safe_Release(pGameInstance);
@@ -92,8 +101,8 @@ void CPlayer::Tick(_float fTimeDelta)
 		if (m_tInfo.iHp<m_tInfo.iMaxHp)
 		{
 			m_tInfo.iHp += 10;
-			
 		}
+		m_tInfo.iMp += 10;
 		m_tInfo.iExp += 100.f;
 	}
 

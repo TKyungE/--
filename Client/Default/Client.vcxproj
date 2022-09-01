@@ -160,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\BackGround.h" />
+    <ClInclude Include="..\Public\BackGroundRect.h" />
     <ClInclude Include="..\Public\Camera_Dynamic.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\public\DmgFont.h" />
@@ -188,6 +189,7 @@
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\public\PlayerMpBar.h" />
     <ClInclude Include="..\public\PlusBox.h" />
+    <ClInclude Include="..\public\Poring.h" />
     <ClInclude Include="..\public\QuickSlot.h" />
     <ClInclude Include="..\public\Rain.h" />
     <ClInclude Include="..\public\Shadow.h" />
@@ -201,7 +203,6 @@
     <ClInclude Include="..\public\ThunderCloud.h" />
     <ClInclude Include="..\Public\ThunderSword.h" />
     <ClInclude Include="..\Public\Tornado.h" />
-    <ClInclude Include="..\Public\Tree.h" />
     <ClInclude Include="..\Public\UI.h" />
     <ClInclude Include="..\public\UseSkill.h" />
     <ClInclude Include="..\Public\Wind.h" />
@@ -214,6 +215,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\BackGround.cpp" />
+    <ClCompile Include="..\Private\BackGroundRect.cpp" />
     <ClCompile Include="..\Private\Camera_Dynamic.cpp" />
     <ClCompile Include="..\private\DmgFont.cpp" />
     <ClCompile Include="..\private\EquipIcon.cpp" />
@@ -241,6 +243,7 @@
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\private\PlayerMpBar.cpp" />
     <ClCompile Include="..\private\PlusBox.cpp" />
+    <ClCompile Include="..\private\Poring.cpp" />
     <ClCompile Include="..\private\QuickSlot.cpp" />
     <ClCompile Include="..\private\Rain.cpp" />
     <ClCompile Include="..\private\Shadow.cpp" />
@@ -254,7 +257,6 @@
     <ClCompile Include="..\private\ThunderCloud.cpp" />
     <ClCompile Include="..\Private\ThunderSword.cpp" />
     <ClCompile Include="..\Private\Tornado.cpp" />
-    <ClCompile Include="..\Private\Tree.cpp" />
     <ClCompile Include="..\Private\UI.cpp" />
     <ClCompile Include="..\private\UseSkill.cpp" />
     <ClCompile Include="..\Private\Wind.cpp" />

@@ -1,8 +1,7 @@
-﻿  Player.cpp
-c:\users\shout\desktop\과제\--\client\private\player.cpp(50): warning C4244: '=': 'float'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\player.cpp(97): warning C4244: '+=': 'float'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\shout\desktop\과제\--\client\private\player.cpp(443): warning C4809: switch 문에 중복 'default' 레이블이 있습니다. 가능한 모든 'case' 레이블이 제공됩니다.
-Level_GamePlay.obj : warning LNK4099: 'vc140.pdb' PDB瑜?'Level_GamePlay.obj' ?먮뒗 'C:\Users\shout\Desktop\怨쇱젣\--\Client\Bin\vc140.pdb'?먯꽌 李얠쓣 ???놁뒿?덈떎. ?붾쾭洹??뺣낫媛 ?녿뒗 寃껋쿂??媛쒖껜瑜?留곹겕?⑸땲??
-DmgFont.obj : warning LNK4099: 'vc140.pdb' PDB瑜?'DmgFont.obj' ?먮뒗 'C:\Users\shout\Desktop\怨쇱젣\--\Client\Bin\vc140.pdb'?먯꽌 李얠쓣 ???놁뒿?덈떎. ?붾쾭洹??뺣낫媛 ?녿뒗 寃껋쿂??媛쒖껜瑜?留곹겕?⑸땲??
-  Client.vcxproj -> C:\Users\shout\Desktop\과제\--\Client\Default\..\Bin\Client.exe
+﻿  Loader.cpp
+  Level_GamePlay.cpp
+c:\users\태경\desktop\라그(sr)\라그v1.0\client\private\level_gameplay.cpp(59): warning C4305: '+=': 'double'에서 'Engine::_float'(으)로 잘립니다.
+c:\users\태경\desktop\라그(sr)\라그v1.0\client\private\level_gameplay.cpp(61): warning C4305: '-=': 'double'에서 'Engine::_float'(으)로 잘립니다.
+  코드를 생성하고 있습니다...
+  Client.vcxproj -> C:\Users\태경\Desktop\라그(SR)\라그v1.0\Client\Default\..\Bin\Client.exe
   Client.vcxproj -> ..\Bin\Client.pdb (Full PDB)
