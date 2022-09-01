@@ -32,6 +32,7 @@ private: /* For.Components */
 	CRenderer*				m_pRendererCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
+	CVIBuffer_Rect*			m_pVIBufferCom2 = nullptr;
 private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
