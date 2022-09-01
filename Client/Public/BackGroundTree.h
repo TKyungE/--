@@ -7,7 +7,7 @@
 BEGIN(Engine)
 class CRenderer;
 class CTransform;
-class CVIBuffer_Rect;
+class CVIBuffer_Cube;
 class CTexture;
 END
 
@@ -28,7 +28,7 @@ public:
 private:
 	CRenderer* m_pRendererCom = nullptr;
 	CTransform* m_pTransformCom = nullptr;
-	CVIBuffer_Rect* m_pVIBuffer = nullptr;
+	CVIBuffer_Cube* m_pVIBuffer = nullptr;
 	CTexture* m_pTextureCom = nullptr;
 
 

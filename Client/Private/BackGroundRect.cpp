@@ -83,7 +83,7 @@ HRESULT CBackGroundRect::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBuffer)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Tree"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_BackGroundRect"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	CTransform::TRANSFORMDESC TransformDesc;
@@ -182,7 +182,7 @@ CGameObject * CBackGroundRect::Clone(void * pArg)
 
 _float4x4 CBackGroundRect::Get_World(void)
 {
-	return m_pTransformCom->Get_WorldMatrix();;
+	return m_pTransformCom->Get_WorldMatrix();
 }
 
 void CBackGroundRect::Free(void)

@@ -140,9 +140,12 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.iIndex = iter.iIndex;
 		indexpos.vPos = iter.BackGroundPos;
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Tree"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundRect"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundCube"), LEVEL_GAMEPLAY, pLayerTag)))
+	return E_FAIL;
 	
 	Safe_Release(pGameInstance);
 
