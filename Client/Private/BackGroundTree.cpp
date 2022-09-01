@@ -28,21 +28,22 @@ HRESULT CBackGroundTree::Initialize(void * pArg)
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
+	memcpy(&m_IndexPos, pArg, sizeof(INDEXPOS));
 
-	_float3 vPos1 = _float3{ 5.f,0.f,5.f };
+	m_pTransformCom->Set_Scaled(m_IndexPos.vScale);
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos1);
+	m_IndexPos.vPos.y += 0.5f * m_IndexPos.vScale.y;
 
-	m_pTransformCom->Set_Scaled(_float3(1.f,1.f,1.f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_IndexPos.vPos);
 
 	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	m_pRectTransform->Set_Scaled(_float3(1.f + vPos.x, 1.f, 1.f));
+	m_pRectTransform->Set_Scaled(_float3(m_IndexPos.vScale.x + 2.5f, m_IndexPos.vScale.y, m_IndexPos.vScale.z));
 
-	vPos.y += m_pTransformCom->Get_State(CTransform::STATE_POSITION).y * 0.5f;
+	vPos.y += m_pTransformCom->Get_State(CTransform::STATE_POSITION).y * 0.75f;
 	m_pRectTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
-	m_pRectTransform2->Set_Scaled(_float3(1.f + vPos.x, 1.f, 1.f));
+	m_pRectTransform2->Set_Scaled(_float3(m_IndexPos.vScale.x + 2.5f, m_IndexPos.vScale.y, m_IndexPos.vScale.z));
 	m_pRectTransform2->Set_State(CTransform::STATE_POSITION, vPos);
 	m_pRectTransform2->Turn(_float3(0.f, 1.f, 0.f), 1.f);
 

@@ -15,6 +15,13 @@ END
 BEGIN(Client)
 class CBackGroundTree final : public CGameObject
 {
+public:
+	typedef struct tagIndexPos
+	{
+		_float3		vPos;
+		_float3		vScale;
+		_uint	iIndex;
+	}INDEXPOS;
 private:
 	CBackGroundTree(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	CBackGroundTree(const CBackGroundTree& rhs);
@@ -25,6 +32,8 @@ public:
 	virtual void Tick(_float fTimeDelta) override;
 	virtual void Late_Tick(_float fTimeDelta) override;
 	virtual HRESULT Render(void) override;
+private:
+	INDEXPOS	m_IndexPos;
 
 private:
 	CRenderer* m_pRendererCom = nullptr;
