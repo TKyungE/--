@@ -163,6 +163,9 @@
     <Filter Include="03.Effect\Default\06.Shadow">
       <UniqueIdentifier>{71afcecb-9d8c-4b4e-8463-874539fb788f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\BackGroundObj">
+      <UniqueIdentifier>{b35db3b3-f917-40d2-b5a9-4e0c5b044c63}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -312,6 +315,12 @@
     <ClInclude Include="..\public\Shadow.h">
       <Filter>03.Effect\Default\06.Shadow</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\ExpBlank.h" />
+    <ClInclude Include="..\public\ExpLogo.h" />
+    <ClInclude Include="..\Public\MpBar.h" />
+    <ClInclude Include="..\Public\BackGroundRect.h">
+      <Filter>02.GameObject\BackGroundObj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -448,6 +457,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Shadow.cpp">
       <Filter>03.Effect\Default\06.Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ExpBlank.cpp" />
+    <ClCompile Include="..\private\ExpLogo.cpp" />
+    <ClCompile Include="..\Private\MpBar.cpp" />
+    <ClCompile Include="..\Private\BackGroundRect.cpp">
+      <Filter>02.GameObject\BackGroundObj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

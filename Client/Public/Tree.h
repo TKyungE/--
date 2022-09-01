@@ -12,7 +12,7 @@ END
 
 BEGIN(Client)
 
-class CTree final : public CGameObject
+class CBackGroundRect final : public CGameObject
 {
 public:
 	typedef struct tagIndexPos
@@ -22,9 +22,9 @@ public:
 	}INDEXPOS;
 
 private:
-	CTree(LPDIRECT3DDEVICE9 _pGraphic_Device);
-	CTree(const CTree& rhs);
-	virtual ~CTree() = default;
+	CBackGroundRect(LPDIRECT3DDEVICE9 _pGraphic_Device);
+	CBackGroundRect(const CBackGroundRect& rhs);
+	virtual ~CBackGroundRect() = default;
 	
 public:
 	virtual HRESULT Initialize_Prototype(void) override;
@@ -49,7 +49,7 @@ private:
 	void OnBillBoard(void);
 
 public:
-	static CTree* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
+	static CBackGroundRect* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
 	virtual _float4x4 Get_World(void) override;
 	virtual void Free(void) override;

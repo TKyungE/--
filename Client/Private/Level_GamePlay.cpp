@@ -6,7 +6,7 @@
 #include "SoundMgr.h"
 #include "CollisionMgr.h"
 #include "KeyMgr.h"
-#include "Tree.h"
+#include "BackGroundRect.h" 
 
 CLevel_GamePlay::CLevel_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -135,8 +135,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 
 	for (auto& iter : m_vecIndex)
 	{
-		CTree::INDEXPOS indexpos;
-		ZeroMemory(&indexpos, sizeof(CTree::INDEXPOS));
+		CBackGroundRect::INDEXPOS indexpos;
+		ZeroMemory(&indexpos, sizeof(CBackGroundRect::INDEXPOS));
 		indexpos.iIndex = iter.iIndex;
 		indexpos.vPos = iter.BackGroundPos;
 
