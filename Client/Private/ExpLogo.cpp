@@ -24,8 +24,8 @@ HRESULT CExpLogo::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
-	memcpy(&m_tInfo, pArg, sizeof(INFO));
-	D3DXMatrixOrthoLH(&m_ProjMatrix, g_iWinSizeX, g_iWinSizeY, 0.f, 1.f);
+
+	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
 
 	m_fSizeX = 20.f;
 	m_fSizeY =10.f;

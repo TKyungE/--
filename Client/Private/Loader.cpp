@@ -44,7 +44,9 @@
 #include"ExpBlank.h"
 #include "BackGroundRect.h"
 #include "Poring.h"
-
+#include "Tree.h"
+#include"Logo.h"
+#include"NextButton.h"
 
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -97,10 +99,15 @@ HRESULT CLoader::Loading_ForLogoLevel()
 
 	/* 텍스쳐 로딩 중. */
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐 로딩 중."));
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Prototype_Component_Texture_BackGround"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Default%d.jpg"), 2))))
+	/*if (FAILED(pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Prototype_Component_Texture_BackGround"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/GameLogo%d.png"), 1))))
+		return E_FAIL;*/
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Prototype_Component_Texture_Logo"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/GameLogo%d.png"), 2))))
 		return E_FAIL;
-	
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Prototype_Component_Texture_NextButton"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Logo/StartLogo%d.jpg"), 2))))
+		return E_FAIL;
 	/* 모델 로딩 중. */
 	lstrcpy(m_szLoadingText, TEXT("모델 로딩 중."));
 	
@@ -111,10 +118,16 @@ HRESULT CLoader::Loading_ForLogoLevel()
 
 	/* 객체 원형 생성 중. */
 	lstrcpy(m_szLoadingText, TEXT("객체 생성 중."));
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"),
+	/*if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"),
 		CBackGround::Create(m_pGraphic_Device))))
 		return E_FAIL;
-	
+	*/
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Logo"),
+		CLogo::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NextButton"),
+		CNextButton::Create(m_pGraphic_Device))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 
