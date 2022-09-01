@@ -2,10 +2,12 @@
 #include "..\Public\BackGroundTree.h"
 
 CBackGroundTree::CBackGroundTree(LPDIRECT3DDEVICE9 _pGraphic_Device)
+	:CGameObject(_pGraphic_Device)
 {
 }
 
 CBackGroundTree::CBackGroundTree(const CBackGroundTree & rhs)
+	: CGameObject(rhs)
 {
 }
 
