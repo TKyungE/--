@@ -44,6 +44,7 @@
 #include"ExpBlank.h"
 #include "BackGroundRect.h"
 #include "Poring.h"
+#include "BackGroundTree.h"
 #include "House.h"
 
 
@@ -347,8 +348,12 @@ HRESULT CLoader::Loading_ForGamePlayLevel()
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/snow/snow.png"), 1))))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Tree"),
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_BackGroundRect"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Terrain/grass_%d.png"), 2))))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_BackGroundTree"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_CUBEMAP, TEXT("../Bin/Resources/Textures/BackGround/Tree/%d.dds"), 1))))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_House_Body"),
@@ -357,6 +362,11 @@ HRESULT CLoader::Loading_ForGamePlayLevel()
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_House_Head"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/House/Head/%d.png"), 1))))
 		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_BackGroundTreeRect"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/BackGround/Tree/%d.png"), 2))))
+		return E_FAIL;
+
 	/* 모델 로딩 중. */
 	lstrcpy(m_szLoadingText, TEXT("모델 로딩 중."));
 
@@ -539,7 +549,7 @@ HRESULT CLoader::Loading_ForGamePlayLevel()
 		CShadow::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Tree"),
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGroundRect"),
 		CBackGroundRect::Create(m_pGraphic_Device))))
 		return E_FAIL;
 	
@@ -547,9 +557,15 @@ HRESULT CLoader::Loading_ForGamePlayLevel()
 		CPoring::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGroundTree"),
+		CBackGroundTree::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_House"),
 		CHouse::Create(m_pGraphic_Device))))
 		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
 
 	Safe_Release(pGameInstance);

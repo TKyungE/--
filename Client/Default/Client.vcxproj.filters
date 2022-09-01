@@ -175,6 +175,12 @@
     <Filter Include="02.GameObject\BackGroundObj\House">
       <UniqueIdentifier>{36349508-8e85-4729-bab5-e5cb61236108}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Rect">
+      <UniqueIdentifier>{a101335d-7c21-480f-9001-eb8a7c18702d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Tree">
+      <UniqueIdentifier>{440c2e30-1a42-44fd-929e-2838a750507e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -327,14 +333,17 @@
     <ClInclude Include="..\public\ExpBlank.h" />
     <ClInclude Include="..\public\ExpLogo.h" />
     <ClInclude Include="..\Public\MpBar.h" />
-    <ClInclude Include="..\Public\BackGroundRect.h">
-      <Filter>02.GameObject\BackGroundObj</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Poring.h">
       <Filter>02.GameObject\Pet\00.Poring</Filter>
     </ClInclude>
     <ClInclude Include="..\public\House.h">
       <Filter>02.GameObject\BackGroundObj\House</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BackGroundRect.h">
+      <Filter>02.GameObject\BackGroundObj\Rect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BackGroundTree.h">
+      <Filter>02.GameObject\BackGroundObj\Tree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -476,14 +485,17 @@
     <ClCompile Include="..\private\ExpBlank.cpp" />
     <ClCompile Include="..\private\ExpLogo.cpp" />
     <ClCompile Include="..\Private\MpBar.cpp" />
-    <ClCompile Include="..\Private\BackGroundRect.cpp">
-      <Filter>02.GameObject\BackGroundObj</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Poring.cpp">
       <Filter>02.GameObject\Pet\00.Poring</Filter>
     </ClCompile>
     <ClCompile Include="..\private\House.cpp">
       <Filter>02.GameObject\BackGroundObj\House</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BackGroundRect.cpp">
+      <Filter>02.GameObject\BackGroundObj\Rect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BackGroundTree.cpp">
+      <Filter>02.GameObject\BackGroundObj\Tree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

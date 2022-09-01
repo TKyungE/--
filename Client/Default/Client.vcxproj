@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="..\public\BackGround.h" />
     <ClInclude Include="..\Public\BackGroundRect.h" />
+    <ClInclude Include="..\Public\BackGroundTree.h" />
     <ClInclude Include="..\Public\Camera_Dynamic.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\public\DmgFont.h" />
@@ -217,6 +218,7 @@
   <ItemGroup>
     <ClCompile Include="..\private\BackGround.cpp" />
     <ClCompile Include="..\Private\BackGroundRect.cpp" />
+    <ClCompile Include="..\Private\BackGroundTree.cpp" />
     <ClCompile Include="..\Private\Camera_Dynamic.cpp" />
     <ClCompile Include="..\private\DmgFont.cpp" />
     <ClCompile Include="..\private\EquipIcon.cpp" />

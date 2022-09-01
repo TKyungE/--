@@ -18,6 +18,7 @@ public:
 	typedef struct tagIndexPos
 	{
 		_float3		vPos;
+		_float3		vScale;
 		_uint	iIndex;
 	}INDEXPOS;
 
