@@ -462,3 +462,8 @@ Engine/Default/x64/Debug/*.obj
 *.tlog
 *.obj
 *.pdb
+*.tlog
+*.log
+*.tlog
+*.idb
+*.obj
