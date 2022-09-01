@@ -8,6 +8,7 @@ BEGIN(Engine)
 class CRenderer;
 class CTransform;
 class CVIBuffer_Cube;
+class CVIBuffer_Rect;
 class CTexture;
 END
 
@@ -31,13 +32,20 @@ private:
 	CVIBuffer_Cube* m_pVIBuffer = nullptr;
 	CTexture* m_pTextureCom = nullptr;
 
+	CTexture* m_pRectTexture = nullptr;
+	CTransform* m_pRectTransform = nullptr;
+	CVIBuffer_Rect* m_VIBufferRect = nullptr;
+
+	CTransform* m_pRectTransform2 = nullptr;
+	CVIBuffer_Rect* m_VIBufferRect2 = nullptr;
+	CTexture* m_pRectTexture2 = nullptr;
 
 private:
 	HRESULT SetUp_Components(void);
 	HRESULT SetUp_RenderState(void);
+	HRESULT SetUp_Rect_RenderState();
 	HRESULT Release_RenderState(void);
 	void OnTerrain(void);
-	void OnBillBoard(void);
 
 public:
 	static CBackGroundTree* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
