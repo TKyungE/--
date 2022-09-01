@@ -25,9 +25,9 @@ HRESULT CPlayerMpBar::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
-	D3DXMatrixOrthoLH(&m_ProjMatrix, g_iWinSizeX, g_iWinSizeY, 0.f, 1.f);
+	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
 
-	m_fSizeX = m_tInfo.iMp;//나중에 늘어나고 줄어듦을 여기서 조절한다
+	m_fSizeX = (float)m_tInfo.iMp;//나중에 늘어나고 줄어듦을 여기서 조절한다
 	m_fSizeY = 8.f;
 
 	m_fX = 640.f;
@@ -50,7 +50,7 @@ void CPlayerMpBar::Tick(_float fTimeDelta)
 	}
 	if (m_tInfo.iMp > 0)
 	{
-		m_fX = m_fSizeX *0.5 + 590.f;
+		m_fX = (float)(m_fSizeX *0.5 + 590.f);
 		m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
 	}

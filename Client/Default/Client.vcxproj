@@ -167,6 +167,7 @@
     <ClInclude Include="..\public\ExpBar.h" />
     <ClInclude Include="..\public\ExpBlank.h" />
     <ClInclude Include="..\public\ExpLogo.h" />
+    <ClInclude Include="..\public\Logo.h" />
     <ClInclude Include="..\Public\MpBar.h" />
     <ClInclude Include="..\public\Fire.h" />
     <ClInclude Include="..\Public\FireDragon.h" />
@@ -185,6 +186,7 @@
     <ClInclude Include="..\public\Meteor.h" />
     <ClInclude Include="..\public\MeteorEff.h" />
     <ClInclude Include="..\Public\Monster.h" />
+    <ClInclude Include="..\public\NextButton.h" />
     <ClInclude Include="..\Public\Player.h" />
     <ClInclude Include="..\public\PlayerMpBar.h" />
     <ClInclude Include="..\public\PlusBox.h" />
@@ -220,6 +222,7 @@
     <ClCompile Include="..\private\ExpBar.cpp" />
     <ClCompile Include="..\private\ExpBlank.cpp" />
     <ClCompile Include="..\private\ExpLogo.cpp" />
+    <ClCompile Include="..\private\Logo.cpp" />
     <ClCompile Include="..\Private\MpBar.cpp" />
     <ClCompile Include="..\private\Fire.cpp" />
     <ClCompile Include="..\Private\FireDragon.cpp" />
@@ -238,6 +241,7 @@
     <ClCompile Include="..\private\Meteor.cpp" />
     <ClCompile Include="..\private\MeteorEff.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
+    <ClCompile Include="..\private\NextButton.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
     <ClCompile Include="..\private\PlayerMpBar.cpp" />
     <ClCompile Include="..\private\PlusBox.cpp" />

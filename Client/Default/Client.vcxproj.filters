@@ -163,6 +163,21 @@
     <Filter Include="03.Effect\Default\06.Shadow">
       <UniqueIdentifier>{71afcecb-9d8c-4b4e-8463-874539fb788f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\StateUi\MpBar">
+      <UniqueIdentifier>{e57d740a-e513-482c-87fe-be32f44144fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StateUi\ExpBar\ExpBlank">
+      <UniqueIdentifier>{2a0ccc7c-36fc-46a6-8ad2-024906b6e864}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StateUi\ExpBar\ExpLogo">
+      <UniqueIdentifier>{2cbd2eb5-1b5c-427e-a671-2dcedfd24939}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Logo">
+      <UniqueIdentifier>{ac523c5e-5728-431e-85f7-3de24701b5ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Logo\NextButton">
+      <UniqueIdentifier>{ed29e46e-8038-4634-9e8c-d36e54c0e955}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -312,6 +327,22 @@
     <ClInclude Include="..\public\Shadow.h">
       <Filter>03.Effect\Default\06.Shadow</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Tree.h" />
+    <ClInclude Include="..\Public\MpBar.h">
+      <Filter>04.UI\StateUi\MpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ExpBlank.h">
+      <Filter>04.UI\StateUi\ExpBar\ExpBlank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ExpLogo.h">
+      <Filter>04.UI\StateUi\ExpBar\ExpLogo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Logo.h">
+      <Filter>02.GameObject\Logo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\NextButton.h">
+      <Filter>02.GameObject\Logo\NextButton</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -448,6 +479,22 @@
     </ClCompile>
     <ClCompile Include="..\private\Shadow.cpp">
       <Filter>03.Effect\Default\06.Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Tree.cpp" />
+    <ClCompile Include="..\Private\MpBar.cpp">
+      <Filter>04.UI\StateUi\MpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ExpBlank.cpp">
+      <Filter>04.UI\StateUi\ExpBar\ExpBlank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ExpLogo.cpp">
+      <Filter>04.UI\StateUi\ExpBar\ExpLogo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Logo.cpp">
+      <Filter>02.GameObject\Logo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\NextButton.cpp">
+      <Filter>02.GameObject\Logo\NextButton</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

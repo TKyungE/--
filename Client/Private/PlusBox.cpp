@@ -27,7 +27,7 @@ HRESULT CPlusBox::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 	m_Recive = (Pos*)pArg;//여기서 바꾸면 상위개체가 영향을 받음 나는 상위개체가 하위 개체한테만 영향을 받게 하고싶음
-	D3DXMatrixOrthoLH(&m_ProjMatrix, g_iWinSizeX, g_iWinSizeY, 0.f, 1.f);
+	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
 	m_fX = m_Recive->fPosX;
 	m_fY = m_Recive->fPosY;
 	m_fSizeX = 24.0f;
@@ -46,7 +46,7 @@ void CPlusBox::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 	RECT		rcRect;
-	SetRect(&rcRect, m_fX - m_fSizeX * 0.5f, m_fY - m_fSizeY * 0.5f, m_fX + m_fSizeX * 0.5f, m_fY + m_fSizeY * 0.5f);
+	SetRect(&rcRect, (int)(m_fX - m_fSizeX * 0.5f), (int)(m_fY - m_fSizeY * 0.5f), (int)(m_fX + m_fSizeX * 0.5f), (int)(m_fY + m_fSizeY * 0.5f));
 
 	POINT		ptMouse;
 	GetCursorPos(&ptMouse);

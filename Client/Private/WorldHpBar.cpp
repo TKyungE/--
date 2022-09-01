@@ -40,7 +40,7 @@ HRESULT CWorldHpBar::Initialize(void * pArg)
 void CWorldHpBar::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	
+
 	
 	if (m_tInfo.pTarget->Get_Info().iHp <= 0)
 	{
@@ -50,20 +50,20 @@ void CWorldHpBar::Tick(_float fTimeDelta)
 	_float3 vPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 	vPos.y += 1.f;
 	
-	m_fSizeX = m_tInfo.pTarget->Get_Info().iHp / (float)m_tInfo.pTarget->Get_Info().iMaxHp;
-	
-	m_pTransformCom->Set_Scaled({ m_fSizeX, 0.1f, 1.f });
+	m_fSizeX = m_tInfo.pTarget->Get_Info().iHp /(float)m_tInfo.pTarget->Get_Info().iMaxHp;
+	OnBillboard();
+	m_pTransformCom->Set_Scaled({m_fSizeX, 0.1f, 1.f });
+
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 	
-
 
 
 }
 void CWorldHpBar::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-	OnBillboard();
+	
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }

@@ -25,7 +25,7 @@ HRESULT CQuickSlot::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
-	D3DXMatrixOrthoLH(&m_ProjMatrix, g_iWinSizeX, g_iWinSizeY, 0.f, 1.f);
+	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
 
 	m_fSizeX = 400.0f;
 	m_fSizeY = 50.0f;
@@ -46,7 +46,7 @@ HRESULT CQuickSlot::Initialize(void * pArg)
 		POINT ptPos;
 
 		ptPos.x = 400 + i * 100;
-		ptPos.y = m_fY;
+		ptPos.y = (long)m_fY;
 		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Item"), LEVEL_GAMEPLAY, TEXT("Layer_UI"), &ptPos);
 		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Slot"), LEVEL_GAMEPLAY, TEXT("Layer_UI"), &ptPos);
 
@@ -70,7 +70,7 @@ void CQuickSlot::Tick(_float fTimeDelta)
 		Set_Dead();
 	}
 	RECT		rcRect;
-	SetRect(&rcRect, m_fX - m_fSizeX * 0.5f, m_fY - m_fSizeY * 0.5f, m_fX + m_fSizeX * 0.5f, m_fY - m_fSizeY * 0.35f);
+	SetRect(&rcRect, (int)(m_fX - m_fSizeX * 0.5f),(int)( m_fY - m_fSizeY * 0.5f),(int)( m_fX + m_fSizeX * 0.5f),(int)( m_fY - m_fSizeY * 0.35f));
 
 	POINT		ptMouse;
 	GetCursorPos(&ptMouse);

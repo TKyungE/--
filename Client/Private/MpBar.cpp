@@ -27,7 +27,7 @@ HRESULT CMpBar::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
-	D3DXMatrixOrthoLH(&m_ProjMatrix, g_iWinSizeX, g_iWinSizeY, 0.f, 1.f);
+	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
 
 	m_fSizeX = (float)m_tInfo.pTarget->Get_Info().iMp;//나중에 늘어나고 줄어듦을 여기서 조절한다
 	m_fSizeY = 16.0f;
@@ -56,7 +56,7 @@ void CMpBar::Tick(_float fTimeDelta)
 		m_fSizeX = 0.00001f;
 	}
 
-	m_fX = m_fSizeX *0.5 + 47.f;
+	m_fX = m_fSizeX *0.5f + 47.f;
 
 	m_pTransformCom->Set_Scaled({ m_fSizeX, m_fSizeY, 1.f });
 

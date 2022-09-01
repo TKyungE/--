@@ -46,7 +46,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	m_tInfo.iMaxHp = 186;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 186;
-	m_tInfo.iExp = 0.f;
+	m_tInfo.iExp = 0;
 
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
@@ -61,7 +61,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_MpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpLogo"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
+	
 
 
 	Safe_Release(pGameInstance);
@@ -92,7 +92,7 @@ void CPlayer::Tick(_float fTimeDelta)
 			m_tInfo.iHp += 10;
 			
 		}
-		m_tInfo.iExp += 100.f;
+		m_tInfo.iExp += 100;
 	}
 
 }
