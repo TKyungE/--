@@ -29,7 +29,7 @@ void CLevel_Logo::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);	
 	
-	if (GetKeyState(VK_SPACE) & 0x8000)
+	if (m_bNextLevel == true)
 	{
 		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 		Safe_AddRef(pGameInstance);
@@ -68,9 +68,12 @@ HRESULT CLevel_Logo::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGround"), LEVEL_LOGO, pLayerTag, nullptr)))
+	/*if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGround"), LEVEL_LOGO, pLayerTag, nullptr)))
+		return E_FAIL;*/
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Logo"), LEVEL_LOGO, pLayerTag, nullptr)))
 		return E_FAIL;
-
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_NextButton"), LEVEL_LOGO, pLayerTag, &m_bNextLevel)))
+		return E_FAIL;
 	Safe_Release(pGameInstance);
 
 	return S_OK;

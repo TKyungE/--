@@ -17,6 +17,8 @@ public:
 	virtual void Late_Tick(_float fTimeDelta);
 private://충돌 예외처리 함수들은 여기에 추가
 	void Dead();
+private:
+	bool m_bNextLevel=false;
 public:
 	HRESULT Ready_Layer_BackGround(const _tchar* pLayerTag);
 

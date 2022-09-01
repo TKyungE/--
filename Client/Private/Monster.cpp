@@ -169,16 +169,18 @@ HRESULT CMonster::Initialize(void * pArg)
 
 	m_tInfo.fX = 0.5f;
 	m_tInfo.iMaxHp = 9999;
-	m_tInfo.iHp = 100;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
 	Safe_AddRef(pGameInstance);
 	CGameObject::INFO tInfo;
+
 	tInfo.pTarget = this;
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_UI"), &tInfo);
+
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo);
 	tInfo.vPos = { 1.f,1.f,1.f };
+
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
 	Safe_Release(pGameInstance);
 
@@ -248,6 +250,7 @@ void CMonster::Tick(_float fTimeDelta)
 		m_iFrame = 0;
 	}
 	Safe_Release(pGameInstance);
+
 }
 
 void CMonster::Late_Tick(_float fTimeDelta)

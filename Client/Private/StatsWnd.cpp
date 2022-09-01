@@ -25,7 +25,7 @@ HRESULT CStatsWnd::Initialize(void* pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
-	D3DXMatrixOrthoLH(&m_ProjMatrix, g_iWinSizeX, g_iWinSizeY, 0.f, 1.f);
+	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
 
 	m_fSizeX = 280.0f;
 	m_fSizeY = 103.0f;
@@ -73,7 +73,7 @@ void CStatsWnd::Tick(_float fTimeDelta)
 	__super::Tick(fTimeDelta);
 
 	RECT		rcRect;
-	SetRect(&rcRect, m_fX - m_fSizeX * 0.5f, m_fY - m_fSizeY * 0.5f, m_fX + m_fSizeX * 0.5f, m_fY + m_fSizeY * 0.5f);
+	SetRect(&rcRect, (int)(m_fX - m_fSizeX * 0.5f), (int)(m_fY - m_fSizeY * 0.5f),(int)( m_fX + m_fSizeX * 0.5f), (int)(m_fY + m_fSizeY * 0.5f));
 
 
 }
