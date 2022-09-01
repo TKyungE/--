@@ -166,6 +166,15 @@
     <Filter Include="02.GameObject\BackGroundObj">
       <UniqueIdentifier>{b35db3b3-f917-40d2-b5a9-4e0c5b044c63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Pet">
+      <UniqueIdentifier>{a58f4177-fe19-4f3b-85ac-373f7be72c82}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Pet\00.Poring">
+      <UniqueIdentifier>{e1de076f-601e-4138-bca7-959e3801c464}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\House">
+      <UniqueIdentifier>{36349508-8e85-4729-bab5-e5cb61236108}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -321,6 +330,12 @@
     <ClInclude Include="..\Public\BackGroundRect.h">
       <Filter>02.GameObject\BackGroundObj</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Poring.h">
+      <Filter>02.GameObject\Pet\00.Poring</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\House.h">
+      <Filter>02.GameObject\BackGroundObj\House</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -463,6 +478,12 @@
     <ClCompile Include="..\Private\MpBar.cpp" />
     <ClCompile Include="..\Private\BackGroundRect.cpp">
       <Filter>02.GameObject\BackGroundObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Poring.cpp">
+      <Filter>02.GameObject\Pet\00.Poring</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\House.cpp">
+      <Filter>02.GameObject\BackGroundObj\House</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
