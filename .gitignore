@@ -377,3 +377,8 @@ Engine/Bin/Engine.dll
 Engine/Bin/Engine.exp
 Engine/Bin/Engine.ilk
 Engine/Bin/Engine.lib
+Client/Default/x64/Debug/Client.log
+Client/Default/x64/Debug/Client.tlog/link.read.1.tlog
+Client/Default/x64/Debug/Loader.obj
+Client/Default/x64/Debug/vc140.idb
+Client/Default/x64/Debug/vc140.pdb
