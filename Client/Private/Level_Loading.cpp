@@ -4,7 +4,7 @@
 #include "Loader.h"
 #include "Level_Logo.h"
 #include "Level_GamePlay.h"
-
+#include "Town.h"
 
 CLevel_Loading::CLevel_Loading(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -42,7 +42,10 @@ void CLevel_Loading::Tick(_float fTimeDelta)
 				pNewLevel = CLevel_Logo::Create(m_pGraphic_Device);
 				break;
 			case LEVEL_GAMEPLAY:
-				pNewLevel = CLevel_GamePlay::Create(m_pGraphic_Device);
+				pNewLevel = CLEVEL_GamePlay::Create(m_pGraphic_Device);
+				break;
+			case LEVEL_TOWN:
+				pNewLevel = CTown::Create(m_pGraphic_Device);
 				break;
 			}
 

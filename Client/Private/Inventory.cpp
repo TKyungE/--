@@ -39,7 +39,7 @@ HRESULT CInventory::Initialize(void * pArg)
 
 	Safe_AddRef(pGameInstance);
 
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_XBox"), LEVEL_GAMEPLAY, TEXT("Layer_UI"), &m_Pass);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_XBox"), LEVEL_STATIC, TEXT("Layer_UI"), &m_Pass);
 	Safe_Release(pGameInstance);
 
 
@@ -121,7 +121,7 @@ HRESULT CInventory::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Inventory"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Inventory"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */

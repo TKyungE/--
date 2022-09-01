@@ -59,20 +59,20 @@ HRESULT CPlayer::Initialize(void * pArg)
 	tInfo.pTarget = this;
 	tInfo.vPos = { 0.7f,0.7f,1.f };
 
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_STATIC, TEXT("Layer_Effect"), &tInfo);
 
 
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_MpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpLogo"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &m_tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpBar"), LEVEL_STATIC, TEXT("Layer_Status"), &m_tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_MpBar"), LEVEL_STATIC, TEXT("Layer_Status"), &m_tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpBar"), LEVEL_STATIC, TEXT("Layer_Status"), &m_tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpLogo"), LEVEL_STATIC, TEXT("Layer_Status"), &m_tInfo);
 
 	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	tInfo.vPos = vPos;
 	tInfo.vPos.z += 0.35f;
 	tInfo.vPos.x += 0.35f;
 	//Pet
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Poring"), LEVEL_GAMEPLAY, TEXT("Layer_Pet"), &m_tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Poring"), LEVEL_STATIC, TEXT("Layer_Pet"), &m_tInfo);
 
 
 	Safe_Release(pGameInstance);
@@ -178,11 +178,11 @@ void CPlayer::OnTerrain()
 	if (nullptr == pGameInstance)
 		return;
 	Safe_AddRef(pGameInstance);
-	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
+	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_STATIC, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
 	if (nullptr == pVIBuffer_Terrain)
 		return;
 
-	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
+	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(LEVEL_STATIC, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
 	if (nullptr == pTransform_Terrain)
 		return;
 
@@ -214,26 +214,26 @@ HRESULT CPlayer::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBuffer)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_IDLE_Front"), (CComponent**)&m_pTextureComIDLE_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_IDLE_Front"), (CComponent**)&m_pTextureComIDLE_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_IDLE_Back"), (CComponent**)&m_pTextureComIDLE_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_IDLE_Back"), (CComponent**)&m_pTextureComIDLE_Back)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Move_Front"), (CComponent**)&m_pTextureComMove_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Move_Front"), (CComponent**)&m_pTextureComMove_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Move_Back"), (CComponent**)&m_pTextureComMove_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Move_Back"), (CComponent**)&m_pTextureComMove_Back)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Skill_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Skill_Front"), (CComponent**)&m_pTextureComSkill_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Skill_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Skill_Front"), (CComponent**)&m_pTextureComSkill_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Skill_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Skill_Back"), (CComponent**)&m_pTextureComSkill_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Skill_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Skill_Back"), (CComponent**)&m_pTextureComSkill_Back)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_IDLE_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Ride_IDLE_Front"), (CComponent**)&m_pTextureComRide_IDLE_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_IDLE_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Ride_IDLE_Front"), (CComponent**)&m_pTextureComRide_IDLE_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_IDLE_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Ride_IDLE_Back"), (CComponent**)&m_pTextureComRide_IDLE_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_IDLE_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Ride_IDLE_Back"), (CComponent**)&m_pTextureComRide_IDLE_Back)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_Move_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Ride_Move_Front"), (CComponent**)&m_pTextureComRide_Move_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_Move_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Ride_Move_Front"), (CComponent**)&m_pTextureComRide_Move_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_Move_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Ride_Move_Back"), (CComponent**)&m_pTextureComRide_Move_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_Move_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Ride_Move_Back"), (CComponent**)&m_pTextureComRide_Move_Back)))
 		return E_FAIL;
 
 	CTransform::TRANSFORMDESC TransformDesc;
@@ -318,7 +318,7 @@ void CPlayer::Use_Skill()
 
 		tInfo.vPos = pInstance->Get_TargetPos();
 
-		pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"), &tInfo);
+		pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), LEVEL_STATIC, TEXT("Layer_UseSkill"), &tInfo);
 	
 		m_bUseSkill = true;
 		m_bThunder = true;
@@ -331,7 +331,7 @@ void CPlayer::Use_Skill()
 
 		tInfo.vPos = pInstance->Get_TargetPos();
 
-		pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"), &tInfo);
+		pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), LEVEL_STATIC, TEXT("Layer_UseSkill"), &tInfo);
 		
 		m_bUseSkill = true;
 		m_bTornado = true;
@@ -342,7 +342,7 @@ void CPlayer::Use_Skill()
 
 		tInfo.vPos = pInstance->Get_TargetPos();
 
-		pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"), &tInfo);
+		pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), LEVEL_STATIC, TEXT("Layer_UseSkill"), &tInfo);
 
 		m_bUseSkill = true;
 		m_bFireSpear = true;
@@ -353,14 +353,14 @@ void CPlayer::Use_Skill()
 
 		tInfo.vPos = pInstance->Get_TargetPos();
 
-		pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"), &tInfo);
+		pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), LEVEL_STATIC, TEXT("Layer_UseSkill"), &tInfo);
 
 		m_bUseSkill = true;
 		m_bMeteor = true;
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bThunder)
 	{
-		pInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
+		pInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
 		Skill_Thunder(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
 		m_bUseSkill = false;
 		m_bThunder = false;
@@ -371,7 +371,7 @@ void CPlayer::Use_Skill()
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bTornado)
 	{
-		pInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
+		pInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
 		Skill_Tornado(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
 		m_bUseSkill = false;
 		m_bTornado = false;
@@ -382,7 +382,7 @@ void CPlayer::Use_Skill()
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bFireSpear)
 	{
-		pInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
+		pInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
 		Skill_FireSpear(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
 		m_bUseSkill = false;
 		m_bFireSpear = false;
@@ -393,7 +393,7 @@ void CPlayer::Use_Skill()
 	}
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bMeteor)
 	{
-		pInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
+		pInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
 		Skill_Meteor(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
 		m_bUseSkill = false;
 		m_bMeteor = false;
@@ -408,7 +408,7 @@ void CPlayer::Use_Skill()
 		CGameObject::INFO tInfo;
 		tInfo.pTarget = this;
 		//tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		pInstance->Add_GameObject(TEXT("Prototype_GameObject_LevelUp"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+		pInstance->Add_GameObject(TEXT("Prototype_GameObject_LevelUp"), LEVEL_STATIC, TEXT("Layer_Effect"), &tInfo);
 	}
 	
 
@@ -464,7 +464,7 @@ HRESULT CPlayer::Skill_Thunder(const _tchar * pLayerTag, _float3 _vPos)
 
 	tInfo.vPos = _vPos;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ThunderCloud"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ThunderCloud"), LEVEL_STATIC, pLayerTag, &tInfo)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -481,7 +481,7 @@ HRESULT CPlayer::Skill_Tornado(const _tchar * pLayerTag, _float3 _vPos)
 
 	tInfo.vPos = _vPos;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Tornado"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Tornado"), LEVEL_STATIC, pLayerTag, &tInfo)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -505,7 +505,7 @@ HRESULT CPlayer::Skill_FireSpear(const _tchar * pLayerTag, _float3 _vPos)
 		tInfo.vPos.z = vPos.z + iTemp;
 
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_FireSpear"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_FireSpear"), LEVEL_STATIC, pLayerTag, &tInfo)))
 			return E_FAIL;
 	}
 	Safe_Release(pGameInstance);
@@ -528,7 +528,7 @@ HRESULT CPlayer::Skill_Meteor(const _tchar * pLayerTag, _float3 _vPos)
 		tInfo.vPos.y = vPos.y;
 		tInfo.vPos.z = vPos.z + iTemp;
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Meteor"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Meteor"), LEVEL_STATIC, pLayerTag, &tInfo)))
 			return E_FAIL;
 	}
 	Safe_Release(pGameInstance);

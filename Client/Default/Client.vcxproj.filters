@@ -175,6 +175,12 @@
     <Filter Include="02.GameObject\BackGroundObj\House">
       <UniqueIdentifier>{36349508-8e85-4729-bab5-e5cb61236108}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Stone">
+      <UniqueIdentifier>{2485e12a-1952-4029-bd81-c026f7e639c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\Town">
+      <UniqueIdentifier>{68167f68-27fb-4e3c-ab0b-50f5c284a1da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -336,6 +342,12 @@
     <ClInclude Include="..\public\House.h">
       <Filter>02.GameObject\BackGroundObj\House</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Stone.h">
+      <Filter>02.GameObject\BackGroundObj\Stone</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Town.h">
+      <Filter>01.Levels\Town</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -484,6 +496,12 @@
     </ClCompile>
     <ClCompile Include="..\private\House.cpp">
       <Filter>02.GameObject\BackGroundObj\House</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Stone.cpp">
+      <Filter>02.GameObject\BackGroundObj\Stone</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Town.cpp">
+      <Filter>01.Levels\Town</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

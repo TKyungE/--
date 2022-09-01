@@ -61,7 +61,7 @@ void CStatsIcon::Tick(_float fTimeDelta)
 				CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 
 				Safe_AddRef(pGameInstance);
-				pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_StatsWnd"), LEVEL_GAMEPLAY, TEXT("Layer_UI"));
+				pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_StatsWnd"), LEVEL_STATIC, TEXT("Layer_UI"));
 				Safe_Release(pGameInstance);
 			}
 		}
@@ -120,7 +120,7 @@ HRESULT CStatsIcon::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_StatsIcon"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_StatsIcon"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */

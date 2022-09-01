@@ -200,10 +200,12 @@
     <ClInclude Include="..\public\SoundMgr.h" />
     <ClInclude Include="..\public\StatsIcon.h" />
     <ClInclude Include="..\public\StatsWnd.h" />
+    <ClInclude Include="..\public\Stone.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\public\ThunderCloud.h" />
     <ClInclude Include="..\Public\ThunderSword.h" />
     <ClInclude Include="..\Public\Tornado.h" />
+    <ClInclude Include="..\public\Town.h" />
     <ClInclude Include="..\Public\UI.h" />
     <ClInclude Include="..\public\UseSkill.h" />
     <ClInclude Include="..\Public\Wind.h" />
@@ -255,10 +257,12 @@
     <ClCompile Include="..\private\SoundMgr.cpp" />
     <ClCompile Include="..\private\StatsIcon.cpp" />
     <ClCompile Include="..\private\StatsWnd.cpp" />
+    <ClCompile Include="..\private\Stone.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\private\ThunderCloud.cpp" />
     <ClCompile Include="..\Private\ThunderSword.cpp" />
     <ClCompile Include="..\Private\Tornado.cpp" />
+    <ClCompile Include="..\private\Town.cpp" />
     <ClCompile Include="..\Private\UI.cpp" />
     <ClCompile Include="..\private\UseSkill.cpp" />
     <ClCompile Include="..\Private\Wind.cpp" />

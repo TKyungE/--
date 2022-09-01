@@ -40,15 +40,15 @@ HRESULT CQuickSlot::Initialize(void * pArg)
 
 	Safe_AddRef(pGameInstance);
 
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_XBox"), LEVEL_GAMEPLAY, TEXT("Layer_UI"), &m_Pass);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_XBox"), LEVEL_STATIC, TEXT("Layer_UI"), &m_Pass);
 	for (int i = 0; i < 9; ++i)
 	{
 		POINT ptPos;
 
 		ptPos.x = 400 + i * 100;
 		ptPos.y = (long)m_fY;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Item"), LEVEL_GAMEPLAY, TEXT("Layer_UI"), &ptPos);
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Slot"), LEVEL_GAMEPLAY, TEXT("Layer_UI"), &ptPos);
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Item"), LEVEL_STATIC, TEXT("Layer_UI"), &ptPos);
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Slot"), LEVEL_STATIC, TEXT("Layer_UI"), &ptPos);
 
 	}
 	Safe_Release(pGameInstance);
@@ -132,7 +132,7 @@ HRESULT CQuickSlot::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_QuickSlot"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_QuickSlot"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */

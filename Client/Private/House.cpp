@@ -76,17 +76,17 @@ HRESULT CHouse::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Renderer"), LEVEL_STATIC, TEXT("Prototype_Component_Renderer"), (CComponent**)&m_pRendererCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer1"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBuffer)))
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer1"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBuffer)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer2"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBuffer2)))
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer2"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBuffer2)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_VIBufferCube1"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Cube"), (CComponent**)&m_pVIBufferCube)))
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBufferCube1"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Cube"), (CComponent**)&m_pVIBufferCube)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_VIBufferCube2"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Cube"), (CComponent**)&m_pVIBufferCube2)))
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBufferCube2"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Cube"), (CComponent**)&m_pVIBufferCube2)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture1"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_House_Body"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture1"), LEVEL_TOWN, TEXT("Prototype_Component_Texture_House_Body"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture2"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_House_Head"), (CComponent**)&m_pTextureCom2)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture2"), LEVEL_TOWN, TEXT("Prototype_Component_Texture_House_Head"), (CComponent**)&m_pTextureCom2)))
 		return E_FAIL;
 
 	CTransform::TRANSFORMDESC TransformDesc;
@@ -123,7 +123,7 @@ HRESULT CHouse::Release_RenderState(void)
 		return E_FAIL;
 
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
+	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
 }
 HRESULT CHouse::On_SamplerState()
@@ -156,11 +156,11 @@ void CHouse::OnTerrain(void)
 		return;
 
 	Safe_AddRef(pGameInstance);
-	CVIBuffer_Terrain* pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
+	CVIBuffer_Terrain* pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_STATIC, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
 	if (nullptr == pVIBuffer_Terrain)
 		return;
 
-	CTransform* pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
+	CTransform* pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(LEVEL_STATIC, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
 	if (nullptr == pTransform_Terrain)
 		return;
 
@@ -186,6 +186,7 @@ void CHouse::OnBillBoard(void)
 
 void CHouse::Set_vPos()
 {
+	m_tInfo.bDead = false;
 	m_pTransformCom->Set_Scaled({ 2.f,2.f,2.f });
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_IndexPos.vPos);
 	_float3 vUp = m_pTransformCom->Get_State(CTransform::STATE_POSITION);

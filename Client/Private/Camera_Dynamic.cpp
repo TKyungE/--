@@ -37,7 +37,7 @@ HRESULT CCamera_Dynamic::Initialize(void* pArg)
 	
 	m_vecCameraNormal = *(_float3*)&m_CameraDesc.Info.pTarget->Get_World().m[2][0] * -1.f;
 	D3DXVec3Normalize(&m_vecCameraNormal, &m_vecCameraNormal);
-
+	int a = 0;
 	return S_OK;
 }
 
