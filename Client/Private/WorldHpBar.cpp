@@ -49,12 +49,14 @@ void CWorldHpBar::Tick(_float fTimeDelta)
 
 	_float3 vPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 	vPos.y += 1.f;
-	
+	m_pTransformCom2->Set_Scaled({ 1.f, 0.1f, 1.f });
+	m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos);
 	m_fSizeX = m_tInfo.pTarget->Get_Info().iHp /(float)m_tInfo.pTarget->Get_Info().iMaxHp;
 	OnBillboard();
 	m_pTransformCom->Set_Scaled({m_fSizeX, 0.1f, 1.f });
-
-
+	_float fX = (1.f - m_fSizeX) / 2.f;
+	vPos.x -= fX;
+	vPos.z -= 0.001f;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 	
 
@@ -76,7 +78,7 @@ HRESULT CWorldHpBar::Render()
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev()))
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_RenderState()))
@@ -84,6 +86,11 @@ HRESULT CWorldHpBar::Render()
 
 	m_pVIBufferCom->Render();
 
+	if (FAILED(m_pTransformCom2->Bind_OnGraphicDev()))
+		return E_FAIL;
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(2)))
+		return E_FAIL;
+	m_pVIBufferCom2->Render();
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
 
@@ -105,7 +112,8 @@ HRESULT CWorldHpBar::SetUp_Components()
 	/* For.Com_VIBuffer */
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
-
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer2"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom2)))
+		return E_FAIL;
 
 	/* For.Com_Transform */
 	CTransform::TRANSFORMDESC		TransformDesc;
@@ -113,7 +121,8 @@ HRESULT CWorldHpBar::SetUp_Components()
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
-
+	if (FAILED(__super::Add_Components(TEXT("Com_Transform2"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom2, &TransformDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -190,7 +199,9 @@ void CWorldHpBar::Free()
 	__super::Free();
 
 	Safe_Release(m_pTransformCom);
+	Safe_Release(m_pTransformCom2);
 	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pVIBufferCom2);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pTextureCom);
 }

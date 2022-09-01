@@ -29,8 +29,8 @@ HRESULT CHouse::Initialize(void * pArg)
 		return E_FAIL;
 
 	memcpy(&m_IndexPos, pArg, sizeof(INDEXPOS));
-	m_IndexPos.vPos.y += 0.5f;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_IndexPos.vPos);
+	
+	Set_vPos();
 
 	return S_OK;
 }
@@ -58,12 +58,8 @@ HRESULT CHouse::Render(void)
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 	Off_SamplerState();
-	m_pTransformCom->Set_Scaled({2.f,2.f,2.f});
-	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-		return E_FAIL;
+	
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
-		return E_FAIL;
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
 
@@ -101,7 +97,12 @@ HRESULT CHouse::SetUp_Components(void)
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
-
+	if (FAILED(__super::Add_Components(TEXT("Com_Transform2"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom2, &TransformDesc)))
+		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Transform3"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom3, &TransformDesc)))
+		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Transform4"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom4, &TransformDesc)))
+		return E_FAIL;
 	return S_OK;
 }
 
@@ -165,8 +166,8 @@ void CHouse::OnTerrain(void)
 
 	_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.5f);
-	vPosition.y += 0.6f;
+	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 1.f);
+	
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	Safe_Release(pGameInstance);
 }
@@ -183,53 +184,54 @@ void CHouse::OnBillBoard(void)
 
 }
 
-HRESULT CHouse::House_Render()
+void CHouse::Set_vPos()
 {
-	m_pVIBufferCube->Render();
+	m_pTransformCom->Set_Scaled({ 2.f,2.f,2.f });
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_IndexPos.vPos);
 	_float3 vUp = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	vUp.y += 2.f;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vUp);
-	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-		return E_FAIL;
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(1)))
-		return E_FAIL;
-	m_pVIBufferCube2->Render();
-	vUp.y -= 0.1f;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vUp);
-	m_pTransformCom->Set_Scaled({ 2.f,2.3f,2.f });
+	vUp.y += 3.f;
+	m_pTransformCom2->Set_Scaled({ 2.f,2.f,2.f });
+	m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vUp);
 	_float3 vUpTrun = { 0.f,1.f,0.f };
 	_float3 vLookTrun = { 0.f,0.f,1.f };
 	_float4x4 vOrginPos = m_pTransformCom->Get_WorldMatrix();
 	_float3 vPos = *(_float3*)&vOrginPos.m[3][0];
 	vPos.x += 0.45f;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
-	m_pTransformCom->Turn(vUpTrun, 1.f);
-	m_pTransformCom->Turn(vLookTrun, 0.3f);
+	vPos.y += 2.9f;
+	m_pTransformCom3->Set_Scaled({ 2.f,2.3f,2.f });
+	m_pTransformCom3->Set_State(CTransform::STATE_POSITION, vPos);
+	m_pTransformCom3->Turn(vUpTrun, 1.f);
+	m_pTransformCom3->Turn(vLookTrun, 0.3f);
+	vPos.x -= 0.9f;
+	m_pTransformCom4->Set_Scaled({ 2.f,2.3f,2.f });
+	m_pTransformCom4->Set_State(CTransform::STATE_POSITION, vPos);
+	m_pTransformCom4->Turn(vUpTrun, -1.f);
+	m_pTransformCom4->Turn(vLookTrun, -0.30f);
+}
+
+HRESULT CHouse::House_Render()
+{
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+		return E_FAIL;
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
+		return E_FAIL;
+	m_pVIBufferCube->Render();
+	if (FAILED(m_pTransformCom2->Bind_OnGraphicDev()))
+		return E_FAIL;
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(1)))
+		return E_FAIL;
+	m_pVIBufferCube2->Render();
+	if (FAILED(m_pTransformCom3->Bind_OnGraphicDev()))
 		return E_FAIL;
 	if (FAILED(m_pTextureCom2->Bind_OnGraphicDev(0)))
 		return E_FAIL;
 	m_pVIBuffer->Render();
-	vUp.y -= 0.1f;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vUp);
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&vOrginPos.m[0][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&vOrginPos.m[1][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&vOrginPos.m[2][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_IndexPos.vPos);
-	vPos.x -= 0.9f;
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
-	m_pTransformCom->Turn(vUpTrun, -1.f);
-	m_pTransformCom->Turn(vLookTrun, -0.30f);
-	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+	if (FAILED(m_pTransformCom4->Bind_OnGraphicDev()))
 		return E_FAIL;
 	if (FAILED(m_pTextureCom2->Bind_OnGraphicDev(0)))
 		return E_FAIL;
 	m_pVIBuffer2->Render();
 
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&vOrginPos.m[0][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&vOrginPos.m[1][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&vOrginPos.m[2][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_IndexPos.vPos);
 }
 
 CHouse * CHouse::Create(LPDIRECT3DDEVICE9 _pGraphic_Device)
@@ -268,6 +270,9 @@ void CHouse::Free(void)
 	__super::Free();
 
 	Safe_Release(m_pTransformCom);
+	Safe_Release(m_pTransformCom2);
+	Safe_Release(m_pTransformCom3);
+	Safe_Release(m_pTransformCom4);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pVIBuffer2);

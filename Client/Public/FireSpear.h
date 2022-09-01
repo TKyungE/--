@@ -31,6 +31,7 @@ private: /* For.Components */
 	CTexture*				m_pTextureCom = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
+	CTransform*				m_pTransformCom2 = nullptr;
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
 	CVIBuffer_Rect*			m_pVIBufferCom2 = nullptr;
 private:
@@ -43,11 +44,10 @@ private:
 	HRESULT Release_RenderState();
 	void Motion_Change();
 	void Move_Frame(_float fTimeDelta);
-	HRESULT TextureRender();
 	HRESULT On_SamplerState();
 	HRESULT Off_SamplerState();
 	HRESULT Create_Fire(const _tchar * pLayerTag);
-	void	OnBillboard();
+	void	Set_vPos();
 	void    OnTerrain();
 public:
 	static CFireSpear* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
