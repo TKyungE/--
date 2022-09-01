@@ -24,7 +24,7 @@ HRESULT CExpBar::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
-	D3DXMatrixOrthoLH(&m_ProjMatrix, g_iWinSizeX, g_iWinSizeY, 0.f, 1.f);
+	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
 
 	m_fSizeX = (float)m_tInfo.pTarget->Get_Info().iExp;//나중에 늘어나고 줄어듦을 여기서 조절한다
 	m_fSizeY = 8.f;
