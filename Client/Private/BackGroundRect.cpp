@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "..\Public\Tree.h"
+#include "..\Public\BackGroundRect.h"
 
 #include "GameInstance.h"
 

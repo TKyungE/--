@@ -467,3 +467,11 @@ Engine/Default/x64/Debug/*.obj
 *.tlog
 *.idb
 *.obj
+Client/Default/x64/Debug/BackGroundRect.obj
+Client/Default/x64/Debug/Client.log
+Client/Default/x64/Debug/Client.tlog/CL.read.1.tlog
+Client/Default/x64/Debug/Client.tlog/CL.write.1.tlog
+Client/Default/x64/Debug/Level_GamePlay.obj
+Client/Default/x64/Debug/Loader.obj
+Client/Default/x64/Debug/vc140.idb
+Client/Default/x64/Debug/vc140.pdb

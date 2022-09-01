@@ -166,6 +166,12 @@
     <Filter Include="02.GameObject\BackGroundObj">
       <UniqueIdentifier>{b35db3b3-f917-40d2-b5a9-4e0c5b044c63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Rect">
+      <UniqueIdentifier>{69d0afbe-47ff-4ccd-8ea1-093438e275e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Tree">
+      <UniqueIdentifier>{4f7dd100-f739-468a-84ff-a43013fe9507}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -318,8 +324,12 @@
     <ClInclude Include="..\public\ExpBlank.h" />
     <ClInclude Include="..\public\ExpLogo.h" />
     <ClInclude Include="..\Public\MpBar.h" />
+    <ClInclude Include="..\public\Poring.h" />
     <ClInclude Include="..\Public\BackGroundRect.h">
-      <Filter>02.GameObject\BackGroundObj</Filter>
+      <Filter>02.GameObject\BackGroundObj\Rect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BackGroundTree.h">
+      <Filter>02.GameObject\BackGroundObj\Tree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -461,8 +471,12 @@
     <ClCompile Include="..\private\ExpBlank.cpp" />
     <ClCompile Include="..\private\ExpLogo.cpp" />
     <ClCompile Include="..\Private\MpBar.cpp" />
+    <ClCompile Include="..\private\Poring.cpp" />
     <ClCompile Include="..\Private\BackGroundRect.cpp">
-      <Filter>02.GameObject\BackGroundObj</Filter>
+      <Filter>02.GameObject\BackGroundObj\Rect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BackGroundTree.cpp">
+      <Filter>02.GameObject\BackGroundObj\Tree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
