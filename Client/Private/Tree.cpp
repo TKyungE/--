@@ -3,17 +3,17 @@
 
 #include "GameInstance.h"
 
-CTree::CTree(LPDIRECT3DDEVICE9 _pGraphic_Device)
+CBackGroundRect::CBackGroundRect(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
 {
 }
 
-CTree::CTree(const CTree& rhs)
+CBackGroundRect::CBackGroundRect(const CBackGroundRect& rhs)
 	: CGameObject(rhs)
 {
 }
 
-HRESULT CTree::Initialize_Prototype(void)
+HRESULT CBackGroundRect::Initialize_Prototype(void)
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -21,7 +21,7 @@ HRESULT CTree::Initialize_Prototype(void)
 	return S_OK;
 }
 
-HRESULT CTree::Initialize(void * pArg)
+HRESULT CBackGroundRect::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
@@ -29,23 +29,21 @@ HRESULT CTree::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 	
-	int X = (rand() % 50000) * 0.001;
-	int Z = (rand() % 50000) * 0.001;
-	_float3 vPos = _float3(X, 0.f, Z);
+	memcpy(&m_IndexPos, pArg, sizeof(INDEXPOS));
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_IndexPos.vPos);
 
 	return S_OK;
 }
 
-void CTree::Tick(_float fTimeDelta)
+void CBackGroundRect::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
 	OnTerrain();
 }
 
-void CTree::Late_Tick(_float fTimeDelta)
+void CBackGroundRect::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
@@ -55,7 +53,7 @@ void CTree::Late_Tick(_float fTimeDelta)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
-HRESULT CTree::Render(void)
+HRESULT CBackGroundRect::Render(void)
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
@@ -63,7 +61,7 @@ HRESULT CTree::Render(void)
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_IndexPos.iIndex)))
 		return E_FAIL;
 	
 	if (FAILED(SetUp_RenderState()))
@@ -77,7 +75,7 @@ HRESULT CTree::Render(void)
 	return S_OK;
 }
 
-HRESULT CTree::SetUp_Components(void)
+HRESULT CBackGroundRect::SetUp_Components(void)
 {
 	if (FAILED(__super::Add_Components(TEXT("Com_Renderer"), LEVEL_STATIC, TEXT("Prototype_Component_Renderer"), (CComponent**)&m_pRendererCom)))
 		return E_FAIL;
@@ -100,7 +98,7 @@ HRESULT CTree::SetUp_Components(void)
 	return S_OK;
 }
 
-HRESULT CTree::SetUp_RenderState(void)
+HRESULT CBackGroundRect::SetUp_RenderState(void)
 {
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
@@ -111,7 +109,7 @@ HRESULT CTree::SetUp_RenderState(void)
 	return S_OK;
 }
 
-HRESULT CTree::Release_RenderState(void)
+HRESULT CBackGroundRect::Release_RenderState(void)
 {
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
@@ -121,7 +119,7 @@ HRESULT CTree::Release_RenderState(void)
 	return S_OK;
 }
 
-void CTree::OnTerrain(void)
+void CBackGroundRect::OnTerrain(void)
 {
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
@@ -144,7 +142,7 @@ void CTree::OnTerrain(void)
 	Safe_Release(pGameInstance);
 }
 
-void CTree::OnBillBoard(void)
+void CBackGroundRect::OnBillBoard(void)
 {
 	_float4x4	ViewMatrix;
 	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
@@ -156,38 +154,38 @@ void CTree::OnBillBoard(void)
 
 }
 
-CTree * CTree::Create(LPDIRECT3DDEVICE9 _pGraphic_Device)
+CBackGroundRect * CBackGroundRect::Create(LPDIRECT3DDEVICE9 _pGraphic_Device)
 {
-	CTree* pInstance = new CTree(_pGraphic_Device);
+	CBackGroundRect* pInstance = new CBackGroundRect(_pGraphic_Device);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		ERR_MSG(TEXT("Failed to Created : CTree"));
+		ERR_MSG(TEXT("Failed to Created : CBackGroundRect"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject * CTree::Clone(void * pArg)
+CGameObject * CBackGroundRect::Clone(void * pArg)
 {
-	CTree* pInstance = new CTree(*this);
+	CBackGroundRect* pInstance = new CBackGroundRect(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		ERR_MSG(TEXT("Failed to Cloned : CTree"));
+		ERR_MSG(TEXT("Failed to Cloned : CBackGroundRect"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-_float4x4 CTree::Get_World(void)
+_float4x4 CBackGroundRect::Get_World(void)
 {
 	return m_pTransformCom->Get_WorldMatrix();;
 }
 
-void CTree::Free(void)
+void CBackGroundRect::Free(void)
 {
 	__super::Free();
 

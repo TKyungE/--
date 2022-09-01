@@ -163,11 +163,8 @@
     <Filter Include="03.Effect\Default\06.Shadow">
       <UniqueIdentifier>{71afcecb-9d8c-4b4e-8463-874539fb788f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Pet">
-      <UniqueIdentifier>{ba3f2ed6-40c4-4934-b93d-7bed495d3210}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObject\Pet\00.Poring">
-      <UniqueIdentifier>{bdc7eca3-8414-495d-8a91-64acc2de13d5}</UniqueIdentifier>
+    <Filter Include="02.GameObject\BackGroundObj">
+      <UniqueIdentifier>{b35db3b3-f917-40d2-b5a9-4e0c5b044c63}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -321,9 +318,8 @@
     <ClInclude Include="..\public\ExpBlank.h" />
     <ClInclude Include="..\public\ExpLogo.h" />
     <ClInclude Include="..\Public\MpBar.h" />
-    <ClInclude Include="..\Public\Tree.h" />
-    <ClInclude Include="..\public\Poring.h">
-      <Filter>02.GameObject\Pet\00.Poring</Filter>
+    <ClInclude Include="..\Public\BackGroundRect.h">
+      <Filter>02.GameObject\BackGroundObj</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -465,9 +461,8 @@
     <ClCompile Include="..\private\ExpBlank.cpp" />
     <ClCompile Include="..\private\ExpLogo.cpp" />
     <ClCompile Include="..\Private\MpBar.cpp" />
-    <ClCompile Include="..\Private\Tree.cpp" />
-    <ClCompile Include="..\private\Poring.cpp">
-      <Filter>02.GameObject\Pet\00.Poring</Filter>
+    <ClCompile Include="..\Private\BackGroundRect.cpp">
+      <Filter>02.GameObject\BackGroundObj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

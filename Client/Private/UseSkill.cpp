@@ -226,6 +226,8 @@ HRESULT CUseSkill::SetUp_RenderState()
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
+
+
 	return S_OK;
 }
 
@@ -233,7 +235,9 @@ HRESULT CUseSkill::Release_RenderState()
 {
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
 	m_pGraphic_Device->SetTexture(0, nullptr);
+
 	return S_OK;
 }
 

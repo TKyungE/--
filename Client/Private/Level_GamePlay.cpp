@@ -6,6 +6,7 @@
 #include "SoundMgr.h"
 #include "CollisionMgr.h"
 #include "KeyMgr.h"
+#include "BackGroundRect.h" 
 
 CLevel_GamePlay::CLevel_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -132,12 +133,16 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		return E_FAIL;
 
 
-	for (_uint i = 0; i < 100; ++i)
+	for (auto& iter : m_vecIndex)
 	{
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Tree"), LEVEL_GAMEPLAY, pLayerTag)))
+		CBackGroundRect::INDEXPOS indexpos;
+		ZeroMemory(&indexpos, sizeof(CBackGroundRect::INDEXPOS));
+		indexpos.iIndex = iter.iIndex;
+		indexpos.vPos = iter.BackGroundPos;
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Tree"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
-
 	
 	Safe_Release(pGameInstance);
 
@@ -277,23 +282,64 @@ void CLevel_GamePlay::SpawnData()
 
 	DWORD	dwByte = 0;
 
-	_float3 Pos{};
 	_float3 vPos1;
+	_uint iMSize, iIndexSize;
+	_tchar str1[MAX_PATH];
+	_tchar str2[MAX_PATH];
 
 	ReadFile(hFile, vPos1, sizeof(_float3), &dwByte, nullptr);
 	m_vPlayerPos = vPos1;
+
+	ReadFile(hFile, str1, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str2, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+	iMSize = stoi(str1);
+	iIndexSize = stoi(str2);
+
 	while (true)
 	{
-		ReadFile(hFile, &Pos, sizeof(_float3), &dwByte, nullptr);
+		for (_uint i = 0; i < iMSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+
+			_float3 Pos;
+
+			ReadFile(hFile, &Pos, sizeof(_float3), &dwByte, nullptr);
+
+			_float3 vPos;
+
+			vPos = Pos;
+
+			m_vMonsterPos1.push_back(vPos);
+
+			
+		}
+
+		for (_uint i = 0; i < iIndexSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+
+			_float3 BackPos;
+			_tchar str3[MAX_PATH];
+			_uint Index;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+
+			INDEXPOS IndexPos;
+
+			IndexPos.BackGroundPos = BackPos;
+			IndexPos.iIndex = Index;
+
+			m_vecIndex.push_back(IndexPos);
+		}
 
 		if (0 == dwByte)
 			break;
-
-		_float3 vPos;
-
-		vPos = Pos;
-
-		m_vMonsterPos1.push_back(vPos);
 	}
 
 	CloseHandle(hFile);
