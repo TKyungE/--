@@ -456,3 +456,5 @@ Client/Default/x64/Debug/Client.log
 Client/Default/x64/Debug/Camera_Dynamic.obj
 Client/Default/x64/Debug/BackGroundRect.obj
 Client/Default/x64/Debug/BackGround.obj
+Client/Default/x64/Debug/*.obj
+Engine/Default/x64/Debug/*.obj
