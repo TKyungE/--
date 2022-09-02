@@ -151,10 +151,16 @@ HRESULT CTerrain::OnLoadData(const _tchar* pFilePath)
 
 		tRectInfo.iTex = _wtoi(szTex);
 
-		for (_uint i = 0; i < 4; i++)
+		for (_uint j = 0; j < 4; j++)
 		{
-			ReadFile(hFile, &tRectInfo.vecPointPos[i], sizeof(tRectInfo.vecPointPos), &dwByte, nullptr);
-			ReadFile(hFile, &tRectInfo.vecPointTex[i], sizeof(tRectInfo.vecPointTex), &dwByte, nullptr);
+			_float3 vPos;
+			_float2 vTex;
+
+			ReadFile(hFile, &vPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &vTex, sizeof(_float2), &dwByte, nullptr);
+
+			tRectInfo.vecPointPos.push_back(vPos);
+			tRectInfo.vecPointTex.push_back(vTex);
 		}
 
 		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TerrainRect"), LEVEL_GAMEPLAY, TEXT("Layer_TerrainRect"), &tRectInfo)))

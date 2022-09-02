@@ -12,7 +12,6 @@ CTerrainRect::CTerrainRect(LPDIRECT3DDEVICE9 pGraphic_Device)
 CTerrainRect::CTerrainRect(const CTerrainRect & rhs)
 	: CGameObject(rhs)
 {
-	memcpy(&m_tInfo, &rhs.m_tInfo, sizeof(RECTINFO));
 }
 
 HRESULT CTerrainRect::Initialize_Prototype(void)
@@ -118,7 +117,7 @@ HRESULT CTerrainRect::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Renderer"), LEVEL_STATIC, TEXT("Prototype_Component_Renderer"), (CComponent**)&m_pRendererCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_TerrainRect"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	CTransform::TRANSFORMDESC TransformDesc;
@@ -168,15 +167,17 @@ void CTerrainRect::Free(void)
 {
 	Safe_Release(m_pIBuffer);
 	Safe_Release(m_pVBuffer);
+	
+	m_tInfo.vecPointPos.clear();
+	////m_tInfo.vecPointPos.shrink_to_fit();
 
-	for (auto& Pair : m_Components)
-		Safe_Release(Pair.second);
+	m_tInfo.vecPointTex.clear();
+	//m_tInfo.vecPointTex.clear();
+	////m_tInfo.vecPointTex.shrink_to_fit();
 
-	m_Components.clear();
+	__super::Free();
 
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pTextureCom);
-
-	Safe_Release(m_pGraphic_Device);
 }
