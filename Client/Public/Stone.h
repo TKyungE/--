@@ -36,15 +36,9 @@ public:
 private:
 	CRenderer* m_pRendererCom = nullptr;
 	CTransform* m_pTransformCom = nullptr;
-	CTransform* m_pTransformCom2 = nullptr;
-	CTransform* m_pTransformCom3 = nullptr;
-	CTransform* m_pTransformCom4 = nullptr;
-	CVIBuffer_Rect* m_pVIBuffer = nullptr;
-	CVIBuffer_Rect* m_pVIBuffer2 = nullptr;
 	CVIBuffer_Cube* m_pVIBufferCube = nullptr;
-	CVIBuffer_Cube* m_pVIBufferCube2 = nullptr;
 	CTexture* m_pTextureCom = nullptr;
-	CTexture* m_pTextureCom2 = nullptr;
+
 private:
 	INDEXPOS	m_IndexPos;
 

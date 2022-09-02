@@ -33,28 +33,33 @@ HRESULT CTown::Initialize()
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Portal(TEXT("Layer_Portal"))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
 void CTown::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+	
+	
+	CGameObject* Dest;
+	CGameObject* Sour;
+	
+	if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Portal"))->Get_Objects(), &Dest, &Sour))
+	{
+		m_bNextLevel = true;
+		pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(Dest->Get_Info());
+	}
 	if (m_bNextLevel == true)
 	{
-		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-		Safe_AddRef(pGameInstance);
-
 		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_GAMEPLAY))))
 			return;
-
-		Safe_Release(pGameInstance);
 	}
-
-	if (CKeyMgr::Get_Instance()->Key_Down('T'))
-		m_bNextLevel = true;
-
-	
+	Safe_Release(pGameInstance);
 }
 
 void CTown::Late_Tick(_float fTimeDelta)
@@ -74,7 +79,7 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_TOWN, pLayerTag)))
 		return E_FAIL;
-
+	
 
 
 	for (auto& iter : m_vecIndex)
@@ -98,11 +103,25 @@ HRESULT CTown::Ready_Layer_Player(const _tchar * pLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	Info.vPos = m_vPlayerPos;
-	Info.iLevelIndex = LEVEL_TOWN;
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_TOWN, pLayerTag, &Info)))
-		return E_FAIL;
-
+	
+	if (pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo")) != nullptr)
+	{
+		CGameObject::INFO tInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Get_Info();
+		memcpy(&Info, &tInfo, sizeof(CGameObject::INFO));
+		Info.iLevelIndex = LEVEL_TOWN;
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_TOWN, pLayerTag, &Info)))
+			return E_FAIL;
+	}
+	else
+	{
+		CGameObject::INFO tInfo;
+		Info.vPos = m_vPlayerPos;
+		Info.iLevelIndex = LEVEL_TOWN;
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_TOWN, pLayerTag, &Info)))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_PlayerInfo"), LEVEL_STATIC, TEXT("Layer_PlayerInfo"), &tInfo)))
+			return E_FAIL;
+	}
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -184,6 +203,19 @@ HRESULT CTown::Ready_Layer_UI(const _tchar * pLayerTag)
 
 	Safe_Release(pGameInstance);
 
+	return S_OK;
+}
+
+HRESULT CTown::Ready_Layer_Portal(const _tchar * pLayerTag)
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+	CGameObject::INFO tInfo;
+	tInfo.iLevelIndex = LEVEL_TOWN;
+	tInfo.vPos = { 2.f,0.01f,20.f };
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_TOWN, pLayerTag, &tInfo)))
+		return E_FAIL;
+	Safe_Release(pGameInstance);
 	return S_OK;
 }
 

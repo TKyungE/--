@@ -190,9 +190,11 @@
     <ClInclude Include="..\public\MeteorEff.h" />
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\Player.h" />
+    <ClInclude Include="..\public\PlayerInfo.h" />
     <ClInclude Include="..\public\PlayerMpBar.h" />
     <ClInclude Include="..\public\PlusBox.h" />
     <ClInclude Include="..\public\Poring.h" />
+    <ClInclude Include="..\public\Portal.h" />
     <ClInclude Include="..\public\QuickSlot.h" />
     <ClInclude Include="..\public\Rain.h" />
     <ClInclude Include="..\public\Shadow.h" />
@@ -211,6 +213,7 @@
     <ClInclude Include="..\Public\UI.h" />
     <ClInclude Include="..\public\UseSkill.h" />
     <ClInclude Include="..\Public\Wind.h" />
+    <ClInclude Include="..\public\Wing.h" />
     <ClInclude Include="..\public\WorldHpBar.h" />
     <ClInclude Include="..\Public\XBox.h" />
     <ClInclude Include="Client.h" />
@@ -249,9 +252,11 @@
     <ClCompile Include="..\private\MeteorEff.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\Player.cpp" />
+    <ClCompile Include="..\private\PlayerInfo.cpp" />
     <ClCompile Include="..\private\PlayerMpBar.cpp" />
     <ClCompile Include="..\private\PlusBox.cpp" />
     <ClCompile Include="..\private\Poring.cpp" />
+    <ClCompile Include="..\private\Portal.cpp" />
     <ClCompile Include="..\private\QuickSlot.cpp" />
     <ClCompile Include="..\private\Rain.cpp" />
     <ClCompile Include="..\private\Shadow.cpp" />
@@ -270,6 +275,7 @@
     <ClCompile Include="..\Private\UI.cpp" />
     <ClCompile Include="..\private\UseSkill.cpp" />
     <ClCompile Include="..\Private\Wind.cpp" />
+    <ClCompile Include="..\private\Wing.cpp" />
     <ClCompile Include="..\private\WorldHpBar.cpp" />
     <ClCompile Include="..\Private\XBox.cpp" />
     <ClCompile Include="Client.cpp" />

@@ -8,6 +8,7 @@
 #include "KeyMgr.h"
 #include "BackGroundRect.h" 
 #include "BackGroundTree.h"
+#include "Level_Loading.h"
 
 CLEVEL_GamePlay::CLEVEL_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -35,6 +36,9 @@ HRESULT CLEVEL_GamePlay::Initialize()
 		return E_FAIL;
 	
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
+		return E_FAIL;
+
+	if (FAILED(Ready_Layer_Portal(TEXT("Layer_Portal"))))
 		return E_FAIL;
 
 	fSound = fSOUND;
@@ -117,7 +121,16 @@ void CLEVEL_GamePlay::Late_Tick(_float fTimeDelta)
 				Sour->Set_Dead();
 		}
 	}
-
+	if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Portal"))->Get_Objects(), &Dest, &Sour))
+	{
+		m_bNextLevel = true;
+		pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(Dest->Get_Info());
+	}
+	if (m_bNextLevel == true)
+	{
+		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_TOWN))))
+			return;
+	}
 	Safe_Release(pGameInstance);
 }
 
@@ -186,7 +199,9 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Player(const _tchar * pLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	Info.vPos = m_vPlayerPos;
+	CGameObject::INFO tInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Get_Info();
+
+	memcpy(&Info, &tInfo, sizeof(CGameObject::INFO));
 	Info.iLevelIndex = LEVEL_GAMEPLAY;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
@@ -296,7 +311,18 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_UI(const _tchar * pLayerTag)
 
 	return S_OK;
 }
-
+HRESULT CLEVEL_GamePlay::Ready_Layer_Portal(const _tchar * pLayerTag)
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+	CGameObject::INFO tInfo;
+	tInfo.iLevelIndex = LEVEL_GAMEPLAY;
+	tInfo.vPos = { 20.f,0.f,2.f };
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+		return E_FAIL;
+	Safe_Release(pGameInstance);
+	return S_OK;
+}
 _float3 CLEVEL_GamePlay::Get_CollisionPos(CGameObject * pDest, CGameObject * pSour)
 {
 	_float3 vLook = *(_float3*)&pDest->Get_World().m[3][0] - *(_float3*)&pSour->Get_World().m[3][0];

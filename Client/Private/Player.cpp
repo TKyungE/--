@@ -28,7 +28,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-	
+
+
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	m_tInfo.pTarget = this;
 	memcpy(pArg, &m_tInfo, sizeof(INFO));
@@ -43,15 +44,14 @@ HRESULT CPlayer::Initialize(void * pArg)
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 0;
 	m_tFrame.fFrameSpeed = 0.1f;
-
-	m_tInfo.fX = 0.5f;
-	m_tInfo.iMaxHp = 186;
-	m_tInfo.iHp = m_tInfo.iMaxHp;
-
-
-	m_tInfo.iMp = 186;
-	m_tInfo.iExp = 0.f;
-
+	if (m_tInfo.iMaxHp <= 0)
+	{
+		m_tInfo.fX = 0.5f;
+		m_tInfo.iMaxHp = 186;
+		m_tInfo.iHp = m_tInfo.iMaxHp;
+		m_tInfo.iMp = 186;
+		m_tInfo.iExp = 0.f;
+	}
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
@@ -196,7 +196,13 @@ void CPlayer::OnTerrain()
 	if (m_bRide)
 	{
 		_float3 vUp = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vUp.y += 0.2f;
+		vUp.y += 0.1f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vUp);
+	}
+	else if (m_bFly)
+	{
+		_float3 vUp = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		vUp.y -= 0.1f + m_fFly_fY;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vUp);
 	}
 	else
@@ -429,11 +435,36 @@ void CPlayer::Key_Input(_float fTimeDelta)
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RBUTTON) && m_eCurState != SKILL)
 	{
 		m_vTarget = pInstance->Get_TargetPos();
-		m_eCurState = MOVE;
-		m_tFrame.iFrameStart = 0;
+		if (!m_bFly)
+		{
+			m_eCurState = MOVE;
+			m_tFrame.iFrameStart = 0;
+		}
 		Check_Front();
 	}
-	if (CKeyMgr::Get_Instance()->Key_Down('R'))
+	if (CKeyMgr::Get_Instance()->Key_Down('F') && !m_bRide)
+	{
+		switch (m_bFly)
+		{
+		case true:
+			m_bFly = false;
+			m_fFly_fY = 0.f;
+			break;
+		case false:
+			m_bFly = true;
+			CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+			if (nullptr == pGameInstance)
+				return;
+			Safe_AddRef(pGameInstance);
+			CGameObject::INFO tInfo;
+			tInfo.pTarget = this;
+			tInfo.vPos = { 0.5f,0.5f,1.f };
+			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wing"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
+			Safe_Release(pGameInstance);
+			break;
+		}
+	}
+	if (CKeyMgr::Get_Instance()->Key_Down('R') && !m_bFly)
 	{
 		switch (m_bRide)
 		{
@@ -453,7 +484,18 @@ void CPlayer::Key_Input(_float fTimeDelta)
 			break;
 		}
 	}
-
+	if (CKeyMgr::Get_Instance()->Key_Pressing('W') && m_bFly)
+	{
+		m_fFly_fY -= 0.1f;
+		if (m_fFly_fY < -2.f)
+			m_fFly_fY = -2.f;
+	}
+	if (CKeyMgr::Get_Instance()->Key_Pressing('S') && m_bFly)
+	{
+		m_fFly_fY += 0.1f;
+		if (m_fFly_fY > 0.f)
+			m_fFly_fY = 0.f;
+	}
 	Safe_Release(pInstance);
 }
 

@@ -322,7 +322,10 @@ void CPoring::Check_Front()
 {
 	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-
+	if (m_tInfo.pTarget->Get_Info().iHp <= 0 || m_tInfo.pTarget->Get_Info().bDead)
+	{
+		Set_Dead();
+	}
 	if (vTargetPos.z > vPos.z)
 		m_bFront = false;
 	if (vTargetPos.z <= vPos.z)

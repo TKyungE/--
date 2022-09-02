@@ -184,6 +184,21 @@
     <Filter Include="02.GameObject\Camera">
       <UniqueIdentifier>{6ad6400b-9d5a-4bf0-9b0f-946a3f09392e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Portal">
+      <UniqueIdentifier>{da6952f7-abbe-4b17-b86a-c71274cfa03b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Player\PlayerInfo">
+      <UniqueIdentifier>{b6a7f3f7-902f-40bd-a4db-66ad2c9fb94d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC">
+      <UniqueIdentifier>{d26d626b-af07-45e9-80a5-51f5cae667c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC\00.NPC">
+      <UniqueIdentifier>{42b918b4-0659-4a8f-8919-5a07b097b36a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Wing">
+      <UniqueIdentifier>{0bc110a1-b2b7-4777-89b4-9fba7c4f5948}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -354,6 +369,16 @@
     <ClInclude Include="..\public\Loading.h">
       <Filter>02.GameObject\Loading</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\BackGroundTree.h" />
+    <ClInclude Include="..\public\Portal.h">
+      <Filter>02.GameObject\Portal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\PlayerInfo.h">
+      <Filter>02.GameObject\Player\PlayerInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Wing.h">
+      <Filter>02.GameObject\Wing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -511,6 +536,16 @@
     </ClCompile>
     <ClCompile Include="..\private\Loading.cpp">
       <Filter>02.GameObject\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BackGroundTree.cpp" />
+    <ClCompile Include="..\private\Portal.cpp">
+      <Filter>02.GameObject\Portal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\PlayerInfo.cpp">
+      <Filter>02.GameObject\Player\PlayerInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Wing.cpp">
+      <Filter>02.GameObject\Wing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

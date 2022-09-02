@@ -23,7 +23,7 @@ public:
 	HRESULT Ready_Layer_Monster(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Camera(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_UI(const _tchar* pLayerTag);
-
+	HRESULT Ready_Layer_Portal(const _tchar* pLayerTag);
 private:
 	CGameObject::INFO Info;
 
@@ -57,6 +57,7 @@ private:
 	_float fCollTime = 0.f;
 	_float fRainTime = 0.f;
 	bool m_IconRender = false;
+	bool m_bNextLevel = false;
 };
 
 END
