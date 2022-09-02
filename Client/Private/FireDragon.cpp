@@ -22,16 +22,16 @@ HRESULT CFireDragon::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_FireDragon_IDLE_Front"), (CComponent**)&m_pTextureComIDLE_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_FireDragon_IDLE_Front"), (CComponent**)&m_pTextureComIDLE_Front)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_FireDragon_IDLE_Back"), (CComponent**)&m_pTextureComIDLE_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_FireDragon_IDLE_Back"), (CComponent**)&m_pTextureComIDLE_Back)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Attack"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_FireDragon_Attack"), (CComponent**)&m_pTextureComAttack)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Attack"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_FireDragon_Attack"), (CComponent**)&m_pTextureComAttack)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Dead"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_FireDragon_Dead"), (CComponent**)&m_pTextureComDead)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Dead"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_FireDragon_Dead"), (CComponent**)&m_pTextureComDead)))
 		return E_FAIL;
 	CTransform::TRANSFORMDESC TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
@@ -73,6 +73,7 @@ void CFireDragon::Check_Hit()
 		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 		Safe_AddRef(pGameInstance);
 		CGameObject::INFO tInfo;
+		tInfo.pTarget = this;
 		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);;
 		tInfo.iTargetDmg = m_tInfo.iTargetDmg;
 		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), LEVEL_GAMEPLAY, TEXT("Layer_DmgFont"), &tInfo);
@@ -329,7 +330,7 @@ HRESULT CFireDragon::Skill_FireSpear(const _tchar * pLayerTag)
 		tInfo.vPos.x = vPos.x + iSour;
 		tInfo.vPos.y = vPos.y;
 		tInfo.vPos.z = vPos.z + iTemp;
-
+		tInfo.iLevelIndex = LEVEL_GAMEPLAY;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_FireSpear"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 			return E_FAIL;
@@ -347,13 +348,13 @@ HRESULT CFireDragon::Skill_Meteor(const _tchar * pLayerTag)
 	for (int i = 0; i < 100; ++i)
 	{
 		_float iSour = rand() % 60000 * 0.001f;
-		_float iTemp = rand() % 40000 * 0.001f;
+		_float iTemp = rand() % 60000 * 0.001f;
 
 		_float3 vPos = { 0.f,0.f,0.f };
 		tInfo.vPos.x = vPos.x + iSour;
 		tInfo.vPos.y = vPos.y;
 		tInfo.vPos.z = vPos.z + iTemp;
-
+		tInfo.iLevelIndex = LEVEL_GAMEPLAY;
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Meteor"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 			return E_FAIL;
 	}
@@ -465,7 +466,7 @@ HRESULT CFireDragon::Create_Wind()
 
 			_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 			tInfo.vPos = vPos;
-
+			tInfo.pTarget = this;
 			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Wind"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo)))
 				return E_FAIL;
 			Safe_Release(pGameInstance);

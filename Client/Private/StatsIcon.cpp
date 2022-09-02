@@ -24,9 +24,9 @@ HRESULT CStatsIcon::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
-
+	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX,(float) g_iWinSizeY, 0.f, 1.f);
-	m_Click = (bool*)pArg;
+
 	m_fSizeX = 30.0f;
 	m_fSizeY = 30.0f;
 	m_fX = 210.f;
@@ -44,7 +44,7 @@ HRESULT CStatsIcon::Initialize(void * pArg)
 void CStatsIcon::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	if (*m_Click == true)
+	if (m_tInfo.pTarget->Get_Info().bHit)
 	{
 		RECT		rcRect;
 		SetRect(&rcRect,(int)( m_fX - m_fSizeX * 0.5f),(int)( m_fY - m_fSizeY * 0.5f),(int)( m_fX + m_fSizeX * 0.5f),(int)( m_fY + m_fSizeY * 0.5f));
@@ -61,7 +61,7 @@ void CStatsIcon::Tick(_float fTimeDelta)
 				CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 
 				Safe_AddRef(pGameInstance);
-				pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_StatsWnd"), LEVEL_GAMEPLAY, TEXT("Layer_UI"));
+				pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_StatsWnd"), m_tInfo.iLevelIndex, TEXT("Layer_UI"),&m_tInfo);
 				Safe_Release(pGameInstance);
 			}
 		}
@@ -72,7 +72,7 @@ void CStatsIcon::Tick(_float fTimeDelta)
 
 void CStatsIcon::Late_Tick(_float fTimeDelta)
 {
-	if (*m_Click == true)
+	if (m_tInfo.pTarget->Get_Info().bHit)
 	{
 		__super::Late_Tick(fTimeDelta);
 
@@ -83,7 +83,7 @@ void CStatsIcon::Late_Tick(_float fTimeDelta)
 
 HRESULT CStatsIcon::Render()
 {
-	if (*m_Click == true)
+	if (m_tInfo.pTarget->Get_Info().bHit)
 	{
 		if (FAILED(__super::Render()))
 			return E_FAIL;
@@ -120,7 +120,7 @@ HRESULT CStatsIcon::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_StatsIcon"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_StatsIcon"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */

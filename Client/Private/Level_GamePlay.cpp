@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "..\Public\Level_GamePlay.h"
+#include "..\Public\LEVEL_GamePlay.h"
 
 #include "GameInstance.h"
 #include "Camera_Dynamic.h"
@@ -9,13 +9,13 @@
 #include "BackGroundRect.h" 
 #include "BackGroundTree.h"
 
-CLevel_GamePlay::CLevel_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device)
+CLEVEL_GamePlay::CLEVEL_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
 {
 	ZeroMemory(&Info, sizeof(CGameObject::INFO));
 }
 
-HRESULT CLevel_GamePlay::Initialize()
+HRESULT CLEVEL_GamePlay::Initialize()
 {
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
@@ -34,7 +34,6 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
 		return E_FAIL;
 	
-
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
 
@@ -47,7 +46,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	return S_OK;
 }
 
-void CLevel_GamePlay::Tick(_float fTimeDelta)
+void CLEVEL_GamePlay::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);	
 	
@@ -73,7 +72,7 @@ void CLevel_GamePlay::Tick(_float fTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-void CLevel_GamePlay::Late_Tick(_float fTimeDelta)
+void CLEVEL_GamePlay::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
@@ -88,9 +87,9 @@ void CLevel_GamePlay::Late_Tick(_float fTimeDelta)
 	CGameObject* Sour;
 	
 	
-	if (pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill")) != nullptr)
+	if (pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_Skill")) != nullptr)
 	{
-		if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Skill"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour))
+		if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_Skill"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour))
 		{
 			
 			Dest->Set_Dead();
@@ -122,7 +121,7 @@ void CLevel_GamePlay::Late_Tick(_float fTimeDelta)
 	Safe_Release(pGameInstance);
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
+HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 {
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
@@ -143,7 +142,6 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.vScale = iter.vScale;
 		indexpos.vPos = iter.BackGroundPos;
 
-
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundRect"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
 			return E_FAIL;
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
@@ -162,18 +160,39 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundTree"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Tree"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
+			return E_FAIL;
+	}
+	CGameObject::INFO tInfo;
+	for (int i = 0; i < 100; ++i)
+	{
+		_float iSour = rand() % 90000 * 0.001f;
+		_float iTemp = rand() % 90000 * 0.001f;
+
+		_float3 vPos = { 0.f,0.f,0.f };
+		tInfo.vPos.x = vPos.x + iSour;
+		tInfo.vPos.y = vPos.y;
+		tInfo.vPos.z = vPos.z + iTemp;
+		tInfo.iLevelIndex = LEVEL_GAMEPLAY;
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Stone"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+			return E_FAIL;
+	}
+	
+
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar * pLayerTag)
+HRESULT CLEVEL_GamePlay::Ready_Layer_Player(const _tchar * pLayerTag)
 {
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
 	Info.vPos = m_vPlayerPos;
-
+	Info.iLevelIndex = LEVEL_GAMEPLAY;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
 
@@ -182,7 +201,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player(const _tchar * pLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
+HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 {
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
@@ -207,7 +226,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 }
 
 
-HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _tchar * pLayerTag)
+HRESULT CLEVEL_GamePlay::Ready_Layer_Camera(const _tchar * pLayerTag)
 {
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
@@ -238,44 +257,52 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera(const _tchar * pLayerTag)
 	return S_OK;
 }
 
-HRESULT CLevel_GamePlay::Ready_Layer_UI(const _tchar * pLayerTag)
+HRESULT CLEVEL_GamePlay::Ready_Layer_UI(const _tchar * pLayerTag)
 {
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_GAMEPLAY, pLayerTag)))
+	CGameObject::INFO tInfo;
+
+	tInfo.iLevelIndex = LEVEL_GAMEPLAY;
+	tInfo.bHit = false;
+	tInfo.bDead = false;
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpBlank"), LEVEL_GAMEPLAY, pLayerTag)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpBlank"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpLogo"), LEVEL_GAMEPLAY, pLayerTag)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpLogo"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_IconBar"), LEVEL_GAMEPLAY, pLayerTag, &m_IconRender)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuickSlot"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_InventoryIcon"), LEVEL_GAMEPLAY, pLayerTag, &m_IconRender)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_IconBar"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_EquipIcon"), LEVEL_GAMEPLAY, pLayerTag, &m_IconRender)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_InventoryIcon"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkillIcon"), LEVEL_GAMEPLAY, pLayerTag, &m_IconRender)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_EquipIcon"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_StatsIcon"), LEVEL_GAMEPLAY, pLayerTag, &m_IconRender)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkillIcon"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuickSlot"), LEVEL_GAMEPLAY, pLayerTag)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_StatsIcon"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
+
+
 
 	Safe_Release(pGameInstance);
 
 	return S_OK;
 }
 
-_float3 CLevel_GamePlay::Get_CollisionPos(CGameObject * pDest, CGameObject * pSour)
+_float3 CLEVEL_GamePlay::Get_CollisionPos(CGameObject * pDest, CGameObject * pSour)
 {
 	_float3 vLook = *(_float3*)&pDest->Get_World().m[3][0] - *(_float3*)&pSour->Get_World().m[3][0];
 	D3DXVec3Normalize(&vLook, &vLook);
@@ -292,6 +319,7 @@ _float3 CLevel_GamePlay::Get_CollisionPos(CGameObject * pDest, CGameObject * pSo
 
 	return CollisionPos;
 }
+
 
 
 void CLevel_GamePlay::LoadData()
@@ -395,7 +423,7 @@ void CLevel_GamePlay::LoadData()
 	CloseHandle(hFile);
 }
 
-void CLevel_GamePlay::Create_Rain(_float fTimeDelta)
+void CLEVEL_GamePlay::Create_Rain(_float fTimeDelta)
 {
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
@@ -424,20 +452,20 @@ void CLevel_GamePlay::Create_Rain(_float fTimeDelta)
 }
 
 
-CLevel_GamePlay * CLevel_GamePlay::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
+CLEVEL_GamePlay * CLEVEL_GamePlay::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
-	CLevel_GamePlay*	pInstance = new CLevel_GamePlay(pGraphic_Device);
+	CLEVEL_GamePlay*	pInstance = new CLEVEL_GamePlay(pGraphic_Device);
 
 	if (FAILED(pInstance->Initialize()))
 	{
-		ERR_MSG(TEXT("Failed to Created : CLevel_GamePlay"));
+		ERR_MSG(TEXT("Failed to Created : CLEVEL_GAMEPLAY"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CLevel_GamePlay::Free()
+void CLEVEL_GamePlay::Free()
 {
 	__super::Free();
 

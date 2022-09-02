@@ -6,11 +6,11 @@
 
 BEGIN(Client)
 
-class CLevel_GamePlay final : public CLevel
+class CLEVEL_GamePlay final : public CLevel
 {
 private:
-	CLevel_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device);
-	virtual ~CLevel_GamePlay() = default;
+	CLEVEL_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device);
+	virtual ~CLEVEL_GamePlay() = default;
 
 public:
 	virtual HRESULT Initialize();
@@ -50,7 +50,7 @@ private:
 	void Create_Rain(_float fTimeDelta);
 
 public:
-	static CLevel_GamePlay* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
+	static CLEVEL_GamePlay* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual void Free() override;
 private:
 	_float fSound = 0.f;

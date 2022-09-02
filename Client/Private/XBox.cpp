@@ -25,10 +25,12 @@ HRESULT CXBox::Initialize(void * pArg)
 
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
-	m_Recive = (Pos*)pArg;//여기서 바꾸면 상위개체가 영향을 받음 나는 상위개체가 하위 개체한테만 영향을 받게 하고싶음
+	memcpy(&m_tInfo, pArg, sizeof(INFO));
+
+	
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
-	m_fX = m_Recive->fPosX;
-	m_fY = m_Recive->fPosY;
+	m_fX = m_tInfo.vPos.x;
+	m_fY = m_tInfo.vPos.y;
 	m_fSizeX = 24.0f;
 	m_fSizeY = 24.0f;
 
@@ -61,7 +63,8 @@ void CXBox::Tick(_float fTimeDelta)
 		m_bCheck = true;
 		if (GetKeyState(VK_LBUTTON) & 0x8000)
 		{
-			m_Recive->bNext = true;
+			m_tInfo.pTarget->Set_Hit(0, {0.f,0.f,0.f});
+			Set_Dead();
 		}
 	}
 	else
@@ -72,10 +75,7 @@ void CXBox::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-	if (m_Recive->bNext == true)
-	{
-		Set_Dead();
-	}
+
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 }
@@ -118,7 +118,7 @@ HRESULT CXBox::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_XBox"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_XBox"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */
