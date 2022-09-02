@@ -29,14 +29,12 @@ HRESULT CDmgFont::Initialize(void* pArg)
 		return E_FAIL;
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
-	m_tInfo.vPos.y += 0.85f;
-	_float3 vScale = { 0.3f,0.3f,1.f };
-	m_pTransformCom->Set_Scaled(vScale);
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
-	m_vPos = m_tInfo.vPos;
 	m_eCurState = STATE_END;
-	
 	m_tInfo.bDead = false;
+
+	Set_State();
+	Set_vPos();
+
 
 	return S_OK;
 }
@@ -44,7 +42,7 @@ HRESULT CDmgFont::Initialize(void* pArg)
 void CDmgFont::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	Set_State();
+	
 	Jump();
 	
 
@@ -60,7 +58,7 @@ void CDmgFont::Late_Tick(_float fTimeDelta)
 	OnBillboard();
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
 HRESULT CDmgFont::Render()
@@ -70,12 +68,6 @@ HRESULT CDmgFont::Render()
 
 	Off_SamplerState();
 
-	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-		return E_FAIL;
-
-
-	//상태에 따라 바인드하는 함수
-	
 
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
@@ -100,8 +92,16 @@ void CDmgFont::OnBillboard()
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
 	_float3 vScale = { 0.3f,0.3f,1.f };
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
-	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+
+	m_pTransformCom2->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
+	m_pTransformCom2->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+
+	m_pTransformCom3->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
+	m_pTransformCom3->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+
+	m_pTransformCom4->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
+	m_pTransformCom4->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
 }
 
 
@@ -137,13 +137,8 @@ void CDmgFont::Set_State()
 	{
 		m_iDraw[i] = iScore % 10;
 		iScore /= 10;
-	/*	if (iScore < 100)
-			m_iDraw[0] = iScore % 10;*/
 	}
-	//m_iDraw[0] = iScore / 1000;
-	//m_iDraw[1] = (iScore % 1000) / 100;
-	//m_iDraw[2] = (iScore % 1000) / 10;
-	//m_iDraw[3] = iScore % 10;
+
 	if (m_iDraw[3] != 0)
 		m_eCurState = ONE;
 	if (m_iDraw[2] != 0)
@@ -154,96 +149,86 @@ void CDmgFont::Set_State()
 		m_eCurState = FOUR;
 }
 
+void CDmgFont::Set_vPos()
+{
+	m_tInfo.vPos.y += 0.85f;
+	_float3 vScale = { 0.3f,0.3f,1.f };
+	m_pTransformCom->Set_Scaled(vScale);
+	m_pTransformCom2->Set_Scaled(vScale);
+	m_pTransformCom3->Set_Scaled(vScale);
+	m_pTransformCom4->Set_Scaled(vScale);
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
+	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	vPos.x -= 0.17f;
+	m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos);
+	vPos.x -= 0.17f;
+	m_pTransformCom3->Set_State(CTransform::STATE_POSITION, vPos);
+	vPos.x -= 0.17f;
+	m_pTransformCom4->Set_State(CTransform::STATE_POSITION, vPos);
+}
+
 void CDmgFont::Jump()
 {
-	m_fMoveX += 0.015f;
+	m_fMoveX += 0.005f;
 	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	vPos.y += 2.5 * m_fTime - (7.8f * m_fTime * m_fTime * 0.5f);
+	vPos.y += 1.5 * m_fTime - (19.8f * m_fTime * m_fTime * 0.5f);
 	vPos.x += m_fMoveX;
-	m_fTime += 0.025f;
+	m_fTime += 0.001f;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
-	
+
+	_float3 vPos2 = m_pTransformCom2->Get_State(CTransform::STATE_POSITION);
+	vPos2.y += 1.5 * m_fTime - (19.8f * m_fTime * m_fTime * 0.5f);
+	vPos2.x += m_fMoveX;
+	m_fTime += 0.001f;
+	m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos2);
+
+	_float3 vPos3 = m_pTransformCom3->Get_State(CTransform::STATE_POSITION);
+	vPos3.y += 1.5 * m_fTime - (19.8f * m_fTime * m_fTime * 0.5f);
+	vPos3.x += m_fMoveX;
+	m_fTime += 0.001f;
+	m_pTransformCom3->Set_State(CTransform::STATE_POSITION, vPos3);
+
+	_float3 vPos4 = m_pTransformCom4->Get_State(CTransform::STATE_POSITION);
+	vPos4.y += 1.5 * m_fTime - (19.8f * m_fTime * m_fTime * 0.5f);
+	vPos4.x += m_fMoveX;
+	m_fTime += 0.001f;
+	m_pTransformCom4->Set_State(CTransform::STATE_POSITION, vPos4);
 	
 }
 
 HRESULT CDmgFont::TextureRender()
 {
-	_float3 vPos;
+	
 	switch (m_eCurState)
 	{
-	case ONE:
-		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_iDraw[3])))
-			return E_FAIL;
-		m_pVIBufferCom1->Render();
-		break;
-	case TWO:
-		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_iDraw[3])))
-			return E_FAIL;
-		m_pVIBufferCom1->Render();
-		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vPos.x -= 0.15f;
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
-		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-			return E_FAIL;
-		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_iDraw[2])))
-			return E_FAIL;
-		m_pVIBufferCom2->Render();
-		break;
-	case THREE:
-		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_iDraw[3])))
-			return E_FAIL;
-		m_pVIBufferCom1->Render();
-		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vPos.x -= 0.15f;
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
-		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-			return E_FAIL;
-		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_iDraw[2])))
-			return E_FAIL;
-		m_pVIBufferCom2->Render();
-		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vPos.x -= 0.15f;
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
-		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-			return E_FAIL;
-		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_iDraw[1])))
-			return E_FAIL;
-		m_pVIBufferCom3->Render();
-		break;
 	case FOUR:
-		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_iDraw[3])))
-			return E_FAIL;
-		m_pVIBufferCom1->Render();
-		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vPos.x -= 0.15f;
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
-		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-			return E_FAIL;
-		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_iDraw[2])))
-			return E_FAIL;
-		m_pVIBufferCom2->Render();
-		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vPos.x -= 0.15f;
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
-		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-			return E_FAIL;
-		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_iDraw[1])))
-			return E_FAIL;
-		m_pVIBufferCom3->Render();
-		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vPos.x -= 0.15f;
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
-		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+		if (FAILED(m_pTransformCom4->Bind_OnGraphicDev()))
 			return E_FAIL;
 		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_iDraw[0])))
 			return E_FAIL;
 		m_pVIBufferCom4->Render();
+	case THREE:
+		if (FAILED(m_pTransformCom3->Bind_OnGraphicDev()))
+			return E_FAIL;
+		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_iDraw[1])))
+			return E_FAIL;
+		m_pVIBufferCom3->Render();
+	case TWO:
+		if (FAILED(m_pTransformCom2->Bind_OnGraphicDev()))
+			return E_FAIL;
+		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_iDraw[2])))
+			return E_FAIL;
+		m_pVIBufferCom2->Render();
+	case ONE:
+		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+			return E_FAIL;
+		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_iDraw[3])))
+			return E_FAIL;
+		m_pVIBufferCom1->Render();
 		break;
 	default:
 		break;
 	}
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPos);
 	return S_OK;
 }
 
@@ -276,7 +261,12 @@ HRESULT CDmgFont::SetUp_Components()
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
-
+	if (FAILED(__super::Add_Components(TEXT("Com_Transform2"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom2, &TransformDesc)))
+		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Transform3"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom3, &TransformDesc)))
+		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Transform4"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom4, &TransformDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -337,6 +327,9 @@ void CDmgFont::Free()
 	__super::Free();
 
 	Safe_Release(m_pTransformCom);
+	Safe_Release(m_pTransformCom2);
+	Safe_Release(m_pTransformCom3);
+	Safe_Release(m_pTransformCom4);
 	Safe_Release(m_pVIBufferCom1);
 	Safe_Release(m_pVIBufferCom2);
 	Safe_Release(m_pVIBufferCom3);

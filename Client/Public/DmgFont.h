@@ -31,6 +31,9 @@ private: /* For.Components */
 	CTexture*				m_pTextureCom = nullptr;
 	CRenderer*				m_pRendererCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
+	CTransform*				m_pTransformCom2 = nullptr;
+	CTransform*				m_pTransformCom3 = nullptr;
+	CTransform*				m_pTransformCom4 = nullptr;
 	CVIBuffer_Rect*			m_pVIBufferCom1 = nullptr;
 	CVIBuffer_Rect*			m_pVIBufferCom2 = nullptr;
 	CVIBuffer_Rect*			m_pVIBufferCom3 = nullptr;
@@ -51,6 +54,7 @@ private:
 	HRESULT TextureRender();
 	void	OnBillboard();
 	void	Set_State();
+	void	Set_vPos();
 	void	Jump();
 public:
 	static CDmgFont* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

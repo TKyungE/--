@@ -30,11 +30,6 @@ HRESULT CFireSpear::Initialize(void* pArg)
 		return E_FAIL;
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
-	m_tInfo.vPos.y += 5.5f;
-	_float3 vScale = { 2.f,3.f,1.f };
-	m_pTransformCom->Set_Scaled(vScale);
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
-
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;
 	m_tFrame.iFrameStart = 0;
@@ -44,7 +39,7 @@ HRESULT CFireSpear::Initialize(void* pArg)
 	m_tInfo.fX = 1.f;
 	m_tInfo.iDmg = 66;
 	m_tInfo.iMoney = 33;
-	
+	Set_vPos();
 	return S_OK;
 }
 
@@ -55,6 +50,7 @@ void CFireSpear::Tick(_float fTimeDelta)
 	OnTerrain();
 
 	m_pTransformCom->Go_Down(fTimeDelta);
+	m_pTransformCom2->Go_Down(fTimeDelta);
 	Move_Frame(fTimeDelta);
 	m_fDeadTime += fTimeDelta;
 	if (m_fDeadTime > 2.f)
@@ -65,7 +61,7 @@ void CFireSpear::Tick(_float fTimeDelta)
 	{
 		Create_Fire(TEXT("Layer_Skill"));
 	}
-
+	
 }
 
 void CFireSpear::Late_Tick(_float fTimeDelta)
@@ -74,11 +70,10 @@ void CFireSpear::Late_Tick(_float fTimeDelta)
 
 
 	Motion_Change();
-	OnBillboard();
-
+	
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }
 
 HRESULT CFireSpear::Render()
@@ -87,17 +82,20 @@ HRESULT CFireSpear::Render()
 		return E_FAIL;
 	Off_SamplerState();
 
-	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-		return E_FAIL;
-
-
-	//상태에 따라 바인드하는 함수
-	TextureRender();
 
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
 
+	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+		return E_FAIL;
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+		return E_FAIL;
 	m_pVIBufferCom->Render();
+
+	if (FAILED(m_pTransformCom2->Bind_OnGraphicDev()))
+		return E_FAIL;
+
+	m_pVIBufferCom2->Render();
 
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
@@ -120,6 +118,18 @@ HRESULT CFireSpear::Create_Fire(const _tchar * pLayerTag)
 	Safe_Release(pGameInstance);
 
 	return S_OK;
+}
+
+void CFireSpear::Set_vPos()
+{
+	m_tInfo.vPos.y += 5.5f;
+	_float3 vScale = { 2.f,3.f,1.f };
+	m_pTransformCom->Set_Scaled(vScale);
+	m_pTransformCom2->Set_Scaled(vScale);
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
+	m_pTransformCom2->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
+	_float3 vUp = { 0.f,1.f,0.f };
+	m_pTransformCom2->Turn(vUp, 1.f);
 }
 
 void CFireSpear::Motion_Change()
@@ -152,31 +162,7 @@ void CFireSpear::Move_Frame(_float fTimeDelta)
 
 }
 
-HRESULT CFireSpear::TextureRender()
-{
-	switch (m_eCurState)
-	{
-	case IDLE:
-		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
-			return E_FAIL;
-		break;
-	default:
-		break;
-	}
-	return S_OK;
-}
-void CFireSpear::OnBillboard()
-{
-	_float4x4		ViewMatrix;
 
-	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
-
-	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-	_float3 vScale = { 2.f,3.f,1.f };
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
-	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
-}
 void CFireSpear::OnTerrain()
 {
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
@@ -192,6 +178,9 @@ void CFireSpear::OnTerrain()
 		return;
 
 	_float3			vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+	m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPosition);
 
 	if (vPosition.y < pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 1.f))
 		Set_Dead();
@@ -211,7 +200,8 @@ HRESULT CFireSpear::SetUp_Components()
 	/* For.Com_VIBuffer */
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
-
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer2"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom2)))
+		return E_FAIL;
 
 	/* For.Com_Transform */
 	CTransform::TRANSFORMDESC		TransformDesc;
@@ -223,7 +213,8 @@ HRESULT CFireSpear::SetUp_Components()
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
 
-
+	if (FAILED(__super::Add_Components(TEXT("Com_Transform2"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom2, &TransformDesc)))
+		return E_FAIL;
 	return S_OK;
 }
 HRESULT CFireSpear::On_SamplerState()
@@ -253,7 +244,9 @@ HRESULT CFireSpear::SetUp_RenderState()
 {
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
-
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	m_pGraphic_Device->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	m_pGraphic_Device->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
@@ -263,7 +256,7 @@ HRESULT CFireSpear::SetUp_RenderState()
 
 HRESULT CFireSpear::Release_RenderState()
 {
-	// m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
@@ -305,7 +298,9 @@ void CFireSpear::Free()
 	__super::Free();
 
 	Safe_Release(m_pTransformCom);
+	Safe_Release(m_pTransformCom2);
 	Safe_Release(m_pVIBufferCom);
+	Safe_Release(m_pVIBufferCom2);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pTextureCom);
 }

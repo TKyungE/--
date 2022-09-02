@@ -163,20 +163,23 @@
     <Filter Include="03.Effect\Default\06.Shadow">
       <UniqueIdentifier>{71afcecb-9d8c-4b4e-8463-874539fb788f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.UI\StateUi\MpBar">
-      <UniqueIdentifier>{e57d740a-e513-482c-87fe-be32f44144fc}</UniqueIdentifier>
+    <Filter Include="02.GameObject\BackGroundObj">
+      <UniqueIdentifier>{b35db3b3-f917-40d2-b5a9-4e0c5b044c63}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.UI\StateUi\ExpBar\ExpBlank">
-      <UniqueIdentifier>{2a0ccc7c-36fc-46a6-8ad2-024906b6e864}</UniqueIdentifier>
+    <Filter Include="02.GameObject\Pet">
+      <UniqueIdentifier>{a58f4177-fe19-4f3b-85ac-373f7be72c82}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.UI\StateUi\ExpBar\ExpLogo">
-      <UniqueIdentifier>{2cbd2eb5-1b5c-427e-a671-2dcedfd24939}</UniqueIdentifier>
+    <Filter Include="02.GameObject\Pet\00.Poring">
+      <UniqueIdentifier>{e1de076f-601e-4138-bca7-959e3801c464}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Logo">
-      <UniqueIdentifier>{ac523c5e-5728-431e-85f7-3de24701b5ae}</UniqueIdentifier>
+    <Filter Include="02.GameObject\BackGroundObj\House">
+      <UniqueIdentifier>{36349508-8e85-4729-bab5-e5cb61236108}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Logo\NextButton">
-      <UniqueIdentifier>{ed29e46e-8038-4634-9e8c-d36e54c0e955}</UniqueIdentifier>
+    <Filter Include="02.GameObject\BackGroundObj\Rect">
+      <UniqueIdentifier>{a101335d-7c21-480f-9001-eb8a7c18702d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Tree">
+      <UniqueIdentifier>{440c2e30-1a42-44fd-929e-2838a750507e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -327,21 +330,20 @@
     <ClInclude Include="..\public\Shadow.h">
       <Filter>03.Effect\Default\06.Shadow</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Tree.h" />
-    <ClInclude Include="..\Public\MpBar.h">
-      <Filter>04.UI\StateUi\MpBar</Filter>
+    <ClInclude Include="..\public\ExpBlank.h" />
+    <ClInclude Include="..\public\ExpLogo.h" />
+    <ClInclude Include="..\Public\MpBar.h" />
+    <ClInclude Include="..\public\Poring.h">
+      <Filter>02.GameObject\Pet\00.Poring</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\ExpBlank.h">
-      <Filter>04.UI\StateUi\ExpBar\ExpBlank</Filter>
+    <ClInclude Include="..\public\House.h">
+      <Filter>02.GameObject\BackGroundObj\House</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\ExpLogo.h">
-      <Filter>04.UI\StateUi\ExpBar\ExpLogo</Filter>
+    <ClInclude Include="..\Public\BackGroundRect.h">
+      <Filter>02.GameObject\BackGroundObj\Rect</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Logo.h">
-      <Filter>02.GameObject\Logo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\NextButton.h">
-      <Filter>02.GameObject\Logo\NextButton</Filter>
+    <ClInclude Include="..\Public\BackGroundTree.h">
+      <Filter>02.GameObject\BackGroundObj\Tree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -480,21 +482,20 @@
     <ClCompile Include="..\private\Shadow.cpp">
       <Filter>03.Effect\Default\06.Shadow</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Tree.cpp" />
-    <ClCompile Include="..\Private\MpBar.cpp">
-      <Filter>04.UI\StateUi\MpBar</Filter>
+    <ClCompile Include="..\private\ExpBlank.cpp" />
+    <ClCompile Include="..\private\ExpLogo.cpp" />
+    <ClCompile Include="..\Private\MpBar.cpp" />
+    <ClCompile Include="..\private\Poring.cpp">
+      <Filter>02.GameObject\Pet\00.Poring</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\ExpBlank.cpp">
-      <Filter>04.UI\StateUi\ExpBar\ExpBlank</Filter>
+    <ClCompile Include="..\private\House.cpp">
+      <Filter>02.GameObject\BackGroundObj\House</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\ExpLogo.cpp">
-      <Filter>04.UI\StateUi\ExpBar\ExpLogo</Filter>
+    <ClCompile Include="..\Private\BackGroundRect.cpp">
+      <Filter>02.GameObject\BackGroundObj\Rect</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Logo.cpp">
-      <Filter>02.GameObject\Logo</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\NextButton.cpp">
-      <Filter>02.GameObject\Logo\NextButton</Filter>
+    <ClCompile Include="..\Private\BackGroundTree.cpp">
+      <Filter>02.GameObject\BackGroundObj\Tree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

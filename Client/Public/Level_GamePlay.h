@@ -30,12 +30,23 @@ private:
 private:
 	_float3 Get_CollisionPos(CGameObject* pDest, CGameObject* pSour);
 
-	void SpawnData();
 
+private:		// 파일입출력 라인
+	void LoadData();
+
+	typedef struct tagIndexPos		// 백그라운드 정보 읽기
+	{
+		_float3  BackGroundPos;
+		_float3 vScale;
+		_uint	iIndex;
+	}INDEXPOS;
+
+	vector<INDEXPOS>	m_vecTree;
+	vector<INDEXPOS>	m_vecIndex;
 	_float3	m_vPlayerPos;
 	vector<_float3> m_vMonsterPos1;
-	
 
+private:
 	void Create_Rain(_float fTimeDelta);
 
 public:

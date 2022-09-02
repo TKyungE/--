@@ -6,6 +6,8 @@
 #include "SoundMgr.h"
 #include "CollisionMgr.h"
 #include "KeyMgr.h"
+#include "BackGroundRect.h" 
+#include "BackGroundTree.h"
 
 CLevel_GamePlay::CLevel_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -18,7 +20,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
-	SpawnData();
+	LoadData();
 
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
@@ -92,6 +94,7 @@ void CLevel_GamePlay::Late_Tick(_float fTimeDelta)
 		{
 			
 			Dest->Set_Dead();
+
 			if(Dest->Get_Info().iMoney == 33)
 			{ 
 				fCollTime += fTimeDelta;
@@ -130,14 +133,35 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_GAMEPLAY, pLayerTag)))
 		return E_FAIL;
 
+	
 
-	for (_uint i = 0; i < 100; ++i)
+	for (auto& iter : m_vecIndex)
 	{
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Tree"), LEVEL_GAMEPLAY, pLayerTag)))
+		CBackGroundRect::INDEXPOS indexpos;
+		ZeroMemory(&indexpos, sizeof(CBackGroundRect::INDEXPOS));
+		indexpos.iIndex = iter.iIndex;
+		indexpos.vScale = iter.vScale;
+		indexpos.vPos = iter.BackGroundPos;
+
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundRect"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
+			return E_FAIL;
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
 
-	
+
+	for (auto& iter : m_vecTree)
+	{
+		CBackGroundTree::INDEXPOS indexpos;
+		ZeroMemory(&indexpos, sizeof(CBackGroundTree::INDEXPOS));
+		indexpos.iIndex = iter.iIndex;
+		indexpos.vScale = iter.vScale;
+		indexpos.vPos = iter.BackGroundPos;
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundTree"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
+			return E_FAIL;
+	}
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -270,7 +294,7 @@ _float3 CLevel_GamePlay::Get_CollisionPos(CGameObject * pDest, CGameObject * pSo
 }
 
 
-void CLevel_GamePlay::SpawnData()
+void CLevel_GamePlay::LoadData()
 {
 	HANDLE hFile = CreateFile(TEXT("../../Data/Pos.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
@@ -279,23 +303,93 @@ void CLevel_GamePlay::SpawnData()
 
 	DWORD	dwByte = 0;
 
-	_float3 Pos{};
 	_float3 vPos1;
+	_uint iMSize, iIndexSize, iTreeSize;
+	_tchar str1[MAX_PATH];
+	_tchar str2[MAX_PATH];
+	_tchar str3[MAX_PATH];
 
 	ReadFile(hFile, vPos1, sizeof(_float3), &dwByte, nullptr);
 	m_vPlayerPos = vPos1;
+
+	ReadFile(hFile, str1, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str2, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+	iMSize = stoi(str1);
+	iIndexSize = stoi(str2);
+	iTreeSize = stoi(str2);
+
 	while (true)
 	{
-		ReadFile(hFile, &Pos, sizeof(_float3), &dwByte, nullptr);
+		for (_uint i = 0; i < iMSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+
+			_float3 Pos;
+
+			ReadFile(hFile, &Pos, sizeof(_float3), &dwByte, nullptr);
+
+			_float3 vPos;
+
+			vPos = Pos;
+
+			m_vMonsterPos1.push_back(vPos);
+
+			
+		}
+
+		for (_uint i = 0; i < iIndexSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+
+			_float3 BackPos, Scale;
+			_tchar str3[MAX_PATH];
+			_uint Index;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &Scale, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+
+			INDEXPOS IndexPos;
+
+			IndexPos.BackGroundPos = BackPos;
+			IndexPos.vScale = Scale;
+			IndexPos.iIndex = Index;
+
+			m_vecIndex.push_back(IndexPos);
+		}
+
+		for (_uint i = 0; i < iTreeSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+
+			_float3 BackPos, Scale;
+			_tchar str3[MAX_PATH];
+			_uint Index;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &Scale, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+
+			INDEXPOS TreePos;
+
+			TreePos.BackGroundPos = BackPos;
+			TreePos.vScale = Scale;
+			TreePos.iIndex = Index;
+
+			m_vecTree.push_back(TreePos);
+		}
 
 		if (0 == dwByte)
 			break;
-
-		_float3 vPos;
-
-		vPos = Pos;
-
-		m_vMonsterPos1.push_back(vPos);
 	}
 
 	CloseHandle(hFile);
