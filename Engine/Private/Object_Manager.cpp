@@ -124,9 +124,9 @@ CLayer * CObject_Manager::Find_Layer(_uint iLevelIndex, const _tchar * pLayerTag
 	return iter->second;
 }
 
-CGameObject * CObject_Manager::Find_Object(const _tchar * pLayerTag, _uint iIndex)
+CGameObject * CObject_Manager::Find_Object(_uint iLevelIndex, const _tchar * pLayerTag, _uint iIndex)
 {
-	CLayer* pLayer = Find_Layer(iIndex,pLayerTag);
+	CLayer* pLayer = Find_Layer(iLevelIndex, pLayerTag);
 	if (nullptr == pLayer)
 		return nullptr;
 

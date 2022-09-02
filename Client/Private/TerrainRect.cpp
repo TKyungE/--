@@ -5,13 +5,17 @@
 
 CTerrainRect::CTerrainRect(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
+	, m_isCloned(false)
 {
-	ZeroMemory(&m_tInfo, sizeof(RECTINFO));
+	ZeroMemory(&m_tRectInfo, sizeof(RECTINFO));
 }
 
 CTerrainRect::CTerrainRect(const CTerrainRect & rhs)
 	: CGameObject(rhs)
+	, m_iIndex(rhs.m_iIndex)
+	, m_isCloned(true)
 {
+	memcpy(&m_tRectInfo, &rhs.m_tRectInfo, sizeof(RECTINFO));
 }
 
 HRESULT CTerrainRect::Initialize_Prototype(void)
@@ -30,7 +34,7 @@ HRESULT CTerrainRect::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	memcpy(&m_tInfo, pArg, sizeof(RECTINFO));
+	memcpy(&m_tRectInfo, pArg, sizeof(RECTINFO));
 
 	if (FAILED(m_pGraphic_Device->CreateVertexBuffer(4 * sizeof(VTXTEX), 0, D3DFVF_XYZ | D3DFVF_TEX1, D3DPOOL_MANAGED, &m_pVBuffer, 0)))
 		return E_FAIL;
@@ -42,26 +46,13 @@ HRESULT CTerrainRect::Initialize(void * pArg)
 	FACEINDICES16* pIndices = nullptr;
 
 	m_pVBuffer->Lock(0, 0, (void**)&pVertices, 0);
-
-	pVertices[0].vPosition = m_tInfo.vecPointPos[0];
-	pVertices[0].vPosition.y += 0.001f;
-	pVertices[0].vTexture = m_tInfo.vecPointTex[0];
-
-	pVertices[1].vPosition = m_tInfo.vecPointPos[1];
-	pVertices[1].vPosition.y += 0.001f;
-	pVertices[1].vTexture = m_tInfo.vecPointTex[1];
-
-	pVertices[2].vPosition = m_tInfo.vecPointPos[2];
-	pVertices[2].vPosition.y += 0.001f;
-	pVertices[2].vTexture = m_tInfo.vecPointTex[2];
-
-	pVertices[3].vPosition = m_tInfo.vecPointPos[3];
-	pVertices[3].vPosition.y += 0.001f;
-	pVertices[3].vTexture = m_tInfo.vecPointTex[3];
-
-	m_pVBuffer->Unlock();
-
 	m_pIBuffer->Lock(0, 0, (void**)&pIndices, 0);
+
+	for (_uint i = 0; i < 4; ++i)
+	{
+		pVertices[i].vPosition = m_tRectInfo.VertexArray[i];
+		pVertices[i].vTexture = m_tRectInfo.TextureArray[i];
+	}
 
 	pIndices[0]._0 = 0;
 	pIndices[0]._1 = 1;
@@ -71,6 +62,7 @@ HRESULT CTerrainRect::Initialize(void * pArg)
 	pIndices[1]._1 = 2;
 	pIndices[1]._2 = 3;
 
+	m_pVBuffer->Unlock();
 	m_pIBuffer->Unlock();
 
 	return S_OK;
@@ -97,7 +89,7 @@ HRESULT CTerrainRect::Render(void)
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tInfo.iTex)))
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tRectInfo.iTex)))
 		return E_FAIL;
 
 	if (nullptr == m_pGraphic_Device)
@@ -165,17 +157,13 @@ _float4x4 CTerrainRect::Get_World(void)
 
 void CTerrainRect::Free(void)
 {
-	Safe_Release(m_pIBuffer);
-	Safe_Release(m_pVBuffer);
-	
-	m_tInfo.vecPointPos.clear();
-	////m_tInfo.vecPointPos.shrink_to_fit();
-
-	m_tInfo.vecPointTex.clear();
-	//m_tInfo.vecPointTex.clear();
-	////m_tInfo.vecPointTex.shrink_to_fit();
-
 	__super::Free();
+
+	if (true == m_isCloned)
+	{
+		Safe_Release(m_pIBuffer);
+		Safe_Release(m_pVBuffer);
+	}
 
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pTransformCom);

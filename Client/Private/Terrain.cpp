@@ -145,7 +145,7 @@ HRESULT CTerrain::OnLoadData(const _tchar* pFilePath)
 		CTerrainRect::RECTINFO tRectInfo;
 
 		ReadFile(hFile, &tRectInfo.vPos, sizeof(tRectInfo.vPos), &dwByte, nullptr);
-		
+
 		_tchar szTex[MAX_PATH];
 		ReadFile(hFile, &szTex, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 
@@ -159,8 +159,8 @@ HRESULT CTerrain::OnLoadData(const _tchar* pFilePath)
 			ReadFile(hFile, &vPos, sizeof(_float3), &dwByte, nullptr);
 			ReadFile(hFile, &vTex, sizeof(_float2), &dwByte, nullptr);
 
-			tRectInfo.vecPointPos.push_back(vPos);
-			tRectInfo.vecPointTex.push_back(vTex);
+			tRectInfo.VertexArray[j] = vPos;
+			tRectInfo.TextureArray[j] = vTex;
 		}
 
 		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TerrainRect"), LEVEL_GAMEPLAY, TEXT("Layer_TerrainRect"), &tRectInfo)))
