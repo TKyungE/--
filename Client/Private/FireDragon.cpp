@@ -22,16 +22,16 @@ HRESULT CFireDragon::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_FireDragon_IDLE_Front"), (CComponent**)&m_pTextureComIDLE_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_FireDragon_IDLE_Front"), (CComponent**)&m_pTextureComIDLE_Front)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_FireDragon_IDLE_Back"), (CComponent**)&m_pTextureComIDLE_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_FireDragon_IDLE_Back"), (CComponent**)&m_pTextureComIDLE_Back)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Attack"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_FireDragon_Attack"), (CComponent**)&m_pTextureComAttack)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Attack"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_FireDragon_Attack"), (CComponent**)&m_pTextureComAttack)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Dead"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_FireDragon_Dead"), (CComponent**)&m_pTextureComDead)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Dead"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_FireDragon_Dead"), (CComponent**)&m_pTextureComDead)))
 		return E_FAIL;
 	CTransform::TRANSFORMDESC TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
@@ -115,11 +115,11 @@ void CFireDragon::OnTerrain()
 	if (nullptr == pGameInstance)
 		return;
 	Safe_AddRef(pGameInstance);
-	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_STATIC, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
+	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
 	if (nullptr == pVIBuffer_Terrain)
 		return;
 
-	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(LEVEL_STATIC, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
+	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
 	if (nullptr == pTransform_Terrain)
 		return;
 

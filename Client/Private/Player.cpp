@@ -180,11 +180,11 @@ void CPlayer::OnTerrain()
 	if (nullptr == pGameInstance)
 		return;
 	Safe_AddRef(pGameInstance);
-	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_STATIC, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
+	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(m_tInfo.iLevelIndex, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
 	if (nullptr == pVIBuffer_Terrain)
 		return;
 
-	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(LEVEL_STATIC, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
+	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(m_tInfo.iLevelIndex, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
 	if (nullptr == pTransform_Terrain)
 		return;
 
@@ -216,26 +216,26 @@ HRESULT CPlayer::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBuffer)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Front"), m_tInfo.iLevelIndex, TEXT("Prototype_Component_Texture_IDLE_Front"), (CComponent**)&m_pTextureComIDLE_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_IDLE_Front"), (CComponent**)&m_pTextureComIDLE_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Back"), m_tInfo.iLevelIndex, TEXT("Prototype_Component_Texture_IDLE_Back"), (CComponent**)&m_pTextureComIDLE_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_IDLE_Back"), (CComponent**)&m_pTextureComIDLE_Back)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Front"), m_tInfo.iLevelIndex, TEXT("Prototype_Component_Texture_Move_Front"), (CComponent**)&m_pTextureComMove_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Move_Front"), (CComponent**)&m_pTextureComMove_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Back"), m_tInfo.iLevelIndex, TEXT("Prototype_Component_Texture_Move_Back"), (CComponent**)&m_pTextureComMove_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Move_Back"), (CComponent**)&m_pTextureComMove_Back)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Skill_Front"), m_tInfo.iLevelIndex, TEXT("Prototype_Component_Texture_Skill_Front"), (CComponent**)&m_pTextureComSkill_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Skill_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Skill_Front"), (CComponent**)&m_pTextureComSkill_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Skill_Back"), m_tInfo.iLevelIndex, TEXT("Prototype_Component_Texture_Skill_Back"), (CComponent**)&m_pTextureComSkill_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Skill_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Skill_Back"), (CComponent**)&m_pTextureComSkill_Back)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_IDLE_Front"), m_tInfo.iLevelIndex, TEXT("Prototype_Component_Texture_Ride_IDLE_Front"), (CComponent**)&m_pTextureComRide_IDLE_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_IDLE_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Ride_IDLE_Front"), (CComponent**)&m_pTextureComRide_IDLE_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_IDLE_Back"), m_tInfo.iLevelIndex, TEXT("Prototype_Component_Texture_Ride_IDLE_Back"), (CComponent**)&m_pTextureComRide_IDLE_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_IDLE_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Ride_IDLE_Back"), (CComponent**)&m_pTextureComRide_IDLE_Back)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_Move_Front"), m_tInfo.iLevelIndex, TEXT("Prototype_Component_Texture_Ride_Move_Front"), (CComponent**)&m_pTextureComRide_Move_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_Move_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Ride_Move_Front"), (CComponent**)&m_pTextureComRide_Move_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_Move_Back"), m_tInfo.iLevelIndex, TEXT("Prototype_Component_Texture_Ride_Move_Back"), (CComponent**)&m_pTextureComRide_Move_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_Move_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Ride_Move_Back"), (CComponent**)&m_pTextureComRide_Move_Back)))
 		return E_FAIL;
 
 	CTransform::TRANSFORMDESC TransformDesc;

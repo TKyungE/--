@@ -22,16 +22,16 @@ HRESULT CPoring::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Front"), m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Prototype_Component_Texture_Poring_IDLE_Front"), (CComponent**)&m_pTextureComIDLE_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Poring_IDLE_Front"), (CComponent**)&m_pTextureComIDLE_Front)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Back"), m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Prototype_Component_Texture_Poring_IDLE_Back"), (CComponent**)&m_pTextureComIDLE_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Poring_IDLE_Back"), (CComponent**)&m_pTextureComIDLE_Back)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Front"), m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Prototype_Component_Texture_Poring_Move_Front"), (CComponent**)&m_pTextureComMove_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Poring_Move_Front"), (CComponent**)&m_pTextureComMove_Front)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Back"), m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Prototype_Component_Texture_Poring_Move_Back"), (CComponent**)&m_pTextureComMove_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Poring_Move_Back"), (CComponent**)&m_pTextureComMove_Back)))
 		return E_FAIL;
 	CTransform::TRANSFORMDESC TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));

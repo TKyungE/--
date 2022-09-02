@@ -181,7 +181,7 @@
     <Filter Include="02.GameObject\Loading">
       <UniqueIdentifier>{529a4711-daf2-4b0b-9f46-064b8cdf1930}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Boss\FireDragon\Camera">
+    <Filter Include="02.GameObject\Camera">
       <UniqueIdentifier>{6ad6400b-9d5a-4bf0-9b0f-946a3f09392e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -226,7 +226,7 @@
       <Filter>02.GameObject\Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Camera_Dynamic.h">
-      <Filter>02.GameObject\Boss\FireDragon\Camera</Filter>
+      <Filter>02.GameObject\Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Sky.h">
       <Filter>02.GameObject\Sky</Filter>
@@ -384,7 +384,7 @@
       <Filter>02.GameObject\Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Camera_Dynamic.cpp">
-      <Filter>02.GameObject\Boss\FireDragon\Camera</Filter>
+      <Filter>02.GameObject\Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Sky.cpp">
       <Filter>02.GameObject\Sky</Filter>
