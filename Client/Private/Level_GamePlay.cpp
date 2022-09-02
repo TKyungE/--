@@ -8,6 +8,7 @@
 #include "KeyMgr.h"
 #include "BackGroundRect.h" 
 #include "BackGroundTree.h"
+#include "House.h"
 
 CLevel_GamePlay::CLevel_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -146,10 +147,20 @@ HRESULT CLevel_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundRect"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
 			return E_FAIL;
+		
+	}
+	for (auto& iter : m_vecHouse)
+	{
+		CHouse::INDEXPOS indexpos;
+		ZeroMemory(&indexpos, sizeof(CHouse::INDEXPOS));
+		indexpos.iIndex = iter.iIndex;
+		indexpos.vScale = iter.vScale;
+		indexpos.vPos = iter.BackGroundPos;
+
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
 			return E_FAIL;
-	}
 
+	}
 
 	for (auto& iter : m_vecTree)
 	{
@@ -304,10 +315,11 @@ void CLevel_GamePlay::LoadData()
 	DWORD	dwByte = 0;
 
 	_float3 vPos1;
-	_uint iMSize, iIndexSize, iTreeSize;
+	_uint iMSize, iIndexSize, iTreeSize, iHouseSize;
 	_tchar str1[MAX_PATH];
 	_tchar str2[MAX_PATH];
 	_tchar str3[MAX_PATH];
+	_tchar str4[MAX_PATH];
 
 	ReadFile(hFile, vPos1, sizeof(_float3), &dwByte, nullptr);
 	m_vPlayerPos = vPos1;
@@ -315,10 +327,14 @@ void CLevel_GamePlay::LoadData()
 	ReadFile(hFile, str1, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str2, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str4, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 
 	iMSize = stoi(str1);
 	iIndexSize = stoi(str2);
-	iTreeSize = stoi(str2);
+	iTreeSize = stoi(str3);
+	iHouseSize = stoi(str4);
+
+	
 
 	while (true)
 	{
@@ -386,6 +402,30 @@ void CLevel_GamePlay::LoadData()
 			TreePos.iIndex = Index;
 
 			m_vecTree.push_back(TreePos);
+		}
+
+		for (_uint i = 0; i < iHouseSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+
+			_float3 BackPos, Scale;
+			_tchar str3[MAX_PATH];
+			_uint Index;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &Scale, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+
+			INDEXPOS HousePos;
+
+			HousePos.BackGroundPos = BackPos;
+			HousePos.vScale = Scale;
+			HousePos.iIndex = Index;
+
+			m_vecHouse.push_back(HousePos);
 		}
 
 		if (0 == dwByte)

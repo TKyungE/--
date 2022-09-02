@@ -39,15 +39,13 @@ void CHouse::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
-	OnTerrain();
+	//OnTerrain();
 
 }
 
 void CHouse::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-
-
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
@@ -189,39 +187,34 @@ void CHouse::OnBillBoard(void)
 
 void CHouse::Set_vPos()
 {
-	_float fScale = 5.f;
-
-	m_pTransformCom->Set_Scaled({ fScale,fScale,fScale });
+	_float3 vIndexScale = m_IndexPos.vScale;
+	m_pTransformCom->Set_Scaled({ vIndexScale.x,vIndexScale.y,vIndexScale.z });
+	m_IndexPos.vPos.y += 0.5f * vIndexScale.y;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_IndexPos.vPos);
+
 	_float3 vUp = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	vUp.y += fScale + 1.f;
-	m_pTransformCom2->Set_Scaled({ fScale,fScale,fScale });
+	vUp.y += vIndexScale.y;
+	m_pTransformCom2->Set_Scaled({ vIndexScale.x,vIndexScale.y,vIndexScale.z });
 	m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vUp);
 
-	_float3 vUpTrun = { 0.f,1.f,0.f };
-	_float3 vLookTrun = { 0.f,0.f,1.f };
-	_float4x4 vOrginPos = m_pTransformCom->Get_WorldMatrix();
-	_float3 vPos = *(_float3*)&vOrginPos.m[3][0];
-	_float3 vPos2 = *(_float3*)&vOrginPos.m[3][0];
-	vPos.x = vPos.x + (fScale * 0.5f) - (fScale * 0.25f);// -0.1f;
-	vPos.y = vPos.y + (1.f + fScale) - 0.1f;
-	m_pTransformCom3->Set_Scaled({ fScale,fScale + 0.1f * fScale,fScale });
+
+	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_float3 vPos2 = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	vPos.x = vPos.x + (vIndexScale.x * 0.5f) - (vIndexScale.x * 0.25f);// -0.1f;
+	vPos.y = vPos.y + vIndexScale.y - 0.1f;
+	m_pTransformCom3->Set_Scaled({ vIndexScale.x,vIndexScale.y + 0.1f * vIndexScale.y,vIndexScale.z });
 	m_pTransformCom3->Set_State(CTransform::STATE_POSITION, vPos);
-	m_pTransformCom3->Turn(vUpTrun, 1.f);
-	m_pTransformCom3->Turn(vLookTrun, 0.3f);
+	m_pTransformCom3->Turn(_float3(0.f, 1.f, 0.f), 1.f);
+	m_pTransformCom3->Turn(_float3(0.f, 0.f, 1.f), 0.3f);
 
-	vPos2.x = vPos2.x - (fScale * 0.5f) + (fScale * 0.25f);// +0.1f;
-	vPos2.y = vPos2.y + (1.f + fScale) - 0.1f;
-	m_pTransformCom4->Set_Scaled({ fScale,fScale + 0.1f * fScale,fScale });
+
+	vPos2.x = vPos2.x - (vIndexScale.x * 0.5f) + (vIndexScale.x * 0.25f);
+	vPos2.y = vPos2.y + vIndexScale.y - 0.1f;
+	m_pTransformCom4->Set_Scaled({ vIndexScale.x,vIndexScale.y + 0.1f * vIndexScale.y,vIndexScale.z });
 	m_pTransformCom4->Set_State(CTransform::STATE_POSITION, vPos2);
-	m_pTransformCom4->Turn(vUpTrun, -1.f);
-	m_pTransformCom4->Turn(vLookTrun, -0.3f);
-
-
-
-
-
-
+	m_pTransformCom4->Turn(_float3(0.f, 1.f, 0.f), -1.f);
+	m_pTransformCom4->Turn(_float3(0.f, 0.f, 1.f), -0.3f);
 }
 
 HRESULT CHouse::House_Render()
