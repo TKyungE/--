@@ -34,9 +34,6 @@
     <Filter Include="02.GameObject\Terrain">
       <UniqueIdentifier>{27ae354b-4b52-4c4d-9a7e-009f3e4b9ec8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Camera">
-      <UniqueIdentifier>{6ad6400b-9d5a-4bf0-9b0f-946a3f09392e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Sky">
       <UniqueIdentifier>{e7741bd6-d9aa-46ed-b919-46b39b50e7b7}</UniqueIdentifier>
     </Filter>
@@ -181,6 +178,12 @@
     <Filter Include="01.Levels\Town">
       <UniqueIdentifier>{68167f68-27fb-4e3c-ab0b-50f5c284a1da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Loading">
+      <UniqueIdentifier>{529a4711-daf2-4b0b-9f46-064b8cdf1930}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Boss\FireDragon\Camera">
+      <UniqueIdentifier>{6ad6400b-9d5a-4bf0-9b0f-946a3f09392e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -223,7 +226,7 @@
       <Filter>02.GameObject\Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Camera_Dynamic.h">
-      <Filter>02.GameObject\Camera</Filter>
+      <Filter>02.GameObject\Boss\FireDragon\Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Sky.h">
       <Filter>02.GameObject\Sky</Filter>
@@ -348,6 +351,9 @@
     <ClInclude Include="..\public\Town.h">
       <Filter>01.Levels\Town</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Loading.h">
+      <Filter>02.GameObject\Loading</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -378,7 +384,7 @@
       <Filter>02.GameObject\Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Camera_Dynamic.cpp">
-      <Filter>02.GameObject\Camera</Filter>
+      <Filter>02.GameObject\Boss\FireDragon\Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Sky.cpp">
       <Filter>02.GameObject\Sky</Filter>
@@ -502,6 +508,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Town.cpp">
       <Filter>01.Levels\Town</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Loading.cpp">
+      <Filter>02.GameObject\Loading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -26,7 +26,7 @@ HRESULT CMonster::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Monster"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Monster"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	CTransform::TRANSFORMDESC TransformDesc;
@@ -80,11 +80,12 @@ void CMonster::Check_Hit()
 		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 		Safe_AddRef(pGameInstance);
 		CGameObject::INFO tInfo;
+		tInfo.pTarget = this;
 		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);;
 		tInfo.iTargetDmg = m_tInfo.iTargetDmg;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), LEVEL_STATIC, TEXT("Layer_DmgFont"), &tInfo);
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_DmgFont"), &tInfo);
 		tInfo.vPos = m_tInfo.vTargetPos;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_STATIC, TEXT("Layer_Effect"), &tInfo);
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_Effect"), &tInfo);
 		CSoundMgr::Get_Instance()->PlayEffect(L"Hit_Sound.wav", fSOUND);
 		m_tInfo.bHit = false;
 		Safe_Release(pGameInstance);
@@ -178,7 +179,7 @@ HRESULT CMonster::Initialize(void * pArg)
 
 	tInfo.pTarget = this;
 
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_STATIC, TEXT("Layer_Status"), &tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo);
 	tInfo.vPos = { 1.f,1.f,1.f };
 
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_STATIC, TEXT("Layer_Effect"), &tInfo);

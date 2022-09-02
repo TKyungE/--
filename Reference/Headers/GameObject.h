@@ -40,6 +40,7 @@ public:
 		_int		 iMoney;
 		_bool		 bDead;
 		_bool		 bHit;
+		_int		 iLevelIndex;
 	}INFO;
 	typedef struct tagFrameInfo
 	{

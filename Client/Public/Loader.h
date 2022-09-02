@@ -36,6 +36,8 @@ public:
 	HRESULT Loading_ForLogoLevel();
 	HRESULT Loading_ForGamePlayLevel();
 	HRESULT Loading_ForTownLevel();
+	HRESULT Loading_Static(LEVEL Level);
+	HRESULT Loading_Prototype();
 
 private:
 	LEVEL					m_eNextLevel = LEVEL_END;

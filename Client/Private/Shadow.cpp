@@ -25,10 +25,10 @@ HRESULT CShadow::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
+	memcpy(&m_tInfo, pArg, sizeof(INFO));
+	
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-
-	memcpy(&m_tInfo, pArg, sizeof(INFO));
 
 	_float3 vRight = { 1.f,0.f,0.f };
 	m_pTransformCom->Set_Scaled(m_tInfo.vPos);
@@ -213,7 +213,7 @@ HRESULT CShadow::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Shadow"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Prototype_Component_Texture_Shadow"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */
@@ -263,7 +263,7 @@ CShadow * CShadow::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		ERR_MSG(TEXT("Failed to Created : CWind"));
+		ERR_MSG(TEXT("Failed to Created : CShadow"));
 		Safe_Release(pInstance);
 	}
 
@@ -276,7 +276,7 @@ CGameObject * CShadow::Clone(void* pArg)
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		ERR_MSG(TEXT("Failed to Cloned : CWind"));
+		ERR_MSG(TEXT("Failed to Cloned : CShadow"));
 		Safe_Release(pInstance);
 	}
 

@@ -24,7 +24,7 @@ HRESULT CExpLogo::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
-
+	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
 
 	m_fSizeX = 20.f;
@@ -94,7 +94,7 @@ HRESULT CExpLogo::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_ExpLogo"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), m_tInfo.iLevelIndex, TEXT("Prototype_Component_Texture_ExpLogo"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */

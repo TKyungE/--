@@ -25,9 +25,12 @@ HRESULT CIconBar::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
+	memcpy(&m_tInfo, pArg, sizeof(INFO));
+	m_tInfo.pTarget = this;
+	memcpy(pArg, &m_tInfo, sizeof(INFO));
 
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
-	m_Click = (bool*)pArg;
+	
 	m_fSizeX = 300.0f;
 	m_fSizeY = 10.0f;
 	m_fX = 150.f;
@@ -56,15 +59,13 @@ void CIconBar::Tick(_float fTimeDelta)
 	if (PtInRect(&rcRect, ptMouse))
 	{
 
-		if (*m_Click == false && GetKeyState(VK_LBUTTON) & 0x8000)
+		if (m_tInfo.bHit == false && GetKeyState(VK_LBUTTON) & 0x8000)
 		{
-			*m_Click = 1;
-			*m_Click = true;
+			m_tInfo.bHit = true;
 		}
-		if (*m_Click == true && GetKeyState(VK_RBUTTON) & 0x8000)
+		if (m_tInfo.bHit == true && GetKeyState(VK_RBUTTON) & 0x8000)
 		{
-			*m_Click = 0;
-			*m_Click = false;
+			m_tInfo.bHit = false;
 		}
 	}
 }
@@ -90,7 +91,7 @@ HRESULT CIconBar::Render()
 	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
 	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(*m_Click)))
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tInfo.bHit)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_RenderState()))
@@ -113,7 +114,7 @@ HRESULT CIconBar::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_IconBar"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), m_tInfo.iLevelIndex, TEXT("Prototype_Component_Texture_IconBar"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */

@@ -5,6 +5,8 @@
 #include "Level_Logo.h"
 #include "Level_GamePlay.h"
 #include "Town.h"
+#include "Component.h"
+#include "Loading.h"
 
 CLevel_Loading::CLevel_Loading(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -15,13 +17,25 @@ HRESULT CLevel_Loading::Initialize(LEVEL eNextLevel)
 {
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
-
+	
 	m_eNextLevel = eNextLevel;
 
 	m_pLoader = CLoader::Create(m_pGraphic_Device, eNextLevel);
 	if (nullptr == m_pLoader)
 		return E_FAIL;
 
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return E_FAIL;
+
+	Safe_AddRef(pGameInstance);
+	if (FAILED(pGameInstance->Add_Prototype(LEVEL_LOADING, TEXT("Prototype_Component_Texture_Loading"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Loading/%d.jpg"), 1))))
+		return E_FAIL;
+	
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Loading"), LEVEL_LOADING, TEXT("Layer_UI"))))
+		return E_FAIL;
+	Safe_Release(pGameInstance);
 	return S_OK;
 }
 

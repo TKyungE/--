@@ -26,23 +26,21 @@ HRESULT CStatsWnd::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
-
+	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	m_fSizeX = 280.0f;
 	m_fSizeY = 103.0f;
 	m_fX = 300.f;
 	m_fY = 400.f;
 
-	m_Pass.fPosX = m_fX + 128;//반지름에서 12(x박스크기의 반값)만큼 추가로 빼야함
-	m_Pass.fPosY = m_fY - 78;//반지름에서 12(x박스크기의 반값)만큼 추가로 빼야함
-	m_Pass.bNext = false;
-
-
+	m_tInfo.vPos.x = m_fX + 128;
+	m_tInfo.vPos.y = m_fY - 78;
+	m_tInfo.bHit = false;
 
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 
 	Safe_AddRef(pGameInstance);
 
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_XBox"), LEVEL_STATIC, TEXT("Layer_UI"), &m_Pass);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_XBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &m_tInfo);
 	//pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_PlusBox"), LEVEL_STATIC, TEXT("Layer_UI"), &m_StrPlus);
 	Safe_Release(pGameInstance);
 
@@ -123,7 +121,7 @@ HRESULT CStatsWnd::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_StatsWnd"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), m_tInfo.iLevelIndex, TEXT("Prototype_Component_Texture_StatsWnd"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */
