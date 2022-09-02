@@ -33,7 +33,7 @@ HRESULT CTerrain::Initialize(void* pArg)
 	
 	//여기서 링크를 가져와서 대입하는 방식이 현명해보임,, 밑에는 임시방편
 
-	if(FAILED(OnLoadData(TEXT("../../Data/TestMap.dat"))))
+	if(FAILED(OnLoadData(TEXT("../../Data/Terrain/TestTerrain.dat"))))
 	{ 
 		ERR_MSG(TEXT("Failed to OnLoadData"));
 		return E_FAIL;
@@ -145,18 +145,22 @@ HRESULT CTerrain::OnLoadData(const _tchar* pFilePath)
 		CTerrainRect::RECTINFO tRectInfo;
 
 		ReadFile(hFile, &tRectInfo.vPos, sizeof(tRectInfo.vPos), &dwByte, nullptr);
-		ReadFile(hFile, &tRectInfo.iTex, sizeof(tRectInfo.iTex), &dwByte, nullptr);
+		
+		_tchar szTex[MAX_PATH];
+		ReadFile(hFile, &szTex, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+		tRectInfo.iTex = _wtoi(szTex);
 
 		for (_uint i = 0; i < 4; i++)
 		{
-			ReadFile(hFile, &tRectInfo.vecPointPos, sizeof(tRectInfo.vecPointPos), &dwByte, nullptr);
-			ReadFile(hFile, &tRectInfo.vecPointTex, sizeof(tRectInfo.vecPointTex), &dwByte, nullptr);
+			ReadFile(hFile, &tRectInfo.vecPointPos[i], sizeof(tRectInfo.vecPointPos), &dwByte, nullptr);
+			ReadFile(hFile, &tRectInfo.vecPointTex[i], sizeof(tRectInfo.vecPointTex), &dwByte, nullptr);
 		}
 
 		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TerrainRect"), LEVEL_GAMEPLAY, TEXT("Layer_TerrainRect"), &tRectInfo)))
 		{
 			ERR_MSG(TEXT("Failed to Cloned : CTerrainRect"));
-			return;
+			return E_FAIL;
 		}
 	}
 #pragma endregion TerrainRect

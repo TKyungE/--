@@ -44,23 +44,35 @@ HRESULT CTerrainRect::Initialize(void * pArg)
 
 	m_pVBuffer->Lock(0, 0, (void**)&pVertices, 0);
 
-	pVertices[0].vPosition = m_tInfo.vecPointPos.vPosition;
+	pVertices[0].vPosition = m_tInfo.vecPointPos[0];
 	pVertices[0].vPosition.y += 0.001f;
-	pVertices[0].vTexture = pVertices[m_iIndices[0]].vTexture;
+	pVertices[0].vTexture = m_tInfo.vecPointTex[0];
 
-	pVertices[1].vPosition = pVertices[m_iIndices[1]].vPosition;
+	pVertices[1].vPosition = m_tInfo.vecPointPos[1];
 	pVertices[1].vPosition.y += 0.001f;
-	pVertices[1].vTexture = pVertices[m_iIndices[1]].vTexture;
+	pVertices[1].vTexture = m_tInfo.vecPointTex[1];
 
-	pVertices[2].vPosition = pVertices[m_iIndices[2]].vPosition;
+	pVertices[2].vPosition = m_tInfo.vecPointPos[2];
 	pVertices[2].vPosition.y += 0.001f;
-	pVertices[2].vTexture = pVertices[m_iIndices[2]].vTexture;
+	pVertices[2].vTexture = m_tInfo.vecPointTex[2];
 
-	pVertices[3].vPosition = pVertices[m_iIndices[3]].vPosition;
+	pVertices[3].vPosition = m_tInfo.vecPointPos[3];
 	pVertices[3].vPosition.y += 0.001f;
-	pVertices[3].vTexture = pVertices[m_iIndices[3]].vTexture;
+	pVertices[3].vTexture = m_tInfo.vecPointTex[3];
 
+	m_pVBuffer->Unlock();
 
+	m_pIBuffer->Lock(0, 0, (void**)&pIndices, 0);
+
+	pIndices[0]._0 = 0;
+	pIndices[0]._1 = 1;
+	pIndices[0]._2 = 2;
+
+	pIndices[1]._0 = 0;
+	pIndices[1]._1 = 2;
+	pIndices[1]._2 = 3;
+
+	m_pIBuffer->Unlock();
 
 	return S_OK;
 }
@@ -68,28 +80,6 @@ HRESULT CTerrainRect::Initialize(void * pArg)
 void CTerrainRect::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-
-	
-
-	
-	VB->Unlock();
-	m_pVBuffer->Unlock();
-
-	m_pIBuffer->Lock(0, 0, (void**)&pIndex, 0);
-
-	pIndex[0]._0 = 0;
-	pIndex[0]._1 = 1;
-	pIndex[0]._2 = 2;
-
-	pIndex[1]._0 = 0;
-	pIndex[1]._1 = 2;
-	pIndex[1]._2 = 3;
-
-	m_pIBuffer->Unlock();
-
-	Safe_Release(pVIBufferTerrain);
-	Safe_Release(pTerrain);
-	Safe_Release(pInstance);
 }
 
 void CTerrainRect::Late_Tick(_float fTimeDelta)

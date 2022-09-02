@@ -194,6 +194,7 @@
     <ClInclude Include="..\public\StatsIcon.h" />
     <ClInclude Include="..\public\StatsWnd.h" />
     <ClInclude Include="..\Public\Terrain.h" />
+    <ClInclude Include="..\Public\TerrainRect.h" />
     <ClInclude Include="..\public\ThunderCloud.h" />
     <ClInclude Include="..\Public\ThunderSword.h" />
     <ClInclude Include="..\Public\Tornado.h" />
@@ -243,6 +244,7 @@
     <ClCompile Include="..\private\StatsIcon.cpp" />
     <ClCompile Include="..\private\StatsWnd.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
+    <ClCompile Include="..\Private\TerrainRect.cpp" />
     <ClCompile Include="..\private\ThunderCloud.cpp" />
     <ClCompile Include="..\Private\ThunderSword.cpp" />
     <ClCompile Include="..\Private\Tornado.cpp" />

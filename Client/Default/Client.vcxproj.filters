@@ -163,6 +163,9 @@
     <Filter Include="02.GameObject\Tree">
       <UniqueIdentifier>{77008662-a1ab-41ee-b2eb-5a0181481183}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Terrain\TerrainRect">
+      <UniqueIdentifier>{df59ed68-f96b-47d5-a15d-619d1d0ad97a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -312,6 +315,9 @@
     <ClInclude Include="..\Public\Tree.h">
       <Filter>02.GameObject\Tree</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\TerrainRect.h">
+      <Filter>02.GameObject\Terrain\TerrainRect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -448,6 +454,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Tree.cpp">
       <Filter>02.GameObject\Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TerrainRect.cpp">
+      <Filter>02.GameObject\Terrain\TerrainRect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
