@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Public\Terrain.h"
 #include "GameInstance.h"
+#include "TerrainRect.h"
 
 CTerrain::CTerrain(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
@@ -134,12 +135,31 @@ HRESULT CTerrain::OnLoadData(const _tchar* pFilePath)
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pInstance);
 
-	//CTerrain* pTerrain = dynamic_cast<CTerrain*>(pInstance->Find_Object(TEXT("Layer_BackGround"), 0));
-	/*if (nullptr == pTerrain)
+#pragma region TerrainRect
+	_tchar szSize[MAX_PATH];
+	ReadFile(hFile, &szSize, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	_int TerrainRectSize = _wtoi(szSize);
+
+	for (_int i = 0; i < TerrainRectSize; ++i)
 	{
-		ERR_MSG(TEXT("Failed to Load"));
-		return;
-	}*/
+		CTerrainRect::RECTINFO tRectInfo;
+
+		ReadFile(hFile, &tRectInfo.vPos, sizeof(tRectInfo.vPos), &dwByte, nullptr);
+		ReadFile(hFile, &tRectInfo.iTex, sizeof(tRectInfo.iTex), &dwByte, nullptr);
+
+		for (_uint i = 0; i < 4; i++)
+		{
+			ReadFile(hFile, &tRectInfo.vecPointPos, sizeof(tRectInfo.vecPointPos), &dwByte, nullptr);
+			ReadFile(hFile, &tRectInfo.vecPointTex, sizeof(tRectInfo.vecPointTex), &dwByte, nullptr);
+		}
+
+		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TerrainRect"), LEVEL_GAMEPLAY, TEXT("Layer_TerrainRect"), &tRectInfo)))
+		{
+			ERR_MSG(TEXT("Failed to Cloned : CTerrainRect"));
+			return;
+		}
+	}
+#pragma endregion TerrainRect
 
 	CVIBuffer::VIBINFO VIBInfo;
 	CVIBuffer_Terrain::VIBINFO_DERIVED VIBInfo_Derived;
@@ -148,7 +168,6 @@ HRESULT CTerrain::OnLoadData(const _tchar* pFilePath)
 
 	ReadFile(hFile, &VIBInfo, sizeof(CVIBuffer::VIBINFO), &dwByte, nullptr);
 	ReadFile(hFile, &VIBInfo_Derived, sizeof(CVIBuffer_Terrain::VIBINFO_DERIVED), &dwByte, nullptr);
-
 
 	m_pVIBufferCom->Release_Buffer();
 	m_pVIBufferCom->Set_VIBInfo(VIBInfo);
