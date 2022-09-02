@@ -25,10 +25,10 @@ HRESULT CBackGroundTree::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
-
+	memcpy(&m_IndexPos, pArg, sizeof(INDEXPOS));
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-	memcpy(&m_IndexPos, pArg, sizeof(INDEXPOS));
+	
 
 	m_pTransformCom->Set_Scaled(m_IndexPos.vScale);
 
@@ -124,7 +124,7 @@ HRESULT CBackGroundTree::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Renderer"), LEVEL_STATIC, TEXT("Prototype_Component_Renderer"), (CComponent**)&m_pRendererCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Cube"), (CComponent**)&m_pVIBuffer)))
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Cube"), (CComponent**)&m_pVIBuffer)))
 		return E_FAIL;
 
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer1"), LEVEL_STATIC , TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_VIBufferRect)))
@@ -134,13 +134,13 @@ HRESULT CBackGroundTree::SetUp_Components(void)
 		return E_FAIL;
 
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_BackGroundTree"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_BackGroundTree"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture1"), LEVEL_GAMEPLAY,TEXT("Prototype_Component_Texture_BackGroundTreeRect"), (CComponent**)&m_pRectTexture)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture1"), LEVEL_STATIC,TEXT("Prototype_Component_Texture_BackGroundTreeRect"), (CComponent**)&m_pRectTexture)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture2"), LEVEL_GAMEPLAY,TEXT("Prototype_Component_Texture_BackGroundTreeRect"), (CComponent**)&m_pRectTexture2)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture2"), LEVEL_STATIC,TEXT("Prototype_Component_Texture_BackGroundTreeRect"), (CComponent**)&m_pRectTexture2)))
 		return E_FAIL;
 
 

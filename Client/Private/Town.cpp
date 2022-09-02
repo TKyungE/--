@@ -19,7 +19,7 @@ HRESULT CTown::Initialize()
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
-	SpawnData();
+	LoadData();
 
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
@@ -186,7 +186,8 @@ HRESULT CTown::Ready_Layer_UI(const _tchar * pLayerTag)
 
 	return S_OK;
 }
-void CTown::SpawnData()
+
+void CTown::LoadData()
 {
 	HANDLE hFile = CreateFile(TEXT("../../Data/Pos.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
@@ -196,18 +197,21 @@ void CTown::SpawnData()
 	DWORD	dwByte = 0;
 
 	_float3 vPos1;
-	_uint iMSize, iIndexSize;
+	_uint iMSize, iIndexSize, iTreeSize;
 	_tchar str1[MAX_PATH];
 	_tchar str2[MAX_PATH];
+	_tchar str3[MAX_PATH];
 
 	ReadFile(hFile, vPos1, sizeof(_float3), &dwByte, nullptr);
 	m_vPlayerPos = vPos1;
 
 	ReadFile(hFile, str1, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str2, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 
 	iMSize = stoi(str1);
 	iIndexSize = stoi(str2);
+	iTreeSize = stoi(str2);
 
 	while (true)
 	{
@@ -234,11 +238,12 @@ void CTown::SpawnData()
 			if (0 == dwByte)
 				break;
 
-			_float3 BackPos;
+			_float3 BackPos, Scale;
 			_tchar str3[MAX_PATH];
 			_uint Index;
 
 			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &Scale, sizeof(_float3), &dwByte, nullptr);
 			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 
 			Index = stoi(str3);
@@ -246,9 +251,34 @@ void CTown::SpawnData()
 			INDEXPOS IndexPos;
 
 			IndexPos.BackGroundPos = BackPos;
+			IndexPos.vScale = Scale;
 			IndexPos.iIndex = Index;
 
 			m_vecIndex.push_back(IndexPos);
+		}
+
+		for (_uint i = 0; i < iTreeSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+
+			_float3 BackPos, Scale;
+			_tchar str3[MAX_PATH];
+			_uint Index;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &Scale, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+
+			INDEXPOS TreePos;
+
+			TreePos.BackGroundPos = BackPos;
+			TreePos.vScale = Scale;
+			TreePos.iIndex = Index;
+
+			m_vecTree.push_back(TreePos);
 		}
 
 		if (0 == dwByte)
