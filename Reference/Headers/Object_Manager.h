@@ -25,7 +25,7 @@ public:
 	void Clear(_uint iLevelIndex);
 	class CLayer* Find_Layer(_uint iLevelIndex, const _tchar* pLayerTag);
 	class CGameObject* Find_Object(const _tchar* pLayerTag, _uint iIndex);
-	class CGameObject* Find_Prototype(const _tchar* pPrototypeTag);
+	
 private:
 	map<const _tchar*, class CGameObject*>			m_Prototypes;
 	typedef map<const _tchar*, class CGameObject*>	PROTOTYPES;
@@ -36,7 +36,7 @@ private: /* 내가 구분하고 싶은 대로 그룹을 지어 레벨별로 객체를 추가한다. */
 	typedef map<const _tchar*, class CLayer*>	LAYERS;
 
 private:
-	//class CGameObject* Find_Prototype(const _tchar* pPrototypeTag);
+	class CGameObject* Find_Prototype(const _tchar* pPrototypeTag);
 
 
 

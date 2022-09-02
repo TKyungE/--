@@ -74,7 +74,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	tInfo.vPos.z += 0.35f;
 	tInfo.vPos.x += 0.35f;
 	//Pet
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Poring"), m_tInfo.iLevelIndex, TEXT("Layer_Pet"), &m_tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Poring"), m_tInfo.iLevelIndex, TEXT("Layer_Pet"), &tInfo);
 
 
 	Safe_Release(pGameInstance);
@@ -505,7 +505,7 @@ HRESULT CPlayer::Skill_FireSpear(const _tchar * pLayerTag, _float3 _vPos)
 		tInfo.vPos.x = vPos.x + iSour;
 		tInfo.vPos.y = vPos.y;
 		tInfo.vPos.z = vPos.z + iTemp;
-
+		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_FireSpear"), m_tInfo.iLevelIndex, pLayerTag, &tInfo)))
 			return E_FAIL;
@@ -529,7 +529,7 @@ HRESULT CPlayer::Skill_Meteor(const _tchar * pLayerTag, _float3 _vPos)
 		tInfo.vPos.x = vPos.x + iSour;
 		tInfo.vPos.y = vPos.y;
 		tInfo.vPos.z = vPos.z + iTemp;
-
+		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Meteor"), m_tInfo.iLevelIndex, pLayerTag, &tInfo)))
 			return E_FAIL;
 	}

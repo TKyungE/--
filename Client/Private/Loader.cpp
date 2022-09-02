@@ -182,7 +182,6 @@ HRESULT CLoader::Loading_ForTownLevel()
 	Safe_AddRef(pGameInstance);
 
 	
-
 	//For Town
 	if (FAILED(pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Texture_House_Body"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_CUBEMAP, TEXT("../Bin/Resources/Textures/House/Body/%d.dds"), 2))))
@@ -378,10 +377,7 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/Shadow/%d.bmp"), 1))))
 		return E_FAIL;
 
-	//버퍼 생성
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_VIBuffer_Terrain"),
-		CVIBuffer_Terrain::Create(m_pGraphic_Device, 200, 200))))
-		return E_FAIL;
+	
 
 	
 	Safe_Release(pGameInstance);

@@ -330,7 +330,7 @@ HRESULT CFireDragon::Skill_FireSpear(const _tchar * pLayerTag)
 		tInfo.vPos.x = vPos.x + iSour;
 		tInfo.vPos.y = vPos.y;
 		tInfo.vPos.z = vPos.z + iTemp;
-
+		tInfo.iLevelIndex = LEVEL_GAMEPLAY;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_FireSpear"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 			return E_FAIL;
@@ -354,7 +354,7 @@ HRESULT CFireDragon::Skill_Meteor(const _tchar * pLayerTag)
 		tInfo.vPos.x = vPos.x + iSour;
 		tInfo.vPos.y = vPos.y;
 		tInfo.vPos.z = vPos.z + iTemp;
-
+		tInfo.iLevelIndex = LEVEL_GAMEPLAY;
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Meteor"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 			return E_FAIL;
 	}

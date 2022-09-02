@@ -63,7 +63,8 @@ void CXBox::Tick(_float fTimeDelta)
 		m_bCheck = true;
 		if (GetKeyState(VK_LBUTTON) & 0x8000)
 		{
-			m_tInfo.bHit = true;
+			m_tInfo.pTarget->Set_Hit(0, {0.f,0.f,0.f});
+			Set_Dead();
 		}
 	}
 	else
@@ -74,10 +75,7 @@ void CXBox::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-	if (m_tInfo.bHit == true)
-	{
-		Set_Dead();
-	}
+
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 }

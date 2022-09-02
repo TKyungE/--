@@ -35,7 +35,7 @@ HRESULT CInventory::Initialize(void * pArg)
 	m_tInfo.vPos.x = m_fX + 138;
 	m_tInfo.vPos.y = m_fY - 88;
 	m_tInfo.bHit = false;
-
+	m_tInfo.pTarget = this;
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 
 	Safe_AddRef(pGameInstance);
@@ -55,7 +55,7 @@ void CInventory::Tick(_float fTimeDelta)
 {
 
 	__super::Tick(fTimeDelta);
-	if (m_Pass.bNext == true)
+	if (m_tInfo.bHit == true)
 	{
 		Set_Dead();
 	}

@@ -29,7 +29,7 @@ HRESULT CWind::Initialize(void* pArg)
 		return E_FAIL;
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
-	m_tInfo.vPos.y -= 0.45f;
+	m_tInfo.vPos.y -= 0.44f;
 	m_tInfo.vPos.x -= +0.5f;
 	_float3 vScale = { 4.f,4.f,1.f };
 	_float3 vRight = { 1.f,0.f,0.f };
