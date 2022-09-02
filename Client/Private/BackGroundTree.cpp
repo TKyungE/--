@@ -54,7 +54,7 @@ void CBackGroundTree::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
-	OnTerrain();
+	//OnTerrain();
 }
 
 void CBackGroundTree::Late_Tick(_float fTimeDelta)
