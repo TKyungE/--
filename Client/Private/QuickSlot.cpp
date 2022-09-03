@@ -97,11 +97,12 @@ void CQuickSlot::Tick(_float fTimeDelta)
 		}
 		if (m_iTemp != nullptr)
 		{
-			if (m_iTemp->Get_Info().vPos.y > 49 || m_iTemp->Get_Info().vPos.y<0)
+			if (m_iTemp->Get_Info().vPos.y > 49 || m_iTemp->Get_Info().vPos.y<0|| m_iTemp->Get_Info().vPos.x<395.f|| m_iTemp->Get_Info().vPos.x>805.f)
 			{
 				m_vSlot[m_iSour]->Set_Target(m_iTemp);
 				m_bCheck = false;
 			}
+	
 		}
 	}
 }
