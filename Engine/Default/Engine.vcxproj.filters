@@ -246,4 +246,7 @@
       <Filter>01.Utility\95.KeyMgr</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\Client\Default\ReadMe.txt" />
+  </ItemGroup>
 </Project>

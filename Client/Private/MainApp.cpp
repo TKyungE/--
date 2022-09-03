@@ -5,6 +5,7 @@
 #include "Level_Loading.h"
 #include "SoundMgr.h"
 #include "Loading.h"
+
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::Get_Instance())
 {
@@ -110,8 +111,10 @@ HRESULT CMainApp::Ready_Prototype_Component()
 	/* For.Prototype_Component_Transform */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Transform"), CTransform::Create(m_pGraphic_Device))))
 		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Loading"),CLoading::Create(m_pGraphic_Device))))
 		return E_FAIL;
+
 	Safe_AddRef(m_pRenderer);
 
 	return S_OK;

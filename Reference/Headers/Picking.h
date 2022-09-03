@@ -17,7 +17,7 @@ public:
 
 	void Transform_ToLocalSpace(_float4x4 WorldMatrixInverse);
 	_bool Intersect_InWorldSpace(_float3 vPointA, _float3 vPointB, _float3 vPointC, _float3* pOut);
-	_bool Intersect_InLocalSpcae(_float3 vPointA, _float3 vPointB, _float3 vPointC, _float3* pOut);
+	_bool Intersect_InLocalSpace(_float3 vPointA, _float3 vPointB, _float3 vPointC, _float3* pOut);
 	
 private:
 	HWND m_hWnd;

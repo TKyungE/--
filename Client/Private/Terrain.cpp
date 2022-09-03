@@ -44,52 +44,6 @@ HRESULT CTerrain::Initialize(void* pArg)
 void CTerrain::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);		
-
-	CGameInstance* pInstance = CGameInstance::Get_Instance();
-
-	if (nullptr == pInstance)
-		return;
-
-	Safe_AddRef(pInstance);
-
-	//if (pInstance->Get_DIMKeyState(DIMK_LBUTTON) < 0)
-	//{
-		_float4x4 matWorld = Get_World();
-		D3DXMatrixInverse(&matWorld, nullptr, &matWorld);
-
-		LPDIRECT3DVERTEXBUFFER9 VB = m_pVIBufferCom->Get_VB();
-		LPDIRECT3DINDEXBUFFER9 IB = m_pVIBufferCom->Get_IB();
-
-		VTXTEX* pVertices = nullptr;
-		FACEINDICES32* pIndices = nullptr;
-
-		VB->Lock(0, 0, (void**)&pVertices, 0);
-		IB->Lock(0, 0, (void**)&pIndices, 0);
-
-		for (_uint i = 0; i < m_pVIBufferCom->Get_VIBInfo().m_iNumPrimitive; ++i)
-		{
-			_float3 LU = pVertices[pIndices[i]._0].vPosition;
-			_float3 RU = pVertices[pIndices[i]._1].vPosition;
-			_float3 RD = pVertices[pIndices[i]._2].vPosition;
-
-			if (!FAILED(pInstance->Intersect(matWorld, &LU, &RU, &RD)))
-			{
-				/*_tchar m_szFPS[MAX_PATH] = L"";
-				wsprintf(m_szFPS, L"ÁÂÇ¥ : %d, %d, %d", (int)pInstance->Get_TargetPos().x, (int)pInstance->Get_TargetPos().y, (int)pInstance->Get_TargetPos().z);
-				ERR_MSG(m_szFPS);*/
-
-			//	pVertices[pIndices[i]._0].vPosition.y += 1.f;
-			//	pVertices[pIndices[i]._1].vPosition.y += 1.f;
-			//	pVertices[pIndices[i]._2].vPosition.y += 1.f;
-				break;
-			}
-		}
-
-		VB->Unlock();
-		IB->Unlock();
-	//}
-
-	Safe_Release(pInstance);
 }
 
 void CTerrain::Late_Tick(_float fTimeDelta)

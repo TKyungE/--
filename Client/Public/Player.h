@@ -92,7 +92,11 @@ private:
 	void Move_Frame(_float fTimeDelta);
 	void Check_Front();
 	HRESULT TextureRender();
-	
+
+	void Get_PickingPoint(void);
+
+private:
+	_float3 m_fPickPoint = { 0.f, 0.f, 0.f };
 };
 
 END

@@ -28,8 +28,6 @@ HRESULT CPlayer::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-
-
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	m_tInfo.pTarget = this;
 	memcpy(pArg, &m_tInfo, sizeof(INFO));
@@ -61,9 +59,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	tInfo.pTarget = this;
 	tInfo.vPos = { 0.7f,0.7f,1.f };
 
-
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
-
 
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &m_tInfo);
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_MpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &m_tInfo);
@@ -88,6 +84,7 @@ void CPlayer::Tick(_float fTimeDelta)
 	
 	OnTerrain();
 	Move_Frame(fTimeDelta);
+	Get_PickingPoint();
 	Key_Input(fTimeDelta);
 	Player_Move(fTimeDelta);
 	if (GetKeyState('N') & 0x8000)
@@ -324,7 +321,7 @@ void CPlayer::Use_Skill()
 	{
 		CGameObject::INFO tInfo;
 
-		tInfo.vPos = pInstance->Get_TargetPos();
+		tInfo.vPos = m_fPickPoint;
 		tInfo.pTarget = this;
 		pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"), &tInfo);
 	
@@ -332,12 +329,11 @@ void CPlayer::Use_Skill()
 		m_bThunder = true;
 	}
 
-
 	if (CKeyMgr::Get_Instance()->Key_Down('2') && !m_bUseSkill && !m_bTornado)
 	{
 		CGameObject::INFO tInfo;
 
-		tInfo.vPos = pInstance->Get_TargetPos();
+		tInfo.vPos = m_fPickPoint;
 		tInfo.pTarget = this;
 		pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"), &tInfo);
 		
@@ -348,7 +344,7 @@ void CPlayer::Use_Skill()
 	{
 		CGameObject::INFO tInfo;
 
-		tInfo.vPos = pInstance->Get_TargetPos();
+		tInfo.vPos = m_fPickPoint;
 		tInfo.pTarget = this;
 		pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"), &tInfo);
 
@@ -359,7 +355,7 @@ void CPlayer::Use_Skill()
 	{
 		CGameObject::INFO tInfo;
 
-		tInfo.vPos = pInstance->Get_TargetPos();
+		tInfo.vPos = m_fPickPoint;
 		tInfo.pTarget = this;
 		pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"), &tInfo);
 
@@ -369,7 +365,7 @@ void CPlayer::Use_Skill()
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bThunder)
 	{
 		pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
-		Skill_Thunder(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
+		Skill_Thunder(TEXT("Layer_Skill"), m_fPickPoint);
 		m_bUseSkill = false;
 		m_bThunder = false;
 		m_eCurState = SKILL;
@@ -380,7 +376,7 @@ void CPlayer::Use_Skill()
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bTornado)
 	{
 		pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
-		Skill_Tornado(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
+		Skill_Tornado(TEXT("Layer_Skill"), m_fPickPoint);
 		m_bUseSkill = false;
 		m_bTornado = false;
 		m_eCurState = SKILL;
@@ -391,7 +387,7 @@ void CPlayer::Use_Skill()
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bFireSpear)
 	{
 		pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
-		Skill_FireSpear(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
+		Skill_FireSpear(TEXT("Layer_Skill"), m_fPickPoint);
 		m_bUseSkill = false;
 		m_bFireSpear = false;
 		m_eCurState = SKILL;
@@ -402,7 +398,7 @@ void CPlayer::Use_Skill()
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bMeteor)
 	{
 		pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
-		Skill_Meteor(TEXT("Layer_Skill"), pInstance->Get_TargetPos());
+		Skill_Meteor(TEXT("Layer_Skill"), m_fPickPoint);
 		m_bUseSkill = false;
 		m_bMeteor = false;
 		m_eCurState = SKILL;
@@ -431,10 +427,10 @@ void CPlayer::Key_Input(_float fTimeDelta)
 		return;
 
 	Safe_AddRef(pInstance);
-
+		
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RBUTTON) && m_eCurState != SKILL)
 	{
-		m_vTarget = pInstance->Get_TargetPos();
+		m_vTarget = m_fPickPoint;
 		if (!m_bFly)
 		{
 			m_eCurState = MOVE;
@@ -442,6 +438,7 @@ void CPlayer::Key_Input(_float fTimeDelta)
 		}
 		Check_Front();
 	}
+
 	if (CKeyMgr::Get_Instance()->Key_Down('F') && !m_bRide)
 	{
 		switch (m_bFly)
@@ -464,6 +461,7 @@ void CPlayer::Key_Input(_float fTimeDelta)
 			break;
 		}
 	}
+
 	if (CKeyMgr::Get_Instance()->Key_Down('R') && !m_bFly)
 	{
 		switch (m_bRide)
@@ -484,18 +482,21 @@ void CPlayer::Key_Input(_float fTimeDelta)
 			break;
 		}
 	}
+
 	if (CKeyMgr::Get_Instance()->Key_Pressing('W') && m_bFly)
 	{
 		m_fFly_fY -= 0.1f;
 		if (m_fFly_fY < -2.f)
 			m_fFly_fY = -2.f;
 	}
+
 	if (CKeyMgr::Get_Instance()->Key_Pressing('S') && m_bFly)
 	{
 		m_fFly_fY += 0.1f;
 		if (m_fFly_fY > 0.f)
 			m_fFly_fY = 0.f;
 	}
+
 	Safe_Release(pInstance);
 }
 
@@ -821,5 +822,28 @@ HRESULT CPlayer::TextureRender()
 		break;
 	}
 	return S_OK;
+}
+
+void CPlayer::Get_PickingPoint(void)
+{
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+
+	if (nullptr == pGameInstance)
+		return;
+
+	Safe_AddRef(pGameInstance);
+
+	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(m_tInfo.iLevelIndex, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
+	if (nullptr == pVIBuffer_Terrain)
+		return;
+
+	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(m_tInfo.iLevelIndex, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
+	if (nullptr == pTransform_Terrain)
+		return;
+
+	pVIBuffer_Terrain->Picking(pTransform_Terrain->Get_WorldMatrix(), &m_fPickPoint);
+
+	Safe_Release(pGameInstance);
+	return;
 }
 

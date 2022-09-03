@@ -12,6 +12,7 @@ public:
 		_uint m_iNumVerticesX;
 		_uint m_iNumVerticesZ;
 	}VIBINFO_DERIVED;
+
 private:
 	CVIBuffer_Terrain(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CVIBuffer_Terrain(const CVIBuffer_Terrain& rhs);
@@ -25,6 +26,7 @@ public:
 	void Release_Buffer(void);
 
 public:
+	virtual _bool Picking(_float4x4 WorldMatrix, _float3* pPickPoint = nullptr) override;
 	_float Compute_Height(const _float3& vWorldPos, const _float4x4& WorldMatrix, _float fOffset = 0.f);
 
 public:

@@ -60,29 +60,31 @@ void CPicking::Transform_ToLocalSpace(_float4x4 WorldMatrixInverse)
 
 _bool CPicking::Intersect_InWorldSpace(_float3 vPointA, _float3 vPointB, _float3 vPointC, _float3 * pOut)
 {
-	return _bool();
+	_float fDist;
+
+	if (true == D3DXIntersectTri(&vPointA, &vPointB, &vPointC, &m_MouseRayPos, &m_MouseRayDir, nullptr, nullptr, &fDist))
+	{
+		*pOut = m_MouseRayPos + m_MouseRayDir * fDist;
+
+		return true;
+	}
+
+	return false;
 }
 
-_bool CPicking::Intersect_InLocalSpcae(_float3 vPointA, _float3 vPointB, _float3 vPointC, _float3 * pOut)
+_bool CPicking::Intersect_InLocalSpace(_float3 vPointA, _float3 vPointB, _float3 vPointC, _float3 * pOut)
 {
-	return _bool();
-}
+	_float fDist;
 
-//HRESULT CPicking::Intersect(_float4x4 InvWorld, _float3* LU, _float3* RU, _float3* RD)
-//{
-//	D3DXVec3TransformCoord(&m_MouseRayPos, &m_MouseRayPos, &InvWorld);
-//	D3DXVec3TransformNormal(&m_MouseRayDir, &m_MouseRayDir, &InvWorld);
-//
-//	
-//	_float Dist = 0.f;
-//
-//	if (D3DXIntersectTri(LU, RU, RD, &m_MouseRayPos, &m_MouseRayDir, nullptr, nullptr, &Dist))
-//		m_TargetPos = m_MouseRayPos + m_MouseRayDir * Dist;
-//	else
-//		return E_FAIL;
-//
-//	return S_OK;
-//}
+	if (true == D3DXIntersectTri(&vPointA, &vPointB, &vPointC, &m_MouseRayPos_Local, &m_MouseRayDir_Local, nullptr, nullptr, &fDist))
+	{
+		*pOut = m_MouseRayPos_Local + m_MouseRayDir_Local * fDist;
+
+		return true;
+	}
+
+	return false;
+}
 
 void CPicking::Free(void)
 {

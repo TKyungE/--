@@ -170,20 +170,10 @@ void CWing::WingTurn(_float fTimeDelta)
 			fTurn = -1.f;
 	}
 
-	_float4x4 matRotP, matWorld;
-	D3DXMatrixRotationAxis(&matWorld, (_float3*)&m_tInfo.pTarget->Get_World().m[1][0], fTimeDelta * fTurn);
-	matWorld = m_pTransformCom->Get_WorldMatrix();
-	matWorld *= matRotP;
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&matWorld.m[0][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&matWorld.m[1][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&matWorld.m[2][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, *(_float3*)&matWorld.m[3][0]);
-
-/*
 	_float3 vUpTurn = { 0.f,-1.f,0.f };
 	m_pTransformCom->Turn(vUpTurn, fTimeDelta *fTurn);
 	vUpTurn = { 0.f,1.f,0.f };
-	m_pTransformCom2->Turn(vUpTurn, fTimeDelta *fTurn);*/
+	m_pTransformCom2->Turn(vUpTurn, fTimeDelta *fTurn);
 }
 
 
