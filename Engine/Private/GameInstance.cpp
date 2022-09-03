@@ -35,8 +35,8 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 	if (FAILED(m_pInput_Device->Initialize(hInst, GraphicDesc.hWnd)))
 		return E_FAIL;
 
-	if (FAILED(m_pPicking->Initialize(GraphicDesc, ppOut)))
-		return E_FAIL;
+	/*if (FAILED(m_pPicking->Initialize(GraphicDesc, ppOut)))
+		return E_FAIL;*/
 
 	/* 사운드 디바이스를 초기화한다. */
 
@@ -204,21 +204,21 @@ CComponent * CGameInstance::Clone_Component(_uint iLevelIndex, const _tchar * pP
 	return m_pComponent_Manager->Clone_Component(iLevelIndex, pPrototypeTag, pArg);
 }
 
-HRESULT CGameInstance::Intersect(_float4x4 InvWorld, _float3 * LU, _float3 * RU, _float3 * RD)
-{
-	if (nullptr == m_pPicking)
-		return E_FAIL;
+//HRESULT CGameInstance::Intersect(_float4x4 InvWorld, _float3 * LU, _float3 * RU, _float3 * RD)
+//{
+//	if (nullptr == m_pPicking)
+//		return E_FAIL;
+//
+//	return m_pPicking->Intersect(InvWorld, LU, RU, RD);
+//}
 
-	return m_pPicking->Intersect(InvWorld, LU, RU, RD);
-}
-
-_float3 CGameInstance::Get_TargetPos(void)
-{
-	if (nullptr == m_pPicking)
-		return _float3();
-
-	return m_pPicking->Get_TargetPos();
-}
+//_float3 CGameInstance::Get_TargetPos(void)
+//{
+//	if (nullptr == m_pPicking)
+//		return _float3();
+//
+//	return m_pPicking->Get_TargetPos();
+//}
 
 void CGameInstance::Release_Engine()
 {
