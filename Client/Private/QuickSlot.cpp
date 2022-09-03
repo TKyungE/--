@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "..\Public\QuickSlot.h"
 #include"GameInstance.h"
-
+#include"SkillSlot.h"
+#include "Layer.h"
 
 CQuickSlot::CQuickSlot(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:CGameObject(pGraphic_Device)
@@ -25,29 +26,38 @@ HRESULT CQuickSlot::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
-	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
+	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
+	m_tInfo.pTarget = nullptr;
 	m_fSizeX = 400.0f;
 	m_fSizeY = 50.0f;
 	m_fX = 600.f;
 	m_fY = 25.f;
 
-	m_tInfo.vPos.x = m_fX + 188;
-	m_tInfo.vPos.y = m_fY - 13;
-	m_tInfo.bHit = false;
-	m_tInfo.pTarget = this;
+
+	m_Pass.fPosX = m_fX + 188;//반지름에서 12(x박스크기의 반값)만큼 추가로 빼야함
+	m_Pass.fPosY = m_fY - 13;//반지름에서 12(x박스크기의 반값)만큼 추가로 빼야함
+	m_Pass.bNext = false;
+	m_tInfo.bHit = m_Pass.bNext;
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 
 	Safe_AddRef(pGameInstance);
 
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_XBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &m_tInfo);
+	//pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_XBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &m_tInfo);
+	for (int i = 0; i < 9; ++i)
+	{
 
+		m_tInfo.vPos.x = 423 + i*41.5f;
+		m_tInfo.vPos.y = 25.f;
+		m_tInfo.iHp = i;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkillSlot"), m_tInfo.iLevelIndex, TEXT("Layer_SkillSlot"), &m_tInfo);
+		m_vSlot.push_back(pGameInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_SkillSlot"))->Get_Objects().back());
+	}
 	Safe_Release(pGameInstance);
 
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-
 
 	return S_OK;
 }
@@ -56,22 +66,44 @@ void CQuickSlot::Tick(_float fTimeDelta)
 {
 
 	__super::Tick(fTimeDelta);
-	if (m_tInfo.bHit == true)
-	{
-		Set_Dead();
-	}
-	RECT		rcRect;
-	SetRect(&rcRect, (int)(m_fX - m_fSizeX * 0.5f),(int)( m_fY - m_fSizeY * 0.5f),(int)( m_fX + m_fSizeX * 0.5f),(int)( m_fY - m_fSizeY * 0.35f));
+
+
 
 	POINT		ptMouse;
 	GetCursorPos(&ptMouse);
 	ScreenToClient(g_hWnd, &ptMouse);
-
-	if (PtInRect(&rcRect, ptMouse))
+	for (int i = 0; i < 9; ++i)
 	{
+		RECT		rcRect;
+		SetRect(&rcRect, (int)(m_vSlot[i]->Get_Info().vPos.x - 36 * 0.5f), (int)(m_vSlot[i]->Get_Info().vPos.y - 36 * 0.5f), (int)(m_vSlot[i]->Get_Info().vPos.x + 36 * 0.5f), (int)(m_vSlot[i]->Get_Info().vPos.y + 36 * 0.5f));
+		if (PtInRect(&rcRect, ptMouse))
+		{
+			if ((CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON)) && m_bCheck == false&& m_vSlot[i]->Get_Info().pTarget!=nullptr)
+			{
+				m_iTemp = m_vSlot[i]->Get_Info().pTarget;
+				m_iSour = i;
+				m_vSlot[i]->Set_Target(nullptr); 
+					
+				m_bCheck = true;
 
+			}
+			if ((CKeyMgr::Get_Instance()->Key_Up(VK_LBUTTON)) && m_bCheck == true)
+			{
+				m_vSlot[m_iSour]->Set_Target(m_vSlot[i]->Get_Info().pTarget);
+				m_vSlot[i]->Set_Target(m_iTemp);
+
+				m_bCheck = false;
+			}
+		}
+		if (m_iTemp != nullptr)
+		{
+			if (m_iTemp->Get_Info().vPos.y > 49 || m_iTemp->Get_Info().vPos.y<0)
+			{
+				m_vSlot[m_iSour]->Set_Target(m_iTemp);
+				m_bCheck = false;
+			}
+		}
 	}
-
 }
 void CQuickSlot::Late_Tick(_float fTimeDelta)
 {

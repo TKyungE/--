@@ -199,6 +199,21 @@
     <Filter Include="02.GameObject\Wing">
       <UniqueIdentifier>{0bc110a1-b2b7-4777-89b4-9fba7c4f5948}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\HpPotin">
+      <UniqueIdentifier>{5d117f82-1d97-4935-9106-f16f3aeae0a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\QuickSlor\SkillSlot">
+      <UniqueIdentifier>{0fb58f8b-5190-47dc-98c2-0aaac717aa62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StateUi\ExpBar\ExpBlank">
+      <UniqueIdentifier>{eab1a906-b873-4df6-bb71-facde7b8f29d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StateUi\ExpBar\ExpLogo">
+      <UniqueIdentifier>{70adb16f-fd14-433b-ad35-241e5412555a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StateUi\MpBar">
+      <UniqueIdentifier>{7dcf0f6e-2d0b-4c4b-b950-95c09d6749df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -348,9 +363,6 @@
     <ClInclude Include="..\public\Shadow.h">
       <Filter>03.Effect\Default\06.Shadow</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\ExpBlank.h" />
-    <ClInclude Include="..\public\ExpLogo.h" />
-    <ClInclude Include="..\Public\MpBar.h" />
     <ClInclude Include="..\Public\BackGroundRect.h">
       <Filter>02.GameObject\BackGroundObj</Filter>
     </ClInclude>
@@ -378,6 +390,21 @@
     </ClInclude>
     <ClInclude Include="..\public\Wing.h">
       <Filter>02.GameObject\Wing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\HpPotion.h">
+      <Filter>04.UI\HpPotin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\SkillSlot.h">
+      <Filter>04.UI\QuickSlor\SkillSlot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ExpBlank.h">
+      <Filter>04.UI\StateUi\ExpBar\ExpBlank</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ExpLogo.h">
+      <Filter>04.UI\StateUi\ExpBar\ExpLogo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MpBar.h">
+      <Filter>04.UI\StateUi\MpBar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -516,9 +543,6 @@
     <ClCompile Include="..\private\Shadow.cpp">
       <Filter>03.Effect\Default\06.Shadow</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\ExpBlank.cpp" />
-    <ClCompile Include="..\private\ExpLogo.cpp" />
-    <ClCompile Include="..\Private\MpBar.cpp" />
     <ClCompile Include="..\Private\BackGroundRect.cpp">
       <Filter>02.GameObject\BackGroundObj</Filter>
     </ClCompile>
@@ -546,6 +570,21 @@
     </ClCompile>
     <ClCompile Include="..\private\Wing.cpp">
       <Filter>02.GameObject\Wing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\HpPotion.cpp">
+      <Filter>04.UI\HpPotin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SkillSlot.cpp">
+      <Filter>04.UI\QuickSlor\SkillSlot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ExpBlank.cpp">
+      <Filter>04.UI\StateUi\ExpBar\ExpBlank</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ExpLogo.cpp">
+      <Filter>04.UI\StateUi\ExpBar\ExpLogo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MpBar.cpp">
+      <Filter>04.UI\StateUi\MpBar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

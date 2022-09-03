@@ -53,10 +53,12 @@ protected:
 	FrameInfo				m_tFrame;
 public: // 여기에 갯 셋 만들어서 인포 +- 관리하면될듯
 	INFO	Get_Info() { return m_tInfo; }
+	void	Set_Target(CGameObject* _pTarget) { m_tInfo.pTarget = _pTarget; }
 	void	Set_Info(INFO& _tInfo){ memcpy(&m_tInfo, &_tInfo, sizeof(INFO)); }
 	void	Set_Dead() { m_tInfo.bDead = true; }
 	void	Set_LevelIndex(_int _iLevelIndex) { m_tInfo.iLevelIndex = _iLevelIndex; };
 	void	Set_Hp(_int _iDmg) { m_tInfo.iHp -= _iDmg; }
+	void	Set_vPos(_float3 _vPos) { m_tInfo.vPos = _vPos; }
 	void	Set_Hit(_int _iDmg, _float3 _vPos) { m_tInfo.bHit = true; m_tInfo.iTargetDmg = _iDmg; m_tInfo.vTargetPos = _vPos; }
 protected:
 	LPDIRECT3DDEVICE9			m_pGraphic_Device = nullptr;

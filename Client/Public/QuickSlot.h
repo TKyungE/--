@@ -36,7 +36,12 @@ private:
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
 	_float					m_fPrePosX = 0, m_fPrePosY = 0;
 	Pos						m_Pass;
-
+	vector < CGameObject* > m_vSlot;
+	CGameObject*			m_Test;
+	CGameObject*			m_iTemp = nullptr;
+	bool					m_bCheck = false;
+	int						m_iSour = 0;
+	int						Temp = 0;
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
