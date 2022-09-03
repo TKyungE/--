@@ -88,9 +88,6 @@
     <Filter Include="04.UI\StateUi">
       <UniqueIdentifier>{c93947ac-9ef8-4cc2-a4f6-24426048ddc3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.UI\XBox">
-      <UniqueIdentifier>{3c789132-7195-434c-9375-2b055b0a36c3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="04.UI\StateUi\ExpBar">
       <UniqueIdentifier>{9f16c13f-6e81-4e8a-988f-6ad324ceba14}</UniqueIdentifier>
     </Filter>
@@ -108,6 +105,66 @@
     </Filter>
     <Filter Include="03.Effect\Default\03.DmgFont">
       <UniqueIdentifier>{d4f5d2b8-7db9-408b-b7c1-92b6532b836e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\02.FireSpear">
+      <UniqueIdentifier>{e5888198-ef0d-4a28-ad94-e966a8d41215}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\02.FireSpear\Fire">
+      <UniqueIdentifier>{4f88c934-0d0b-4abf-ab7a-aac9645c8a3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\03.Meteor">
+      <UniqueIdentifier>{58c9eec7-8375-47e3-9017-dc756e607a3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\03.Meteor\MeteorEff">
+      <UniqueIdentifier>{59afe265-12a3-4ee1-92df-c139b6702621}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\04.Rain">
+      <UniqueIdentifier>{50fc2f1f-a364-4bde-b65c-da29ee1ea6e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Boss">
+      <UniqueIdentifier>{ff47cc89-caae-48a7-8208-1e8c3a22b2c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Boss\FireDragon">
+      <UniqueIdentifier>{51ae774e-4c6b-4c27-8efd-526921d3d00d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\05.Wind">
+      <UniqueIdentifier>{b3b81a1a-fbb2-4b96-8cd2-1d831f9b6cc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StateUi\IconBar\EquipIcon">
+      <UniqueIdentifier>{e7ce73e9-4e9f-47d0-97fb-4e83880891b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StateUi\IconBar\StatsIcon">
+      <UniqueIdentifier>{ef13cef6-0851-4481-92eb-124f501b8d85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StateUi\IconBar\SkillIcon">
+      <UniqueIdentifier>{06dc74a7-77ae-4ba3-ba1a-f6eafe264697}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\Box">
+      <UniqueIdentifier>{751b8fde-459b-498d-91f3-31237fa15234}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\Box\PlusBox">
+      <UniqueIdentifier>{1de50e90-4cf1-4c10-8e34-427119f07610}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\Box\XBox">
+      <UniqueIdentifier>{3c789132-7195-434c-9375-2b055b0a36c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\QuickSlor">
+      <UniqueIdentifier>{3967bf9e-2d9f-4070-83dc-2a72fe4a1038}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\StatsWnd">
+      <UniqueIdentifier>{6a9cb870-2145-4bbe-86d5-c816bb3565d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\SkillWnd">
+      <UniqueIdentifier>{e76fb6fe-566e-489b-a76d-080adf0a6e45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\WorldHpBar">
+      <UniqueIdentifier>{59e40b13-2353-4d51-9ce7-e372dc9a23d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\06.Shadow">
+      <UniqueIdentifier>{71afcecb-9d8c-4b4e-8463-874539fb788f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj">
+      <UniqueIdentifier>{b35db3b3-f917-40d2-b5a9-4e0c5b044c63}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -187,7 +244,7 @@
       <Filter>04.UI\StateUi\ExpBar</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\XBox.h">
-      <Filter>04.UI\XBox</Filter>
+      <Filter>04.UI\Box\XBox</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\InventoryIcon.h">
       <Filter>04.UI\StateUi\IconBar\InventoryIcon</Filter>
@@ -206,6 +263,63 @@
     </ClInclude>
     <ClInclude Include="..\public\DmgFont.h">
       <Filter>03.Effect\Default\03.DmgFont</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\FireSpear.h">
+      <Filter>03.Effect\Skill\02.FireSpear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Fire.h">
+      <Filter>03.Effect\Skill\02.FireSpear\Fire</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Meteor.h">
+      <Filter>03.Effect\Skill\03.Meteor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\MeteorEff.h">
+      <Filter>03.Effect\Skill\03.Meteor\MeteorEff</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Rain.h">
+      <Filter>03.Effect\Default\04.Rain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FireDragon.h">
+      <Filter>02.GameObject\Boss\FireDragon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Wind.h">
+      <Filter>03.Effect\Default\05.Wind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\PlusBox.h">
+      <Filter>04.UI\Box\PlusBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\EquipIcon.h">
+      <Filter>04.UI\StateUi\IconBar\EquipIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\SkillIcon.h">
+      <Filter>04.UI\StateUi\IconBar\SkillIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\StatsIcon.h">
+      <Filter>04.UI\StateUi\IconBar\StatsIcon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\QuickSlot.h">
+      <Filter>04.UI\QuickSlor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\SkillWnd.h">
+      <Filter>04.UI\SkillWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\StatsWnd.h">
+      <Filter>04.UI\StatsWnd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\WorldHpBar.h">
+      <Filter>04.UI\WorldHpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\PlayerMpBar.h">
+      <Filter>04.UI\WorldHpBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Shadow.h">
+      <Filter>03.Effect\Default\06.Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ExpBlank.h" />
+    <ClInclude Include="..\public\ExpLogo.h" />
+    <ClInclude Include="..\Public\MpBar.h" />
+    <ClInclude Include="..\Public\BackGroundRect.h">
+      <Filter>02.GameObject\BackGroundObj</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -267,7 +381,7 @@
       <Filter>03.Effect\Default\01.UseSkill</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\XBox.cpp">
-      <Filter>04.UI\XBox</Filter>
+      <Filter>04.UI\Box\XBox</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ExpBar.cpp">
       <Filter>04.UI\StateUi\ExpBar</Filter>
@@ -292,6 +406,63 @@
     </ClCompile>
     <ClCompile Include="..\private\DmgFont.cpp">
       <Filter>03.Effect\Default\03.DmgFont</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\FireSpear.cpp">
+      <Filter>03.Effect\Skill\02.FireSpear</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Fire.cpp">
+      <Filter>03.Effect\Skill\02.FireSpear\Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Meteor.cpp">
+      <Filter>03.Effect\Skill\03.Meteor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\MeteorEff.cpp">
+      <Filter>03.Effect\Skill\03.Meteor\MeteorEff</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Rain.cpp">
+      <Filter>03.Effect\Default\04.Rain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\FireDragon.cpp">
+      <Filter>02.GameObject\Boss\FireDragon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Wind.cpp">
+      <Filter>03.Effect\Default\05.Wind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\PlusBox.cpp">
+      <Filter>04.UI\Box\PlusBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\EquipIcon.cpp">
+      <Filter>04.UI\StateUi\IconBar\EquipIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SkillIcon.cpp">
+      <Filter>04.UI\StateUi\IconBar\SkillIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\StatsIcon.cpp">
+      <Filter>04.UI\StateUi\IconBar\StatsIcon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\QuickSlot.cpp">
+      <Filter>04.UI\QuickSlor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SkillWnd.cpp">
+      <Filter>04.UI\SkillWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\StatsWnd.cpp">
+      <Filter>04.UI\StatsWnd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\WorldHpBar.cpp">
+      <Filter>04.UI\WorldHpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\PlayerMpBar.cpp">
+      <Filter>04.UI\WorldHpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Shadow.cpp">
+      <Filter>03.Effect\Default\06.Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ExpBlank.cpp" />
+    <ClCompile Include="..\private\ExpLogo.cpp" />
+    <ClCompile Include="..\Private\MpBar.cpp" />
+    <ClCompile Include="..\Private\BackGroundRect.cpp">
+      <Filter>02.GameObject\BackGroundObj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

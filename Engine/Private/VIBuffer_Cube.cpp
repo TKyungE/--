@@ -28,27 +28,35 @@ HRESULT CVIBuffer_Cube::Initialize_Prototype()
 
 	pVertices[0].vPosition = _float3(-0.5f, 0.5f, -0.5f);
 	pVertices[0].vTexture = pVertices[0].vPosition;
+	m_pVerticesPos.push_back(_float3(-0.5f, 0.5f, -0.5f));
 
 	pVertices[1].vPosition = _float3(0.5f, 0.5f, -0.5f);
 	pVertices[1].vTexture = pVertices[1].vPosition;
+	m_pVerticesPos.push_back(_float3(0.5f, 0.5f, -0.5f));
 
 	pVertices[2].vPosition = _float3(0.5f, -0.5f, -0.5f);
 	pVertices[2].vTexture = pVertices[2].vPosition;
+	m_pVerticesPos.push_back(_float3(0.5f, -0.5f, -0.5f));
 
 	pVertices[3].vPosition = _float3(-0.5f, -0.5f, -0.5f);
 	pVertices[3].vTexture = pVertices[3].vPosition;
+	m_pVerticesPos.push_back(_float3(-0.5f, -0.5f, -0.5f));
 
 	pVertices[4].vPosition = _float3(-0.5f, 0.5f, 0.5f);
 	pVertices[4].vTexture = pVertices[4].vPosition;
+	m_pVerticesPos.push_back(_float3(-0.5f, 0.5f, 0.5f));
 
 	pVertices[5].vPosition = _float3(0.5f, 0.5f, 0.5f);
 	pVertices[5].vTexture = pVertices[5].vPosition;
+	m_pVerticesPos.push_back(_float3(0.5f, 0.5f, 0.5f));
 
 	pVertices[6].vPosition = _float3(0.5f, -0.5f, 0.5f);
 	pVertices[6].vTexture = pVertices[6].vPosition;
+	m_pVerticesPos.push_back(_float3(0.5f, -0.5f, 0.5f));
 
 	pVertices[7].vPosition = _float3(-0.5f, -0.5f, 0.5f);
 	pVertices[7].vTexture = pVertices[7].vPosition;
+	m_pVerticesPos.push_back(_float3(-0.5f, -0.5f, 0.5f));
 
 	m_pVB->Unlock();
 
@@ -65,26 +73,38 @@ HRESULT CVIBuffer_Cube::Initialize_Prototype()
 	/* +X */
 	pIndices[0]._0 = 1; pIndices[0]._1 = 5; pIndices[0]._2 = 6;
 	pIndices[1]._0 = 1; pIndices[1]._1 = 6; pIndices[1]._2 = 2;
+	m_pIndices16.push_back(pIndices[0]);
+	m_pIndices16.push_back(pIndices[1]);
 
 	/* -X */
 	pIndices[2]._0 = 4; pIndices[2]._1 = 0; pIndices[2]._2 = 3;
 	pIndices[3]._0 = 4; pIndices[3]._1 = 3; pIndices[3]._2 = 7;
+	m_pIndices16.push_back(pIndices[2]);
+	m_pIndices16.push_back(pIndices[3]);
 
 	/* +Y */
 	pIndices[4]._0 = 4; pIndices[4]._1 = 5; pIndices[4]._2 = 1;
 	pIndices[5]._0 = 4; pIndices[5]._1 = 1; pIndices[5]._2 = 0;
+	m_pIndices16.push_back(pIndices[4]);
+	m_pIndices16.push_back(pIndices[5]);
 
-	/* -Y */
+	/* -Y */																											
 	pIndices[6]._0 = 3; pIndices[6]._1 = 2; pIndices[6]._2 = 6;
 	pIndices[7]._0 = 3; pIndices[7]._1 = 6; pIndices[7]._2 = 7;
+	m_pIndices16.push_back(pIndices[6]);
+	m_pIndices16.push_back(pIndices[7]);
 
-	/* +Z */
-	pIndices[8]._0 = 5; pIndices[8]._1 = 4; pIndices[8]._2 = 7;
-	pIndices[9]._0 = 5; pIndices[9]._1 = 7; pIndices[9]._2 = 6;
+	/* +Z */																											
+	pIndices[8]._0 = 5; pIndices[8]._1 = 4; pIndices[8]._2 =7;
+	pIndices[9]._0 = 5; pIndices[9]._1 = 7; pIndices[9]._2 =6;
+	m_pIndices16.push_back(pIndices[8]);
+	m_pIndices16.push_back(pIndices[9]);
 
 	/* -Z */
 	pIndices[10]._0 = 0; pIndices[10]._1 = 1; pIndices[10]._2 = 2;
 	pIndices[11]._0 = 0; pIndices[11]._1 = 2; pIndices[11]._2 = 3;
+	m_pIndices16.push_back(pIndices[10]);
+	m_pIndices16.push_back(pIndices[11]);
 
 	m_pIB->Unlock();
 
@@ -126,4 +146,9 @@ void CVIBuffer_Cube::Free()
 {
 	__super::Free();
 
+	if (false == m_isCloned)
+	{
+		m_pVerticesPos.clear();
+		m_pIndices16.clear();
+	}
 }

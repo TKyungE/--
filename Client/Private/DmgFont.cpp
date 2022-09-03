@@ -30,7 +30,7 @@ HRESULT CDmgFont::Initialize(void* pArg)
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	m_tInfo.vPos.y += 0.85f;
-	_float3 vScale = { 0.1f,0.3f,1.f };
+	_float3 vScale = { 0.3f,0.3f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 	m_vPos = m_tInfo.vPos;
@@ -45,9 +45,11 @@ void CDmgFont::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 	Set_State();
+	Jump();
 	
+
 	m_fDeadTime += fTimeDelta;
-	if (m_fDeadTime > 0.7f)
+	if (m_fDeadTime > 0.25f)
 		Set_Dead();
 }
 
@@ -55,22 +57,10 @@ void CDmgFont::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-
-
-
-	_float4x4		ViewMatrix;
-
-	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
-
-	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
-	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
-
+	OnBillboard();
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_PRIORITY, this);
+		m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
 HRESULT CDmgFont::Render()
@@ -101,7 +91,18 @@ HRESULT CDmgFont::Render()
 
 
 
+void CDmgFont::OnBillboard()
+{
+	_float4x4		ViewMatrix;
 
+	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
+
+	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
+	_float3 vScale = { 0.3f,0.3f,1.f };
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
+	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+}
 
 
 
@@ -153,6 +154,19 @@ void CDmgFont::Set_State()
 		m_eCurState = FOUR;
 }
 
+void CDmgFont::Jump()
+{
+	m_fMoveX += 0.015f;
+	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	vPos.y += 2.5 * m_fTime - (7.8f * m_fTime * m_fTime * 0.5f);
+	vPos.x += m_fMoveX;
+	m_fTime += 0.025f;
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+	
+	
+}
+
 HRESULT CDmgFont::TextureRender()
 {
 	_float3 vPos;
@@ -168,7 +182,7 @@ HRESULT CDmgFont::TextureRender()
 			return E_FAIL;
 		m_pVIBufferCom1->Render();
 		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vPos.x -= 0.5f;
+		vPos.x -= 0.15f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 			return E_FAIL;
@@ -181,7 +195,7 @@ HRESULT CDmgFont::TextureRender()
 			return E_FAIL;
 		m_pVIBufferCom1->Render();
 		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vPos.x -= 0.5f;
+		vPos.x -= 0.15f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 			return E_FAIL;
@@ -189,7 +203,7 @@ HRESULT CDmgFont::TextureRender()
 			return E_FAIL;
 		m_pVIBufferCom2->Render();
 		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vPos.x -= 0.5f;
+		vPos.x -= 0.15f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 			return E_FAIL;
@@ -202,7 +216,7 @@ HRESULT CDmgFont::TextureRender()
 			return E_FAIL;
 		m_pVIBufferCom1->Render();
 		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vPos.x -= 0.5f;
+		vPos.x -= 0.15f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 			return E_FAIL;
@@ -210,7 +224,7 @@ HRESULT CDmgFont::TextureRender()
 			return E_FAIL;
 		m_pVIBufferCom2->Render();
 		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vPos.x -= 0.5f;
+		vPos.x -= 0.15f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 			return E_FAIL;
@@ -218,7 +232,7 @@ HRESULT CDmgFont::TextureRender()
 			return E_FAIL;
 		m_pVIBufferCom3->Render();
 		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vPos.x -= 0.5f;
+		vPos.x -= 0.15f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 			return E_FAIL;
@@ -232,6 +246,7 @@ HRESULT CDmgFont::TextureRender()
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vPos);
 	return S_OK;
 }
+
 HRESULT CDmgFont::SetUp_Components()
 {
 	/* For.Com_Renderer */
@@ -256,7 +271,7 @@ HRESULT CDmgFont::SetUp_Components()
 	CTransform::TRANSFORMDESC		TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
 
-	TransformDesc.fSpeedPerSec = 5.f;
+	TransformDesc.fSpeedPerSec = 3.f;
 	TransformDesc.fRotationPerSec = D3DXToRadian(90.0f);
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))

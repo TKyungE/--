@@ -25,82 +25,88 @@ HRESULT CInventory::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
-
 	D3DXMatrixOrthoLH(&m_ProjMatrix, g_iWinSizeX, g_iWinSizeY, 0.f, 1.f);
 
 	m_fSizeX = 300.0f;
 	m_fSizeY = 200.0f;
 	m_fX = 500.f;
 	m_fY = 400.f;
-	m_Delete = false;
+
+	m_Pass.fPosX = m_fX + 138;//반지름에서 12(x박스크기의 반값)만큼 추가로 빼야함
+	m_Pass.fPosY = m_fY - 88;//반지름에서 12(x박스크기의 반값)만큼 추가로 빼야함
+	m_Pass.bNext = false;
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 
 	Safe_AddRef(pGameInstance);
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_XBox"), LEVEL_GAMEPLAY, TEXT("Layer_UI"),&m_Delete);
+
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_XBox"), LEVEL_GAMEPLAY, TEXT("Layer_UI"), &m_Pass);
 	Safe_Release(pGameInstance);
-	
+
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
 
 	return S_OK;
 }
 
 void CInventory::Tick(_float fTimeDelta)
 {
-	
+
 	__super::Tick(fTimeDelta);
-	
-		RECT		rcRect;
-		SetRect(&rcRect, m_fX - m_fSizeX * 0.5f, m_fY - m_fSizeY * 0.5f, m_fX + m_fSizeX * 0.5f, m_fY + m_fSizeY * 0.5f);
+	if (m_Pass.bNext == true)
+	{
+		Set_Dead();
+	}
+	RECT		rcRect;
+	SetRect(&rcRect, m_fX - m_fSizeX * 0.5f, m_fY - m_fSizeY * 0.5f, m_fX + m_fSizeX * 0.5f, m_fY - m_fSizeY * 0.35f);
 
-		POINT		ptMouse;
-		GetCursorPos(&ptMouse);
-		ScreenToClient(g_hWnd, &ptMouse);
+	POINT		ptMouse;
+	GetCursorPos(&ptMouse);
+	ScreenToClient(g_hWnd, &ptMouse);
 
-		if (PtInRect(&rcRect, ptMouse))
-		{
+	if (PtInRect(&rcRect, ptMouse))
+	{
 
-		}
-	
+	}
+
 }
 void CInventory::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-	
-	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 
+	if (nullptr != m_pRendererCom)
+		m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_UI, this);
+
+	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));//여기가중점
 }
 
 HRESULT CInventory::Render()
 {
 
-		if (FAILED(__super::Render()))
-			return E_FAIL;
+	if (FAILED(__super::Render()))
+		return E_FAIL;
 
-		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-			return E_FAIL;
+	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+		return E_FAIL;
 
-		_float4x4		ViewMatrix;
-		D3DXMatrixIdentity(&ViewMatrix);
+	_float4x4		ViewMatrix;
+	D3DXMatrixIdentity(&ViewMatrix);
 
-		m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
-		m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
+	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
+	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
 
-		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
-			return E_FAIL;
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
+		return E_FAIL;
 
-		if (FAILED(SetUp_RenderState()))
-			return E_FAIL;
+	if (FAILED(SetUp_RenderState()))
+		return E_FAIL;
 
-		m_pVIBufferCom->Render();
+	m_pVIBufferCom->Render();
 
-		if (FAILED(Release_RenderState()))
-			return E_FAIL;
+	if (FAILED(Release_RenderState()))
+		return E_FAIL;
 
 
 

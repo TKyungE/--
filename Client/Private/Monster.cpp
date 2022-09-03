@@ -2,6 +2,7 @@
 #include "..\Public\Monster.h"
 #include "..\Public\Player.h"
 #include "GameInstance.h"
+#include "SoundMgr.h"
 
 CMonster::CMonster(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -28,9 +29,6 @@ HRESULT CMonster::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Monster"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Onterrain"), LEVEL_STATIC, TEXT("Prototype_Component_Onterrain"), (CComponent**)&m_pOnTerrain)))
-		return E_FAIL;
-
 	CTransform::TRANSFORMDESC TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
 
@@ -40,7 +38,7 @@ HRESULT CMonster::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
 
-	m_pTransformCom->Set_Scaled({ 1.f, 2.f, 1.f });
+	m_pTransformCom->Set_Scaled({ 1.f, 1.f, 1.f });
 
 	return S_OK;
 }
@@ -85,6 +83,9 @@ void CMonster::Check_Hit()
 		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);;
 		tInfo.iTargetDmg = m_tInfo.iTargetDmg;
 		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), LEVEL_GAMEPLAY, TEXT("Layer_DmgFont"), &tInfo);
+		tInfo.vPos = m_tInfo.vTargetPos;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+		CSoundMgr::Get_Instance()->PlayEffect(L"Hit_Sound.wav", fSOUND);
 		m_tInfo.bHit = false;
 		Safe_Release(pGameInstance);
 	}
@@ -144,7 +145,6 @@ void CMonster::Free(void)
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pTextureCom);
-	Safe_Release(m_pOnTerrain);
 }
 
 HRESULT CMonster::Initialize_Prototype(void)
@@ -165,10 +165,23 @@ HRESULT CMonster::Initialize(void * pArg)
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(0.f, 0.f, 5.f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
 	m_tInfo.fX = 0.5f;
-	m_tInfo.iHp = 9999;
+	m_tInfo.iMaxHp = 9999;
+	m_tInfo.iHp = 100;
+	m_tInfo.iHp = m_tInfo.iMaxHp;
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return E_FAIL;
+	Safe_AddRef(pGameInstance);
+	CGameObject::INFO tInfo;
+	tInfo.pTarget = this;
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_UI"), &tInfo);
+	tInfo.vPos = { 1.f,1.f,1.f };
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+	Safe_Release(pGameInstance);
+
 	return S_OK;
 }
 
@@ -176,25 +189,30 @@ void CMonster::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 	
-	_float3 Position = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	_float a;
-	if (FAILED(m_pOnTerrain->Get_OnTerrainY(Position, &a)))
-	{
-		ERR_MSG(TEXT("Failed to OnTerrain"));
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
 		return;
-	}
+	Safe_AddRef(pGameInstance);
+	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
+	if (nullptr == pVIBuffer_Terrain)
+		return;
 
-	Position.y = a + (D3DXVec3Length(&m_pTransformCom->Get_State(CTransform::STATE_UP)) * 0.5f);
+	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
+	if (nullptr == pTransform_Terrain)
+		return;
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, Position);
+	_float3			vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.5f);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 
 	_float4x4 matCameraPos;
 	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &matCameraPos);
 	D3DXMatrixInverse(&matCameraPos, nullptr, &matCameraPos);
 
 	m_pTransformCom->LookAt(*(_float3*)&matCameraPos.m[3][0]);
-
+	
 	if (nullptr != m_tInfo.pTarget)
 		Chase(fTimeDelta);
 
@@ -229,6 +247,7 @@ void CMonster::Tick(_float fTimeDelta)
 	{
 		m_iFrame = 0;
 	}
+	Safe_Release(pGameInstance);
 }
 
 void CMonster::Late_Tick(_float fTimeDelta)

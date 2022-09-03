@@ -10,7 +10,9 @@ CGameInstance::CGameInstance()
 	, m_pTimer_Manager(CTimer_Manager::Get_Instance())
 	, m_pComponent_Manager(CComponent_Manager::Get_Instance())
 	, m_pPicking(CPicking::Get_Instance())
+	, m_pKeyMgr(CKeyMgr::Get_Instance())
 {
+	Safe_AddRef(m_pKeyMgr);
 	Safe_AddRef(m_pPicking);
 	Safe_AddRef(m_pComponent_Manager);
 	Safe_AddRef(m_pTimer_Manager);
@@ -178,6 +180,14 @@ CGameObject * CGameInstance::Find_Object(const _tchar * pLayerTag, _uint iIndex)
 	return m_pObject_Manager->Find_Object(pLayerTag, iIndex);
 }
 
+CComponent * CGameInstance::Get_Component(_uint iLevelIndex, const _tchar * pLayerTag, const _tchar * pComponentTag, _uint iIndex)
+{
+	if (nullptr == m_pObject_Manager)
+		return nullptr;
+
+	return m_pObject_Manager->Get_Component(iLevelIndex, pLayerTag, pComponentTag, iIndex);
+}
+
 HRESULT CGameInstance::Add_Prototype(_uint iLevelIndex, const _tchar * pPrototypeTag, CComponent * pPrototype)
 {
 	if (nullptr == m_pComponent_Manager)
@@ -225,12 +235,15 @@ void CGameInstance::Release_Engine()
 	CInput_Device::Get_Instance()->Destroy_Instance();
 
 	CPicking::Get_Instance()->Destroy_Instance();
+	
+	CKeyMgr::Get_Instance()->Destroy_Instance();
 
 	CGraphic_Device::Get_Instance()->Destroy_Instance();
 }
 
 void CGameInstance::Free()
 {
+	Safe_Release(m_pKeyMgr);
 	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pTimer_Manager);
 	Safe_Release(m_pObject_Manager);

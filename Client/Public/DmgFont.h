@@ -40,6 +40,8 @@ private:
 	_int				m_iDraw[4];
 	_float				m_fDeadTime = 0.f;
 	_float3				m_vPos;
+	_float              m_fMoveX = 0.f;
+	_float				m_fTime = 0.f;
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
@@ -47,7 +49,9 @@ private:
 	HRESULT On_SamplerState();
 	HRESULT Off_SamplerState();
 	HRESULT TextureRender();
+	void	OnBillboard();
 	void	Set_State();
+	void	Jump();
 public:
 	static CDmgFont* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

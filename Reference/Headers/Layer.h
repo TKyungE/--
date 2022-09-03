@@ -10,6 +10,10 @@ class CLayer final : public CBase
 private:
 	CLayer();
 	virtual ~CLayer() = default;
+
+public:
+	class CComponent* Get_Component(const _tchar* pComponentTag, _uint iIndex = 0);
+
 public:
 	typedef list<class CGameObject*>	GAMEOBJECTS;
 public:

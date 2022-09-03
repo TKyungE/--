@@ -13,6 +13,7 @@ END
 BEGIN(Client)
 class CXBox : public CGameObject
 {
+
 private:
 	CXBox(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CXBox(const CXBox& rhs);
@@ -34,7 +35,8 @@ private: /* For.Components */
 private:
 	_float4x4				m_ProjMatrix;
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
-	bool*					m_Del=false;
+	Pos*					m_Recive;
+	bool					m_bCheck = 0;
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
@@ -44,7 +46,7 @@ public:
 	static CXBox*		 Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
 	virtual void		 Free() override;
-	virtual _float4x4 Get_World(void) override;
+	virtual _float4x4	 Get_World(void) override;
 };
 
 END

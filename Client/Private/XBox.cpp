@@ -22,16 +22,16 @@ HRESULT CXBox::Initialize_Prototype()
 
 HRESULT CXBox::Initialize(void * pArg)
 {
-	
+
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
-	m_Del = (bool*)pArg;
+	m_Recive = (Pos*)pArg;//여기서 바꾸면 상위개체가 영향을 받음 나는 상위개체가 하위 개체한테만 영향을 받게 하고싶음
 	D3DXMatrixOrthoLH(&m_ProjMatrix, g_iWinSizeX, g_iWinSizeY, 0.f, 1.f);
-
+	m_fX = m_Recive->fPosX;
+	m_fY = m_Recive->fPosY;
 	m_fSizeX = 24.0f;
 	m_fSizeY = 24.0f;
-	m_fX = 300.f;
-	m_fY = 300.f;
+
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
@@ -44,7 +44,11 @@ HRESULT CXBox::Initialize(void * pArg)
 
 void CXBox::Tick(_float fTimeDelta)
 {
+
 	__super::Tick(fTimeDelta);
+
+
+
 	RECT		rcRect;
 	SetRect(&rcRect, m_fX - m_fSizeX * 0.5f, m_fY - m_fSizeY * 0.5f, m_fX + m_fSizeX * 0.5f, m_fY + m_fSizeY * 0.5f);
 
@@ -54,17 +58,21 @@ void CXBox::Tick(_float fTimeDelta)
 
 	if (PtInRect(&rcRect, ptMouse))
 	{
+		m_bCheck = true;
 		if (GetKeyState(VK_LBUTTON) & 0x8000)
 		{
-			*m_Del = true;
+			m_Recive->bNext = true;
 		}
 	}
+	else
+		m_bCheck = false;
 }
 
 void CXBox::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-	if (*m_Del == true)
+
+	if (m_Recive->bNext == true)
 	{
 		Set_Dead();
 	}
@@ -86,7 +94,7 @@ HRESULT CXBox::Render()
 	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
 	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(1)))
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_bCheck)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_RenderState()))
@@ -135,14 +143,16 @@ HRESULT CXBox::SetUp_RenderState()
 		return E_FAIL;
 
 	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
-
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 	return S_OK;
 }
 
 HRESULT CXBox::Release_RenderState()
 {
 	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
-
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	return S_OK;
 }
 

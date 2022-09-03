@@ -27,9 +27,10 @@ HRESULT CHpBar::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
+	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	D3DXMatrixOrthoLH(&m_ProjMatrix, g_iWinSizeX, g_iWinSizeY, 0.f, 1.f);
 
-	m_fSizeX = 96.f;//나중에 늘어나고 줄어듦을 여기서 조절한다
+	m_fSizeX = (float)m_tInfo.pTarget->Get_Info().iHp;//나중에 늘어나고 줄어듦을 여기서 조절한다
 	m_fSizeY = 16.f;
 
 	m_fY = 91.f;
@@ -44,42 +45,25 @@ HRESULT CHpBar::Initialize(void * pArg)
 void CHpBar::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	if (m_SaveTest == false)
+
+	
+	m_fSizeX = (float)m_tInfo.pTarget->Get_Info().iHp;
+
+	if (m_fSizeX >= 186.0f)
 	{
-		if (GetKeyState('B') & 0x8000)
-		{
-			if (m_fSizeX <= 186.0f)//186이 ui최대치
-			{
-				m_fSizeX += 10;
-			}
-			if (m_fSizeX >= 186.0f)
-			{
-				m_fSizeX = 186.0;
-			}
-		}
-		if (GetKeyState('N') & 0x8000)
-		{
-			if (m_fSizeX <= 186.0f)//186이 ui최대치
-			{
-				m_fSizeX -= 10;
-			}
-			if (m_fSizeX <= 0.f)
-			{
-				m_fSizeX = 0.00001f;
-			}
-		}
-		m_fX = m_fSizeX *0.5 + 47.f;
-		m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
+		m_fSizeX = 186.0;
 	}
-	if (GetKeyState('L') & 0x8000)
+
+	if (m_fSizeX <= 0.f)
 	{
-		m_SaveTest = true;
+		m_fSizeX = 0.00001f;
 	}
-	if (GetKeyState('K') & 0x8000)
-	{
-		m_SaveTest = false;
-	}
+
+	m_fX = m_fSizeX *0.5 + 47.f;
+	
+	m_pTransformCom->Set_Scaled({ m_fSizeX, m_fSizeY, 1.f });
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
 }
 
 void CHpBar::Late_Tick(_float fTimeDelta)
