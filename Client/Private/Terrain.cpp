@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Public\Terrain.h"
 #include "GameInstance.h"
+#include "TerrainRect.h"
 
 CTerrain::CTerrain(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
@@ -32,7 +33,7 @@ HRESULT CTerrain::Initialize(void* pArg)
 	
 	//여기서 링크를 가져와서 대입하는 방식이 현명해보임,, 밑에는 임시방편
 
-	if(FAILED(OnLoadData(TEXT("../../Data/TestMap.dat"))))
+	if(FAILED(OnLoadData(TEXT("../../Data/Terrain/TestTerrain.dat"))))
 	{ 
 		ERR_MSG(TEXT("Failed to OnLoadData"));
 		return E_FAIL;
@@ -88,12 +89,41 @@ HRESULT CTerrain::OnLoadData(const _tchar* pFilePath)
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pInstance);
 
-	//CTerrain* pTerrain = dynamic_cast<CTerrain*>(pInstance->Find_Object(TEXT("Layer_BackGround"), 0));
-	/*if (nullptr == pTerrain)
+#pragma region TerrainRect
+	_tchar szSize[MAX_PATH];
+	ReadFile(hFile, &szSize, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	_int TerrainRectSize = _wtoi(szSize);
+
+	for (_int i = 0; i < TerrainRectSize; ++i)
 	{
-		ERR_MSG(TEXT("Failed to Load"));
-		return;
-	}*/
+		CTerrainRect::RECTINFO tRectInfo;
+
+		ReadFile(hFile, &tRectInfo.vPos, sizeof(tRectInfo.vPos), &dwByte, nullptr);
+
+		_tchar szTex[MAX_PATH];
+		ReadFile(hFile, &szTex, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+		tRectInfo.iTex = _wtoi(szTex);
+
+		for (_uint j = 0; j < 4; j++)
+		{
+			_float3 vPos;
+			_float2 vTex;
+
+			ReadFile(hFile, &vPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &vTex, sizeof(_float2), &dwByte, nullptr);
+
+			tRectInfo.VertexArray[j] = vPos;
+			tRectInfo.TextureArray[j] = vTex;
+		}
+
+		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TerrainRect"), LEVEL_GAMEPLAY, TEXT("Layer_TerrainRect"), &tRectInfo)))
+		{
+			ERR_MSG(TEXT("Failed to Cloned : CTerrainRect"));
+			return E_FAIL;
+		}
+	}
+#pragma endregion TerrainRect
 
 	CVIBuffer::VIBINFO VIBInfo;
 	CVIBuffer_Terrain::VIBINFO_DERIVED VIBInfo_Derived;

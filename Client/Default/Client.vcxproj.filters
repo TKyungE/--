@@ -199,6 +199,9 @@
     <Filter Include="02.GameObject\Wing">
       <UniqueIdentifier>{0bc110a1-b2b7-4777-89b4-9fba7c4f5948}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Terrain\TerrainRect">
+      <UniqueIdentifier>{7461084d-77ed-4c28-a10f-f5149c95ae5a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\MainApp.h">
@@ -376,6 +379,9 @@
     <ClInclude Include="..\public\Wing.h">
       <Filter>02.GameObject\Wing</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\TerrainRect.h">
+      <Filter>02.GameObject\Terrain\TerrainRect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -543,6 +549,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Wing.cpp">
       <Filter>02.GameObject\Wing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TerrainRect.cpp">
+      <Filter>02.GameObject\Terrain\TerrainRect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
