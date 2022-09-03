@@ -30,10 +30,6 @@ HRESULT CWing::Initialize(void* pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	
-	m_pTransformCom->Set_Scaled(m_tInfo.vPos);
-	m_pTransformCom2->Set_Scaled(m_tInfo.vPos);
-
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;
 	m_tFrame.iFrameStart = 0;
@@ -58,7 +54,7 @@ void CWing::Late_Tick(_float fTimeDelta)
 		Set_Dead();
 		return;
 	}
-	Set_TargetPos();
+	//Set_TargetPos();
 	WingTurn(fTimeDelta);
 
 	if (nullptr != m_pRendererCom)
@@ -145,6 +141,12 @@ void CWing::Set_TargetPos()
 
 void CWing::WingTurn(_float fTimeDelta)
 {
+	_float4x4 matWorld, matScale, matTrans, matRotW, matParent;
+
+	D3DXMatrixIdentity(&matWorld);
+
+	D3DXMatrixScaling(&matScale, m_tInfo.vPos.x, m_tInfo.vPos.y, m_tInfo.vPos.z);
+	
 	_float fTurn;
 	m_TurnTime += fTimeDelta;
 	if (m_TurnTime >= 1.f)
@@ -170,10 +172,21 @@ void CWing::WingTurn(_float fTimeDelta)
 			fTurn = -1.f;
 	}
 
-	_float3 vUpTurn = { 0.f,-1.f,0.f };
-	m_pTransformCom->Turn(vUpTurn, fTimeDelta *fTurn);
-	vUpTurn = { 0.f,1.f,0.f };
-	m_pTransformCom2->Turn(vUpTurn, fTimeDelta *fTurn);
+	D3DXMatrixTranslation(&matTrans, -0.25f, 0.25f, 0.f);
+	D3DXMatrixRotationAxis(&matRotW, (_float3*)&m_tInfo.pTarget->Get_World().m[1][0], 40000.f * fTimeDelta);
+
+	D3DXMatrixTranslation(&matParent, m_tInfo.pTarget->Get_World().m[3][0], m_tInfo.pTarget->Get_World().m[3][1], m_tInfo.pTarget->Get_World().m[3][2]);
+	
+	matWorld = matWorld * matScale;
+	matWorld = matWorld * matTrans;
+	matWorld = matWorld * matRotW;
+	matWorld = matWorld * matParent;
+
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&matWorld.m[0][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&matWorld.m[1][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&matWorld.m[2][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, *(_float3*)&matWorld.m[3][0]);
+
 }
 
 
