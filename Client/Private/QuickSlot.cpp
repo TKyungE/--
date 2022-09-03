@@ -26,31 +26,22 @@ HRESULT CQuickSlot::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
-
+	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	m_fSizeX = 400.0f;
 	m_fSizeY = 50.0f;
 	m_fX = 600.f;
 	m_fY = 25.f;
 
-
-	m_Pass.fPosX = m_fX + 188;//반지름에서 12(x박스크기의 반값)만큼 추가로 빼야함
-	m_Pass.fPosY = m_fY - 13;//반지름에서 12(x박스크기의 반값)만큼 추가로 빼야함
-	m_Pass.bNext = false;
+	m_tInfo.vPos.x = m_fX + 188;
+	m_tInfo.vPos.y = m_fY - 13;
+	m_tInfo.bHit = false;
+	m_tInfo.pTarget = this;
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 
 	Safe_AddRef(pGameInstance);
 
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_XBox"), LEVEL_GAMEPLAY, TEXT("Layer_UI"), &m_Pass);
-	for (int i = 0; i < 9; ++i)
-	{
-		POINT ptPos;
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_XBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &m_tInfo);
 
-		ptPos.x = 400 + i * 100;
-		ptPos.y = (long)m_fY;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Item"), LEVEL_GAMEPLAY, TEXT("Layer_UI"), &ptPos);
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Slot"), LEVEL_GAMEPLAY, TEXT("Layer_UI"), &ptPos);
-
-	}
 	Safe_Release(pGameInstance);
 
 
@@ -65,7 +56,7 @@ void CQuickSlot::Tick(_float fTimeDelta)
 {
 
 	__super::Tick(fTimeDelta);
-	if (m_Pass.bNext == true)
+	if (m_tInfo.bHit == true)
 	{
 		Set_Dead();
 	}
@@ -132,7 +123,7 @@ HRESULT CQuickSlot::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_QuickSlot"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_QuickSlot"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */

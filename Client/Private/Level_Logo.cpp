@@ -16,12 +16,9 @@ HRESULT CLevel_Logo::Initialize()
 	if (FAILED(__super::Initialize()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
-		return E_FAIL;
-	//배경음 사용법
-	CSoundMgr::Get_Instance()->PlayBGM(L"Boss_Sound1.wav", fSOUND);
-	//효과음 사용법
-	CSoundMgr::Get_Instance()->PlayEffect(L"KingkongGun.wav", fSOUND);
+//	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+//		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -34,21 +31,13 @@ void CLevel_Logo::Tick(_float fTimeDelta)
 		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 		Safe_AddRef(pGameInstance);
 
-		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_GAMEPLAY))))
+		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_TOWN))))
 			return;
 
 		Safe_Release(pGameInstance);
 	}
-	//충돌 사용법
-	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
-	Safe_AddRef(pGameInstance);
-	//Layer_Player,Layer_Monster 가 있다는 가정하에 적은 예외코드;
-	/*if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_Monster"))->Get_Objects()))
-	{
-		Dead();
-	}*/
-
-	Safe_Release(pGameInstance);
+	if (CKeyMgr::Get_Instance()->Key_Down('T'))
+		m_bNextLevel = true;
 }
 
 void CLevel_Logo::Late_Tick(_float fTimeDelta)

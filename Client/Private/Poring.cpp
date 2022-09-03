@@ -22,16 +22,16 @@ HRESULT CPoring::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Poring_IDLE_Front"), (CComponent**)&m_pTextureComIDLE_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Poring_IDLE_Front"), (CComponent**)&m_pTextureComIDLE_Front)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Poring_IDLE_Back"), (CComponent**)&m_pTextureComIDLE_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Poring_IDLE_Back"), (CComponent**)&m_pTextureComIDLE_Back)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Front"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Poring_Move_Front"), (CComponent**)&m_pTextureComMove_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Poring_Move_Front"), (CComponent**)&m_pTextureComMove_Front)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Back"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Poring_Move_Back"), (CComponent**)&m_pTextureComMove_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Poring_Move_Back"), (CComponent**)&m_pTextureComMove_Back)))
 		return E_FAIL;
 	CTransform::TRANSFORMDESC TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
@@ -95,11 +95,11 @@ void CPoring::OnTerrain()
 	if (nullptr == pGameInstance)
 		return;
 	Safe_AddRef(pGameInstance);
-	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
+	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
 	if (nullptr == pVIBuffer_Terrain)
 		return;
 
-	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
+	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
 	if (nullptr == pTransform_Terrain)
 		return;
 
@@ -168,10 +168,11 @@ HRESULT CPoring::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
+	
+	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	memcpy(&m_tInfo, pArg, sizeof(INFO));
 //	m_tInfo.vPos.y += 2.f;
 	_float3 vScale = { 0.5f,0.5f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
@@ -184,7 +185,8 @@ HRESULT CPoring::Initialize(void * pArg)
 	m_tFrame.fFrameSpeed = 0.1f;
 	m_tInfo.bDead = false;
 	m_tInfo.fX = 1.f;
-	
+	m_tInfo.iHp = 999999999;
+	m_tInfo.iLevelIndex = m_tInfo.pTarget->Get_Info().iLevelIndex;
 
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
@@ -192,8 +194,9 @@ HRESULT CPoring::Initialize(void * pArg)
 	Safe_AddRef(pGameInstance);
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
+	
 	tInfo.vPos = { 0.5f,0.5f,1.f };
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
 
 	Safe_Release(pGameInstance);
 
@@ -319,7 +322,10 @@ void CPoring::Check_Front()
 {
 	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-
+	if (m_tInfo.pTarget->Get_Info().iHp <= 0 || m_tInfo.pTarget->Get_Info().bDead)
+	{
+		Set_Dead();
+	}
 	if (vTargetPos.z > vPos.z)
 		m_bFront = false;
 	if (vTargetPos.z <= vPos.z)

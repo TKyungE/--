@@ -33,7 +33,7 @@ private: /* For.Components */
 private:
 	_float4x4				m_ProjMatrix;
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
-	bool*					m_Click = false;
+	
 	_ushort					m_Check = 0;
 private:
 	HRESULT SetUp_Components();

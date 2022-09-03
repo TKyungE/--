@@ -34,9 +34,6 @@
     <Filter Include="02.GameObject\Terrain">
       <UniqueIdentifier>{27ae354b-4b52-4c4d-9a7e-009f3e4b9ec8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Camera">
-      <UniqueIdentifier>{6ad6400b-9d5a-4bf0-9b0f-946a3f09392e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Sky">
       <UniqueIdentifier>{e7741bd6-d9aa-46ed-b919-46b39b50e7b7}</UniqueIdentifier>
     </Filter>
@@ -175,11 +172,32 @@
     <Filter Include="02.GameObject\BackGroundObj\House">
       <UniqueIdentifier>{36349508-8e85-4729-bab5-e5cb61236108}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\BackGroundObj\Rect">
-      <UniqueIdentifier>{a101335d-7c21-480f-9001-eb8a7c18702d}</UniqueIdentifier>
+    <Filter Include="02.GameObject\BackGroundObj\Stone">
+      <UniqueIdentifier>{2485e12a-1952-4029-bd81-c026f7e639c0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\BackGroundObj\Tree">
-      <UniqueIdentifier>{440c2e30-1a42-44fd-929e-2838a750507e}</UniqueIdentifier>
+    <Filter Include="01.Levels\Town">
+      <UniqueIdentifier>{68167f68-27fb-4e3c-ab0b-50f5c284a1da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Loading">
+      <UniqueIdentifier>{529a4711-daf2-4b0b-9f46-064b8cdf1930}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Camera">
+      <UniqueIdentifier>{6ad6400b-9d5a-4bf0-9b0f-946a3f09392e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Portal">
+      <UniqueIdentifier>{da6952f7-abbe-4b17-b86a-c71274cfa03b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Player\PlayerInfo">
+      <UniqueIdentifier>{b6a7f3f7-902f-40bd-a4db-66ad2c9fb94d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC">
+      <UniqueIdentifier>{d26d626b-af07-45e9-80a5-51f5cae667c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC\00.NPC">
+      <UniqueIdentifier>{42b918b4-0659-4a8f-8919-5a07b097b36a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Wing">
+      <UniqueIdentifier>{0bc110a1-b2b7-4777-89b4-9fba7c4f5948}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -333,17 +351,33 @@
     <ClInclude Include="..\public\ExpBlank.h" />
     <ClInclude Include="..\public\ExpLogo.h" />
     <ClInclude Include="..\Public\MpBar.h" />
+    <ClInclude Include="..\Public\BackGroundRect.h">
+      <Filter>02.GameObject\BackGroundObj</Filter>
+    </ClInclude>
     <ClInclude Include="..\public\Poring.h">
       <Filter>02.GameObject\Pet\00.Poring</Filter>
     </ClInclude>
     <ClInclude Include="..\public\House.h">
       <Filter>02.GameObject\BackGroundObj\House</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\BackGroundRect.h">
-      <Filter>02.GameObject\BackGroundObj\Rect</Filter>
+    <ClInclude Include="..\public\Stone.h">
+      <Filter>02.GameObject\BackGroundObj\Stone</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\BackGroundTree.h">
-      <Filter>02.GameObject\BackGroundObj\Tree</Filter>
+    <ClInclude Include="..\public\Town.h">
+      <Filter>01.Levels\Town</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Loading.h">
+      <Filter>02.GameObject\Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BackGroundTree.h" />
+    <ClInclude Include="..\public\Portal.h">
+      <Filter>02.GameObject\Portal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\PlayerInfo.h">
+      <Filter>02.GameObject\Player\PlayerInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Wing.h">
+      <Filter>02.GameObject\Wing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -485,17 +519,33 @@
     <ClCompile Include="..\private\ExpBlank.cpp" />
     <ClCompile Include="..\private\ExpLogo.cpp" />
     <ClCompile Include="..\Private\MpBar.cpp" />
+    <ClCompile Include="..\Private\BackGroundRect.cpp">
+      <Filter>02.GameObject\BackGroundObj</Filter>
+    </ClCompile>
     <ClCompile Include="..\private\Poring.cpp">
       <Filter>02.GameObject\Pet\00.Poring</Filter>
     </ClCompile>
     <ClCompile Include="..\private\House.cpp">
       <Filter>02.GameObject\BackGroundObj\House</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\BackGroundRect.cpp">
-      <Filter>02.GameObject\BackGroundObj\Rect</Filter>
+    <ClCompile Include="..\private\Stone.cpp">
+      <Filter>02.GameObject\BackGroundObj\Stone</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\BackGroundTree.cpp">
-      <Filter>02.GameObject\BackGroundObj\Tree</Filter>
+    <ClCompile Include="..\private\Town.cpp">
+      <Filter>01.Levels\Town</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Loading.cpp">
+      <Filter>02.GameObject\Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BackGroundTree.cpp" />
+    <ClCompile Include="..\private\Portal.cpp">
+      <Filter>02.GameObject\Portal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\PlayerInfo.cpp">
+      <Filter>02.GameObject\Player\PlayerInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Wing.cpp">
+      <Filter>02.GameObject\Wing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

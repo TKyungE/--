@@ -83,7 +83,10 @@ HRESULT CBackGroundRect::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBuffer)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_BackGroundRect"), (CComponent**)&m_pTextureCom)))
+
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_BackGroundRect"), (CComponent**)&m_pTextureCom)))
+		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Tree"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	CTransform::TRANSFORMDESC TransformDesc;
@@ -115,7 +118,7 @@ HRESULT CBackGroundRect::Release_RenderState(void)
 		return E_FAIL;
 
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-
+	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
 }
 
