@@ -205,6 +205,9 @@
     <Filter Include="02.GameObject\BackGroundObj\Rect">
       <UniqueIdentifier>{1995a023-de79-436a-8b3c-5236e96fdc2b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\RectHouse">
+      <UniqueIdentifier>{5296e59f-0882-4402-bb8c-0d0508430126}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -387,6 +390,9 @@
     <ClInclude Include="..\Public\BackGroundTree.h">
       <Filter>02.GameObject\BackGroundObj\Tree</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\RectHouse.h">
+      <Filter>02.GameObject\BackGroundObj\RectHouse</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -556,6 +562,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\BackGroundTree.cpp">
       <Filter>02.GameObject\BackGroundObj\Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\RectHouse.cpp">
+      <Filter>02.GameObject\BackGroundObj\RectHouse</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

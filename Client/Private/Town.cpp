@@ -8,6 +8,7 @@
 #include "Camera_Dynamic.h"
 #include "KeyMgr.h"
 #include "House.h"
+#include "RectHouse.h"
 
 CTown::CTown(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -91,10 +92,21 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.vScale = iter.vScale;
 		indexpos.vPos = iter.BackGroundPos;
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House"), LEVEL_TOWN, pLayerTag, &indexpos)))
-			return E_FAIL;
+	/*	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House"), LEVEL_TOWN, pLayerTag, &indexpos)))
+			return E_FAIL;*/
 	}
-	
+
+	CRectHouse::INDEXPOS indexpos;
+	ZeroMemory(&indexpos, sizeof(CRectHouse::INDEXPOS));
+	//indexpos.iIndex = 3;
+	//indexpos.vScale = 
+	//indexpos.vPos = 
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_RectHouse"), LEVEL_TOWN, pLayerTag, &indexpos)))
+		return E_FAIL;
+
+
+
 
 	Safe_Release(pGameInstance);
 

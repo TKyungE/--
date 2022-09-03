@@ -50,6 +50,7 @@
 #include "Portal.h"
 #include "PlayerInfo.h"
 #include "Wing.h"
+#include "RectHouse.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
@@ -397,7 +398,13 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_BackGroundRect"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/BackGround/etc/%d.png"), 6))))
 		return E_FAIL;
-	
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_HouseRect"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/BackGround/House/%d.png"), 4))))
+		return E_FAIL;
+
+
+
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -576,6 +583,9 @@ HRESULT CLoader::Loading_Prototype()
 		CStone::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_RectHouse"),
+		CRectHouse::Create(m_pGraphic_Device))))
+		return E_FAIL;
 
 	Safe_Release(pGameInstance);
 

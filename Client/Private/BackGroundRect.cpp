@@ -30,7 +30,9 @@ HRESULT CBackGroundRect::Initialize(void * pArg)
 		return E_FAIL;
 	
 	memcpy(&m_IndexPos, pArg, sizeof(INDEXPOS));
-
+	'
+		
+	
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_IndexPos.vPos);
 
 	return S_OK;
@@ -40,7 +42,7 @@ void CBackGroundRect::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
-	OnTerrain();
+	//OnTerrain();
 }
 
 void CBackGroundRect::Late_Tick(_float fTimeDelta)
