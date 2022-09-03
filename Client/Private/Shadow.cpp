@@ -158,7 +158,7 @@ void CShadow::OnTerrain()
 }
 void CShadow::Set_TargetPos()
 {
-	if (m_tInfo.pTarget->Get_Info().iHp <= 0 || m_tInfo.pTarget->Get_Info().bDead)
+	if (/*m_tInfo.pTarget->Get_Info().iHp <= 0 ||*/ m_tInfo.pTarget->Get_Info().bDead)
 	{
 		Set_Dead();
 	}

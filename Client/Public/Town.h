@@ -28,6 +28,7 @@ private:		// 파일입출력 라인
 
 	vector<INDEXPOS>	m_vecTree;
 	vector<INDEXPOS>	m_vecIndex;
+	vector<INDEXPOS>	m_vecHouse;
 	_float3	m_vPlayerPos;
 	vector<_float3> m_vMonsterPos1;
 

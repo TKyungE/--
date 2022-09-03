@@ -199,6 +199,12 @@
     <Filter Include="02.GameObject\Wing">
       <UniqueIdentifier>{0bc110a1-b2b7-4777-89b4-9fba7c4f5948}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Tree">
+      <UniqueIdentifier>{44da3952-18e6-4a35-a7b3-4550c35d4158}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Rect">
+      <UniqueIdentifier>{1995a023-de79-436a-8b3c-5236e96fdc2b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -351,9 +357,6 @@
     <ClInclude Include="..\public\ExpBlank.h" />
     <ClInclude Include="..\public\ExpLogo.h" />
     <ClInclude Include="..\Public\MpBar.h" />
-    <ClInclude Include="..\Public\BackGroundRect.h">
-      <Filter>02.GameObject\BackGroundObj</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Poring.h">
       <Filter>02.GameObject\Pet\00.Poring</Filter>
     </ClInclude>
@@ -369,7 +372,6 @@
     <ClInclude Include="..\public\Loading.h">
       <Filter>02.GameObject\Loading</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\BackGroundTree.h" />
     <ClInclude Include="..\public\Portal.h">
       <Filter>02.GameObject\Portal</Filter>
     </ClInclude>
@@ -378,6 +380,12 @@
     </ClInclude>
     <ClInclude Include="..\public\Wing.h">
       <Filter>02.GameObject\Wing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BackGroundRect.h">
+      <Filter>02.GameObject\BackGroundObj\Rect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BackGroundTree.h">
+      <Filter>02.GameObject\BackGroundObj\Tree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -519,9 +527,6 @@
     <ClCompile Include="..\private\ExpBlank.cpp" />
     <ClCompile Include="..\private\ExpLogo.cpp" />
     <ClCompile Include="..\Private\MpBar.cpp" />
-    <ClCompile Include="..\Private\BackGroundRect.cpp">
-      <Filter>02.GameObject\BackGroundObj</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Poring.cpp">
       <Filter>02.GameObject\Pet\00.Poring</Filter>
     </ClCompile>
@@ -537,7 +542,6 @@
     <ClCompile Include="..\private\Loading.cpp">
       <Filter>02.GameObject\Loading</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\BackGroundTree.cpp" />
     <ClCompile Include="..\private\Portal.cpp">
       <Filter>02.GameObject\Portal</Filter>
     </ClCompile>
@@ -546,6 +550,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Wing.cpp">
       <Filter>02.GameObject\Wing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BackGroundRect.cpp">
+      <Filter>02.GameObject\BackGroundObj\Rect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BackGroundTree.cpp">
+      <Filter>02.GameObject\BackGroundObj\Tree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
