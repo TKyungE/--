@@ -6,7 +6,8 @@ BEGIN(Engine)
 class CTexture;
 class CRenderer;
 class CTransform;
-class CVIBuffer_Rect;
+class CVIBuffer_WingRect;
+class CVIBuffer_RectLeft;
 END
 
 BEGIN(Client)
@@ -32,13 +33,18 @@ private: /* For.Components */
 	CRenderer*				m_pRendererCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
 	CTransform*				m_pTransformCom2 = nullptr;
-	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
-	CVIBuffer_Rect*			m_pVIBufferCom2 = nullptr;
+	CVIBuffer_WingRect*			m_pVIBufferCom = nullptr;
+	CVIBuffer_RectLeft*			m_pVIBufferCom2 = nullptr;
 private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
 	_float				m_TurnTime = 0.f;
 	_bool				m_bTurn = false;
+	_bool				m_bFront = false;
+	_float				vfTurn = 1.f;
+	_float3				m_OriginvRight;
+	_float3				m_OriginvLook;
+	_float				m_fAngle = 0.f;
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();

@@ -284,7 +284,7 @@ void CPlayer::OnBillboard()
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
 	_float3 vScale = { 1.f,1.f,1.f };
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
-	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
+	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
 }
 
@@ -614,7 +614,7 @@ _float3 CPlayer::Get_Pos()
 
 void CPlayer::Player_Move(_float fTimeDelta)
 {
-	
+	_float3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	_float3 vLook;
 	m_vTargetLook = m_vTarget - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	D3DXVec3Normalize(&vLook, &m_vTargetLook);
@@ -626,7 +626,7 @@ void CPlayer::Player_Move(_float fTimeDelta)
 			m_eCurState = IDLE;
 			m_tFrame.iFrameStart = 0;
 		}
-		m_pTransformCom->Go_Straight(fTimeDelta * 1.8f);
+		m_pTransformCom->Go_Straight(fTimeDelta * 1.5f);
 	}
 	else
 	{
