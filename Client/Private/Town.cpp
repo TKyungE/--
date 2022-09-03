@@ -67,7 +67,7 @@ void CTown::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-	SetWindowText(g_hWnd, TEXT("로고레벨입니다."));
+	SetWindowText(g_hWnd, TEXT("타운레벨입니다."));
 }
 
 HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
