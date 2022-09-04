@@ -20,6 +20,7 @@ public:
 		_float3		vPos;
 		_float3		vScale;
 		_uint	iIndex;
+		_uint iTrun;
 	}INDEXPOS;
 
 private:

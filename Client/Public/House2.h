@@ -21,6 +21,7 @@ public:
 		_float3		vPos;
 		_float3		vScale;
 		_uint	iIndex;
+		_uint iTrun;
 	}INDEXPOS;
 private:
 	CHouse2(LPDIRECT3DDEVICE9 _pGraphic_Device);
