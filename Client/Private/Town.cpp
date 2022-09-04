@@ -7,6 +7,7 @@
 #include "BackGroundRect.h" 
 #include "Camera_Dynamic.h"
 #include "KeyMgr.h"
+#include "House.h"
 
 CTown::CTown(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -82,11 +83,12 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	
 
 
-	for (auto& iter : m_vecIndex)
+	for (auto& iter : m_vecHouse)
 	{
-		CBackGroundRect::INDEXPOS indexpos;
-		ZeroMemory(&indexpos, sizeof(CBackGroundRect::INDEXPOS));
+		CHouse::INDEXPOS indexpos;
+		ZeroMemory(&indexpos, sizeof(CHouse::INDEXPOS));
 		indexpos.iIndex = iter.iIndex;
+		indexpos.vScale = iter.vScale;
 		indexpos.vPos = iter.BackGroundPos;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House"), LEVEL_TOWN, pLayerTag, &indexpos)))
@@ -184,6 +186,9 @@ HRESULT CTown::Ready_Layer_UI(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuickSlot"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
 
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), LEVEL_TOWN, pLayerTag, &tInfo)))
+		return E_FAIL;
+
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_IconBar"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
 
@@ -229,10 +234,11 @@ void CTown::LoadData()
 	DWORD	dwByte = 0;
 
 	_float3 vPos1;
-	_uint iMSize, iIndexSize, iTreeSize;
+	_uint iMSize, iIndexSize, iTreeSize, iHouseSize;
 	_tchar str1[MAX_PATH];
 	_tchar str2[MAX_PATH];
 	_tchar str3[MAX_PATH];
+	_tchar str4[MAX_PATH];
 
 	ReadFile(hFile, vPos1, sizeof(_float3), &dwByte, nullptr);
 	m_vPlayerPos = vPos1;
@@ -240,10 +246,14 @@ void CTown::LoadData()
 	ReadFile(hFile, str1, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str2, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str4, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 
 	iMSize = stoi(str1);
 	iIndexSize = stoi(str2);
-	iTreeSize = stoi(str2);
+	iTreeSize = stoi(str3);
+	iHouseSize = stoi(str4);
+
+
 
 	while (true)
 	{
@@ -311,6 +321,30 @@ void CTown::LoadData()
 			TreePos.iIndex = Index;
 
 			m_vecTree.push_back(TreePos);
+		}
+
+		for (_uint i = 0; i < iHouseSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+
+			_float3 BackPos, Scale;
+			_tchar str3[MAX_PATH];
+			_uint Index;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &Scale, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+
+			INDEXPOS HousePos;
+
+			HousePos.BackGroundPos = BackPos;
+			HousePos.vScale = Scale;
+			HousePos.iIndex = Index;
+
+			m_vecHouse.push_back(HousePos);
 		}
 
 		if (0 == dwByte)

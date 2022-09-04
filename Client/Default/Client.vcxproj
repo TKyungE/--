@@ -170,6 +170,7 @@
     <ClInclude Include="..\public\ExpBlank.h" />
     <ClInclude Include="..\public\ExpLogo.h" />
     <ClInclude Include="..\public\House.h" />
+    <ClInclude Include="..\public\HpPotion.h" />
     <ClInclude Include="..\public\Loading.h" />
     <ClInclude Include="..\Public\MpBar.h" />
     <ClInclude Include="..\public\Fire.h" />
@@ -199,6 +200,7 @@
     <ClInclude Include="..\public\Rain.h" />
     <ClInclude Include="..\public\Shadow.h" />
     <ClInclude Include="..\public\SkillIcon.h" />
+    <ClInclude Include="..\public\SkillSlot.h" />
     <ClInclude Include="..\public\SkillWnd.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\public\SoundMgr.h" />
@@ -232,6 +234,7 @@
     <ClCompile Include="..\private\ExpBlank.cpp" />
     <ClCompile Include="..\private\ExpLogo.cpp" />
     <ClCompile Include="..\private\House.cpp" />
+    <ClCompile Include="..\private\HpPotion.cpp" />
     <ClCompile Include="..\private\Loading.cpp" />
     <ClCompile Include="..\Private\MpBar.cpp" />
     <ClCompile Include="..\private\Fire.cpp" />
@@ -261,6 +264,7 @@
     <ClCompile Include="..\private\Rain.cpp" />
     <ClCompile Include="..\private\Shadow.cpp" />
     <ClCompile Include="..\private\SkillIcon.cpp" />
+    <ClCompile Include="..\private\SkillSlot.cpp" />
     <ClCompile Include="..\private\SkillWnd.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\private\SoundMgr.cpp" />

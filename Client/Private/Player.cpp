@@ -90,6 +90,7 @@ void CPlayer::Tick(_float fTimeDelta)
 	Move_Frame(fTimeDelta);
 	Key_Input(fTimeDelta);
 	Player_Move(fTimeDelta);
+
 	if (GetKeyState('N') & 0x8000)
 	{
 		if (m_tInfo.iHp > 0)
