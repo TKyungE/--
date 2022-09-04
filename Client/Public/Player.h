@@ -8,6 +8,7 @@ class CRenderer;
 class CTransform;
 class CVIBuffer_Rect;
 class CTexture;
+class CCollider;
 END
 
 BEGIN(Client)
@@ -32,6 +33,7 @@ private:
 	CRenderer* m_pRendererCom = nullptr;
 	CTransform* m_pTransformCom = nullptr;
 	CVIBuffer_Rect* m_pVIBuffer = nullptr;
+	CCollider* m_pColliderCom = nullptr;
 
 	CTexture* m_pTextureComIDLE_Front = nullptr;
 	CTexture* m_pTextureComIDLE_Back = nullptr;
@@ -92,7 +94,11 @@ private:
 	void Move_Frame(_float fTimeDelta);
 	void Check_Front();
 	HRESULT TextureRender();
-	
+
+	void Get_PickingPoint(void);
+
+private:
+	_float3 m_fPickPoint = { 0.f, 0.f, 0.f };
 };
 
 END

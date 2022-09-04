@@ -30,7 +30,6 @@ public:
 
 private:
 	void CameraRotationX(_float fTimeDelta, _long MouseMove);
-	void CameraRotationY(_float fTimeDelta, _long MouseMove);
 	
 private:
 	_float3 m_vecCameraNormal;
