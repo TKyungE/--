@@ -30,7 +30,7 @@ HRESULT CBackGroundRect::Initialize(void * pArg)
 		return E_FAIL;
 	
 	memcpy(&m_IndexPos, pArg, sizeof(INDEXPOS));
-	'
+	
 		
 	
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_IndexPos.vPos);

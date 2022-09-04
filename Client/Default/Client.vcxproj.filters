@@ -390,7 +390,7 @@
     <ClInclude Include="..\Public\BackGroundTree.h">
       <Filter>02.GameObject\BackGroundObj\Tree</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\RectHouse.h">
+    <ClInclude Include="..\Public\House2.h">
       <Filter>02.GameObject\BackGroundObj\RectHouse</Filter>
     </ClInclude>
   </ItemGroup>
@@ -563,7 +563,7 @@
     <ClCompile Include="..\Private\BackGroundTree.cpp">
       <Filter>02.GameObject\BackGroundObj\Tree</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\RectHouse.cpp">
+    <ClCompile Include="..\Private\House2.cpp">
       <Filter>02.GameObject\BackGroundObj\RectHouse</Filter>
     </ClCompile>
   </ItemGroup>

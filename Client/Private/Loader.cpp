@@ -50,7 +50,7 @@
 #include "Portal.h"
 #include "PlayerInfo.h"
 #include "Wing.h"
-#include "RectHouse.h"
+#include "House2.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
@@ -399,9 +399,11 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/BackGround/etc/%d.png"), 6))))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_HouseRect"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/BackGround/House/%d.png"), 4))))
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/BackGround/House/%d.png"), 2))))
 		return E_FAIL;
-
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_HouseCube"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_CUBEMAP, TEXT("../Bin/Resources/Textures/BackGround/House/%d.dds"), 1))))
+		return E_FAIL;
 
 
 
@@ -509,6 +511,10 @@ HRESULT CLoader::Loading_Prototype()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Portal"),
 		CPortal::Create(m_pGraphic_Device))))
 		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_House2"),
+		CHouse2::Create(m_pGraphic_Device))))
+		return E_FAIL;
 	
 	//sky °´Ã¼
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sky"),
@@ -583,9 +589,7 @@ HRESULT CLoader::Loading_Prototype()
 		CStone::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_RectHouse"),
-		CRectHouse::Create(m_pGraphic_Device))))
-		return E_FAIL;
+	
 
 	Safe_Release(pGameInstance);
 
