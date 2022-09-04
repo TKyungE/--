@@ -51,9 +51,9 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 	_long MouseMove = 0;
 
 	if (GetKeyState(VK_LEFT) < 0)
-		CameraRotationX(fTimeDelta, 10.f);
-	if (GetKeyState(VK_RIGHT) < 0)
 		CameraRotationX(fTimeDelta, -10.f);
+	if (GetKeyState(VK_RIGHT) < 0)
+		CameraRotationX(fTimeDelta, 10.f);
 
 	if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_WHEEL))
 	{
