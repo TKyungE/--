@@ -226,6 +226,12 @@
     <Filter Include="02.GameObject\NPC\04.Engineer">
       <UniqueIdentifier>{38052cc6-d24d-430a-8cdc-731f050f7655}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Effect\Skill\04.PoisonArrow">
+      <UniqueIdentifier>{65320a6e-01ea-412d-b06e-0725fff5a357}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\00.Alligator">
+      <UniqueIdentifier>{711995f4-d041-41c2-a053-a6db8ab3e8da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -433,6 +439,12 @@
     <ClInclude Include="..\public\Village_Quest1.h">
       <Filter>02.GameObject\NPC\02.Village_Quest1</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\PoisonArrow.h">
+      <Filter>03.Effect\Skill\04.PoisonArrow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Alligator.h">
+      <Filter>02.GameObject\Monster\00.Alligator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -627,6 +639,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Village_Quest1.cpp">
       <Filter>02.GameObject\NPC\02.Village_Quest1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\PoisonArrow.cpp">
+      <Filter>03.Effect\Skill\04.PoisonArrow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Alligator.cpp">
+      <Filter>02.GameObject\Monster\00.Alligator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
