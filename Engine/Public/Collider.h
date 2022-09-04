@@ -17,7 +17,7 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
-	HRESULT Set_TargetWorld(_float4x4 matTarget) { m_matTarget = matTarget; }
+	void Set_TargetWorld(_float4x4 matTarget) { m_matTarget = matTarget; }
 	void Tick(_float fTimeDelta);
 	void Late_Tick(_float fTimeDelta);
 	HRESULT Render(void);

@@ -29,42 +29,64 @@ HRESULT CCollider::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CCollider::Tick(_float fTimeDelta)
-{
-}
-
-void CCollider::Late_Tick(_float fTimeDelta)
-{
-}
-
 HRESULT CCollider::Render(void)
 {
-	return E_NOTIMPL;
+	if (FAILED())
+	{
+
+	}
+
+	return S_OK;
 }
 
 HRESULT CCollider::SetUp_Components(void)
 {
+	if (true)
+	{
+
+	}
+
 	return E_NOTIMPL;
 }
 
 HRESULT CCollider::SetUp_RenderState(void)
 {
-	return E_NOTIMPL;
+	m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	
+	return S_OK;
 }
 
 HRESULT CCollider::Release_RenderState(void)
 {
-	return E_NOTIMPL;
+	m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+
+	return S_OK;
 }
 
 CCollider * CCollider::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
-	return nullptr;
+	CCollider* pInstance = new CCollider(pGraphic_Device);
+
+	if (FAILED(pInstance->Initialize_Prototype()))
+	{
+		ERR_MSG(TEXT("Failed to Created : CCollider"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
 }
 
 CComponent * CCollider::Clone(void * pArg)
 {
-	return nullptr;
+	CCollider* pInstance = new CCollider(*this);
+
+	if (FAILED(pInstance->Initialize(pArg)))
+	{
+		ERR_MSG(TEXT("Failed to Cloned : CCollider"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
 }
 
 void CCollider::Free(void)
