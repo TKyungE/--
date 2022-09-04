@@ -76,13 +76,13 @@ HRESULT CHouse2::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBufferCube"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Cube"), (CComponent**)&m_pVIBufferCube)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBuffer1)))
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect2"), (CComponent**)&m_pVIBuffer1)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer1"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBuffer2)))
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer1"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect2"), (CComponent**)&m_pVIBuffer2)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer2"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBuffer3)))
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer2"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect2"), (CComponent**)&m_pVIBuffer3)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer3"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBuffer4)))
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer3"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect2"), (CComponent**)&m_pVIBuffer4)))
 		return E_FAIL;
 
 
@@ -143,44 +143,172 @@ HRESULT CHouse2::Release_RenderState(void)
 
 void CHouse2::SetPos(void)
 {
-	_float3 vPos = _float3(1.f, 0.f, 1.f);
-
-	_float Scale = 1.f;
-
-	vPos.y += 0.5f;
-	m_pTransformCom1->Set_Scaled(_float3(Scale, Scale, Scale));
+	// 6개의 점을 구해보자
 	
-	m_pTransformCom1->Set_State(CTransform::STATE_POSITION, vPos * Scale);
+	_float3 vPos = _float3(3.f, 0.f, 3.f);
+	
+	_float3 vScale = _float3(2.f, 2.f, 2.f);
+
 	
 
-	_float3 vPos1 = _float3(0.f,1.f,-0.5f);
-	m_pTransformCom2->Set_Scaled(_float3(Scale, Scale, Scale));
-	m_pTransformCom2->Turn(_float3(1.f, 0.f, 0.f), 0.3f);
-	vPos1.y -= 0.13f;
-	vPos1.z += 0.35f;
-	m_pTransformCom2->Set_State(CTransform::STATE_POSITION, (m_pTransformCom1->Get_State(CTransform::STATE_POSITION) + vPos1));
+	vPos.y += 0.5f * vScale.y;
+	m_pTransformCom1->Set_Scaled(vScale);
+	m_pTransformCom1->Set_State(CTransform::STATE_POSITION,vPos);
+
+	// 가운데점
+	_float3 vCenter = m_pTransformCom1->Get_State(CTransform::STATE_POSITION);
+	vCenter.y += 0.5f * vScale.y;
+
+	// 앞쪽 점 
+	_float3 vFront = m_pTransformCom1->Get_State(CTransform::STATE_POSITION);
+	vFront.y += 0.5f * vScale.y;
+	vFront.z -= 0.5f * vScale.z;
+
+	//임의의 벡터 
+	_float3 vXYZ = m_pTransformCom1->Get_State(CTransform::STATE_POSITION);
+	vXYZ.y += 1.f * vScale.y;
+
+	_float3 vFrontLook = vCenter - vFront;
+	_float3 vFrontRight;
+
+	D3DXVec3Cross(&vFrontRight,&vFrontLook,&_float3(0.f,1.f,0.f));
+	
+
+	D3DXVec3Normalize(&vFrontRight, &vFrontRight);
+	vFrontRight *= vScale.x;
+	m_pTransformCom2->Set_State(CTransform::STATE_RIGHT, vFrontRight);
+	vCenter = vXYZ - vCenter;
+	vFrontLook += vCenter;
+	_float3 vFrontUp =  vFrontLook;
+
+	
+	m_pTransformCom2->Set_State(CTransform::STATE_UP, vFrontUp);
+
+	_float3 vLook;
+	D3DXVec3Cross(&vLook, &vFrontUp, &vFrontRight);
+	D3DXVec3Normalize(&vLook, &vLook);
+
+	m_pTransformCom2->Set_State(CTransform::STATE_LOOK, vLook);
+
+	m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vFront);
 
 
-	_float3 vPos2 = _float3(0.f, 1.f, 0.5f);
-	m_pTransformCom3->Set_Scaled(_float3(Scale, Scale, Scale));
-	m_pTransformCom3->Turn(_float3(1.f, 0.f, 0.f), -0.3f);
-	vPos2.y -= 0.13f;
-	vPos2.z -= 0.35f;
-	m_pTransformCom3->Set_State(CTransform::STATE_POSITION, (m_pTransformCom1->Get_State(CTransform::STATE_POSITION) + vPos2));
 
 
-	_float3 vPos3 = _float3(0.5f, 1.f, 0.f);
-	m_pTransformCom4->Set_Scaled(_float3(Scale, Scale, Scale));
-	m_pTransformCom4->Turn(_float3(0.f, 1.f, 0.f),1);
-	m_pTransformCom4->Turn(_float3(0.f, 0.f, 1.f), 0.5f);
-	m_pTransformCom4->Set_State(CTransform::STATE_POSITION, (m_pTransformCom1->Get_State(CTransform::STATE_POSITION) + vPos3));
+	// 가운데점
+	_float3 vCenter1 = m_pTransformCom1->Get_State(CTransform::STATE_POSITION);
+	vCenter1.y += 0.5f * vScale.y;
+
+	// 뒷쪽 점 
+	_float3 vBack = m_pTransformCom1->Get_State(CTransform::STATE_POSITION);
+	vBack.y += 0.5f * vScale.y;
+	vBack.z += 0.5f * vScale.z;
+
+	//임의의 벡터 
+	_float3 vXYZ1 = m_pTransformCom1->Get_State(CTransform::STATE_POSITION);
+	vXYZ1.y += 1.f * vScale.y;
+
+	_float3 vBackLook = vCenter1 - vBack;
+	_float3 vBackRight;
+
+	D3DXVec3Cross(&vBackRight, &vBackLook, &_float3(0.f, 1.f, 0.f));
+
+	D3DXVec3Normalize(&vBackRight, &vBackRight);
+	vBackRight *= vScale.x;
+	m_pTransformCom3->Set_State(CTransform::STATE_RIGHT, vBackRight);
+	vCenter1 = vXYZ1 - vCenter1;
+	vBackLook += vCenter1;
+	_float3 vBackUp = vBackLook;
 
 
-	_float3 vPos4 = _float3(-0.5f, 1.f, 0.f);
-	m_pTransformCom5->Set_Scaled(_float3(Scale, Scale, Scale));
-	m_pTransformCom5->Turn(_float3(0.f, 1.f, 0.f),1);
-	m_pTransformCom5->Turn(_float3(0.f, 0.f, 1.f), -0.5f);
-	m_pTransformCom5->Set_State(CTransform::STATE_POSITION, (m_pTransformCom1->Get_State(CTransform::STATE_POSITION) + vPos4));
+	m_pTransformCom3->Set_State(CTransform::STATE_UP, vBackUp);
+
+	_float3 vLook1;
+	D3DXVec3Cross(&vLook1, &vBackUp, &vBackRight);
+	D3DXVec3Normalize(&vLook1, &vLook1);
+
+	m_pTransformCom3->Set_State(CTransform::STATE_LOOK, vLook1);
+
+	m_pTransformCom3->Set_State(CTransform::STATE_POSITION, vBack);
+
+
+
+
+	// 가운데점
+	_float3 vCenter2 = m_pTransformCom1->Get_State(CTransform::STATE_POSITION);
+	vCenter2.y += 0.5f * vScale.y;
+
+	// 오른쪽 점 
+	_float3 vRight = m_pTransformCom1->Get_State(CTransform::STATE_POSITION);
+	vRight.y += 0.5f * vScale.y;
+	vRight.x += 0.5f * vScale.z;
+
+	//임의의 벡터 
+	_float3 vXYZ2 = m_pTransformCom1->Get_State(CTransform::STATE_POSITION);
+	vXYZ2.y += 1.f * vScale.y;
+
+	_float3 vRightLook = vCenter2 - vRight;
+	_float3 vRightRight;
+
+	D3DXVec3Cross(&vRightRight, &vRightLook, &_float3(0.f, 1.f, 0.f));
+
+	D3DXVec3Normalize(&vRightRight, &vRightRight);
+	vRightRight *= vScale.x;
+	m_pTransformCom4->Set_State(CTransform::STATE_RIGHT, vRightRight);
+	vCenter2 = vXYZ2 - vCenter2;
+	vRightLook += vCenter1;
+	_float3 vRightUp = vRightLook;
+
+
+	m_pTransformCom4->Set_State(CTransform::STATE_UP, vRightUp);
+
+	_float3 vLook2;
+	D3DXVec3Cross(&vLook2, &vRightUp, &vRightRight);
+	D3DXVec3Normalize(&vLook2, &vLook2);
+
+	m_pTransformCom4->Set_State(CTransform::STATE_LOOK, vLook2);
+
+	m_pTransformCom4->Set_State(CTransform::STATE_POSITION, vRight);
+
+
+
+
+	// 가운데점
+	_float3 vCenter3 = m_pTransformCom1->Get_State(CTransform::STATE_POSITION);
+	vCenter3.y += 0.5f * vScale.y;
+
+	// 왼쪽 점 
+	_float3 vLeft = m_pTransformCom1->Get_State(CTransform::STATE_POSITION);
+	vLeft.y += 0.5f * vScale.y;
+	vLeft.x -= 0.5f * vScale.z;
+
+	//임의의 벡터 
+	_float3 vXYZ3 = m_pTransformCom1->Get_State(CTransform::STATE_POSITION);
+	vXYZ3.y += 1.f * vScale.y;
+
+	_float3 vLeftLook = vCenter3 - vLeft;
+	_float3 vLeftRight;
+
+	D3DXVec3Cross(&vLeftRight, &vLeftLook, &_float3(0.f, 1.f, 0.f));
+
+	D3DXVec3Normalize(&vLeftRight, &vLeftRight);
+	vLeftRight *= vScale.x;
+	m_pTransformCom5->Set_State(CTransform::STATE_RIGHT, vLeftRight);
+	vCenter3 = vXYZ3 - vCenter3;
+	vLeftLook += vCenter1;
+	_float3 vLeftUp = vLeftLook;
+
+
+	m_pTransformCom5->Set_State(CTransform::STATE_UP, vLeftUp);
+
+	_float3 vLook3;
+	D3DXVec3Cross(&vLook3, &vLeftUp, &vLeftRight);
+	D3DXVec3Normalize(&vLook3, &vLook3);
+
+	m_pTransformCom5->Set_State(CTransform::STATE_LOOK, vLook3);
+
+	m_pTransformCom5->Set_State(CTransform::STATE_POSITION, vLeft);
+
 }
 
 HRESULT CHouse2::RectHouse_Render(void)
@@ -195,7 +323,7 @@ HRESULT CHouse2::RectHouse_Render(void)
 
 	if (FAILED(m_pTransformCom2->Bind_OnGraphicDev()))
 		return E_FAIL;
-	if (FAILED(m_pTextureCom2->Bind_OnGraphicDev(1)))
+	if (FAILED(m_pTextureCom2->Bind_OnGraphicDev(0)))
 		return E_FAIL;
 	m_pVIBuffer1->Render();
 
@@ -203,21 +331,21 @@ HRESULT CHouse2::RectHouse_Render(void)
 
 	if (FAILED(m_pTransformCom3->Bind_OnGraphicDev()))
 		return E_FAIL;
-	if (FAILED(m_pTextureCom2->Bind_OnGraphicDev(1)))
+	if (FAILED(m_pTextureCom2->Bind_OnGraphicDev(0)))
 		return E_FAIL;
 	m_pVIBuffer2->Render();
 
 
 	if (FAILED(m_pTransformCom4->Bind_OnGraphicDev()))
 		return E_FAIL;
-	if (FAILED(m_pTextureCom2->Bind_OnGraphicDev(1)))
+	if (FAILED(m_pTextureCom2->Bind_OnGraphicDev(0)))
 		return E_FAIL;
 	m_pVIBuffer3->Render();
 
 
 	if (FAILED(m_pTransformCom5->Bind_OnGraphicDev()))
 		return E_FAIL;
-	if (FAILED(m_pTextureCom2->Bind_OnGraphicDev(1)))
+	if (FAILED(m_pTextureCom2->Bind_OnGraphicDev(0)))
 		return E_FAIL;
 	m_pVIBuffer4->Render();
 }
