@@ -57,11 +57,12 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 
 	if (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_WHEEL))
 	{
-		if ((1.7f < m_CameraDesc.fFovy) && (0 < D3DXToRadian(fTimeDelta * MouseMove * -1.f)))
+		if ((1.7f <= m_CameraDesc.fFovy) && (0 < D3DXToRadian(fTimeDelta * MouseMove * -1.f)))
 			m_CameraDesc.fFovy = 1.7f;
-		else if ((0.4f > m_CameraDesc.fFovy) && (0 >= D3DXToRadian(fTimeDelta * MouseMove * -1.f)))
-			m_CameraDesc.fFovy = 0.4f;
 
+		else if ((0.4f >= m_CameraDesc.fFovy) && (0 >= D3DXToRadian(fTimeDelta * MouseMove * -1.f)))
+			m_CameraDesc.fFovy = 0.4f;
+		else
 		m_CameraDesc.fFovy += D3DXToRadian(fTimeDelta * MouseMove * -1.f);
 	}
 
