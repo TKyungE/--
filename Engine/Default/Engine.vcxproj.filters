@@ -73,14 +73,17 @@
     <Filter Include="01.Utility\03.Components\VIBuffer\Cube">
       <UniqueIdentifier>{08c9dd47-7f7c-4318-a43f-ef8ea0ca2412}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\97.CollisionMgr">
-      <UniqueIdentifier>{8ed6dac4-1bad-4894-81d8-a2fe64c6179d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\96. Picking">
       <UniqueIdentifier>{ca9ff2c7-d78f-42f2-a09c-da38a5c53f75}</UniqueIdentifier>
     </Filter>
     <Filter Include="01.Utility\95.KeyMgr">
       <UniqueIdentifier>{6bea3816-ac4b-4676-a2e6-bb9977de212f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\CollisionMgr">
+      <UniqueIdentifier>{8ed6dac4-1bad-4894-81d8-a2fe64c6179d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\CollisionMgr\Collider">
+      <UniqueIdentifier>{4088c76f-8471-428a-a90e-3a9d8c59c4f1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -148,13 +151,16 @@
       <Filter>01.Utility\03.Components\VIBuffer\Cube</Filter>
     </ClCompile>
     <ClCompile Include="..\private\CollisionMgr.cpp">
-      <Filter>01.Utility\97.CollisionMgr</Filter>
+      <Filter>01.Utility\03.Components\CollisionMgr</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Picking.cpp">
       <Filter>01.Utility\96. Picking</Filter>
     </ClCompile>
     <ClCompile Include="..\private\KeyMgr.cpp">
       <Filter>01.Utility\95.KeyMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Collider.cpp">
+      <Filter>01.Utility\03.Components\CollisionMgr\Collider</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -237,13 +243,16 @@
       <Filter>01.Utility\03.Components\VIBuffer\Cube</Filter>
     </ClInclude>
     <ClInclude Include="..\public\CollisionMgr.h">
-      <Filter>01.Utility\97.CollisionMgr</Filter>
+      <Filter>01.Utility\03.Components\CollisionMgr</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Picking.h">
       <Filter>01.Utility\96. Picking</Filter>
     </ClInclude>
     <ClInclude Include="..\public\KeyMgr.h">
       <Filter>01.Utility\95.KeyMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Collider.h">
+      <Filter>01.Utility\03.Components\CollisionMgr\Collider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
