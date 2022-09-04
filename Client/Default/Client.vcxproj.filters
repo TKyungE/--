@@ -193,9 +193,6 @@
     <Filter Include="02.GameObject\NPC">
       <UniqueIdentifier>{d26d626b-af07-45e9-80a5-51f5cae667c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\NPC\00.NPC">
-      <UniqueIdentifier>{42b918b4-0659-4a8f-8919-5a07b097b36a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Wing">
       <UniqueIdentifier>{0bc110a1-b2b7-4777-89b4-9fba7c4f5948}</UniqueIdentifier>
     </Filter>
@@ -213,6 +210,21 @@
     </Filter>
     <Filter Include="04.UI\StateUi\MpBar">
       <UniqueIdentifier>{7dcf0f6e-2d0b-4c4b-b950-95c09d6749df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC\00.Default">
+      <UniqueIdentifier>{42b918b4-0659-4a8f-8919-5a07b097b36a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC\01.Village_Chief">
+      <UniqueIdentifier>{c82a5037-d2e9-475c-8431-bb2814512834}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC\02.Village_Quest1">
+      <UniqueIdentifier>{ecc17898-5245-44a8-8465-a6dce2423e9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC\03.Village_Quest2">
+      <UniqueIdentifier>{4a24c3d4-4f7a-4010-be6f-34d80332a13d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC\04.Engineer">
+      <UniqueIdentifier>{38052cc6-d24d-430a-8cdc-731f050f7655}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -406,6 +418,21 @@
     <ClInclude Include="..\Public\MpBar.h">
       <Filter>04.UI\StateUi\MpBar</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Default_NPC.h">
+      <Filter>02.GameObject\NPC\00.Default</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Village_Chief.h">
+      <Filter>02.GameObject\NPC\01.Village_Chief</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Engineer.h">
+      <Filter>02.GameObject\NPC\04.Engineer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Village_Quest2.h">
+      <Filter>02.GameObject\NPC\03.Village_Quest2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Village_Quest1.h">
+      <Filter>02.GameObject\NPC\02.Village_Quest1</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -585,6 +612,21 @@
     </ClCompile>
     <ClCompile Include="..\Private\MpBar.cpp">
       <Filter>04.UI\StateUi\MpBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Default_NPC.cpp">
+      <Filter>02.GameObject\NPC\00.Default</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Village_Chief.cpp">
+      <Filter>02.GameObject\NPC\01.Village_Chief</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Engineer.cpp">
+      <Filter>02.GameObject\NPC\04.Engineer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Village_Quest2.cpp">
+      <Filter>02.GameObject\NPC\03.Village_Quest2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Village_Quest1.cpp">
+      <Filter>02.GameObject\NPC\02.Village_Quest1</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
