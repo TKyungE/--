@@ -238,6 +238,9 @@
     <Filter Include="02.GameObject\BackGroundObj\RectHouse">
       <UniqueIdentifier>{5296e59f-0882-4402-bb8c-0d0508430126}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Tree">
+      <UniqueIdentifier>{8b468d26-ab3b-4f9d-9998-c2e898243c83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -405,7 +408,6 @@
     <ClInclude Include="..\public\Loading.h">
       <Filter>02.GameObject\Loading</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\BackGroundTree.h" />
     <ClInclude Include="..\public\Portal.h">
       <Filter>02.GameObject\Portal</Filter>
     </ClInclude>
@@ -456,6 +458,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\House2.h">
       <Filter>02.GameObject\BackGroundObj\RectHouse</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BackGroundTree.h">
+      <Filter>02.GameObject\BackGroundObj\Tree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -612,7 +617,6 @@
     <ClCompile Include="..\private\Loading.cpp">
       <Filter>02.GameObject\Loading</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\BackGroundTree.cpp" />
     <ClCompile Include="..\private\Portal.cpp">
       <Filter>02.GameObject\Portal</Filter>
     </ClCompile>
@@ -663,6 +667,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\House2.cpp">
       <Filter>02.GameObject\BackGroundObj\RectHouse</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BackGroundTree.cpp">
+      <Filter>02.GameObject\BackGroundObj\Tree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
