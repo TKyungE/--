@@ -39,7 +39,7 @@ HRESULT CAlligator::Initialize(void * pArg)
 	m_eCurState = IDLE;
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 4;
-	m_tFrame.fFrameSpeed = 0.1f;
+	m_tFrame.fFrameSpeed = 0.15f;
 	m_tInfo.bDead = false;
 	m_tInfo.iDmg = 66;
 	m_tInfo.fX = 0.5f;
@@ -66,31 +66,38 @@ HRESULT CAlligator::Initialize(void * pArg)
 void CAlligator::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+	m_fSkillCool += fTimeDelta;
 
 	OnTerrain();
-	Check_Front();
+	if (!m_bDead)
+		Check_Front();
 	if (m_eCurState == DEAD)
 	{
 		if (m_tFrame.iFrameStart == 3)
 		{
-			m_bDead = true;
 			m_fDeadTime += fTimeDelta;
-			if (m_fDeadTime > 5.f)
+			if (m_fDeadTime > 3.f)
 			{
 				m_tInfo.bDead = true;
 				return;
 			}
 		}
-	}
-	if (!m_bDead)
-	{
-		Move_Frame(fTimeDelta);
-		Use_Skill(fTimeDelta);
+		if (m_tFrame.iFrameStart != 3)
+			Move_Frame(fTimeDelta);
+		m_tInfo.bDead = false;
+		return;
 	}
 
-	if (nullptr != m_tInfo.pTarget)
+	if (!m_bSkill && !m_bDead && !m_bRun)
 		Chase(fTimeDelta);
 
+	if(m_bRun)
+		Chase2(fTimeDelta);
+
+	Move_Frame(fTimeDelta);
+	if (m_eCurState == SKILL)
+		Use_Skill(fTimeDelta);
+	
 	m_tInfo.bDead = false;
 }
 
@@ -206,9 +213,29 @@ void CAlligator::Check_Hit()
 void CAlligator::Chase(_float fTimeDelta)
 {
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
-
-	if (0.25f < Distance && m_eCurState != DEAD)
+	if (3.f >= Distance)
 	{
+		if (m_fSkillCool >	3.f)
+		{
+			m_fSkillCool = 0.f;
+			m_eCurState = SKILL;
+			m_tFrame.iFrameStart = 0;
+		}
+		if (m_eCurState != SKILL)
+			m_eCurState = IDLE;
+		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
+		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+		//	vPosition.y = vTargetPos.y += 2.f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+	}
+	else if (3.f < Distance && 7.f > Distance)
+	{
+		if(!m_bSkill)
+			m_eCurState = MOVE;
+		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
 		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 
@@ -218,9 +245,42 @@ void CAlligator::Chase(_float fTimeDelta)
 	}
 	else
 	{
+		if(!m_bSkill)
+			m_eCurState = IDLE;
+		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
 		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 	//	vPosition.y = vTargetPos.y += 2.f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+	}
+}
+void CAlligator::Chase2(_float fTimeDelta)
+{
+	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
+
+	if (12.f > Distance)
+	{
+		if (!m_bSkill)
+			m_eCurState = MOVE;
+		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
+		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+
+		vPosition -= *D3DXVec3Normalize(&vTargetPos, &(vTargetPos - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
+		//	vPosition.y += 2.f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+	}
+	else
+	{
+		if (!m_bSkill)
+			m_eCurState = IDLE;
+		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
+		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+		//	vPosition.y = vTargetPos.y += 2.f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
 }
@@ -345,7 +405,7 @@ void CAlligator::Motion_Change()
 		case IDLE:
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 4;
-			m_tFrame.fFrameSpeed = 0.1f;
+			m_tFrame.fFrameSpeed = 0.15f;
 			break;
 		case MOVE:
 			m_tFrame.iFrameStart = 0;
@@ -356,6 +416,7 @@ void CAlligator::Motion_Change()
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 3;
 			m_tFrame.fFrameSpeed = 0.3f;
+			m_bDead = true;
 			break;
 		case SKILL:
 			m_tFrame.iFrameStart = 0;
@@ -415,25 +476,26 @@ void CAlligator::Check_Front()
 	{
 		m_eCurState = DEAD;
 		m_tFrame.iFrameStart = 0;
+		m_bDead = true;
+		Motion_Change();
 	}
-
+	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.25f) && !m_bRun)
+	{
+		m_bRun = true;
+	}
 }
 void CAlligator::Use_Skill(_float fTimeDelta)
 {
-	m_fSkillCool += fTimeDelta;
-
-	if (m_fSkillCool >	3.f)
+	if (!m_bSkill && m_tFrame.iFrameStart == 4)
 	{
-		m_fSkillCool = 0.f;
-		m_eCurState = SKILL;
-		m_tFrame.iFrameStart = 0;
-	}
-	if(	m_eCurState == SKILL && m_tFrame.iFrameStart == 4)
 		Skill_PoisonArrow(TEXT("Layer_MonsterSkill"));
-	if (m_eCurState == SKILL&& m_tFrame.iFrameStart == 5)
+		m_bSkill = true;
+	}
+	if (m_tFrame.iFrameStart == 5)
 	{
 		m_eCurState = IDLE;
 		m_tFrame.iFrameStart = 0;
+		m_bSkill = false;
 	}
 }
 HRESULT CAlligator::TextureRender()

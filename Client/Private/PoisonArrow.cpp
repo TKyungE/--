@@ -44,6 +44,11 @@ HRESULT CPoisonArrow::Initialize(void* pArg)
 	m_tInfo.fX = 0.5f;
 	m_tInfo.iDmg = 123;
 	m_tInfo.iMoney = 11;
+
+
+	_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	vLook = m_tInfo.vTargetPos - vPosition;
+
 	return S_OK;
 }
 
@@ -53,11 +58,10 @@ void CPoisonArrow::Tick(_float fTimeDelta)
 
 	Move_Frame(fTimeDelta);
 	m_fDeadTime += fTimeDelta;
-	if (m_fDeadTime > 2.f)
+	if (m_fDeadTime > 1.2f)
 		Set_Dead();
 
 	_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	_float3		vLook = m_tInfo.vTargetPos - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	vPosition += *D3DXVec3Normalize(&vLook, &vLook) * 5.f * fTimeDelta;
 
@@ -210,7 +214,7 @@ void CPoisonArrow::OnBillboard()
 	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
 
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-	_float3 vScale = { 3.5f,4.f,1.f };
+	_float3 vScale = { 1.f,1.f,1.f };
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
 	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);

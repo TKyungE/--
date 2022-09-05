@@ -217,9 +217,6 @@
     <Filter Include="02.GameObject\NPC\01.Village_Chief">
       <UniqueIdentifier>{c82a5037-d2e9-475c-8431-bb2814512834}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\NPC\02.Village_Quest1">
-      <UniqueIdentifier>{ecc17898-5245-44a8-8465-a6dce2423e9d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\NPC\03.Village_Quest2">
       <UniqueIdentifier>{4a24c3d4-4f7a-4010-be6f-34d80332a13d}</UniqueIdentifier>
     </Filter>
@@ -234,6 +231,9 @@
     </Filter>
     <Filter Include="02.GameObject\Terrain\TerrainRect">
       <UniqueIdentifier>{1aeaeda5-7149-40ac-8889-6855c833cf44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\NPC\02.Village_Quest1">
+      <UniqueIdentifier>{ecc17898-5245-44a8-8465-a6dce2423e9d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -375,9 +375,6 @@
     <ClInclude Include="..\public\StatsWnd.h">
       <Filter>04.UI\StatsWnd</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\WorldHpBar.h">
-      <Filter>04.UI\WorldHpBar</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\PlayerMpBar.h">
       <Filter>04.UI\WorldHpBar</Filter>
     </ClInclude>
@@ -450,6 +447,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\TerrainRect.h">
       <Filter>02.GameObject\Terrain\TerrainRect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\WorldHpBar.h">
+      <Filter>04.UI\WorldHpBar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

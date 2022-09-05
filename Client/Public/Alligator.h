@@ -51,6 +51,7 @@ private:
 	HRESULT Skill_PoisonArrow(const _tchar * pLayerTag);
 	void Check_Hit();
 	void Chase(_float fTimeDelta);
+	void Chase2(_float fTimeDelta);
 	void Motion_Change();
 	void Move_Frame(_float fTimeDelta);
 	void Check_Front();
@@ -59,11 +60,14 @@ private:
 private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
-	_bool	m_bFront = false;
+	_bool				m_bFront = false;
 	_float				m_fSkillCool = 0.f;
 	_float				m_fDeadTime = 0.f;
-	_bool	m_bSkill = false;
-	_bool	m_bDead = false;
+	_bool				m_bSkill = false;
+	_bool				m_bMove = false;
+	_bool				m_bDead = false;
+	_bool				m_bRun = false;
+	_bool				m_bFindfriend = false;
 public:
 	static CAlligator* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
