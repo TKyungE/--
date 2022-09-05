@@ -232,6 +232,9 @@
     <Filter Include="02.GameObject\Monster\00.Alligator">
       <UniqueIdentifier>{711995f4-d041-41c2-a053-a6db8ab3e8da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Terrain\TerrainRect">
+      <UniqueIdentifier>{1aeaeda5-7149-40ac-8889-6855c833cf44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -445,6 +448,9 @@
     <ClInclude Include="..\public\Alligator.h">
       <Filter>02.GameObject\Monster\00.Alligator</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\TerrainRect.h">
+      <Filter>02.GameObject\Terrain\TerrainRect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -645,6 +651,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Alligator.cpp">
       <Filter>02.GameObject\Monster\00.Alligator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TerrainRect.cpp">
+      <Filter>02.GameObject\Terrain\TerrainRect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
