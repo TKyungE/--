@@ -24,13 +24,13 @@ HRESULT CUI::Initialize(void* pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
+	memcpy(&m_tInfo, pArg, sizeof(INFO));
+	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
 
-	D3DXMatrixOrthoLH(&m_ProjMatrix, g_iWinSizeX, g_iWinSizeY, 0.f, 1.f);
-
-	m_fSizeX = 200.0f;
-	m_fSizeY = 200.0f;
-	m_fX = 100.f;
-	m_fY = 100.f;
+	m_fSizeX = 300.0f;
+	m_fSizeY = 180.0f;
+	m_fX = 150.f;
+	m_fY = 90.f;
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
@@ -43,20 +43,11 @@ HRESULT CUI::Initialize(void* pArg)
 
 void CUI::Tick(_float fTimeDelta)
 {
-	__super::Tick(fTimeDelta);	
+	__super::Tick(fTimeDelta);
 
 	RECT		rcRect;
-	SetRect(&rcRect, m_fX - m_fSizeX * 0.5f, m_fY - m_fSizeY * 0.5f, m_fX + m_fSizeX * 0.5f, m_fY + m_fSizeY * 0.5f);
-
-	POINT		ptMouse;
-	GetCursorPos(&ptMouse);
-	ScreenToClient(g_hWnd, &ptMouse);
-
-	if (PtInRect(&rcRect, ptMouse))
-	{
-		ERR_MSG(L"Ãæµ¹");
-	}
-
+	SetRect(&rcRect,(int)( m_fX - m_fSizeX * 0.5f),(int) (m_fY - m_fSizeY * 0.5f),(int)( m_fX + m_fSizeX * 0.5f),(int)( m_fY + m_fSizeY * 0.5f));
+	
 }
 
 void CUI::Late_Tick(_float fTimeDelta)
@@ -64,24 +55,24 @@ void CUI::Late_Tick(_float fTimeDelta)
 	__super::Late_Tick(fTimeDelta);
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
+		m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_UI, this);
 }
 
 HRESULT CUI::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
-	
+
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
 
 	_float4x4		ViewMatrix;
 	D3DXMatrixIdentity(&ViewMatrix);
-	
+
 	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
 	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(1)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_RenderState()))
@@ -99,12 +90,12 @@ HRESULT CUI::Render()
 
 HRESULT CUI::SetUp_Components()
 {
-	/* For.Com_Renderer */
+/* For.Com_Renderer */
 	if (FAILED(__super::Add_Components(TEXT("Com_Renderer"), LEVEL_STATIC, TEXT("Prototype_Component_Renderer"), (CComponent**)&m_pRendererCom)))
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_UI"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_UI"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */
@@ -132,14 +123,16 @@ HRESULT CUI::SetUp_RenderState()
 		return E_FAIL;	
 
 	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
-
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 	return S_OK;
 }
 
 HRESULT CUI::Release_RenderState()
 {
 	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
-
+	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	return S_OK;
 }
 

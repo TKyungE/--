@@ -28,7 +28,17 @@ HRESULT CRenderer::Add_RenderGroup(RENDERGROUP eRenderGroup, CGameObject * pGame
 
 	return S_OK;
 }
+HRESULT CRenderer::Add_RenderGroup_Front(RENDERGROUP eRenderGroup, CGameObject * pGameObject)
+{
+	if (nullptr == pGameObject)
+		return E_FAIL;
 
+	m_GameObjects[eRenderGroup].push_front(pGameObject);
+
+	Safe_AddRef(pGameObject);
+
+	return S_OK;
+}
 HRESULT CRenderer::Render_GameObjects()
 {
 	if (FAILED(Render_Priority()))

@@ -14,6 +14,7 @@ BEGIN(Client)
 
 class CTerrain final : public CGameObject
 {
+
 private:
 	CTerrain(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CTerrain(const CTerrain& rhs);
@@ -32,6 +33,8 @@ private: /* For.Components */
 	CTransform*				m_pTransformCom = nullptr;
 	CVIBuffer_Terrain*		m_pVIBufferCom = nullptr;
 
+private:
+	HRESULT OnLoadData(const _tchar* pFilePath);
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();

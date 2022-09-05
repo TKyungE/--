@@ -1,0 +1,8 @@
+*.db
+*.ilk
+Framework.VC.db
+Client/Bin/Client.exe
+Client/Bin/Client.ilk
+Client/Bin/Client.pdb
+Framework.VC.VC.opendb
+Framework.VC.db

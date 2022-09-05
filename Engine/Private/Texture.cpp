@@ -53,6 +53,19 @@ HRESULT CTexture::Bind_OnGraphicDev(_uint iIndex)
 	return m_pGraphic_Device->SetTexture(0, m_Textures[iIndex]);	
 }
 
+_int CTexture::MoveFrame(_float fTimeDelta, _float MoveSpeed, _int MaxFrame)
+{
+	m_fFrameTime += fTimeDelta;
+	if (m_fFrameTime > MoveSpeed)
+	{
+		++m_iFrame;
+		m_fFrameTime = 0.f;
+	}
+	if (m_iFrame > MaxFrame)
+		m_iFrame = 0;
+	return m_iFrame;
+}
+
 CTexture * CTexture::Create(LPDIRECT3DDEVICE9 pGraphic_Device, TYPE eType, const _tchar * pTextureFilePath, _uint iNumTexture)
 {
 	CTexture*	pInstance = new CTexture(pGraphic_Device);

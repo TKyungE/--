@@ -3,6 +3,9 @@
 #include "Client_Defines.h"
 #include "Level.h"
 
+BEGIN(Engine)
+class CRenderer;
+END
 BEGIN(Client)
 
 class CLevel_Loading final : public CLevel
@@ -19,7 +22,7 @@ public:
 private:
 	LEVEL				m_eNextLevel = LEVEL_END;
 	class CLoader*		m_pLoader = nullptr;
-
+	
 public:
 	static CLevel_Loading* Create(LPDIRECT3DDEVICE9 pGraphic_Device, LEVEL eNextLevel);
 	virtual void Free() override;

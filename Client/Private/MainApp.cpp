@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Level_Loading.h"
 #include "SoundMgr.h"
+#include "Loading.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance(CGameInstance::Get_Instance())
@@ -35,6 +36,7 @@ HRESULT CMainApp::Initialize()
 
 	if (FAILED(Open_Level(LEVEL_LOGO)))
 		return E_FAIL;
+
 	CSoundMgr::Get_Instance()->Initialize();
 	return S_OK;
 }
@@ -81,6 +83,7 @@ HRESULT CMainApp::Open_Level(LEVEL eLevel)
 		return E_FAIL;
 
 	CLevel_Loading*			pLevel_Loading = CLevel_Loading::Create(m_pGraphic_Device, eLevel);
+
 	if (nullptr == pLevel_Loading)
 		return E_FAIL;
 
@@ -101,9 +104,24 @@ HRESULT CMainApp::Ready_Prototype_Component()
 	/* For.Prototype_Component_VIBuffer_Rect */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), CVIBuffer_Rect::Create(m_pGraphic_Device))))
 		return E_FAIL;
-
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect2"), CVIBuffer_Rect2::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Cube"),CVIBuffer_Cube::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Terrain"),CVIBuffer_Terrain::Create(m_pGraphic_Device, 200, 200))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_WingRect"), CVIBuffer_WingRect::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_RectLeft"), CVIBuffer_RectLeft::Create(m_pGraphic_Device))))
+		return E_FAIL;
 	/* For.Prototype_Component_Transform */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Transform"), CTransform::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Loading"),CLoading::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Collider"), CCollider::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
 	Safe_AddRef(m_pRenderer);
@@ -118,9 +136,11 @@ HRESULT CMainApp::SetUp_RenderState()
 
 	m_pGraphic_Device->SetRenderState(D3DRS_LIGHTING, FALSE);
 
-	// m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 	m_pGraphic_Device->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	// m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+
+	m_pGraphic_Device->SetRenderState(D3DRS_SHADEMODE, D3DSHADE_FLAT);
 
 	return S_OK;
 }
@@ -154,6 +174,7 @@ void CMainApp::Free()
 {
 	CSoundMgr::Get_Instance()->Free();
 	CSoundMgr::Get_Instance()->Destroy_Instance();
+
 	Safe_Release(m_pRenderer);
 	Safe_Release(m_pGraphic_Device);
 	Safe_Release(m_pGameInstance);

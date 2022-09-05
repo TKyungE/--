@@ -62,8 +62,6 @@ HRESULT CCamera::Bind_OnGraphicDev()
 	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
 	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &ProjMatrix);
 
-
-
 	return S_OK;
 }
 
