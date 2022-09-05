@@ -8,6 +8,8 @@
 #include "Camera_Dynamic.h"
 #include "KeyMgr.h"
 #include "House.h"
+#include "House2.h"
+#include "BackGroundTree.h"
 
 CTown::CTown(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -68,7 +70,7 @@ void CTown::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-	SetWindowText(g_hWnd, TEXT("로고레벨입니다."));
+	SetWindowText(g_hWnd, TEXT("타운레벨입니다."));
 }
 
 HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
@@ -82,7 +84,17 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_TOWN, pLayerTag)))
 		return E_FAIL;
 	
-
+	for (auto& iter : m_vecTree)
+	{
+		CBackGroundTree::INDEXPOS indexpos;
+		ZeroMemory(&indexpos, sizeof(CBackGroundTree::INDEXPOS));
+		indexpos.iIndex = iter.iIndex;
+		indexpos.vScale = iter.vScale;
+		indexpos.vPos = iter.BackGroundPos;
+		
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundTree"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
+			return E_FAIL;
+	}
 
 	for (auto& iter : m_vecHouse)
 	{
@@ -91,11 +103,43 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.iIndex = iter.iIndex;
 		indexpos.vScale = iter.vScale;
 		indexpos.vPos = iter.BackGroundPos;
+		indexpos.iTrun = iter.iTrun;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House"), LEVEL_TOWN, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
-	
+
+
+
+
+	for (auto& iter : m_vecHouse2)
+	{
+		CHouse2::INDEXPOS indexpos;
+		ZeroMemory(&indexpos, sizeof(CHouse2::INDEXPOS));
+		indexpos.iIndex = iter.iIndex;
+		indexpos.vScale = iter.vScale;
+		indexpos.vPos = iter.BackGroundPos;
+		indexpos.iTrun = iter.iTrun;
+
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House2"), LEVEL_TOWN, pLayerTag, &indexpos)))
+			return E_FAIL;
+	}
+
+
+	for (auto& iter : m_vecIndex)
+	{
+		CBackGroundRect::INDEXPOS indexpos;
+		ZeroMemory(&indexpos, sizeof(CBackGroundRect::INDEXPOS));
+		indexpos.iIndex = iter.iIndex;
+		indexpos.vScale = iter.vScale;
+		indexpos.vPos = iter.BackGroundPos;
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundRect"), LEVEL_TOWN, pLayerTag, &indexpos)))
+			return E_FAIL;
+	}
+
+
 
 	Safe_Release(pGameInstance);
 
@@ -218,19 +262,19 @@ HRESULT CTown::Ready_Layer_NPC(const _tchar * pLayerTag)
 	Safe_AddRef(pGameInstance);
 	CGameObject::INFO tInfo;
 	tInfo.iLevelIndex = LEVEL_TOWN;
-	tInfo.vPos = { 2.f,0.f,2.f };
+	tInfo.vPos = { 14.f,0.f,11.f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Default_NPC"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
 	tInfo.vPos = { 6.f,0.f,6.f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Chief"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
-	tInfo.vPos = { 8.f,0.f,6.f };
+	tInfo.vPos = { 18.f,0.f,8.f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Quest1"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
-	tInfo.vPos = { 10.f,0.f,14.f };
+	tInfo.vPos = { 11.f,0.f,18.f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Quest2"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
-	tInfo.vPos = { 10.f,0.f,16.f };
+	tInfo.vPos = { 9.5f,0.f,16.5f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Engineer"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
 
@@ -244,11 +288,17 @@ HRESULT CTown::Ready_Layer_Portal(const _tchar * pLayerTag)
 {
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
-	CGameObject::INFO tInfo;
-	tInfo.iLevelIndex = LEVEL_TOWN;
-	tInfo.vPos = { 2.f,0.01f,20.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_TOWN, pLayerTag, &tInfo)))
-		return E_FAIL;
+
+	for (auto& iter : m_vecPortal)
+	{
+		CGameObject::INFO tInfo;
+		tInfo.iLevelIndex = LEVEL_TOWN;
+		tInfo.vPos = iter.BackGroundPos;
+		tInfo.vScale = iter.vScale;
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_TOWN, pLayerTag, &tInfo)))
+			return E_FAIL;
+	}
 	Safe_Release(pGameInstance);
 	return S_OK;
 }
@@ -263,11 +313,13 @@ void CTown::LoadData()
 	DWORD	dwByte = 0;
 
 	_float3 vPos1;
-	_uint iMSize, iIndexSize, iTreeSize, iHouseSize;
+	_uint iMSize, iIndexSize, iTreeSize, iHouseSize, iHouse2Size, iPortalSize;
 	_tchar str1[MAX_PATH];
 	_tchar str2[MAX_PATH];
 	_tchar str3[MAX_PATH];
 	_tchar str4[MAX_PATH];
+	_tchar str5[MAX_PATH];
+	_tchar str6[MAX_PATH];
 
 	ReadFile(hFile, vPos1, sizeof(_float3), &dwByte, nullptr);
 	m_vPlayerPos = vPos1;
@@ -276,11 +328,17 @@ void CTown::LoadData()
 	ReadFile(hFile, str2, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str4, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str5, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str6, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+
 
 	iMSize = stoi(str1);
 	iIndexSize = stoi(str2);
 	iTreeSize = stoi(str3);
 	iHouseSize = stoi(str4);
+	iHouse2Size = stoi(str5);
+	iPortalSize = stoi(str6);
 
 
 
@@ -300,8 +358,6 @@ void CTown::LoadData()
 			vPos = Pos;
 
 			m_vMonsterPos1.push_back(vPos);
-
-
 		}
 
 		for (_uint i = 0; i < iIndexSize; ++i)
@@ -359,22 +415,80 @@ void CTown::LoadData()
 
 			_float3 BackPos, Scale;
 			_tchar str3[MAX_PATH];
-			_uint Index;
+			_tchar str4[MAX_PATH];
+			_uint Index, turn;
 
 			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
 			ReadFile(hFile, &Scale, sizeof(_float3), &dwByte, nullptr);
 			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+			ReadFile(hFile, str4, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 
 			Index = stoi(str3);
+			turn = stoi(str4);
 
 			INDEXPOS HousePos;
 
 			HousePos.BackGroundPos = BackPos;
 			HousePos.vScale = Scale;
 			HousePos.iIndex = Index;
-
+			HousePos.iTrun = turn;
 			m_vecHouse.push_back(HousePos);
 		}
+
+		for (_uint i = 0; i < iHouse2Size; ++i)
+		{
+			if (0 == dwByte)
+				break;
+
+			_float3 BackPos, Scale;
+			_tchar str3[MAX_PATH];
+			_tchar str4[MAX_PATH];
+			_uint Index, turn;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &Scale, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+			ReadFile(hFile, str4, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+			turn = stoi(str4);
+
+			INDEXPOS HousePos;
+
+			HousePos.BackGroundPos = BackPos;
+			HousePos.vScale = Scale;
+			HousePos.iIndex = Index;
+			HousePos.iTrun = turn;
+			m_vecHouse2.push_back(HousePos);
+		}
+
+		for (_uint i = 0; i < iPortalSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+
+			_float3 BackPos, Scale;
+			_tchar str3[MAX_PATH];
+			_tchar str4[MAX_PATH];
+			_uint Index, turn;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &Scale, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+			ReadFile(hFile, str4, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+			turn = stoi(str4);
+
+			INDEXPOS PortalPos;
+
+			PortalPos.BackGroundPos = BackPos;
+			PortalPos.vScale = Scale;
+			PortalPos.iIndex = Index;
+			PortalPos.iTrun = turn;
+			m_vecPortal.push_back(PortalPos);
+		}
+
 
 		if (0 == dwByte)
 			break;

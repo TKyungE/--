@@ -48,7 +48,7 @@ private:
 	HRESULT Release_RenderState(void);
 	void OnTerrain(void);
 	void OnBillBoard(void);
-
+	
 public:
 	static CBackGroundRect* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
