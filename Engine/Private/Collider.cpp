@@ -56,6 +56,8 @@ _float3 CCollider::Find_MinPoint(void)
 			vMin = m_pVIBufferCom->m_pVerticesPos[i];
 	}
 
+	vMin += m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
 	return vMin;
 }
 
@@ -68,6 +70,8 @@ _float3 CCollider::Find_MaxPoint(void)
 		if (vMax.x < m_pVIBufferCom->m_pVerticesPos[i].x && vMax.y < m_pVIBufferCom->m_pVerticesPos[i].y && vMax.z < m_pVIBufferCom->m_pVerticesPos[i].z)
 			vMax = m_pVIBufferCom->m_pVerticesPos[i];
 	}
+
+	vMax += m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	return vMax;
 }

@@ -6,10 +6,6 @@ BEGIN(Engine)
 
 class ENGINE_DLL CCollisionMgr final : public CComponent
 {
-public:
-	//enum COLLISIONGROUP { COLLISION_PLAYER, COLLISION_MONSTER, COLLISION_BOSS, COLLISION_PLAYERSKILL, COLLISION_MONSTERSKILL, COLLISION_OBJECT, COLLISION_END };
-	enum COLLISIONGROUP { COLLISION_PLAYER, COLLISION_DAMANGE, COLLISION_OBJECT, COLLISION_ITEM, COLLISION_END };
-
 private:
 	CCollisionMgr(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual ~CCollisionMgr() = default;
@@ -19,15 +15,15 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
-	HRESULT Add_ColiisionGroup(COLLISIONGROUP eCollisionGroup, class CGameObject* pGameObject);
-
+	HRESULT Add_ColiisionGroup(_uint iCollisionGroup, class CGameObject* pGameObject);
+	_bool Collision(class CGameObject* pGameObject, _uint iCollisionGroup);
 
 private:
-	list <class CGameObject*> m_GameObjects[COLLISION_END];
+	list <class CGameObject*>* m_GameObjects;
 	typedef list<class CGameObject*> GAMEOBJECTS;
 
 private:
-	_bool Collision_AABB(GAMEOBJECTS _Dest, GAMEOBJECTS _Sour);
+	_bool Collision_AABB(class CGameObject* _Dest, GAMEOBJECTS _Sour);
 
 public:
 	static CCollisionMgr* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
