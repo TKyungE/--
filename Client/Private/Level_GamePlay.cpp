@@ -61,9 +61,9 @@ void CLEVEL_GamePlay::Tick(_float fTimeDelta)
 	//fSound += (pGameInstance->Get_DIMMoveState(DIMM_WHEEL)*fTimeDelta) / 100;
 
 	if (CKeyMgr::Get_Instance()->Key_Down('O'))
-		fSound += 0.01;
+		fSound += 0.01f;
 	if (CKeyMgr::Get_Instance()->Key_Down('P'))
-		fSound -= 0.01;
+		fSound -= 0.01f;
 	
 	if (fSound > 1.f)
 		fSound = 1.f;

@@ -19,6 +19,8 @@ public:
 public:
 	void Set_Transform(_float3 vTargetPos) { m_pTransformCom->Set_State(CTransform::STATE_POSITION, vTargetPos); }
 	HRESULT Render(void);
+	_float3 Find_MinPoint(void);
+	_float3 Find_MaxPoint(void);
 
 private:
 	HRESULT SetUp_Components(void);

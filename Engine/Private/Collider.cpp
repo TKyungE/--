@@ -46,6 +46,32 @@ HRESULT CCollider::Render(void)
 	return S_OK;
 }
 
+_float3 CCollider::Find_MinPoint(void)
+{
+	_float3 vMin = m_pVIBufferCom->m_pVerticesPos[0];
+
+	for (_uint i = 0; i < m_pVIBufferCom->Get_VIBInfo().m_iNumVertices; ++i)
+	{
+		if (vMin.x > m_pVIBufferCom->m_pVerticesPos[i].x && vMin.y > m_pVIBufferCom->m_pVerticesPos[i].y && vMin.z > m_pVIBufferCom->m_pVerticesPos[i].z)
+			vMin = m_pVIBufferCom->m_pVerticesPos[i];
+	}
+
+	return vMin;
+}
+
+_float3 CCollider::Find_MaxPoint(void)
+{
+	_float3 vMax;
+
+	for (_uint i = 0; i < m_pVIBufferCom->Get_VIBInfo().m_iNumVertices; ++i)
+	{
+		if (vMax.x < m_pVIBufferCom->m_pVerticesPos[i].x && vMax.y < m_pVIBufferCom->m_pVerticesPos[i].y && vMax.z < m_pVIBufferCom->m_pVerticesPos[i].z)
+			vMax = m_pVIBufferCom->m_pVerticesPos[i];
+	}
+
+	return vMax;
+}
+
 HRESULT CCollider::SetUp_Components(void)
 {
 	/* For.Com_VIBuffer */
