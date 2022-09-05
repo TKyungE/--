@@ -161,6 +161,8 @@ HRESULT CTown::Ready_Layer_Player(const _tchar * pLayerTag)
 		CGameObject::INFO tInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Get_Info();
 		memcpy(&Info, &tInfo, sizeof(CGameObject::INFO));
 		Info.iLevelIndex = LEVEL_TOWN;
+		Info.vPos = m_vBackPos;
+
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_TOWN, pLayerTag, &Info)))
 			return E_FAIL;
 	}
@@ -347,7 +349,7 @@ void CTown::LoadData()
 	DWORD	dwByte = 0;
 	
 	
-	_float3 vPos1;
+	_float3 vPos1,vPos2;
 	_uint iMSize, iIndexSize, iTreeSize, iHouseSize, iHouse2Size, iPortalSize, iNPCSize;
 	_tchar str1[MAX_PATH];
 	_tchar str2[MAX_PATH];
@@ -359,6 +361,9 @@ void CTown::LoadData()
 
 	ReadFile(hFile, vPos1, sizeof(_float3), &dwByte, nullptr);
 	m_vPlayerPos = vPos1;
+
+	ReadFile(hFile, vPos2, sizeof(_float3), &dwByte, nullptr);
+	m_vBackPos = vPos2;
 
 	ReadFile(hFile, str1, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str2, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
