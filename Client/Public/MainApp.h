@@ -6,6 +6,7 @@
 BEGIN(Engine)
 class CRenderer;
 class CGameInstance;
+class CCollisionMgr;
 END
 
 BEGIN(Client)
@@ -27,6 +28,7 @@ private:
 private:
 	LPDIRECT3DDEVICE9		m_pGraphic_Device = nullptr;
 	CRenderer*				m_pRenderer = nullptr;
+	CCollisionMgr* m_pCollisionMgr = nullptr;
 
 #ifdef _DEBUG
 private:

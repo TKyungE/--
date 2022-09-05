@@ -4,6 +4,10 @@
 #include "Level.h"
 #include "GameObject.h"
 
+BEGIN(Engine)
+class CCollisionMgr;
+END
+
 BEGIN(Client)
 
 class CLEVEL_GamePlay final : public CLevel
@@ -49,6 +53,7 @@ private:		// 파일입출력 라인
 
 private:
 	void Create_Rain(_float fTimeDelta);
+	HRESULT SetUp_Components(void);
 
 public:
 	static CLEVEL_GamePlay* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
@@ -59,6 +64,8 @@ private:
 	_float fRainTime = 0.f;
 	bool m_IconRender = false;
 	bool m_bNextLevel = false;
+
+	CCollisionMgr* m_pCollisionMgr = nullptr;
 };
 
 END

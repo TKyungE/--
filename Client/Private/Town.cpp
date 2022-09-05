@@ -3,11 +3,11 @@
 #include "GameInstance.h"
 #include "Level_Loading.h"
 #include "SoundMgr.h"
-#include "CollisionMgr.h"
 #include "BackGroundRect.h" 
 #include "Camera_Dynamic.h"
 #include "KeyMgr.h"
 #include "House.h"
+#include "Layer.h"
 
 CTown::CTown(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -21,6 +21,9 @@ HRESULT CTown::Initialize()
 		return E_FAIL;
 
 	LoadData();
+
+	if (FAILED(SetUp_Components()))
+		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
@@ -48,14 +51,29 @@ void CTown::Tick(_float fTimeDelta)
 	Safe_AddRef(pGameInstance);
 	
 	
-	CGameObject* Dest;
-	CGameObject* Sour;
+	/*CGameObject* Dest;
+	CGameObject* Sour;*/
 	
-	if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Portal"))->Get_Objects(), &Dest, &Sour))
+	/*if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Portal"))->Get_Objects(), &Dest, &Sour))
 	{
 		m_bNextLevel = true;
 		pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(Dest->Get_Info());
+	}*/
+	if (GetKeyState('Y') < 0)
+	{
+		if (!g_bCollider)
+			g_bCollider = true;
 	}
+	if (GetKeyState('U') < 0)
+	{
+		if (g_bCollider)
+		{
+			g_bCollider = false;
+		}
+	}
+
+	m_pCollisionMgr->Release_Objects();
+
 	if (m_bNextLevel == true)
 	{
 		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_GAMEPLAY))))
@@ -106,7 +124,6 @@ HRESULT CTown::Ready_Layer_Player(const _tchar * pLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	
 	if (pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo")) != nullptr)
 	{
 		CGameObject::INFO tInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Get_Info();
@@ -250,6 +267,23 @@ HRESULT CTown::Ready_Layer_Portal(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
 	Safe_Release(pGameInstance);
+	return S_OK;
+}
+
+HRESULT CTown::SetUp_Components(void)
+{
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return E_FAIL;
+
+	Safe_AddRef(pInstance);
+
+	m_pCollisionMgr = (CCollisionMgr*)pInstance->Clone_Component(LEVEL_STATIC, TEXT("Prototype_Component_CollisionMgr"));
+	if (nullptr == m_pCollisionMgr)
+		return E_FAIL;
+
+	Safe_Release(pInstance);
+
 	return S_OK;
 }
 
@@ -399,5 +433,5 @@ void CTown::Free()
 {
 	__super::Free();
 
-
+	Safe_Release(m_pCollisionMgr);
 }

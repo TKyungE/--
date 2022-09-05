@@ -1,7 +1,13 @@
 #pragma once
+
 #include "Client_Defines.h"
 #include "Level.h"
 #include "GameObject.h"
+
+BEGIN(Engine)
+class CCollisionMgr;
+END
+
 BEGIN(Client)
 
 class CTown final : public CLevel
@@ -42,6 +48,13 @@ public:
 	HRESULT Ready_Layer_UI(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_NPC(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Portal(const _tchar* pLayerTag);
+
+private:
+	HRESULT SetUp_Components(void);
+
+private:
+	CCollisionMgr* m_pCollisionMgr = nullptr;
+
 public:
 	static CTown* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual void Free() override;

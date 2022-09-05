@@ -14,7 +14,14 @@ HRESULT CCollisionMgr::Initialize_Prototype(void)
 
 HRESULT CCollisionMgr::Initialize(void * pArg)
 {
-	m_GameObjects = new GAMEOBJECTS[*(_uint*)&pArg];
+	return S_OK;
+}
+
+HRESULT CCollisionMgr::Ready_ObjectsArray(_uint iNumObjects)
+{
+	m_iNumObjects = iNumObjects;
+
+	m_GameObjects = new GAMEOBJECTS[m_iNumObjects];
 
 	return S_OK;
 }
@@ -44,6 +51,20 @@ _bool CCollisionMgr::Collision(CGameObject * pGameObject, _uint iCollisionGroup)
 
 	else
 		return true;
+}
+
+void CCollisionMgr::Release_Objects(void)
+{
+	if (nullptr != m_GameObjects)
+	{
+		for (_uint i = 0; i < m_iNumObjects; ++i)
+		{
+			for (auto& iter : m_GameObjects[i])
+				Safe_Release(iter);
+
+			m_GameObjects[i].clear();
+		}
+	}
 }
 
 
@@ -79,31 +100,43 @@ _bool CCollisionMgr::Collision_AABB(class CGameObject* _Dest, GAMEOBJECTS _Sour)
 		{
 			if (DestMax.x < SourMin.x)
 				return false;
+			else
+				m_vCollision.x = DestMax.x - SourMin.x;
 		}
 		else
 		{
 			if (DestMin.x > SourMax.x)
 				return false;
+			else
+				m_vCollision.x = SourMax.x - DestMin.x;
 		}
 		if (_Dest->Get_World().m[3][2] < Sour->Get_World().m[3][2])
 		{
 			if (DestMax.z < SourMin.z)
 				return false;
+			else
+				m_vCollision.z = DestMax.z - SourMin.z;
 		}
 		else
 		{
 			if (DestMin.z > SourMax.z)
 				return false;
+			else
+				m_vCollision.z = SourMax.z - DestMin.z;
 		}
 		if (_Dest->Get_World().m[3][1] < Sour->Get_World().m[3][1])
 		{
 			if (DestMax.y < SourMin.y)
 				return false;
+			else
+				m_vCollision.y = DestMax.y - SourMin.y;
 		}
 		else
 		{
 			if (DestMin.y > SourMax.y)
 				return false;
+			else
+				m_vCollision.y = SourMax.y - DestMin.y;
 		}
 
 		Safe_Release(SourCollider);
@@ -134,5 +167,15 @@ CComponent * CCollisionMgr::Clone(void * pArg)
 
 void CCollisionMgr::Free(void)
 {
+	for (_uint i = 0; i < m_iNumObjects; ++i)
+	{
+		for (auto& iter : m_GameObjects[i])
+			Safe_Release(iter);
+
+		m_GameObjects[i].clear();
+	}
+
+	Safe_Delete_Array(m_GameObjects);
+
 	__super::Free();
 }
