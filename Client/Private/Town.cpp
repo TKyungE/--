@@ -265,25 +265,54 @@ HRESULT CTown::Ready_Layer_NPC(const _tchar * pLayerTag)
 {
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
+
+	// Index 0 = Ang  , Index 1,2,3 = Default, Index 4 = Engineer, Index 5 = Village_Chief, Index 6 = Village_Quest1, Index 7 = Village_Quest2; 
+
 	CGameObject::INFO tInfo;
 	tInfo.iLevelIndex = LEVEL_TOWN;
-	tInfo.vPos = { 14.f,0.f,11.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Default_NPC"), LEVEL_TOWN, pLayerTag, &tInfo)))
-		return E_FAIL;
-	tInfo.vPos = { 6.f,0.f,6.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Chief"), LEVEL_TOWN, pLayerTag, &tInfo)))
-		return E_FAIL;
-	tInfo.vPos = { 18.f,0.f,8.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Quest1"), LEVEL_TOWN, pLayerTag, &tInfo)))
-		return E_FAIL;
-	tInfo.vPos = { 11.f,0.f,18.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Quest2"), LEVEL_TOWN, pLayerTag, &tInfo)))
-		return E_FAIL;
-	tInfo.vPos = { 9.5f,0.f,16.5f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Engineer"), LEVEL_TOWN, pLayerTag, &tInfo)))
-		return E_FAIL;
 
+	for (auto& iter : m_vecNPC)
+	{
+		if (iter.iIndex == 0)
+		{
 
+		}
+		else if (iter.iIndex > 0 && iter.iIndex <= 3)
+		{
+			tInfo.vPos = iter.BackGroundPos;
+			tInfo.iMp = iter.iIndex;						// 인덱스 인데 인포구조체에 인덱스 없어서 MP로 대체 함
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Default_NPC"), LEVEL_TOWN, pLayerTag, &tInfo)))
+				return E_FAIL;
+		}
+		else if (iter.iIndex == 4)
+		{
+			tInfo.vPos = iter.BackGroundPos;
+			tInfo.iMp = iter.iIndex;
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Engineer"), LEVEL_TOWN, pLayerTag, &tInfo)))
+				return E_FAIL;
+		}
+		else if (iter.iIndex == 5)
+		{
+			tInfo.vPos = iter.BackGroundPos;
+			tInfo.iMp = iter.iIndex;
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Chief"), LEVEL_TOWN, pLayerTag, &tInfo)))
+				return E_FAIL;
+		}
+		else if (iter.iIndex == 6)
+		{
+			tInfo.vPos = iter.BackGroundPos;
+			tInfo.iMp = iter.iIndex;
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Quest1"), LEVEL_TOWN, pLayerTag, &tInfo)))
+				return E_FAIL;
+		}
+		else if (iter.iIndex == 7)
+		{
+			tInfo.vPos = iter.BackGroundPos;
+			tInfo.iMp = iter.iIndex;
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Quest2"), LEVEL_TOWN, pLayerTag, &tInfo)))
+				return E_FAIL;
+		}
+	}
 
 	Safe_Release(pGameInstance);
 	return S_OK;
@@ -316,15 +345,17 @@ void CTown::LoadData()
 		return;
 
 	DWORD	dwByte = 0;
-
+	
+	
 	_float3 vPos1;
-	_uint iMSize, iIndexSize, iTreeSize, iHouseSize, iHouse2Size, iPortalSize;
+	_uint iMSize, iIndexSize, iTreeSize, iHouseSize, iHouse2Size, iPortalSize, iNPCSize;
 	_tchar str1[MAX_PATH];
 	_tchar str2[MAX_PATH];
 	_tchar str3[MAX_PATH];
 	_tchar str4[MAX_PATH];
 	_tchar str5[MAX_PATH];
 	_tchar str6[MAX_PATH];
+	_tchar str7[MAX_PATH];
 
 	ReadFile(hFile, vPos1, sizeof(_float3), &dwByte, nullptr);
 	m_vPlayerPos = vPos1;
@@ -335,6 +366,7 @@ void CTown::LoadData()
 	ReadFile(hFile, str4, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str5, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str6, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str7, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 
 
 
@@ -344,6 +376,7 @@ void CTown::LoadData()
 	iHouseSize = stoi(str4);
 	iHouse2Size = stoi(str5);
 	iPortalSize = stoi(str6);
+	iNPCSize = stoi(str7);
 
 
 
@@ -494,6 +527,25 @@ void CTown::LoadData()
 			m_vecPortal.push_back(PortalPos);
 		}
 
+		for (_uint i = 0; i < iNPCSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+			_float3 BackPos;
+			_tchar str3[MAX_PATH];
+			_uint Index;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+			INDEXPOS NPCPos;
+
+			NPCPos.BackGroundPos = BackPos;
+			NPCPos.iIndex = Index;
+
+			m_vecNPC.push_back(NPCPos);
+		}
 
 		if (0 == dwByte)
 			break;

@@ -66,7 +66,7 @@ HRESULT CTerrain::Render()
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(1068)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_RenderState()))
@@ -198,7 +198,7 @@ HRESULT CTerrain::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Terrain"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_TerrainRect"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */

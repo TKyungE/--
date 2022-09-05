@@ -74,7 +74,7 @@ HRESULT CVillage_Chief::Render(void)
 	Off_SamplerState();
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tInfo.iMp)))
 		return E_FAIL;
 
 
@@ -97,7 +97,7 @@ HRESULT CVillage_Chief::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBuffer)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Village_Chief"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_NPC"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 
@@ -211,7 +211,7 @@ CGameObject * CVillage_Chief::Clone(void * pArg)
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		ERR_MSG(TEXT("Failed to Cloned : CPortal"));
+		ERR_MSG(TEXT("Failed to Cloned : CVillage_Chief"));
 		Safe_Release(pInstance);
 	}
 

@@ -191,20 +191,8 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 
 	Safe_AddRef(pGameInstance);
 	//NPC
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Default_NPC"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/NPC/Default/%d.png"),3))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Village_Chief"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/NPC/Village_Chief/%d.png"), 1))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Village_Quest1"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/NPC/Village_Quest1/%d.png"), 1))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Village_Quest2"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/NPC/Village_Quest2/%d.png"), 1))))
-		return E_FAIL;
-	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Engineer"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/NPC/Engineer/%d.png"), 1))))
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_NPC"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/NPC/NPC%d.png"),8))))
 		return E_FAIL;
 	//Pet ÅØ½ºÃÄ
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Poring_IDLE_Back"),
