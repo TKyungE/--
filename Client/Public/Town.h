@@ -44,6 +44,7 @@ public:
 	HRESULT Ready_Layer_Player(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Camera(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_UI(const _tchar* pLayerTag);
+	HRESULT Ready_Layer_NPC(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Portal(const _tchar* pLayerTag);
 public:
 	static CTown* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

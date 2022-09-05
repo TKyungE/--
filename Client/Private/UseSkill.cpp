@@ -176,9 +176,21 @@ HRESULT CUseSkill::Off_SamplerState()
 void CUseSkill::LockPos()
 {
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return;
+
 	Safe_AddRef(pGameInstance);
 
-	m_tInfo.vPos = pGameInstance->Get_TargetPos();
+	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
+	if (nullptr == pVIBuffer_Terrain)
+		return;
+
+	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(m_tInfo.pTarget->Get_Info().iLevelIndex, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
+	if (nullptr == pTransform_Terrain)
+		return;
+
+	pVIBuffer_Terrain->Picking(pTransform_Terrain->Get_WorldMatrix(), &m_tInfo.vPos);
+
 	m_tInfo.vPos.y += 0.01f;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 

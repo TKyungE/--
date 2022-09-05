@@ -53,10 +53,6 @@ public: /* For.Component_Manager */
 	HRESULT Add_Prototype(_uint iLevelIndex, const _tchar* pPrototypeTag, class CComponent* pPrototype);
 	class CComponent* Clone_Component(_uint iLevelIndex, const _tchar* pPrototypeTag, void* pArg = nullptr);
 	
-public: //Picking
-	HRESULT Intersect(_float4x4 InvWorld, _float3* LU, _float3* RU, _float3* RD);
-	_float3 Get_TargetPos(void);
-
 public:
 	static void Release_Engine();
 
@@ -69,6 +65,7 @@ private:
 	CComponent_Manager*				m_pComponent_Manager = nullptr;
 	CPicking*						m_pPicking = nullptr;
 	CKeyMgr*						m_pKeyMgr = nullptr;
+
 public:
 	virtual void Free() override;
 };

@@ -37,6 +37,9 @@ public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render();
+	
+public:
+	virtual _bool Picking(_float4x4 WorldMatrix, _float3* vPickPoint = nullptr) { return true; }
 
 public:
 	vector<_float3> m_pVerticesPos;

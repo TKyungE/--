@@ -33,6 +33,10 @@ HRESULT CFireDragon::SetUp_Components(void)
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Dead"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_FireDragon_Dead"), (CComponent**)&m_pTextureComDead)))
 		return E_FAIL;
+
+	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
+		return E_FAIL;
+
 	CTransform::TRANSFORMDESC TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
 
@@ -41,8 +45,6 @@ HRESULT CFireDragon::SetUp_Components(void)
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
-
-	
 
 	return S_OK;
 }
@@ -166,6 +168,7 @@ void CFireDragon::Free(void)
 {
 	__super::Free();
 
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pRendererCom);
@@ -256,6 +259,8 @@ void CFireDragon::Tick(_float fTimeDelta)
 		Chase(fTimeDelta);
 
 	m_tInfo.bDead = false;
+
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 }
 
 void CFireDragon::Late_Tick(_float fTimeDelta)
@@ -288,7 +293,11 @@ HRESULT CFireDragon::Render(void)
 
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
+
 	On_SamplerState();
+
+	m_pColliderCom->Render();
+
 	return S_OK;
 }
 

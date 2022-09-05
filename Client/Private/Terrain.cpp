@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Public\Terrain.h"
 #include "GameInstance.h"
+#include "TerrainRect.h"
 
 CTerrain::CTerrain(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CGameObject(pGraphic_Device)
@@ -32,7 +33,7 @@ HRESULT CTerrain::Initialize(void* pArg)
 	
 	//여기서 링크를 가져와서 대입하는 방식이 현명해보임,, 밑에는 임시방편
 
-	if(FAILED(OnLoadData(TEXT("../../Data/TestMap.dat"))))
+	if(FAILED(OnLoadData(TEXT("../../Data/Terrain/TestTerrain.dat"))))
 	{ 
 		ERR_MSG(TEXT("Failed to OnLoadData"));
 		return E_FAIL;
@@ -44,52 +45,6 @@ HRESULT CTerrain::Initialize(void* pArg)
 void CTerrain::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);		
-
-	CGameInstance* pInstance = CGameInstance::Get_Instance();
-
-	if (nullptr == pInstance)
-		return;
-
-	Safe_AddRef(pInstance);
-
-	//if (pInstance->Get_DIMKeyState(DIMK_LBUTTON) < 0)
-	//{
-		_float4x4 matWorld = Get_World();
-		D3DXMatrixInverse(&matWorld, nullptr, &matWorld);
-
-		LPDIRECT3DVERTEXBUFFER9 VB = m_pVIBufferCom->Get_VB();
-		LPDIRECT3DINDEXBUFFER9 IB = m_pVIBufferCom->Get_IB();
-
-		VTXTEX* pVertices = nullptr;
-		FACEINDICES32* pIndices = nullptr;
-
-		VB->Lock(0, 0, (void**)&pVertices, 0);
-		IB->Lock(0, 0, (void**)&pIndices, 0);
-
-		for (_uint i = 0; i < m_pVIBufferCom->Get_VIBInfo().m_iNumPrimitive; ++i)
-		{
-			_float3 LU = pVertices[pIndices[i]._0].vPosition;
-			_float3 RU = pVertices[pIndices[i]._1].vPosition;
-			_float3 RD = pVertices[pIndices[i]._2].vPosition;
-
-			if (!FAILED(pInstance->Intersect(matWorld, &LU, &RU, &RD)))
-			{
-				/*_tchar m_szFPS[MAX_PATH] = L"";
-				wsprintf(m_szFPS, L"좌표 : %d, %d, %d", (int)pInstance->Get_TargetPos().x, (int)pInstance->Get_TargetPos().y, (int)pInstance->Get_TargetPos().z);
-				ERR_MSG(m_szFPS);*/
-
-			//	pVertices[pIndices[i]._0].vPosition.y += 1.f;
-			//	pVertices[pIndices[i]._1].vPosition.y += 1.f;
-			//	pVertices[pIndices[i]._2].vPosition.y += 1.f;
-				break;
-			}
-		}
-
-		VB->Unlock();
-		IB->Unlock();
-	//}
-
-	Safe_Release(pInstance);
 }
 
 void CTerrain::Late_Tick(_float fTimeDelta)
@@ -134,12 +89,41 @@ HRESULT CTerrain::OnLoadData(const _tchar* pFilePath)
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pInstance);
 
-	//CTerrain* pTerrain = dynamic_cast<CTerrain*>(pInstance->Find_Object(TEXT("Layer_BackGround"), 0));
-	/*if (nullptr == pTerrain)
+#pragma region TerrainRect
+	_tchar szSize[MAX_PATH];
+	ReadFile(hFile, &szSize, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	_int TerrainRectSize = _wtoi(szSize);
+
+	for (_int i = 0; i < TerrainRectSize; ++i)
 	{
-		ERR_MSG(TEXT("Failed to Load"));
-		return;
-	}*/
+		CTerrainRect::RECTINFO tRectInfo;
+
+		ReadFile(hFile, &tRectInfo.vPos, sizeof(tRectInfo.vPos), &dwByte, nullptr);
+
+		_tchar szTex[MAX_PATH];
+		ReadFile(hFile, &szTex, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+		tRectInfo.iTex = _wtoi(szTex);
+
+		for (_uint j = 0; j < 4; j++)
+		{
+			_float3 vPos;
+			_float2 vTex;
+
+			ReadFile(hFile, &vPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &vTex, sizeof(_float2), &dwByte, nullptr);
+
+			tRectInfo.VertexArray[j] = vPos;
+			tRectInfo.TextureArray[j] = vTex;
+		}
+
+		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TerrainRect"), LEVEL_GAMEPLAY, TEXT("Layer_TerrainRect"), &tRectInfo)))
+		{
+			ERR_MSG(TEXT("Failed to Cloned : CTerrainRect"));
+			return E_FAIL;
+		}
+	}
+#pragma endregion TerrainRect
 
 	CVIBuffer::VIBINFO VIBInfo;
 	CVIBuffer_Terrain::VIBINFO_DERIVED VIBInfo_Derived;

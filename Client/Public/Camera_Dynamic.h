@@ -29,8 +29,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	void CameraRotationX(_float fTimeDelta, _long MouseMove);
-	void CameraRotationY(_float fTimeDelta, _long MouseMove);
+	void CameraRotationX(_float fTimeDelta, _float fIncrease);
 	
 private:
 	_float3 m_vecCameraNormal;

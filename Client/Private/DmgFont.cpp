@@ -171,25 +171,25 @@ void CDmgFont::Jump()
 {
 	m_fMoveX += 0.005f;
 	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	vPos.y += 1.5 * m_fTime - (19.8f * m_fTime * m_fTime * 0.5f);
+	vPos.y += 1.5f * m_fTime - (19.8f * m_fTime * m_fTime * 0.5f);
 	vPos.x += m_fMoveX;
 	m_fTime += 0.001f;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 
 	_float3 vPos2 = m_pTransformCom2->Get_State(CTransform::STATE_POSITION);
-	vPos2.y += 1.5 * m_fTime - (19.8f * m_fTime * m_fTime * 0.5f);
+	vPos2.y += 1.5f * m_fTime - (19.8f * m_fTime * m_fTime * 0.5f);
 	vPos2.x += m_fMoveX;
 	m_fTime += 0.001f;
 	m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos2);
 
 	_float3 vPos3 = m_pTransformCom3->Get_State(CTransform::STATE_POSITION);
-	vPos3.y += 1.5 * m_fTime - (19.8f * m_fTime * m_fTime * 0.5f);
+	vPos3.y += 1.5f * m_fTime - (19.8f * m_fTime * m_fTime * 0.5f);
 	vPos3.x += m_fMoveX;
 	m_fTime += 0.001f;
 	m_pTransformCom3->Set_State(CTransform::STATE_POSITION, vPos3);
 
 	_float3 vPos4 = m_pTransformCom4->Get_State(CTransform::STATE_POSITION);
-	vPos4.y += 1.5 * m_fTime - (19.8f * m_fTime * m_fTime * 0.5f);
+	vPos4.y += 1.5f * m_fTime - (19.8f * m_fTime * m_fTime * 0.5f);
 	vPos4.x += m_fMoveX;
 	m_fTime += 0.001f;
 	m_pTransformCom4->Set_State(CTransform::STATE_POSITION, vPos4);
