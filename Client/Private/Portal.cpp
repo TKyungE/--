@@ -27,10 +27,10 @@ HRESULT CPortal::Initialize(void * pArg)
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
-	_float3 vScale = { 2.f,2.f,2.f };
-	m_pTransformCom->Set_Scaled(vScale);
+	
+	m_pTransformCom->Set_Scaled(m_tInfo.vScale);
 
-	m_tInfo.vPos.y -= 0.3f;
+	m_tInfo.vPos.y += 0.5f;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 	m_tInfo.bDead = false;
 	m_tInfo.fX = 0.1f;
@@ -53,8 +53,8 @@ void CPortal::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-
 	OnBillboard();
+
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
@@ -63,13 +63,15 @@ HRESULT CPortal::Render(void)
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
+
 	Off_SamplerState();
+
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
+
 	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
 		return E_FAIL;
 	
-
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
 
@@ -77,6 +79,7 @@ HRESULT CPortal::Render(void)
 
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
+
 	On_SamplerState();
 	return S_OK;
 }

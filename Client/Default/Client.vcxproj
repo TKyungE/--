@@ -202,6 +202,7 @@
     <ClInclude Include="..\public\Portal.h" />
     <ClInclude Include="..\public\QuickSlot.h" />
     <ClInclude Include="..\public\Rain.h" />
+    <ClInclude Include="..\Public\House2.h" />
     <ClInclude Include="..\public\Shadow.h" />
     <ClInclude Include="..\public\SkillIcon.h" />
     <ClInclude Include="..\public\SkillSlot.h" />
@@ -274,6 +275,7 @@
     <ClCompile Include="..\private\Portal.cpp" />
     <ClCompile Include="..\private\QuickSlot.cpp" />
     <ClCompile Include="..\private\Rain.cpp" />
+    <ClCompile Include="..\Private\House2.cpp" />
     <ClCompile Include="..\private\Shadow.cpp" />
     <ClCompile Include="..\private\SkillIcon.cpp" />
     <ClCompile Include="..\private\SkillSlot.cpp" />

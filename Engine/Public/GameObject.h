@@ -29,6 +29,7 @@ public:
 		CGameObject* pTarget;
 		_float3		 vPos;
 		_float3		 vTargetPos;
+		_float3		 vScale;		// 임시용이긴 하지만 객체마다 사이즈가 필요할 수도 있지 않을까..
 		_float       fX; // (객체의 지름) 객체 생성할때 이니셜라이즈에서 스케일 맥인거 대입해줘야함.
 		_int		 iMaxHp;
 		_int		 iHp;
@@ -41,6 +42,7 @@ public:
 		_bool		 bDead;
 		_bool		 bHit;
 		_int		 iLevelIndex;
+
 	}INFO;
 	typedef struct tagFrameInfo
 	{
