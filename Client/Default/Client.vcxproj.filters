@@ -247,6 +247,9 @@
     <Filter Include="03.Effect\Skill\05.DefaultAttack">
       <UniqueIdentifier>{cfef189c-c68a-4a94-9306-311682decb20}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Monster\02.Bigfoot">
+      <UniqueIdentifier>{5e6663fa-7cdb-4530-8cd3-94da7fc3f3b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -474,6 +477,9 @@
     <ClInclude Include="..\public\DefaultAttack.h">
       <Filter>03.Effect\Skill\05.DefaultAttack</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Bigfoot.h">
+      <Filter>02.GameObject\Monster\02.Bigfoot</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -688,6 +694,9 @@
     </ClCompile>
     <ClCompile Include="..\private\DefaultAttack.cpp">
       <Filter>03.Effect\Skill\05.DefaultAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Bigfoot.cpp">
+      <Filter>02.GameObject\Monster\02.Bigfoot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

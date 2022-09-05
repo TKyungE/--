@@ -293,8 +293,12 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 	Info.vPos = { 10.f,0.f,2.f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
-
-
+	Info.vPos = { 10.f,0.f,10.f };
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+		return E_FAIL;
+	Info.vPos = { 7.f,0.f,7.f };
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+		return E_FAIL;
 	Safe_Release(pGameInstance);
 
 	return S_OK;

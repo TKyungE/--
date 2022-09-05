@@ -1,20 +1,20 @@
 #include "stdafx.h"
-#include "..\Public\ElderWilow.h"
+#include "..\Public\Bigfoot.h"
 #include "..\Public\Player.h"
 #include "GameInstance.h"
 #include "SoundMgr.h"
 #include "Layer.h"
 
-CElderWilow::CElderWilow(LPDIRECT3DDEVICE9 _pGraphic_Device)
+CBigfoot::CBigfoot(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
 {
 }
 
-CElderWilow::CElderWilow(const CElderWilow& rhs)
+CBigfoot::CBigfoot(const CBigfoot& rhs)
 	: CGameObject(rhs)
 {
 }
-HRESULT CElderWilow::Initialize_Prototype(void)
+HRESULT CBigfoot::Initialize_Prototype(void)
 {
 	if (FAILED(__super::Initialize_Prototype()))
 		return E_FAIL;
@@ -22,7 +22,7 @@ HRESULT CElderWilow::Initialize_Prototype(void)
 	return S_OK;
 }
 
-HRESULT CElderWilow::Initialize(void * pArg)
+HRESULT CBigfoot::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
@@ -39,7 +39,7 @@ HRESULT CElderWilow::Initialize(void * pArg)
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;
 	m_tFrame.iFrameStart = 0;
-	m_tFrame.iFrameEnd = 4;
+	m_tFrame.iFrameEnd = 5;
 	m_tFrame.fFrameSpeed = 0.2f;
 	m_tInfo.bDead = false;
 	m_tInfo.iDmg = 66;
@@ -54,7 +54,7 @@ HRESULT CElderWilow::Initialize(void * pArg)
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo);
-	tInfo.vPos = { 1.f,1.f,1.f };
+	tInfo.vPos = { 2.f,2.f,1.f };
 
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
 
@@ -64,19 +64,18 @@ HRESULT CElderWilow::Initialize(void * pArg)
 	return S_OK;
 }
 
-void CElderWilow::Tick(_float fTimeDelta)
+void CBigfoot::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	m_fSkillCool += fTimeDelta;
 	if (!m_bRespawn)
 	{
-	//	m_fSkillCool += fTimeDelta;
+		m_fSkillCool += fTimeDelta;
 		OnTerrain();
 		if (!m_bDead)
 			Check_Front();
 		if (m_eCurState == DEAD)
 		{
-			if (m_tFrame.iFrameStart == 2)
+			if (m_tFrame.iFrameStart == 3)
 			{
 				m_fDeadTime += fTimeDelta;
 				if (m_fDeadTime > 3.f)
@@ -88,14 +87,14 @@ void CElderWilow::Tick(_float fTimeDelta)
 					return;
 				}
 			}
-			if (m_tFrame.iFrameStart != 2)
+			if (m_tFrame.iFrameStart != 3)
 				Move_Frame(fTimeDelta);
 			m_tInfo.bDead = false;
 			return;
 		}
 		if (m_tInfo.iMp == 1)
 		{
-			if (!m_bSkill && !m_bDead && !m_bRun)
+			if (m_eCurState != SKILL && m_eCurState != SKILL2 && !m_bDead && !m_bRun)
 				Chase(fTimeDelta);
 
 			if (m_bRun)
@@ -114,6 +113,8 @@ void CElderWilow::Tick(_float fTimeDelta)
 		Move_Frame(fTimeDelta);
 		if (m_eCurState == SKILL)
 			Use_Skill(fTimeDelta);
+		if (m_eCurState == SKILL2)
+			Use_Skill2(fTimeDelta);
 	}
 	else
 	{
@@ -128,7 +129,7 @@ void CElderWilow::Tick(_float fTimeDelta)
 	m_tInfo.bDead = false;
 }
 
-void CElderWilow::Late_Tick(_float fTimeDelta)
+void CBigfoot::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 	if (!m_bRespawn)
@@ -144,7 +145,7 @@ void CElderWilow::Late_Tick(_float fTimeDelta)
 	}
 }
 
-HRESULT CElderWilow::Render(void)
+HRESULT CBigfoot::Render(void)
 {
 	if (!m_bRespawn)
 	{
@@ -167,7 +168,7 @@ HRESULT CElderWilow::Render(void)
 	}
 	return S_OK;
 }
-HRESULT CElderWilow::SetUp_Components(void)
+HRESULT CBigfoot::SetUp_Components(void)
 {
 	if (FAILED(__super::Add_Components(TEXT("Com_Renderer"), LEVEL_STATIC, TEXT("Prototype_Component_Renderer"), (CComponent**)&m_pRendererCom)))
 		return E_FAIL;
@@ -175,21 +176,25 @@ HRESULT CElderWilow::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_ElderWilow_IDLE_Front"), (CComponent**)&m_pTextureComIDLE_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Bigfoot_IDLE_Front"), (CComponent**)&m_pTextureComIDLE_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_ElderWilow_IDLE_Back"), (CComponent**)&m_pTextureComIDLE_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Bigfoot_IDLE_Back"), (CComponent**)&m_pTextureComIDLE_Back)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_ElderWilow_Move_Front"), (CComponent**)&m_pTextureComMove_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Bigfoot_Move_Front"), (CComponent**)&m_pTextureComMove_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_ElderWilow_Move_Back"), (CComponent**)&m_pTextureComMove_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Bigfoot_Move_Back"), (CComponent**)&m_pTextureComMove_Back)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Attack_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_ElderWilow_Attack_Front"), (CComponent**)&m_pTextureComAttack_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Attack_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Bigfoot_Attack_Front"), (CComponent**)&m_pTextureComAttack_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Attack_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_ElderWilow_Attack_Back"), (CComponent**)&m_pTextureComAttack_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Attack_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Bigfoot_Attack_Back"), (CComponent**)&m_pTextureComAttack_Back)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Dead_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_ElderWilow_Dead_Front"), (CComponent**)&m_pTextureComDead_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Attack2_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Bigfoot_Attack2_Front"), (CComponent**)&m_pTextureComAttack2_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Dead_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_ElderWilow_Dead_Back"), (CComponent**)&m_pTextureComDead_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Attack2_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Bigfoot_Attack2_Back"), (CComponent**)&m_pTextureComAttack2_Back)))
+		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Dead_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Bigfoot_Dead_Front"), (CComponent**)&m_pTextureComDead_Front)))
+		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Dead_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Bigfoot_Dead_Back"), (CComponent**)&m_pTextureComDead_Back)))
 		return E_FAIL;
 	CTransform::TRANSFORMDESC TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
@@ -205,7 +210,7 @@ HRESULT CElderWilow::SetUp_Components(void)
 	return S_OK;
 }
 
-HRESULT CElderWilow::SetUp_RenderState(void)
+HRESULT CBigfoot::SetUp_RenderState(void)
 {
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
@@ -217,14 +222,14 @@ HRESULT CElderWilow::SetUp_RenderState(void)
 	return S_OK;
 }
 
-HRESULT CElderWilow::Release_RenderState(void)
+HRESULT CBigfoot::Release_RenderState(void)
 {
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
 }
 
-void CElderWilow::Check_Hit()
+void CBigfoot::Check_Hit()
 {
 	if (m_tInfo.bHit)
 	{
@@ -243,22 +248,35 @@ void CElderWilow::Check_Hit()
 	}
 }
 
-void CElderWilow::Chase(_float fTimeDelta)
+void CBigfoot::Chase(_float fTimeDelta)
 {
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
 	if (Distance >= 5.f)
 		m_bIDLE = false;
 	else
 		m_bIDLE = true;
+	_int iDest = rand() % 1;
 	if (1.f >= Distance)
 	{
 		if (m_fSkillCool >	0.5f)
 		{
-			m_fSkillCool = 0.f;
-			m_eCurState = SKILL;
-			m_tFrame.iFrameStart = 0;
+			switch (iDest)
+			{
+			case 0:
+				m_fSkillCool = 0.f;
+				m_eCurState = SKILL;
+				m_tFrame.iFrameStart = 0;
+				break;
+			case 1:
+				m_fSkillCool = 0.f;
+				m_eCurState = SKILL2;
+				m_tFrame.iFrameStart = 0;
+				break;
+			default:
+				break;
+			}
 		}
-		if (m_eCurState != SKILL)
+		if (m_eCurState != SKILL && m_eCurState != SKILL2)
 			m_eCurState = IDLE;
 		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
@@ -269,7 +287,7 @@ void CElderWilow::Chase(_float fTimeDelta)
 	}
 	else if (1.f < Distance && 5.f > Distance)
 	{
-		if (!m_bSkill)
+		if (m_eCurState != SKILL && m_eCurState != SKILL2)
 			m_eCurState = MOVE;
 		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
@@ -282,7 +300,7 @@ void CElderWilow::Chase(_float fTimeDelta)
 	}
 	else
 	{
-		if (!m_bSkill)
+		if (m_eCurState != SKILL && m_eCurState != SKILL2)
 			m_eCurState = IDLE;
 		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
@@ -292,7 +310,7 @@ void CElderWilow::Chase(_float fTimeDelta)
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
 }
-void CElderWilow::Chase2(_float fTimeDelta)
+void CBigfoot::Chase2(_float fTimeDelta)
 {
 	_float MinDist = 100000.f;
 	_float3 MinTarget;
@@ -325,7 +343,7 @@ void CElderWilow::Chase2(_float fTimeDelta)
 
 		if (2.f <= MinDist)
 		{
-			if (!m_bSkill)
+			if (m_eCurState != SKILL && m_eCurState != SKILL2)
 				m_eCurState = MOVE;
 			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
@@ -339,7 +357,7 @@ void CElderWilow::Chase2(_float fTimeDelta)
 		}
 		else
 		{
-			if (!m_bSkill)
+			if (m_eCurState != SKILL && m_eCurState != SKILL2)
 				m_eCurState = IDLE;
 			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
@@ -353,7 +371,7 @@ void CElderWilow::Chase2(_float fTimeDelta)
 	{
 		if (10.f > Distance)
 		{
-			if (!m_bSkill)
+			if (m_eCurState != SKILL && m_eCurState != SKILL2)
 				m_eCurState = MOVE;
 			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
@@ -367,7 +385,7 @@ void CElderWilow::Chase2(_float fTimeDelta)
 		}
 		else
 		{
-			if (!m_bSkill)
+			if (m_eCurState != SKILL && m_eCurState != SKILL2)
 				m_eCurState = IDLE;
 			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
@@ -379,18 +397,31 @@ void CElderWilow::Chase2(_float fTimeDelta)
 	}
 	Safe_Release(pGameInstance);
 }
-void CElderWilow::Chase3(_float fTimeDelta)
+void CBigfoot::Chase3(_float fTimeDelta)
 {
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
+	_int iDest = rand() % 2;
 	if (1.f >= Distance)
 	{
-		if (m_fSkillCool >	0.4f)
+		if (m_fSkillCool >	2.0f)
 		{
-			m_fSkillCool = 0.f;
-			m_eCurState = SKILL;
-			m_tFrame.iFrameStart = 0;
+			switch (iDest)
+			{
+			case 0:
+				m_fSkillCool = 0.f;
+				m_eCurState = SKILL;
+				m_tFrame.iFrameStart = 0;
+				break;
+			case 1:
+				m_fSkillCool = 0.f;
+				m_eCurState = SKILL2;
+				m_tFrame.iFrameStart = 0;
+				break;
+			default:
+				break;
+			}
 		}
-		if (m_eCurState != SKILL)
+		if (m_eCurState != SKILL && m_eCurState != SKILL2)
 			m_eCurState = IDLE;
 		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
@@ -401,7 +432,7 @@ void CElderWilow::Chase3(_float fTimeDelta)
 	}
 	else if (1.f < Distance && 10000.f > Distance)
 	{
-		if (!m_bSkill)
+		if (m_eCurState != SKILL && m_eCurState != SKILL2)
 			m_eCurState = MOVE;
 		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
@@ -414,7 +445,7 @@ void CElderWilow::Chase3(_float fTimeDelta)
 	}
 	else
 	{
-		if (!m_bSkill)
+		if (m_eCurState != SKILL && m_eCurState != SKILL2)
 			m_eCurState = IDLE;
 		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
 			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
@@ -424,7 +455,7 @@ void CElderWilow::Chase3(_float fTimeDelta)
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
 }
-void CElderWilow::OnTerrain()
+void CBigfoot::OnTerrain()
 {
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
@@ -440,44 +471,44 @@ void CElderWilow::OnTerrain()
 
 	_float3			vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.5f);
+	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.7f);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	Safe_Release(pGameInstance);
 }
 
-CElderWilow * CElderWilow::Create(LPDIRECT3DDEVICE9 _pGraphic_Device)
+CBigfoot * CBigfoot::Create(LPDIRECT3DDEVICE9 _pGraphic_Device)
 {
-	CElderWilow* pInstance = new CElderWilow(_pGraphic_Device);
+	CBigfoot* pInstance = new CBigfoot(_pGraphic_Device);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		ERR_MSG(TEXT("Failed to Created : CElderWilow"));
+		ERR_MSG(TEXT("Failed to Created : CBigfoot"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject * CElderWilow::Clone(void * pArg)
+CGameObject * CBigfoot::Clone(void * pArg)
 {
-	CElderWilow* pInstance = new CElderWilow(*this);
+	CBigfoot* pInstance = new CBigfoot(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		ERR_MSG(TEXT("Failed to Cloned : CElderWilow"));
+		ERR_MSG(TEXT("Failed to Cloned : CBigfoot"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-_float4x4 CElderWilow::Get_World(void)
+_float4x4 CBigfoot::Get_World(void)
 {
 	return m_pTransformCom->Get_WorldMatrix();
 }
 
-void CElderWilow::Free(void)
+void CBigfoot::Free(void)
 {
 	__super::Free();
 
@@ -490,13 +521,15 @@ void CElderWilow::Free(void)
 	Safe_Release(m_pTextureComMove_Back);
 	Safe_Release(m_pTextureComAttack_Front);
 	Safe_Release(m_pTextureComAttack_Back);
+	Safe_Release(m_pTextureComAttack2_Front);
+	Safe_Release(m_pTextureComAttack2_Back);
 	Safe_Release(m_pTextureComDead_Front);
 	Safe_Release(m_pTextureComDead_Back);
 }
 
 
 
-HRESULT CElderWilow::On_SamplerState()
+HRESULT CBigfoot::On_SamplerState()
 {
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
@@ -508,7 +541,7 @@ HRESULT CElderWilow::On_SamplerState()
 	return S_OK;
 }
 
-HRESULT CElderWilow::Off_SamplerState()
+HRESULT CBigfoot::Off_SamplerState()
 {
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
@@ -520,7 +553,7 @@ HRESULT CElderWilow::Off_SamplerState()
 	return S_OK;
 }
 
-HRESULT CElderWilow::Skill_DefaultAttack(const _tchar * pLayerTag)
+HRESULT CBigfoot::Skill_DefaultAttack(const _tchar * pLayerTag)
 {
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
@@ -529,7 +562,10 @@ HRESULT CElderWilow::Skill_DefaultAttack(const _tchar * pLayerTag)
 	tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	tInfo.iLevelIndex = LEVEL_GAMEPLAY;
 	tInfo.vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-	tInfo.iDmg = 20;
+	if(m_eCurState != SKILL2)
+		tInfo.iDmg = 20;
+	else
+		tInfo.iDmg = 40;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DefaultAttack"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
@@ -537,7 +573,7 @@ HRESULT CElderWilow::Skill_DefaultAttack(const _tchar * pLayerTag)
 
 	return S_OK;
 }
-void CElderWilow::Motion_Change()
+void CBigfoot::Motion_Change()
 {
 	if (m_ePreState != m_eCurState)
 	{
@@ -545,24 +581,29 @@ void CElderWilow::Motion_Change()
 		{
 		case IDLE:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 4;
+			m_tFrame.iFrameEnd = 5;
 			m_tFrame.fFrameSpeed = 0.2f;
 			break;
 		case MOVE:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 3;
-			m_tFrame.fFrameSpeed = 0.2f;
+			m_tFrame.iFrameEnd = 5;
+			m_tFrame.fFrameSpeed = 0.15f;
 			break;
 		case DEAD:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 2;
+			m_tFrame.iFrameEnd = 3;
 			m_tFrame.fFrameSpeed = 0.3f;
 			m_bDead = true;
 			break;
 		case SKILL:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 4;
-			m_tFrame.fFrameSpeed = 0.2f;
+			m_tFrame.iFrameEnd = 5;
+			m_tFrame.fFrameSpeed = 0.15f;
+			break;
+		case SKILL2:
+			m_tFrame.iFrameStart = 0;
+			m_tFrame.iFrameEnd = 7;
+			m_tFrame.fFrameSpeed = 0.1f;
 			break;
 		}
 
@@ -570,7 +611,7 @@ void CElderWilow::Motion_Change()
 	}
 }
 
-void CElderWilow::Move_Frame(_float fTimeDelta)
+void CBigfoot::Move_Frame(_float fTimeDelta)
 {
 	switch (m_eCurState)
 	{
@@ -598,11 +639,17 @@ void CElderWilow::Move_Frame(_float fTimeDelta)
 		else
 			m_tFrame.iFrameStart = m_pTextureComAttack_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
 		break;
+	case SKILL2:
+		if (m_bFront)
+			m_tFrame.iFrameStart = m_pTextureComAttack2_Front->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+		else
+			m_tFrame.iFrameStart = m_pTextureComAttack2_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+		break;
 	default:
 		break;
 	}
 }
-void CElderWilow::Check_Front()
+void CBigfoot::Check_Front()
 {
 	_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
@@ -625,21 +672,40 @@ void CElderWilow::Check_Front()
 		m_bRun = true;
 	}
 }
-void CElderWilow::Use_Skill(_float fTimeDelta)
+void CBigfoot::Use_Skill(_float fTimeDelta)
 {
-	if (!m_bSkill && m_tFrame.iFrameStart == 3)
+	if (!m_bSkill && m_tFrame.iFrameStart == 4)
 	{
 		Skill_DefaultAttack(TEXT("Layer_MonsterSkill"));
 		m_bSkill = true;
 	}
-	if (m_tFrame.iFrameStart == 4)
+	if (m_tFrame.iFrameStart == 5)
 	{
 		m_eCurState = IDLE;
 		m_tFrame.iFrameStart = 0;
 		m_bSkill = false;
 	}
 }
-HRESULT CElderWilow::TextureRender()
+void CBigfoot::Use_Skill2(_float fTimeDelta)
+{
+	if (!m_bSkill && m_tFrame.iFrameStart == 5)
+	{
+		Skill_DefaultAttack(TEXT("Layer_MonsterSkill"));
+		m_bSkill = true;
+		m_fSkillCool = 0;
+	}
+	if (m_tFrame.iFrameStart >= 7)
+	{
+		m_tFrame.iFrameStart = 7;
+	}
+	if (m_fSkillCool > 0.5f)
+	{
+		m_eCurState = IDLE;
+		m_tFrame.iFrameStart = 0;
+		m_bSkill = false;
+	}
+}
+HRESULT CBigfoot::TextureRender()
 {
 	switch (m_eCurState)
 	{
@@ -691,12 +757,24 @@ HRESULT CElderWilow::TextureRender()
 				return E_FAIL;
 		}
 		break;
+	case SKILL2:
+		if (m_bFront)
+		{
+			if (FAILED(m_pTextureComAttack2_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+				return E_FAIL;
+		}
+		else
+		{
+			if (FAILED(m_pTextureComAttack2_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+				return E_FAIL;
+		}
+		break;
 	default:
 		break;
 	}
 	return S_OK;
 }
-void CElderWilow::MonsterMove(_float fTimeDelta)
+void CBigfoot::MonsterMove(_float fTimeDelta)
 {
 
 	m_fMove += fTimeDelta;
@@ -758,13 +836,13 @@ void CElderWilow::MonsterMove(_float fTimeDelta)
 
 
 }
-HRESULT CElderWilow::RespawnMonster()
+HRESULT CBigfoot::RespawnMonster()
 {
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;
 	m_tFrame.iFrameStart = 0;
-	m_tFrame.iFrameEnd = 4;
+	m_tFrame.iFrameEnd = 5;
 	m_tFrame.fFrameSpeed = 0.2f;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 1;
@@ -787,11 +865,11 @@ HRESULT CElderWilow::RespawnMonster()
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo);
-	tInfo.vPos = { 1.f,1.f,1.f };
+	tInfo.vPos = { 2.f,2.f,1.f };
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
 	Safe_Release(pGameInstance);
 }
-void CElderWilow::OnBillboard()
+void CBigfoot::OnBillboard()
 {
 	_float4x4		ViewMatrix;
 

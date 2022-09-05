@@ -40,11 +40,11 @@ HRESULT CAlligator::Initialize(void * pArg)
 	m_eCurState = IDLE;
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 4;
-	m_tFrame.fFrameSpeed = 0.15f;
+	m_tFrame.fFrameSpeed = 0.2f;
 	m_tInfo.bDead = false;
 	m_tInfo.iDmg = 66;
 	m_tInfo.fX = 0.5f;
-	m_tInfo.iMaxHp = 99999;
+	m_tInfo.iMaxHp = 299999;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 1;
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
@@ -54,7 +54,7 @@ HRESULT CAlligator::Initialize(void * pArg)
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo);
-	tInfo.vPos = { 2.f,2.f,1.f };
+	tInfo.vPos = { 1.f,1.f,1.f };
 
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
 
@@ -439,7 +439,7 @@ void CAlligator::OnTerrain()
 
 	_float3			vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.5f);
+	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.6f);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	Safe_Release(pGameInstance);
@@ -544,12 +544,12 @@ void CAlligator::Motion_Change()
 		case IDLE:
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 4;
-			m_tFrame.fFrameSpeed = 0.15f;
+			m_tFrame.fFrameSpeed = 0.2f;
 			break;
 		case MOVE:
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 4;
-			m_tFrame.fFrameSpeed = 0.1f;
+			m_tFrame.fFrameSpeed = 0.2f;
 			break;
 		case DEAD:
 			m_tFrame.iFrameStart = 0;
@@ -560,7 +560,7 @@ void CAlligator::Motion_Change()
 		case SKILL:
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 5;
-			m_tFrame.fFrameSpeed = 0.1f;
+			m_tFrame.fFrameSpeed = 0.2f;
 			break;
 		}
 
@@ -709,35 +709,43 @@ void CAlligator::MonsterMove(_float fTimeDelta)
 	case 0:
 		m_pTransformCom->Go_Straight(fTimeDelta);
 		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_eCurState = MOVE;
 		if (vPos.z > m_tInfo.vPos.z + 3.f)
 		{
 			m_bFront = false;
 			m_pTransformCom->Go_Backward(fTimeDelta);
+			m_eCurState = IDLE;
 		}
 		break;
 	case 1:
 		m_pTransformCom->Go_Backward(fTimeDelta);
 		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_eCurState = MOVE;
 		if (vPos.z < m_tInfo.vPos.z - 3.f)
 		{
 			m_bFront = true;
 			m_pTransformCom->Go_Straight(fTimeDelta);
+			m_eCurState = IDLE;
 		}
 		break;
 	case 2:
 		m_pTransformCom->Go_Left(fTimeDelta);
 		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_eCurState = MOVE;
 		if (vPos.x < m_tInfo.vPos.x - 3.f)
 		{
 			m_pTransformCom->Go_Right(fTimeDelta);
+			m_eCurState = IDLE;
 		}
 		break;
 	case 3:
 		m_pTransformCom->Go_Right(fTimeDelta);
 		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_eCurState = MOVE;
 		if (vPos.x > m_tInfo.vPos.x + 3.f)
 		{
 			m_pTransformCom->Go_Left(fTimeDelta);
+			m_eCurState = IDLE;
 		}
 		break;
 	default:
@@ -755,7 +763,7 @@ HRESULT CAlligator::RespawnMonster()
 	m_eCurState = IDLE;
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 4;
-	m_tFrame.fFrameSpeed = 0.15f;
+	m_tFrame.fFrameSpeed = 0.2f;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 1;
 	m_bFront = false;
@@ -777,7 +785,7 @@ HRESULT CAlligator::RespawnMonster()
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo);
-	tInfo.vPos = { 2.f,2.f,1.f };
+	tInfo.vPos = { 1.f,1.f,1.f };
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
 	Safe_Release(pGameInstance);
 }

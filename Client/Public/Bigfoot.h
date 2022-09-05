@@ -11,14 +11,14 @@ END
 
 BEGIN(Client)
 
-class CElderWilow final : public CGameObject
+class CBigfoot final : public CGameObject
 {
 public:
-	enum STATE { IDLE, DEAD, SKILL, MOVE, STATE_END };
+	enum STATE { IDLE, DEAD, SKILL, SKILL2,MOVE, STATE_END };
 private:
-	CElderWilow(LPDIRECT3DDEVICE9 _pGraphic_Device);
-	CElderWilow(const CElderWilow& rhs);
-	virtual ~CElderWilow() = default;
+	CBigfoot(LPDIRECT3DDEVICE9 _pGraphic_Device);
+	CBigfoot(const CBigfoot& rhs);
+	virtual ~CBigfoot() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype(void) override;
@@ -37,6 +37,8 @@ private:
 	CTexture* m_pTextureComMove_Back = nullptr;
 	CTexture* m_pTextureComAttack_Front = nullptr;
 	CTexture* m_pTextureComAttack_Back = nullptr;
+	CTexture* m_pTextureComAttack2_Front = nullptr;
+	CTexture* m_pTextureComAttack2_Back = nullptr;
 	CTexture* m_pTextureComDead_Front = nullptr;
 	CTexture* m_pTextureComDead_Back = nullptr;
 
@@ -57,6 +59,7 @@ private:
 	void Move_Frame(_float fTimeDelta);
 	void Check_Front();
 	void Use_Skill(_float fTimeDelta);
+	void Use_Skill2(_float fTimeDelta);
 	HRESULT TextureRender();
 	void MonsterMove(_float fTimeDelta);
 	HRESULT RespawnMonster();
@@ -76,7 +79,7 @@ private:
 	_bool				m_bIDLE = false;
 	_bool				m_bRespawn = false;
 public:
-	static CElderWilow* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
+	static CBigfoot* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
 	virtual _float4x4 Get_World(void) override;
 	virtual void Free(void) override;
