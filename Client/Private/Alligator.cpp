@@ -44,7 +44,7 @@ HRESULT CAlligator::Initialize(void * pArg)
 	m_tInfo.bDead = false;
 	m_tInfo.iDmg = 66;
 	m_tInfo.fX = 0.5f;
-	m_tInfo.iMaxHp = 999999;
+	m_tInfo.iMaxHp = 99999;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 1;
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
@@ -193,7 +193,7 @@ HRESULT CAlligator::SetUp_Components(void)
 	CTransform::TRANSFORMDESC TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
 
-	TransformDesc.fSpeedPerSec = 2.f;
+	TransformDesc.fSpeedPerSec = 1.5f;
 	TransformDesc.fRotationPerSec = D3DXToRadian(90.f);
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
@@ -245,7 +245,7 @@ void CAlligator::Check_Hit()
 void CAlligator::Chase(_float fTimeDelta)
 {
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
-	if (Distance >= 7.f)
+	if (Distance >= 5.f)
 		m_bIDLE = false;
 	else
 		m_bIDLE = true;
@@ -266,7 +266,7 @@ void CAlligator::Chase(_float fTimeDelta)
 		//	vPosition.y = vTargetPos.y += 2.f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
-	else if (3.f < Distance && 7.f > Distance)
+	else if (3.f < Distance && 5.f > Distance)
 	{
 		if(!m_bSkill)
 			m_eCurState = MOVE;
@@ -383,7 +383,7 @@ void CAlligator::Chase3(_float fTimeDelta)
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
 	if (3.f >= Distance)
 	{
-		if (m_fSkillCool >	3.f)
+		if (m_fSkillCool >	2.f)
 		{
 			m_fSkillCool = 0.f;
 			m_eCurState = SKILL;
@@ -711,6 +711,7 @@ void CAlligator::MonsterMove(_float fTimeDelta)
 		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		if (vPos.z > m_tInfo.vPos.z + 3.f)
 		{
+			m_bFront = false;
 			m_pTransformCom->Go_Backward(fTimeDelta);
 		}
 		break;
@@ -719,6 +720,7 @@ void CAlligator::MonsterMove(_float fTimeDelta)
 		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		if (vPos.z < m_tInfo.vPos.z - 3.f)
 		{
+			m_bFront = true;
 			m_pTransformCom->Go_Straight(fTimeDelta);
 		}
 		break;
