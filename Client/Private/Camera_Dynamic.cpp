@@ -67,11 +67,25 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 		else if ((0.4f >= m_CameraDesc.fFovy) && (0 >= D3DXToRadian(fTimeDelta * MouseMove * -1.f)))
 			m_CameraDesc.fFovy = 0.4f;
 		else
-		m_CameraDesc.fFovy += D3DXToRadian(fTimeDelta * MouseMove * -1.f);
+		{
+			m_CameraDesc.fFovy += D3DXToRadian(fTimeDelta * MouseMove * -1.f);
+			if (0 >= D3DXToRadian(fTimeDelta * MouseMove * -1.f))
+			{
+				m_YfAngle -= 1.f;
+				if (m_YfAngle < 30.f)
+					m_YfAngle = 30.f;
+			}
+			else if (0 < D3DXToRadian(fTimeDelta * MouseMove * -1.f))
+			{
+				m_YfAngle += 1.f;
+				if (m_YfAngle > 50.f)
+					m_YfAngle = 50.f;
+			}
+		}
 	}
 
 	_float4x4 CameraRotationMatrix;
-	D3DXMatrixRotationAxis(&CameraRotationMatrix, &m_pTransform->Get_State(CTransform::STATE_RIGHT), D3DXToRadian(40.f));
+	D3DXMatrixRotationAxis(&CameraRotationMatrix, &m_pTransform->Get_State(CTransform::STATE_RIGHT), D3DXToRadian(m_YfAngle));
 
 	_float3 Camera;
 	CameraRotationMatrix *= m_matRotX;
