@@ -29,11 +29,14 @@ HRESULT CTerrain::Initialize(void* pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	*(CGameObject**)pArg = this;
+	CGameObject::INFO info;
+	ZeroMemory(&info, sizeof(CGameObject::INFO));
+
+	memcpy(&info, pArg, sizeof(CGameObject::INFO));
 	
 	//여기서 링크를 가져와서 대입하는 방식이 현명해보임,, 밑에는 임시방편
 
-	if(FAILED(OnLoadData(TEXT("../../Data/Terrain/TestTerrain.dat"))))
+	if(FAILED(OnLoadData(info.pstrPath)))
 	{ 
 		ERR_MSG(TEXT("Failed to OnLoadData"));
 		return E_FAIL;
@@ -68,6 +71,8 @@ HRESULT CTerrain::Render()
 
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
+
+
 
 	m_pVIBufferCom->Render();
 
