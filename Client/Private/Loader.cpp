@@ -461,8 +461,6 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_CUBEMAP, TEXT("../Bin/Resources/Textures/BackGround/House/%d.dds"), 1))))
 		return E_FAIL;
 
-
-
 	Safe_Release(pGameInstance);
 
 	return S_OK;
