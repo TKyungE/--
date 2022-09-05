@@ -14,6 +14,7 @@ BEGIN(Client)
 
 class CTerrain final : public CGameObject
 {
+
 private:
 	CTerrain(LPDIRECT3DDEVICE9 pGraphic_Device);
 	CTerrain(const CTerrain& rhs);

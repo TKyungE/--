@@ -333,8 +333,8 @@ HRESULT CFireDragon::Skill_FireSpear(const _tchar * pLayerTag)
 
 	for (int i = 0; i < 100; ++i)
 	{
-		_float iSour = rand() % 60000 * 0.001f;
-		_float iTemp = rand() % 60000 * 0.001f;
+		_float iSour = rand() % 4000 * 0.001f;
+		_float iTemp = rand() % 4000 * 0.001f;
 		_float3 vPos = { 0.f,0.f,0.f };
 		tInfo.vPos.x = vPos.x + iSour;
 		tInfo.vPos.y = vPos.y;
@@ -356,8 +356,8 @@ HRESULT CFireDragon::Skill_Meteor(const _tchar * pLayerTag)
 	CGameObject::INFO tInfo;
 	for (int i = 0; i < 100; ++i)
 	{
-		_float iSour = rand() % 60000 * 0.001f;
-		_float iTemp = rand() % 60000 * 0.001f;
+		_float iSour = rand() % 4000 * 0.001f;
+		_float iTemp = rand() % 4000 * 0.001f;
 
 		_float3 vPos = { 0.f,0.f,0.f };
 		tInfo.vPos.x = vPos.x + iSour;

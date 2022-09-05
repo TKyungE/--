@@ -25,7 +25,7 @@ public:
 public:
 	typedef struct tagInfo
 	{
-		CGameObject* pTerrain;
+		_tchar*		 pstrPath;
 		CGameObject* pTarget;
 		_float3		 vPos;
 		_float3		 vTargetPos;

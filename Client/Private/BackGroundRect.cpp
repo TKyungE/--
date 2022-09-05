@@ -31,8 +31,10 @@ HRESULT CBackGroundRect::Initialize(void * pArg)
 	
 	memcpy(&m_IndexPos, pArg, sizeof(INDEXPOS));
 	
-		
-	
+	m_pTransformCom->Set_Scaled(m_IndexPos.vScale);
+
+	m_IndexPos.vPos.y += 0.5f * m_IndexPos.vScale.y;
+
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_IndexPos.vPos);
 
 	return S_OK;
@@ -112,6 +114,7 @@ HRESULT CBackGroundRect::SetUp_RenderState(void)
 	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_NONE);
 	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_NONE);
 	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+
 	return S_OK;
 }
 
