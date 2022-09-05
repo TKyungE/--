@@ -3,6 +3,7 @@
 #include "..\Public\Player.h"
 #include "GameInstance.h"
 #include "SoundMgr.h"
+#include "Layer.h"
 
 CAlligator::CAlligator(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -45,7 +46,7 @@ HRESULT CAlligator::Initialize(void * pArg)
 	m_tInfo.fX = 0.5f;
 	m_tInfo.iMaxHp = 999999;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
-
+	m_tInfo.iMp = 1;
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
@@ -66,72 +67,103 @@ HRESULT CAlligator::Initialize(void * pArg)
 void CAlligator::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	m_fSkillCool += fTimeDelta;
-
-	OnTerrain();
-	if (!m_bDead)
-		Check_Front();
-	if (m_eCurState == DEAD)
+	if (!m_bRespawn)
 	{
-		if (m_tFrame.iFrameStart == 3)
+		m_fSkillCool += fTimeDelta;
+		OnTerrain();
+		if (!m_bDead)
+			Check_Front();
+		if (m_eCurState == DEAD)
 		{
-			m_fDeadTime += fTimeDelta;
-			if (m_fDeadTime > 3.f)
+			if (m_tFrame.iFrameStart == 3)
 			{
-				m_tInfo.bDead = true;
-				return;
+				m_fDeadTime += fTimeDelta;
+				if (m_fDeadTime > 3.f)
+				{
+					_float3 vDeadPos = { -50000.f,-50000.f,-50000.f };
+					m_pTransformCom->Set_State(CTransform::STATE_POSITION, vDeadPos);
+					m_pTransformCom->Bind_OnGraphicDev();
+					m_bRespawn = true;
+					return;
+				}
 			}
+			if (m_tFrame.iFrameStart != 3)
+				Move_Frame(fTimeDelta);
+			m_tInfo.bDead = false;
+			return;
 		}
-		if (m_tFrame.iFrameStart != 3)
-			Move_Frame(fTimeDelta);
-		m_tInfo.bDead = false;
-		return;
+		if (m_tInfo.iMp == 1)
+		{
+			if (!m_bSkill && !m_bDead && !m_bRun)
+				Chase(fTimeDelta);
+
+			if (m_bRun)
+				Chase2(fTimeDelta);
+		}
+		else if (!m_bSkill && !m_bDead)
+			Chase3(fTimeDelta);
+
+		if (m_tInfo.iMp == 1 && !m_bIDLE)
+		{
+			MonsterMove(fTimeDelta);
+
+		}
+
+
+		Move_Frame(fTimeDelta);
+		if (m_eCurState == SKILL)
+			Use_Skill(fTimeDelta);
 	}
-
-	if (!m_bSkill && !m_bDead && !m_bRun)
-		Chase(fTimeDelta);
-
-	if(m_bRun)
-		Chase2(fTimeDelta);
-
-	Move_Frame(fTimeDelta);
-	if (m_eCurState == SKILL)
-		Use_Skill(fTimeDelta);
-	
+	else
+	{
+		m_fRespawnTime += fTimeDelta;
+		if (m_fRespawnTime > 10.f)
+		{
+			RespawnMonster();
+			m_fRespawnTime = 0.f;
+			m_bRespawn = false;
+		}
+	}
 	m_tInfo.bDead = false;
 }
 
 void CAlligator::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-	if (!m_bDead)
+	if (!m_bRespawn)
 	{
-		Check_Hit();
-		Motion_Change();
+		if (!m_bDead)
+		{
+			Check_Hit();
+			Motion_Change();
+		}
+		OnBillboard();
+		if (nullptr != m_pRendererCom)
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 	}
-	OnBillboard();
-	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
 HRESULT CAlligator::Render(void)
 {
-	if (FAILED(__super::Render()))
-		return E_FAIL;
-	Off_SamplerState();
+	if (!m_bRespawn)
+	{
+		if (FAILED(__super::Render()))
+			return E_FAIL;
+		Off_SamplerState();
 
-	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-		return E_FAIL;
-	TextureRender();
+		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+			return E_FAIL;
+		TextureRender();
 
-	if (FAILED(SetUp_RenderState()))
-		return E_FAIL;
+		if (FAILED(SetUp_RenderState()))
+			return E_FAIL;
 
-	m_pVIBufferCom->Render();
+		m_pVIBufferCom->Render();
 
-	if (FAILED(Release_RenderState()))
-		return E_FAIL;
-	On_SamplerState();
+		if (FAILED(Release_RenderState()))
+			return E_FAIL;
+		On_SamplerState();
+	}
 	return S_OK;
 }
 HRESULT CAlligator::SetUp_Components(void)
@@ -213,6 +245,10 @@ void CAlligator::Check_Hit()
 void CAlligator::Chase(_float fTimeDelta)
 {
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
+	if (Distance >= 7.f)
+		m_bIDLE = false;
+	else
+		m_bIDLE = true;
 	if (3.f >= Distance)
 	{
 		if (m_fSkillCool >	3.f)
@@ -257,9 +293,112 @@ void CAlligator::Chase(_float fTimeDelta)
 }
 void CAlligator::Chase2(_float fTimeDelta)
 {
+	_float MinDist = 100000.f;
+	_float3 MinTarget;
+	_float HelpDistance = 0.f;
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
 
-	if (12.f > Distance)
+	if (pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster")) != nullptr)
+	{
+		for (auto& iter : pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects())
+		{
+			_float3 Target = *(_float3*)&iter->Get_World().m[3][0];
+			if (iter->Get_Info().iHp <= 0)
+				continue;
+			HelpDistance = D3DXVec3Length(&(Target - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
+			if (HelpDistance <= 0.f)
+				continue;
+			if (HelpDistance <= 2.f)
+			{
+				iter->Set_Mp(1);
+				m_tInfo.iMp = 2;
+			}
+			if (MinDist > HelpDistance)
+			{
+				MinDist = HelpDistance;
+				MinTarget = *(_float3*)&iter->Get_World().m[3][0];
+			}
+		}
+
+		if (2.f <= MinDist)
+		{
+			if (!m_bSkill)
+				m_eCurState = MOVE;
+			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
+
+
+			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+			vPosition += *D3DXVec3Normalize(&MinTarget, &(MinTarget - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
+			//	vPosition.y += 2.f;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		}
+		else
+		{
+			if (!m_bSkill)
+				m_eCurState = IDLE;
+			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
+			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+			//	vPosition.y = vTargetPos.y += 2.f;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		}
+	}
+	else
+	{
+		if (10.f > Distance)
+		{
+			if (!m_bSkill)
+				m_eCurState = MOVE;
+			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
+
+
+			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+			vPosition -= *D3DXVec3Normalize(&MinTarget, &(MinTarget - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
+			//	vPosition.y += 2.f;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		}
+		else
+		{
+			if (!m_bSkill)
+				m_eCurState = IDLE;
+			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
+			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+			//	vPosition.y = vTargetPos.y += 2.f;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		}
+	}
+	Safe_Release(pGameInstance);
+}
+void CAlligator::Chase3(_float fTimeDelta)
+{
+	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
+	if (3.f >= Distance)
+	{
+		if (m_fSkillCool >	3.f)
+		{
+			m_fSkillCool = 0.f;
+			m_eCurState = SKILL;
+			m_tFrame.iFrameStart = 0;
+		}
+		if (m_eCurState != SKILL)
+			m_eCurState = IDLE;
+		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
+		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+		//	vPosition.y = vTargetPos.y += 2.f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+	}
+	else if (3.f < Distance && 10000.f > Distance)
 	{
 		if (!m_bSkill)
 			m_eCurState = MOVE;
@@ -268,7 +407,7 @@ void CAlligator::Chase2(_float fTimeDelta)
 		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 
-		vPosition -= *D3DXVec3Normalize(&vTargetPos, &(vTargetPos - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
+		vPosition += *D3DXVec3Normalize(&vTargetPos, &(vTargetPos - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
 		//	vPosition.y += 2.f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
@@ -479,7 +618,7 @@ void CAlligator::Check_Front()
 		m_bDead = true;
 		Motion_Change();
 	}
-	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.25f) && !m_bRun)
+	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.3f) && !m_bRun)
 	{
 		m_bRun = true;
 	}
@@ -554,6 +693,91 @@ HRESULT CAlligator::TextureRender()
 		break;
 	}
 	return S_OK;
+}
+void CAlligator::MonsterMove(_float fTimeDelta)
+{
+	
+	m_fMove += fTimeDelta;
+	if (m_fMove > 1.5f)
+	{
+		m_irand = rand() % 4;
+		m_fMove = 0.f;
+	}
+	_float3 vPos;
+	switch (m_irand)
+	{
+	case 0:
+		m_pTransformCom->Go_Straight(fTimeDelta);
+		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		if (vPos.z > m_tInfo.vPos.z + 3.f)
+		{
+			m_pTransformCom->Go_Backward(fTimeDelta);
+		}
+		break;
+	case 1:
+		m_pTransformCom->Go_Backward(fTimeDelta);
+		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		if (vPos.z < m_tInfo.vPos.z - 3.f)
+		{
+			m_pTransformCom->Go_Straight(fTimeDelta);
+		}
+		break;
+	case 2:
+		m_pTransformCom->Go_Left(fTimeDelta);
+		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		if (vPos.x < m_tInfo.vPos.x - 3.f)
+		{
+			m_pTransformCom->Go_Right(fTimeDelta);
+		}
+		break;
+	case 3:
+		m_pTransformCom->Go_Right(fTimeDelta);
+		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		if (vPos.x > m_tInfo.vPos.x + 3.f)
+		{
+			m_pTransformCom->Go_Left(fTimeDelta);
+		}
+		break;
+	default:
+		break;
+	}
+
+
+
+
+}
+HRESULT CAlligator::RespawnMonster()
+{
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
+	m_ePreState = STATE_END;
+	m_eCurState = IDLE;
+	m_tFrame.iFrameStart = 0;
+	m_tFrame.iFrameEnd = 4;
+	m_tFrame.fFrameSpeed = 0.15f;
+	m_tInfo.iHp = m_tInfo.iMaxHp;
+	m_tInfo.iMp = 1;
+	m_bFront = false;
+	m_fSkillCool = 0.f;
+	m_fRespawnTime = 0.f;
+	m_fDeadTime = 0.f;
+	m_fMove = 0.f;
+	m_irand = 0;
+	m_bSkill = false;
+	m_bMove = false;
+	m_bDead = false;
+	m_bRun = false;
+	m_bIDLE = false;
+	m_bRespawn = false;
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return E_FAIL;
+	Safe_AddRef(pGameInstance);
+	CGameObject::INFO tInfo;
+	tInfo.pTarget = this;
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo);
+	tInfo.vPos = { 2.f,2.f,1.f };
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+	Safe_Release(pGameInstance);
 }
 void CAlligator::OnBillboard()
 {

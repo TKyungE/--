@@ -52,22 +52,29 @@ private:
 	void Check_Hit();
 	void Chase(_float fTimeDelta);
 	void Chase2(_float fTimeDelta);
+	void Chase3(_float fTimeDelta);
 	void Motion_Change();
 	void Move_Frame(_float fTimeDelta);
 	void Check_Front();
 	void Use_Skill(_float fTimeDelta);
 	HRESULT TextureRender();
+	void MonsterMove(_float fTimeDelta);
+	HRESULT RespawnMonster();
 private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
 	_bool				m_bFront = false;
 	_float				m_fSkillCool = 0.f;
+	_float				m_fRespawnTime = 0.f;
 	_float				m_fDeadTime = 0.f;
+	_float				m_fMove = 0.f;
+	_int				m_irand = 0;
 	_bool				m_bSkill = false;
 	_bool				m_bMove = false;
 	_bool				m_bDead = false;
 	_bool				m_bRun = false;
-	_bool				m_bFindfriend = false;
+	_bool				m_bIDLE = false;
+	_bool				m_bRespawn = false;
 public:
 	static CAlligator* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

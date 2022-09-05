@@ -1,3 +1,12 @@
-﻿  VIBuffer_Terrain.cpp
-  Engine.vcxproj -> C:\Users\태경\Desktop\라그(SR)\라그v1.0\Engine\Default\..\Bin\Engine.dll
+﻿  Camera.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  GameObject.cpp
+  코드를 생성하고 있습니다...
+  건너뛰고 있습니다... (관련된 변경 내용 없음)
+  Renderer.cpp
+  Object_Manager.cpp
+  Layer.cpp
+  CollisionMgr.cpp
+  Engine.vcxproj -> C:\Users\shout\Desktop\과제\--\Engine\Default\..\Bin\Engine.dll
   Engine.vcxproj -> ..\Bin\Engine.pdb (Full PDB)
