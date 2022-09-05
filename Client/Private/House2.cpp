@@ -141,17 +141,21 @@ HRESULT CHouse2::Release_RenderState(void)
 
 void CHouse2::SetPos(void)
 {
-	// 6개의 점을 구해보자
-	
-	_float3 vPos = _float3(3.f, 0.f, 3.f);
-	
-	_float3 vScale = _float3(2.f, 2.f, 2.f);
+	_float3 vPos = m_IndexPos.vPos;
 
-	
+	_float3 vScale = m_IndexPos.vScale;
+
+
 
 	vPos.y += 0.5f * vScale.y;
 	m_pTransformCom1->Set_Scaled(vScale);
-	m_pTransformCom1->Set_State(CTransform::STATE_POSITION,vPos);
+
+	for (_uint i = 0; i < m_IndexPos.iTrun; ++i)
+	{
+		m_pTransformCom1->Turn(_float3(0.f, 1.f, 0.f), 1);
+	}
+
+	m_pTransformCom1->Set_State(CTransform::STATE_POSITION, vPos);
 
 	// 가운데점
 	_float3 vCenter = m_pTransformCom1->Get_State(CTransform::STATE_POSITION);
@@ -164,22 +168,22 @@ void CHouse2::SetPos(void)
 
 	//임의의 벡터 
 	_float3 vXYZ = m_pTransformCom1->Get_State(CTransform::STATE_POSITION);
-	vXYZ.y += 1.f * vScale.y;
+	vXYZ.y += 1.25f * vScale.y;
 
 	_float3 vFrontLook = vCenter - vFront;
 	_float3 vFrontRight;
 
-	D3DXVec3Cross(&vFrontRight,&vFrontLook,&_float3(0.f,1.f,0.f));
-	
+	D3DXVec3Cross(&vFrontRight, &vFrontLook, &_float3(0.f, 1.f, 0.f));
+
 
 	D3DXVec3Normalize(&vFrontRight, &vFrontRight);
 	vFrontRight *= vScale.x;
 	m_pTransformCom2->Set_State(CTransform::STATE_RIGHT, vFrontRight);
 	vCenter = vXYZ - vCenter;
 	vFrontLook += vCenter;
-	_float3 vFrontUp =  vFrontLook;
+	_float3 vFrontUp = vFrontLook;
 
-	
+
 	m_pTransformCom2->Set_State(CTransform::STATE_UP, vFrontUp);
 
 	_float3 vLook;
@@ -204,7 +208,7 @@ void CHouse2::SetPos(void)
 
 	//임의의 벡터 
 	_float3 vXYZ1 = m_pTransformCom1->Get_State(CTransform::STATE_POSITION);
-	vXYZ1.y += 1.f * vScale.y;
+	vXYZ1.y += 1.25f * vScale.y;
 
 	_float3 vBackLook = vCenter1 - vBack;
 	_float3 vBackRight;
@@ -243,7 +247,7 @@ void CHouse2::SetPos(void)
 
 	//임의의 벡터 
 	_float3 vXYZ2 = m_pTransformCom1->Get_State(CTransform::STATE_POSITION);
-	vXYZ2.y += 1.f * vScale.y;
+	vXYZ2.y += 1.25f * vScale.y;
 
 	_float3 vRightLook = vCenter2 - vRight;
 	_float3 vRightRight;
@@ -282,7 +286,7 @@ void CHouse2::SetPos(void)
 
 	//임의의 벡터 
 	_float3 vXYZ3 = m_pTransformCom1->Get_State(CTransform::STATE_POSITION);
-	vXYZ3.y += 1.f * vScale.y;
+	vXYZ3.y += 1.25f * vScale.y;
 
 	_float3 vLeftLook = vCenter3 - vLeft;
 	_float3 vLeftRight;

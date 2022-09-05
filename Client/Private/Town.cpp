@@ -9,6 +9,7 @@
 #include "KeyMgr.h"
 #include "House.h"
 #include "House2.h"
+#include "BackGroundTree.h"
 
 CTown::CTown(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -83,7 +84,17 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_TOWN, pLayerTag)))
 		return E_FAIL;
 	
-
+	for (auto& iter : m_vecTree)
+	{
+		CBackGroundTree::INDEXPOS indexpos;
+		ZeroMemory(&indexpos, sizeof(CBackGroundTree::INDEXPOS));
+		indexpos.iIndex = iter.iIndex;
+		indexpos.vScale = iter.vScale;
+		indexpos.vPos = iter.BackGroundPos;
+		
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundTree"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
+			return E_FAIL;
+	}
 
 	for (auto& iter : m_vecHouse)
 	{
@@ -101,22 +112,19 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 
 
 
-	//for (auto& iter : m_vecHouse2)
-	//{
-	//	CHouse2::INDEXPOS indexpos;
-	//	ZeroMemory(&indexpos, sizeof(CHouse2::INDEXPOS));
-	//	indexpos.iIndex = iter.iIndex;
-	//	indexpos.vScale = iter.vScale;
-	//	indexpos.vPos = iter.BackGroundPos;
-	//	indexpos.iTrun = iter.iTrun;
+	for (auto& iter : m_vecHouse2)
+	{
+		CHouse2::INDEXPOS indexpos;
+		ZeroMemory(&indexpos, sizeof(CHouse2::INDEXPOS));
+		indexpos.iIndex = iter.iIndex;
+		indexpos.vScale = iter.vScale;
+		indexpos.vPos = iter.BackGroundPos;
+		indexpos.iTrun = iter.iTrun;
 
 
-	//	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House2"), LEVEL_TOWN, pLayerTag, &indexpos)))
-	//		return E_FAIL;
-	//}
-	
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House2"), LEVEL_TOWN, pLayerTag)))
-		return E_FAIL;
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House2"), LEVEL_TOWN, pLayerTag, &indexpos)))
+			return E_FAIL;
+	}
 
 
 	for (auto& iter : m_vecIndex)
@@ -254,19 +262,19 @@ HRESULT CTown::Ready_Layer_NPC(const _tchar * pLayerTag)
 	Safe_AddRef(pGameInstance);
 	CGameObject::INFO tInfo;
 	tInfo.iLevelIndex = LEVEL_TOWN;
-	tInfo.vPos = { 2.f,0.f,2.f };
+	tInfo.vPos = { 14.f,0.f,11.f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Default_NPC"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
 	tInfo.vPos = { 6.f,0.f,6.f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Chief"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
-	tInfo.vPos = { 8.f,0.f,6.f };
+	tInfo.vPos = { 18.f,0.f,8.f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Quest1"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
-	tInfo.vPos = { 10.f,0.f,14.f };
+	tInfo.vPos = { 11.f,0.f,18.f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Village_Quest2"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
-	tInfo.vPos = { 10.f,0.f,16.f };
+	tInfo.vPos = { 9.5f,0.f,16.5f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Engineer"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
 
