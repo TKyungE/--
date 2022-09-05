@@ -92,20 +92,44 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.iIndex = iter.iIndex;
 		indexpos.vScale = iter.vScale;
 		indexpos.vPos = iter.BackGroundPos;
+		indexpos.iTrun = iter.iTrun;
 
-	/*	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House"), LEVEL_TOWN, pLayerTag, &indexpos)))
-			return E_FAIL;*/
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House"), LEVEL_TOWN, pLayerTag, &indexpos)))
+			return E_FAIL;
 	}
 
-	CHouse2::INDEXPOS indexpos;
-	ZeroMemory(&indexpos, sizeof(CHouse2::INDEXPOS));
-	//indexpos.iIndex = 3;
-	//indexpos.vScale = 
-	//indexpos.vPos = 
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House2"), LEVEL_TOWN, pLayerTag, &indexpos)))
+
+
+	//for (auto& iter : m_vecHouse2)
+	//{
+	//	CHouse2::INDEXPOS indexpos;
+	//	ZeroMemory(&indexpos, sizeof(CHouse2::INDEXPOS));
+	//	indexpos.iIndex = iter.iIndex;
+	//	indexpos.vScale = iter.vScale;
+	//	indexpos.vPos = iter.BackGroundPos;
+	//	indexpos.iTrun = iter.iTrun;
+
+
+	//	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House2"), LEVEL_TOWN, pLayerTag, &indexpos)))
+	//		return E_FAIL;
+	//}
+	
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House2"), LEVEL_TOWN, pLayerTag)))
 		return E_FAIL;
 
+
+	for (auto& iter : m_vecIndex)
+	{
+		CBackGroundRect::INDEXPOS indexpos;
+		ZeroMemory(&indexpos, sizeof(CBackGroundRect::INDEXPOS));
+		indexpos.iIndex = iter.iIndex;
+		indexpos.vScale = iter.vScale;
+		indexpos.vPos = iter.BackGroundPos;
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundRect"), LEVEL_TOWN, pLayerTag, &indexpos)))
+			return E_FAIL;
+	}
 
 
 
@@ -326,8 +350,6 @@ void CTown::LoadData()
 			vPos = Pos;
 
 			m_vMonsterPos1.push_back(vPos);
-
-
 		}
 
 		for (_uint i = 0; i < iIndexSize; ++i)

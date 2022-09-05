@@ -29,11 +29,9 @@ HRESULT CHouse2::Initialize(void * pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	//memcpy(&m_IndexPos, pArg, sizeof(INDEXPOS));
+	memcpy(&m_IndexPos, pArg, sizeof(INDEXPOS));
 
 	SetPos();
-
-	//m_pTransformCom1->Set_State(CTransform::STATE_POSITION, m_IndexPos.vPos);
 
 	return S_OK;
 }

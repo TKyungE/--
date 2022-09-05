@@ -1,4 +1,4 @@
-#include "VIBuffer_Rect2.h"
+#include "..\Public\VIBuffer_Rect2.h"
 
 CVIBuffer_Rect2::CVIBuffer_Rect2(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CVIBuffer(pGraphic_Device)
