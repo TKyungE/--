@@ -42,7 +42,7 @@ void CHouse::Tick(_float fTimeDelta)
 	//OnTerrain();
 	m_pColliderCom->Set_Transform(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 
-	m_pCollisionMgrCom->Add_ColiisionGroup(COLLISION_OBJECT, this);
+	//m_pCollisionMgrCom->Add_ColiisionGroup(COLLISION_OBJECT, this);
 }
 
 void CHouse::Late_Tick(_float fTimeDelta)
@@ -113,8 +113,8 @@ HRESULT CHouse::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
 		return E_FAIL;
 	
-	if (FAILED(__super::Add_Components(TEXT("Com_CollisionMgr"), LEVEL_STATIC, TEXT("Prototype_Component_CollisionMgr"), (CComponent**)&m_pCollisionMgrCom)))
-		return E_FAIL;
+	/*if (FAILED(__super::Add_Components(TEXT("Com_CollisionMgr"), LEVEL_STATIC, TEXT("Prototype_Component_CollisionMgr"), (CComponent**)&m_pCollisionMgrCom)))
+		return E_FAIL;*/
 
 	return S_OK;
 }
@@ -291,7 +291,7 @@ void CHouse::Free(void)
 {
 	__super::Free();
 
-	Safe_Release(m_pCollisionMgrCom);
+	//Safe_Release(m_pCollisionMgrCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pTransformCom2);

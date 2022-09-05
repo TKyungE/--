@@ -85,14 +85,12 @@ void CLEVEL_GamePlay::Tick(_float fTimeDelta)
 	if (GetKeyState('U') < 0)
 	{
 		if (g_bCollider)
-		{
 			g_bCollider = false;
-		}
 	}
 		
 	Create_Rain(fTimeDelta);
 
-	m_pCollisionMgr->Release_Objects();
+	//m_pCollisionMgr->Release_Objects();
 
 	Safe_Release(pGameInstance);
 }

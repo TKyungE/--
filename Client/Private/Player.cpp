@@ -122,8 +122,8 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	}
 	OnBillboard();
 
-	if (m_pCollisionMgrCom->Collision(this, COLLISION_OBJECT))
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_pTransformCom->Get_State(CTransform::STATE_POSITION) - m_pCollisionMgrCom->Get_Collision());
+	/*if (m_pCollisionMgrCom->Collision(this, COLLISION_OBJECT))
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_pTransformCom->Get_State(CTransform::STATE_POSITION) - m_pCollisionMgrCom->Get_Collision());*/
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
