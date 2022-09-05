@@ -26,9 +26,6 @@ HRESULT CLEVEL_GamePlay::Initialize()
 
 	LoadData();
 
-	if (FAILED(SetUp_Components()))
-		return E_FAIL;
-
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
 
@@ -89,8 +86,6 @@ void CLEVEL_GamePlay::Tick(_float fTimeDelta)
 	}
 		
 	Create_Rain(fTimeDelta);
-
-	//m_pCollisionMgr->Release_Objects();
 
 	Safe_Release(pGameInstance);
 }
@@ -531,23 +526,6 @@ void CLEVEL_GamePlay::Create_Rain(_float fTimeDelta)
 
 }
 
-HRESULT CLEVEL_GamePlay::SetUp_Components(void)
-{
-	CGameInstance* pInstance = CGameInstance::Get_Instance();
-	if (nullptr == pInstance)
-		return E_FAIL;
-	
-	Safe_AddRef(pInstance);
-
-	m_pCollisionMgr = (CCollisionMgr*)pInstance->Clone_Component(LEVEL_STATIC, TEXT("Prototype_Component_CollisionMgr"));
-	if (nullptr == m_pCollisionMgr)
-		return E_FAIL;
-
-	Safe_Release(pInstance);
-
-	return S_OK;
-}
-
 CLEVEL_GamePlay * CLEVEL_GamePlay::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
 	CLEVEL_GamePlay*	pInstance = new CLEVEL_GamePlay(pGraphic_Device);
@@ -564,6 +542,4 @@ CLEVEL_GamePlay * CLEVEL_GamePlay::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 void CLEVEL_GamePlay::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pCollisionMgr);
 }

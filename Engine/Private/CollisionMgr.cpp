@@ -77,8 +77,6 @@ _bool CCollisionMgr::Collision_AABB(class CGameObject* _Dest, GAMEOBJECTS _Sour)
 		return true;
 	}
 
-	Safe_AddRef(DestCollider);
-
 	_float3 DestMin = DestCollider->Find_MinPoint();
 	_float3 DestMax = DestCollider->Find_MaxPoint();
 
@@ -90,8 +88,6 @@ _bool CCollisionMgr::Collision_AABB(class CGameObject* _Dest, GAMEOBJECTS _Sour)
 			ERR_MSG(TEXT("Failed to Check AABB : Sour"));
 			return true;
 		}
-
-		Safe_AddRef(SourCollider);
 
 		_float3 SourMin = SourCollider->Find_MinPoint();
 		_float3 SourMax = SourCollider->Find_MaxPoint();
@@ -114,6 +110,7 @@ _bool CCollisionMgr::Collision_AABB(class CGameObject* _Dest, GAMEOBJECTS _Sour)
 		{
 			if (DestMax.z < SourMin.z)
 				return false;
+
 			else
 				m_vCollision.z = DestMax.z - SourMin.z;
 		}
@@ -121,6 +118,7 @@ _bool CCollisionMgr::Collision_AABB(class CGameObject* _Dest, GAMEOBJECTS _Sour)
 		{
 			if (DestMin.z > SourMax.z)
 				return false;
+
 			else
 				m_vCollision.z = SourMax.z - DestMin.z;
 		}
@@ -128,6 +126,7 @@ _bool CCollisionMgr::Collision_AABB(class CGameObject* _Dest, GAMEOBJECTS _Sour)
 		{
 			if (DestMax.y < SourMin.y)
 				return false;
+
 			else
 				m_vCollision.y = DestMax.y - SourMin.y;
 		}
@@ -135,11 +134,10 @@ _bool CCollisionMgr::Collision_AABB(class CGameObject* _Dest, GAMEOBJECTS _Sour)
 		{
 			if (DestMin.y > SourMax.y)
 				return false;
+
 			else
 				m_vCollision.y = SourMax.y - DestMin.y;
 		}
-
-		Safe_Release(SourCollider);
 	}
 
 	return true;

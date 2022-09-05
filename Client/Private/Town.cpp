@@ -22,9 +22,6 @@ HRESULT CTown::Initialize()
 
 	LoadData();
 
-	if (FAILED(SetUp_Components()))
-		return E_FAIL;
-
 	if (FAILED(Ready_Layer_Player(TEXT("Layer_Player"))))
 		return E_FAIL;
 
@@ -71,8 +68,6 @@ void CTown::Tick(_float fTimeDelta)
 			g_bCollider = false;
 		}
 	}
-
-	m_pCollisionMgr->Release_Objects();
 
 	if (m_bNextLevel == true)
 	{
@@ -270,23 +265,6 @@ HRESULT CTown::Ready_Layer_Portal(const _tchar * pLayerTag)
 	return S_OK;
 }
 
-HRESULT CTown::SetUp_Components(void)
-{
-	CGameInstance* pInstance = CGameInstance::Get_Instance();
-	if (nullptr == pInstance)
-		return E_FAIL;
-
-	Safe_AddRef(pInstance);
-
-	m_pCollisionMgr = (CCollisionMgr*)pInstance->Clone_Component(LEVEL_STATIC, TEXT("Prototype_Component_CollisionMgr"));
-	if (nullptr == m_pCollisionMgr)
-		return E_FAIL;
-
-	Safe_Release(pInstance);
-
-	return S_OK;
-}
-
 void CTown::LoadData()
 {
 	HANDLE hFile = CreateFile(TEXT("../../Data/Pos.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
@@ -432,6 +410,4 @@ CTown * CTown::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 void CTown::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pCollisionMgr);
 }

@@ -48,6 +48,8 @@ void CMainApp::Tick(_float fTimeDelta)
 
 	m_pGameInstance->Tick_Engine(fTimeDelta);
 
+	m_pCollisionMgr->Release_Objects();
+
 #ifdef _DEBUG
 	m_fTimeAcc += fTimeDelta;
 #endif // _DEBUG

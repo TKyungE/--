@@ -48,7 +48,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 		m_tInfo.iMaxHp = 186;
 		m_tInfo.iHp = m_tInfo.iMaxHp;
 		m_tInfo.iMp = 186;
-		m_tInfo.iExp = 0.f;
+		m_tInfo.iExp = 0;
 	}
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
@@ -103,7 +103,7 @@ void CPlayer::Tick(_float fTimeDelta)
 			m_tInfo.iHp += 10;
 		}
 		m_tInfo.iMp += 10;
-		m_tInfo.iExp += 100.f;
+		m_tInfo.iExp += 100;
 	}
 
 	m_pColliderCom->Set_Transform(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
@@ -178,7 +178,6 @@ CGameObject * CPlayer::Clone(void * pArg)
 		Safe_Release(pInstance);
 	}
 	
-
 	return pInstance;
 }
 
@@ -495,8 +494,6 @@ void CPlayer::Key_Input(_float fTimeDelta)
 				m_tFrame.iFrameEnd = 4;
 				m_tFrame.fFrameSpeed = 0.07f;
 			}
-			break;
-		default:
 			break;
 		}
 	}
