@@ -7,6 +7,7 @@ class CRenderer;
 class CTransform;
 class CVIBuffer_Rect;
 class CTexture;
+class CCollider;
 END
 
 BEGIN(Client)
@@ -39,7 +40,7 @@ private:
 	CTexture* m_pTextureComAttack_Back = nullptr;
 	CTexture* m_pTextureComDead_Front = nullptr;
 	CTexture* m_pTextureComDead_Back = nullptr;
-
+	CCollider*				m_pColliderCom = nullptr;
 private:
 	void OnTerrain();
 	void	OnBillboard();
@@ -60,6 +61,7 @@ private:
 	HRESULT TextureRender();
 	void MonsterMove(_float fTimeDelta);
 	HRESULT RespawnMonster();
+	void CheckColl();
 private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;

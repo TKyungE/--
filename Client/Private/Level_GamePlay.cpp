@@ -220,35 +220,29 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 	Info.iLevelIndex = LEVEL_GAMEPLAY;
 
-	Info.vPos = { 10.f,0.f,10.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 10.f,0.f,12.f };
+	Info.vPos = { 5.f,0.f,5.f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
 	Info.vPos = { 5.f,0.f,10.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
-	Info.vPos = { 8.f,0.f,15.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 10.f,0.f,8.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+	Info.vPos = { 8.f,0.f,10.f };
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
 	Info.vPos = { 7.f,0.f,3.f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
 	Info.vPos = { 8.f,0.f,5.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
 	Info.vPos = { 10.f,0.f,2.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
 	Info.vPos = { 10.f,0.f,10.f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
 	Info.vPos = { 7.f,0.f,7.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bloodymurderer"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
 
 

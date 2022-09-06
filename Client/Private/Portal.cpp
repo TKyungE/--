@@ -81,8 +81,8 @@ void CPortal::Late_Tick(_float fTimeDelta)
 		return;
 
 	Safe_AddRef(pInstance);
-
-	if (pInstance->Collision(this, COLLISION_PLAYER))
+	CGameObject* pTarget;
+	if (pInstance->Collision(this, COLLISION_PLAYER, &pTarget))
 		m_bLevel = true;
 
 	Safe_Release(pInstance);

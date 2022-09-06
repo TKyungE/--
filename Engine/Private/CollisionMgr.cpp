@@ -30,7 +30,7 @@ HRESULT CCollisionMgr::Add_ColiisionGroup(_uint iCollisionGroup, CGameObject * p
 	return S_OK;
 }
 
-_bool CCollisionMgr::Collision(CGameObject * pGameObject, _uint iCollisionGroup)
+_bool CCollisionMgr::Collision(CGameObject * pGameObject, _uint iCollisionGroup, CGameObject** pTarget)
 {
 	if (nullptr == pGameObject)
 	{
@@ -41,7 +41,10 @@ _bool CCollisionMgr::Collision(CGameObject * pGameObject, _uint iCollisionGroup)
 	for (auto& iter : m_GameObjects[iCollisionGroup])
 	{
 		if (Collision_AABB(pGameObject, iter))
+		{
+			*pTarget = iter;
 			return true;
+		}
 	}
 
 	return false;
@@ -64,11 +67,14 @@ void CCollisionMgr::Release_Objects(void)
 
 _bool CCollisionMgr::Collision_AABB(class CGameObject* _Dest, class CGameObject* _Sour)
 {
+	if (_Dest == _Sour)
+		return false;
+
 	CCollider* DestCollider = (CCollider*)_Dest->Find_Component(TEXT("Com_Collider"));
 	if (nullptr == DestCollider)
 	{
 		ERR_MSG(TEXT("Failed to Check AABB : Dest"));
-		return true;
+		return false;
 	}
 
 	_float3 DestMin = DestCollider->Find_MinPoint();
@@ -78,7 +84,7 @@ _bool CCollisionMgr::Collision_AABB(class CGameObject* _Dest, class CGameObject*
 	if (nullptr == SourCollider)
 	{
 		ERR_MSG(TEXT("Failed to Check AABB : Sour"));
-		return true;
+		return false;
 	}
 
 	ZeroMemory(&m_vCollision, sizeof(_float3));

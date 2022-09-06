@@ -14,7 +14,7 @@ private:
 public:
 	HRESULT Reserve_Container(_uint iNumObjects);
 	HRESULT Add_ColiisionGroup(_uint iCollisionGroup, class CGameObject* pGameObject);
-	_bool Collision(class CGameObject* pGameObject, _uint iCollisionGroup);
+	_bool Collision(class CGameObject* pGameObject, _uint iCollisionGroup, CGameObject** pTarget);
 	void Release_Objects(void);
 
 public:

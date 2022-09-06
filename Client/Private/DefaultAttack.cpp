@@ -58,13 +58,28 @@ void CDefaultAttack::Tick(_float fTimeDelta)
 	if (m_fDeadTime > 0.3f)
 		Set_Dead();
 
-	
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.7f);
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+
+	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_MONSTERSKILL, this)))
+	{
+		ERR_MSG(TEXT("Failed to Add CollisionGroup : CThunderSword"));
+		return;
+	}
+
+	Safe_Release(pInstance);
 }
 
 void CDefaultAttack::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
+	CheckColl();
 
 
 	if (nullptr != m_pRendererCom)
@@ -79,7 +94,8 @@ HRESULT CDefaultAttack::Render()
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
 
-	m_pColliderCom->Render();
+	if (g_bCollider)
+		m_pColliderCom->Render();
 
 	return S_OK;
 }
@@ -152,10 +168,46 @@ _float4x4 CDefaultAttack::Get_World(void)
 void CDefaultAttack::Free()
 {
 	__super::Free();
-	
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pRendererCom);
 
+}
+void CDefaultAttack::CheckColl()
+{
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+	CGameObject* pTarget;
+	if (pInstance->Collision(this, COLLISION_PLAYER, &pTarget))
+	{
+		pTarget->Set_Hp(m_tInfo.iDmg);
+		pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
+		if (pTarget->Get_Info().iHp <= 0)
+			pTarget->Set_Dead();
+		Set_Dead();
+	}
+
+	Safe_Release(pInstance);
+}
+_float3 CDefaultAttack::Get_CollisionPos(CGameObject * pDest, CGameObject * pSour)
+{
+	_float3 vLook = *(_float3*)&pDest->Get_World().m[3][0] - *(_float3*)&pSour->Get_World().m[3][0];
+	D3DXVec3Normalize(&vLook, &vLook);
+
+	vLook = vLook * 0.5f;
+
+	_float Angle = D3DXVec3Dot(&vLook, (_float3*)&pSour->Get_World().m[1][0]);
+	_float3 SourUp = *(_float3*)&pSour->Get_World().m[1][0];
+	_float3 Proj = (Angle / D3DXVec3Length(&SourUp) * D3DXVec3Length(&SourUp)) * *(_float3*)&pSour->Get_World().m[1][0];
+
+	_float3 CollisionPos = *(_float3*)&pSour->Get_World().m[3][0] + Proj;
+	//	CollisionPos.y -= 0.8f;
+	CollisionPos.x = pDest->Get_World().m[3][0];
+
+	return CollisionPos;
 }

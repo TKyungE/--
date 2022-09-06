@@ -56,7 +56,7 @@ public: /* For.Component_Manager */
 	
 public: /* For.Collision_Manager */
 	HRESULT Add_ColiisionGroup(_uint iCollisionGroup, class CGameObject* pGameObject);
-	_bool Collision(class CGameObject* pGameObject, _uint iCollisionGroup);
+	_bool Collision(class CGameObject* pGameObject, _uint iCollisionGroup, CGameObject** pTarget);
 	_float3 Get_Collision(void);
 	void Release_Objects(void);
 

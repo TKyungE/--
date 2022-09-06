@@ -30,7 +30,7 @@ private: /* For.Components */
 	CRenderer*				m_pRendererCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
-	CCollider* m_pColliderCom = nullptr;
+	CCollider*				m_pColliderCom = nullptr;
 private:
 
 	_float				m_fDeadTime = 0.f;
@@ -43,6 +43,8 @@ public:
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
 	virtual _float4x4 Get_World(void) override;
 	virtual void Free() override;
+	void CheckColl();
+	_float3 Get_CollisionPos(CGameObject* pDest, CGameObject* pSour);
 };
 
 END

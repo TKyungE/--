@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "..\Public\Player.h"
-
+#include "SoundMgr.h"
 #include "GameInstance.h"
 #include "Layer.h"
 #include "KeyMgr.h"
@@ -45,7 +45,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	if (m_tInfo.iMaxHp <= 0)
 	{
 		m_tInfo.fX = 0.5f;
-		m_tInfo.iMaxHp = 186;
+		m_tInfo.iMaxHp = 99999;
 		m_tInfo.iHp = m_tInfo.iMaxHp;
 		m_tInfo.iMp = 186;
 		m_tInfo.iExp = 0;
@@ -121,6 +121,7 @@ void CPlayer::Tick(_float fTimeDelta)
 	}
 
 	Safe_Release(pInstance);
+	
 }
 
 void CPlayer::Late_Tick(_float fTimeDelta)
@@ -128,37 +129,13 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	__super::Late_Tick(fTimeDelta);
 	
 	Motion_Change();
+	Check_Hit();
 	if (m_tInfo.iMp > 0)
 	{
 		Use_Skill();
 	}
 	OnBillboard();
-
-	CGameInstance* pInstance = CGameInstance::Get_Instance();
-	if (nullptr == pInstance)
-		return;
-
-	Safe_AddRef(pInstance);
-
-	if (pInstance->Collision(this, COLLISION_OBJECT))
-	{
-		_float3 vBackPos;
-		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
-		{
-			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
-			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
-		}
-		else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
-		{
-			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
-			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
-		}
-		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
-
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
-	}
-
-	Safe_Release(pInstance);
+	CheckColl();
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
@@ -214,6 +191,68 @@ CGameObject * CPlayer::Clone(void * pArg)
 	}
 	
 	return pInstance;
+}
+
+void CPlayer::CheckColl()
+{
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+	CGameObject* pTarget;
+	if (pInstance->Collision(this, COLLISION_OBJECT, &pTarget))
+	{
+		_float3 vBackPos;
+		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
+		{
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
+		}
+		else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
+		{
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
+		}
+		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
+	}
+	if (pInstance->Collision(this, COLLISION_MONSTER, &pTarget))
+	{
+		_float3 vBackPos;
+		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
+		{
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
+		}
+		else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
+		{
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
+		}
+		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
+	}
+	if (pInstance->Collision(this, COLLISION_BOSS, &pTarget))
+	{
+		_float3 vBackPos;
+		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
+		{
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
+		}
+		else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
+		{
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
+		}
+		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
+	}
+	Safe_Release(pInstance);
 }
 
 void CPlayer::OnTerrain()
@@ -587,10 +626,10 @@ HRESULT CPlayer::Skill_FireSpear(const _tchar * pLayerTag, _float3 _vPos)
 
 	CGameObject::INFO tInfo;
 
-	for (int i = 0; i < 100; ++i)
+	for (int i = 0; i < 10; ++i)
 	{
-		_float iSour = rand() % 60000 * 0.001f;
-		_float iTemp = rand() % 60000 * 0.001f;
+		_float iSour = rand() % 6000 * 0.001f;
+		_float iTemp = rand() % 6000 * 0.001f;
 		_float3 vPos = { 0.f,0.f,0.f };
 		tInfo.vPos.x = vPos.x + iSour;
 		tInfo.vPos.y = vPos.y;
@@ -610,10 +649,10 @@ HRESULT CPlayer::Skill_Meteor(const _tchar * pLayerTag, _float3 _vPos)
 	Safe_AddRef(pGameInstance);
 
 	CGameObject::INFO tInfo;
-	for (int i = 0; i < 100; ++i)
+	for (int i = 0; i < 10; ++i)
 	{
-		_float iSour = rand() % 60000 * 0.001f;
-		_float iTemp = rand() % 60000 * 0.001f;
+		_float iSour = rand() % 6000 * 0.001f;
+		_float iTemp = rand() % 6000 * 0.001f;
 
 		_float3 vPos = { 0.f,0.f,0.f };
 		tInfo.vPos.x = vPos.x + iSour;
@@ -895,3 +934,22 @@ void CPlayer::Get_PickingPoint(void)
 	return;
 }
 
+
+void CPlayer::Check_Hit()
+{
+	if (m_tInfo.bHit)
+	{
+		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+		CGameObject::INFO tInfo;
+		tInfo.pTarget = this;
+		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);;
+		tInfo.iTargetDmg = m_tInfo.iTargetDmg;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), LEVEL_GAMEPLAY, TEXT("Layer_DmgFont"), &tInfo);
+		tInfo.vPos = m_tInfo.vTargetPos;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+		CSoundMgr::Get_Instance()->PlayEffect(L"Hit_Sound.wav", fSOUND);
+		m_tInfo.bHit = false;
+		Safe_Release(pGameInstance);
+	}
+}
