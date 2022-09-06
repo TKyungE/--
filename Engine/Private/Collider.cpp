@@ -30,6 +30,16 @@ HRESULT CCollider::Initialize(void * pArg)
 	return S_OK;
 }
 
+void CCollider::Set_Transform(_float4x4 matTargetWorld, _float fScale)
+{
+	_float3 vTargetRight = *(_float3*)&matTargetWorld.m[0][0];
+	_float3 vTargetUp = *(_float3*)&matTargetWorld.m[1][0];
+	_float3 vTargetLook = *(_float3*)&matTargetWorld.m[2][0];
+
+	m_pTransformCom->Set_Scaled(_float3(D3DXVec3Length(&vTargetRight) * fScale, D3DXVec3Length(&vTargetUp) * fScale, D3DXVec3Length(&vTargetLook) * fScale));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, *(_float3*)&matTargetWorld.m[3][0]);
+}
+
 HRESULT CCollider::Render(void)
 {
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
@@ -56,7 +66,7 @@ _float3 CCollider::Find_MinPoint(void)
 			vMin = m_pVIBufferCom->m_pVerticesPos[i];
 	}
 
-	vMin += m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	D3DXVec3TransformCoord(&vMin, &vMin, &m_pTransformCom->Get_WorldMatrix());
 
 	return vMin;
 }
@@ -71,7 +81,7 @@ _float3 CCollider::Find_MaxPoint(void)
 			vMax = m_pVIBufferCom->m_pVerticesPos[i];
 	}
 
-	vMax += m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	D3DXVec3TransformCoord(&vMax, &vMax, &m_pTransformCom->Get_WorldMatrix());
 
 	return vMax;
 }

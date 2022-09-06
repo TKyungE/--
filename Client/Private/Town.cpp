@@ -94,8 +94,6 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_TOWN, pLayerTag)))
 		return E_FAIL;
-	
-
 
 	for (auto& iter : m_vecHouse)
 	{
@@ -108,7 +106,6 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House"), LEVEL_TOWN, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
-	
 
 	Safe_Release(pGameInstance);
 

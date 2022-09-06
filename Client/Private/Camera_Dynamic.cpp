@@ -70,7 +70,7 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 	}
 
 	_float4x4 CameraRotationMatrix, CameraMatrix;
-	D3DXMatrixRotationAxis(&CameraRotationMatrix, &m_pTransform->Get_State(CTransform::STATE_RIGHT), D3DXToRadian(40.f));
+	D3DXMatrixRotationAxis(&CameraRotationMatrix, &m_pTransform->Get_State(CTransform::STATE_RIGHT), D3DXToRadian(45.f));
 
 	_float3 Camera;
 	CameraMatrix = m_matRotX * CameraRotationMatrix;

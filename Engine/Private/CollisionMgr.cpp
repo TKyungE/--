@@ -46,11 +46,13 @@ _bool CCollisionMgr::Collision(CGameObject * pGameObject, _uint iCollisionGroup)
 		return false;
 	}
 
-	if (!Collision_AABB(pGameObject, m_GameObjects[iCollisionGroup]))
-		return false;
+	for (auto& iter : m_GameObjects[iCollisionGroup])
+	{
+		if (Collision_AABB(pGameObject, iter))
+			return true;
+	}
 
-	else
-		return true;
+	return false;
 }
 
 void CCollisionMgr::Release_Objects(void)
@@ -68,7 +70,7 @@ void CCollisionMgr::Release_Objects(void)
 }
 
 
-_bool CCollisionMgr::Collision_AABB(class CGameObject* _Dest, GAMEOBJECTS _Sour)
+_bool CCollisionMgr::Collision_AABB(class CGameObject* _Dest, class CGameObject* _Sour)
 {
 	CCollider* DestCollider = (CCollider*)_Dest->Find_Component(TEXT("Com_Collider"));
 	if (nullptr == DestCollider)
@@ -80,63 +82,145 @@ _bool CCollisionMgr::Collision_AABB(class CGameObject* _Dest, GAMEOBJECTS _Sour)
 	_float3 DestMin = DestCollider->Find_MinPoint();
 	_float3 DestMax = DestCollider->Find_MaxPoint();
 
-	for (auto& Sour : _Sour)
+	CCollider* SourCollider = (CCollider*)_Sour->Find_Component(TEXT("Com_Collider"));
+	if (nullptr == SourCollider)
 	{
-		CCollider* SourCollider = (CCollider*)Sour->Find_Component(TEXT("Com_Collider"));
-		if (nullptr == SourCollider)
-		{
-			ERR_MSG(TEXT("Failed to Check AABB : Sour"));
-			return true;
-		}
+		ERR_MSG(TEXT("Failed to Check AABB : Sour"));
+		return true;
+	}
 
-		_float3 SourMin = SourCollider->Find_MinPoint();
-		_float3 SourMax = SourCollider->Find_MaxPoint();
+	ZeroMemory(&m_vCollision, sizeof(_float3));
 
-		if (_Dest->Get_World().m[3][0] < Sour->Get_World().m[3][0])
-		{
-			if (DestMax.x < SourMin.x)
-				return false;
-			else
-				m_vCollision.x = DestMax.x - SourMin.x;
-		}
+	_float3 SourMin = SourCollider->Find_MinPoint();
+	_float3 SourMax = SourCollider->Find_MaxPoint();
+
+	if (_Dest->Get_World().m[3][0] < _Sour->Get_World().m[3][0])
+	{
+		if (DestMax.x <= SourMin.x)
+			return false;
 		else
 		{
-			if (DestMin.x > SourMax.x)
-				return false;
-			else
-				m_vCollision.x = SourMax.x - DestMin.x;
-		}
-		if (_Dest->Get_World().m[3][2] < Sour->Get_World().m[3][2])
-		{
-			if (DestMax.z < SourMin.z)
-				return false;
+			m_vCollision.x = DestMax.x - SourMin.x;
 
+			if (_Dest->Get_World().m[3][2] < _Sour->Get_World().m[3][2])
+			{
+				if (DestMax.z <= SourMin.z)
+					return false;
+
+				else
+				{
+					m_vCollision.z = DestMax.z - SourMin.z;
+
+					if (_Dest->Get_World().m[3][1] < _Sour->Get_World().m[3][1])
+					{
+						if (DestMax.y <= SourMin.y)
+							return false;
+
+						else
+							m_vCollision.y = DestMax.y - SourMin.y;
+					}
+					else
+					{
+						if (DestMin.y >= SourMax.y)
+							return false;
+
+						else
+							m_vCollision.y = DestMin.y - SourMax.y;
+					}
+				}
+			}
 			else
-				m_vCollision.z = DestMax.z - SourMin.z;
+			{
+				if (DestMin.z >= SourMax.z)
+					return false;
+
+				else
+				{
+					m_vCollision.z = DestMin.z - SourMax.z;
+
+					if (_Dest->Get_World().m[3][1] < _Sour->Get_World().m[3][1])
+					{
+						if (DestMax.y <= SourMin.y)
+							return false;
+
+						else
+							m_vCollision.y = DestMax.y - SourMin.y;
+					}
+					else
+					{
+						if (DestMin.y >= SourMax.y)
+							return false;
+
+						else
+							m_vCollision.y = DestMin.y - SourMax.y;
+					}
+				}
+			}
 		}
+	}
+	else
+	{
+		if (DestMin.x >= SourMax.x)
+			return false;
 		else
 		{
-			if (DestMin.z > SourMax.z)
-				return false;
+			m_vCollision.x = DestMin.x - SourMax.x;
 
-			else
-				m_vCollision.z = SourMax.z - DestMin.z;
-		}
-		if (_Dest->Get_World().m[3][1] < Sour->Get_World().m[3][1])
-		{
-			if (DestMax.y < SourMin.y)
-				return false;
+			if (_Dest->Get_World().m[3][2] < _Sour->Get_World().m[3][2])
+			{
+				if (DestMax.z <= SourMin.z)
+					return false;
 
-			else
-				m_vCollision.y = DestMax.y - SourMin.y;
-		}
-		else
-		{
-			if (DestMin.y > SourMax.y)
-				return false;
+				else
+				{
+					m_vCollision.z = DestMax.z - SourMin.z;
 
+					if (_Dest->Get_World().m[3][1] < _Sour->Get_World().m[3][1])
+					{
+						if (DestMax.y <= SourMin.y)
+							return false;
+
+						else
+							m_vCollision.y = DestMax.y - SourMin.y;
+					}
+					else
+					{
+						if (DestMin.y >= SourMax.y)
+							return false;
+
+						else
+							m_vCollision.y = DestMin.y - SourMax.y;
+					}
+				}
+
+			}
 			else
-				m_vCollision.y = SourMax.y - DestMin.y;
+			{
+				if (DestMin.z >= SourMax.z)
+					return false;
+
+				else
+				{
+					m_vCollision.z = DestMin.z - SourMax.z;
+
+					if (_Dest->Get_World().m[3][1] < _Sour->Get_World().m[3][1])
+					{
+						if (DestMax.y <= SourMin.y)
+							return false;
+
+						else
+							m_vCollision.y = DestMax.y - SourMin.y;
+					}
+					else
+					{
+						if (DestMin.y >= SourMax.y)
+							return false;
+
+						else
+							m_vCollision.y = DestMin.y - SourMax.y;
+					}
+				}
+			}
 		}
 	}
 

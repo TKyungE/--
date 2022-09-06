@@ -99,46 +99,6 @@ void CLEVEL_GamePlay::Late_Tick(_float fTimeDelta)
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	//CGameObject* Dest;
-	//CGameObject* Sour;
-	//
-	//
-	//if (pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_Skill")) != nullptr)
-	//{
-	//	if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_Skill"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour))
-	//	{
-	//		
-	//		Dest->Set_Dead();
-
-	//		if(Dest->Get_Info().iMoney == 33)
-	//		{ 
-	//			fCollTime += fTimeDelta;
-	//			if (fCollTime > 0.3f)
-	//			{
-	//				_float3 vPos = Get_CollisionPos(Dest, Sour);
-
-	//				Sour->Set_Hit(Dest->Get_Info().iDmg, vPos);
-	//				Sour->Set_Hp(Dest->Get_Info().iDmg);
-	//				fCollTime = 0.f;
-	//			}
-	//		}
-	//		else
-	//		{
-	//			_float3 vPos = Get_CollisionPos(Dest, Sour);
-
-	//			Sour->Set_Hit(Dest->Get_Info().iDmg, vPos);
-	//			Sour->Set_Hp(Dest->Get_Info().iDmg);
-	//		}
-	//		if (Sour->Get_Info().iHp <= 0)
-	//			Sour->Set_Dead();
-	//	}
-	//}
-	//if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Portal"))->Get_Objects(), &Dest, &Sour))
-	//{
-	//	m_bNextLevel = true;
-	//	pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(Dest->Get_Info());
-	//}
-
 	if (m_bNextLevel == true)
 	{
 		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_TOWN))))
@@ -158,8 +118,6 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_GAMEPLAY, pLayerTag)))
 		return E_FAIL;
-
-	
 
 	for (auto& iter : m_vecIndex)
 	{

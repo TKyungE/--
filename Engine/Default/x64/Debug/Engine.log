@@ -1,3 +1,22 @@
 ﻿  CollisionMgr.cpp
-  Engine.vcxproj -> C:\Users\603jh\Desktop\--\Engine\Default\..\Bin\Engine.dll
+  코드를 생성하고 있습니다...
+  건너뛰고 있습니다... (관련된 변경 내용 없음)
+  VIBuffer_WingRect.cpp
+  VIBuffer_RectLeft.cpp
+  VIBuffer_Rect.cpp
+  VIBuffer.cpp
+  Transform.cpp
+  Timer_Manager.cpp
+  Texture.cpp
+  Renderer.cpp
+  Level.cpp
+  Layer.cpp
+  KeyMgr.cpp
+  VIBuffer_Terrain.cpp
+  VIBuffer_Cube.cpp
+  Timer.cpp
+  Picking.cpp
+  Input_Device.cpp
+  Graphic_Device.cpp
+  Engine.vcxproj -> C:\Users\JJH\Desktop\--\Engine\Default\..\Bin\Engine.dll
   Engine.vcxproj -> ..\Bin\Engine.pdb (Full PDB)

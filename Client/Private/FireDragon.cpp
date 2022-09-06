@@ -261,7 +261,7 @@ void CFireDragon::Tick(_float fTimeDelta)
 	m_tInfo.bDead = false;
 
 	if (g_bCollider)
-		m_pColliderCom->Set_Transform(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 1.f);
 }
 
 void CFireDragon::Late_Tick(_float fTimeDelta)

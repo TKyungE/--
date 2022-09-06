@@ -106,7 +106,7 @@ void CPlayer::Tick(_float fTimeDelta)
 		m_tInfo.iExp += 100;
 	}
 
-	m_pColliderCom->Set_Transform(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
 
 	m_pCollisionMgrCom->Add_ColiisionGroup(COLLISION_PLAYER, this);
 }
@@ -122,9 +122,24 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	}
 	OnBillboard();
 
-	/*if (m_pCollisionMgrCom->Collision(this, COLLISION_OBJECT))
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_pTransformCom->Get_State(CTransform::STATE_POSITION) - m_pCollisionMgrCom->Get_Collision());*/
+	if (m_pCollisionMgrCom->Collision(this, COLLISION_OBJECT))
+	{
+		_float3 vBackPos;
+		if (fabs(m_pCollisionMgrCom->Get_Collision().x) < fabs(m_pCollisionMgrCom->Get_Collision().z))
+		{
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - m_pCollisionMgrCom->Get_Collision().x;
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
+		}
+		else if (fabs(m_pCollisionMgrCom->Get_Collision().z) < fabs(m_pCollisionMgrCom->Get_Collision().x))
+		{
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - m_pCollisionMgrCom->Get_Collision().z;
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
+		}
+		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
 
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
+	}
+		
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
 }

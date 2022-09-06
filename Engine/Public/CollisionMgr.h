@@ -30,7 +30,7 @@ private:
 	typedef list<class CGameObject*> GAMEOBJECTS;
 
 private:
-	_bool Collision_AABB(class CGameObject* _Dest, GAMEOBJECTS _Sour);
+	_bool Collision_AABB(class CGameObject* _Dest, class CGameObject* _Sour);
 
 public:
 	static CCollisionMgr* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
