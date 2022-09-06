@@ -482,6 +482,7 @@ HRESULT CFireDragon::Create_Wind()
 			Safe_Release(pGameInstance);
 		}
 	}
+	return S_OK;
 }
 HRESULT CFireDragon::TextureRender()
 {

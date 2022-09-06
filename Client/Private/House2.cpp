@@ -354,6 +354,7 @@ HRESULT CHouse2::RectHouse_Render(void)
 	if (FAILED(m_pTextureCom2->Bind_OnGraphicDev(0)))
 		return E_FAIL;
 	m_pVIBuffer4->Render();
+	return S_OK;
 }
 
 CHouse2 * CHouse2::Create(LPDIRECT3DDEVICE9 _pGraphic_Device)

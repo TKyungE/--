@@ -805,6 +805,7 @@ HRESULT CAlligator::RespawnMonster()
 	tInfo.vPos = { 1.f,1.f,1.f };
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
 	Safe_Release(pGameInstance);
+	return S_OK;
 }
 void CAlligator::OnBillboard()
 {

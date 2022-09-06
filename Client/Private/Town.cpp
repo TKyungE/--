@@ -14,8 +14,6 @@
 
 bool g_bCollider = false;
 
-bool g_bCollider = false;
-
 CTown::CTown(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
 {
@@ -344,7 +342,9 @@ HRESULT CTown::Ready_Layer_Portal(const _tchar * pLayerTag)
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_TOWN, pLayerTag, &tInfo)))
 			return E_FAIL;
+		
 	}
+	
 	Safe_Release(pGameInstance);
 	return S_OK;
 }
@@ -360,6 +360,7 @@ void CTown::Open_Level(void)
 		{
 			if (dynamic_cast<CPortal*>(iter)->Get_Level())
 			{
+				pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Player"))->Get_Objects().front()->Get_Info());
 				LEVEL eLevel = (LEVEL)iter->Get_Info().iNextLevel;
 				if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, eLevel))))
 					return;
