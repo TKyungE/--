@@ -145,7 +145,7 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	CGameObject::INFO info;
 	ZeroMemory(&info, sizeof(CGameObject::INFO));
 	info.pstrPath = TEXT("../../Data/Terrain/TestTerrain2.dat");
-	
+	info.iLevelIndex = LEVEL_GAMEPLAY;
 	
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_GAMEPLAY, pLayerTag, &info)))
 		return E_FAIL;

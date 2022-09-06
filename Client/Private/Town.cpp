@@ -81,7 +81,7 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	CGameObject::INFO info;
 	ZeroMemory(&info, sizeof(CGameObject::INFO));
 	info.pstrPath = TEXT("../../Data/Terrain/TestTerrain.dat");
-
+	info.iLevelIndex = LEVEL_TOWN;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_TOWN, pLayerTag, &info)))
 		return E_FAIL;
