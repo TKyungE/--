@@ -70,6 +70,16 @@ void CBigfoot::Tick(_float fTimeDelta)
 	if (!m_bRespawn)
 	{
 		m_fSkillCool += fTimeDelta;
+		if (m_tInfo.iMp == 2 && !m_bAngry)
+		{
+			CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+			Safe_AddRef(pGameInstance);
+			CGameObject::INFO tInfo;
+			tInfo.pTarget = this;
+			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Angry"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+			Safe_Release(pGameInstance);
+			m_bAngry = true;
+		}
 		OnTerrain();
 		if (!m_bDead)
 			Check_Front();
@@ -258,7 +268,7 @@ void CBigfoot::Chase(_float fTimeDelta)
 	_int iDest = rand() % 1;
 	if (1.f >= Distance)
 	{
-		if (m_fSkillCool >	0.5f)
+		if (m_fSkillCool >	0.4f)
 		{
 			switch (iDest)
 			{
@@ -670,6 +680,12 @@ void CBigfoot::Check_Front()
 	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.3f) && !m_bRun)
 	{
 		m_bRun = true;
+		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+		CGameObject::INFO tInfo;
+		tInfo.pTarget = this;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Help"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+		Safe_Release(pGameInstance);
 	}
 }
 void CBigfoot::Use_Skill(_float fTimeDelta)
