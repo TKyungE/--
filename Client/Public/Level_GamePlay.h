@@ -29,7 +29,7 @@ private:
 
 private:
 	_float3 Get_CollisionPos(CGameObject* pDest, CGameObject* pSour);
-
+	void Open_Level(void);
 
 private:		// 파일입출력 라인
 	void LoadData();

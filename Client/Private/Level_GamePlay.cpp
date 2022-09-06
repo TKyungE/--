@@ -97,23 +97,7 @@ void CLEVEL_GamePlay::Late_Tick(_float fTimeDelta)
 
 	SetWindowText(g_hWnd, TEXT("게임플레이레벨입니다."));
 	
-	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
-	Safe_AddRef(pGameInstance);
-
-	if (nullptr != pGameInstance->Find_Layer(LEVEL_LOGO, TEXT("Layer_Portal")))
-	{
-		for (auto& iter : pGameInstance->Find_Layer(LEVEL_LOGO, TEXT("Layer_Portal"))->Get_Objects())
-		{
-			if (dynamic_cast<CPortal*>(iter)->Get_Level())
-			{
-				LEVEL eLevel = (LEVEL)iter->Get_Info().iNextLevel;
-				if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, eLevel))))
-					return;
-			}
-		}
-	}
-	
-	Safe_Release(pGameInstance);
+	Open_Level();
 }
 
 HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
@@ -384,6 +368,27 @@ _float3 CLEVEL_GamePlay::Get_CollisionPos(CGameObject * pDest, CGameObject * pSo
 	CollisionPos.x = pDest->Get_World().m[3][0];
 
 	return CollisionPos;
+}
+
+void CLEVEL_GamePlay::Open_Level(void)
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	if (nullptr != pGameInstance->Find_Layer(LEVEL_LOGO, TEXT("Layer_Portal")))
+	{
+		for (auto& iter : pGameInstance->Find_Layer(LEVEL_LOGO, TEXT("Layer_Portal"))->Get_Objects())
+		{
+			if (dynamic_cast<CPortal*>(iter)->Get_Level())
+			{
+				LEVEL eLevel = (LEVEL)iter->Get_Info().iNextLevel;
+				if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, eLevel))))
+					return;
+			}
+		}
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 
