@@ -45,8 +45,16 @@ void CHouse2::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+
+	Safe_AddRef(pInstance);
+
+	if (pInstance->IsInFrustum(m_pTransformCom1->Get_State(CTransform::STATE_POSITION), m_pTransformCom1->Get_Scale()))
+	{
+		if (nullptr != m_pRendererCom)
+			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
+	}
+	Safe_Release(pInstance);
 }
 
 HRESULT CHouse2::Render(void)

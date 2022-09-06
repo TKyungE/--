@@ -78,9 +78,16 @@ void CPoisonArrow::Late_Tick(_float fTimeDelta)
 	OnBillboard();
 
 
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
 
-	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+	Safe_AddRef(pInstance);
+
+	if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
+	{
+		if (nullptr != m_pRendererCom)
+			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
+	}
+	Safe_Release(pInstance);
 }
 
 HRESULT CPoisonArrow::Render()

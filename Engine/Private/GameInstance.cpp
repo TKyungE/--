@@ -11,7 +11,9 @@ CGameInstance::CGameInstance()
 	, m_pComponent_Manager(CComponent_Manager::Get_Instance())
 	, m_pPicking(CPicking::Get_Instance())
 	, m_pKeyMgr(CKeyMgr::Get_Instance())
+	, m_pFrustum(CFrustum::Get_Instance())
 {
+	Safe_AddRef(m_pFrustum);
 	Safe_AddRef(m_pKeyMgr);
 	Safe_AddRef(m_pPicking);
 	Safe_AddRef(m_pComponent_Manager);
@@ -48,6 +50,9 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 	if (FAILED(m_pComponent_Manager->Reserve_Container(iNumLevels)))
 		return E_FAIL;
 
+	if (FAILED(m_pFrustum->Initialize(*ppOut)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -61,6 +66,7 @@ void CGameInstance::Tick_Engine(_float fTimeDelta)
 	m_pLevel_Manager->Tick(fTimeDelta);
 	m_pObject_Manager->Tick(fTimeDelta);
 
+	m_pFrustum->Tick();
 	m_pPicking->Tick();
 
 	m_pLevel_Manager->Late_Tick(fTimeDelta);
@@ -204,6 +210,14 @@ CComponent * CGameInstance::Clone_Component(_uint iLevelIndex, const _tchar * pP
 	return m_pComponent_Manager->Clone_Component(iLevelIndex, pPrototypeTag, pArg);
 }
 
+_bool CGameInstance::IsInFrustum(_float3 vPos, _float3 vScale)
+{
+	if (nullptr == m_pFrustum)
+		return false;
+
+	return m_pFrustum->IsinFrustum(vPos, vScale);
+}
+
 void CGameInstance::Release_Engine()
 {
 	CGameInstance::Get_Instance()->Destroy_Instance();
@@ -216,6 +230,8 @@ void CGameInstance::Release_Engine()
 
 	CTimer_Manager::Get_Instance()->Destroy_Instance();
 
+	CFrustum::Get_Instance()->Destroy_Instance();
+
 	CInput_Device::Get_Instance()->Destroy_Instance();
 
 	CPicking::Get_Instance()->Destroy_Instance();
@@ -227,6 +243,7 @@ void CGameInstance::Release_Engine()
 
 void CGameInstance::Free()
 {
+	Safe_Release(m_pFrustum);
 	Safe_Release(m_pKeyMgr);
 	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pTimer_Manager);

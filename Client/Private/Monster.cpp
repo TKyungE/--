@@ -258,8 +258,17 @@ void CMonster::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 	Check_Hit();
-	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+
+	Safe_AddRef(pInstance);
+
+	if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
+	{
+		if (nullptr != m_pRendererCom)
+			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
+	}
+	Safe_Release(pInstance);
 }
 
 HRESULT CMonster::Render(void)

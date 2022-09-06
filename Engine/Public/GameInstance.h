@@ -8,6 +8,7 @@
 #include "Component_Manager.h"
 #include "Picking.h"
 #include "KeyMgr.h"
+#include "Frustum.h"
 
 BEGIN(Engine)
 
@@ -52,7 +53,8 @@ public: /* For.Object_Manager */
 public: /* For.Component_Manager */
 	HRESULT Add_Prototype(_uint iLevelIndex, const _tchar* pPrototypeTag, class CComponent* pPrototype);
 	class CComponent* Clone_Component(_uint iLevelIndex, const _tchar* pPrototypeTag, void* pArg = nullptr);
-	
+public:	/* for. Frustum*/
+	_bool	IsInFrustum(_float3 vPos, _float3 vScale);
 public:
 	static void Release_Engine();
 
@@ -65,6 +67,7 @@ private:
 	CComponent_Manager*				m_pComponent_Manager = nullptr;
 	CPicking*						m_pPicking = nullptr;
 	CKeyMgr*						m_pKeyMgr = nullptr;
+	CFrustum*						m_pFrustum = nullptr;
 
 public:
 	virtual void Free() override;

@@ -67,8 +67,16 @@ void CTornado::Late_Tick(_float fTimeDelta)
 
 
 
-	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+
+	Safe_AddRef(pInstance);
+
+	if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
+	{
+		if (nullptr != m_pRendererCom)
+			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
+	}
+	Safe_Release(pInstance);
 }
 
 HRESULT CTornado::Render()
