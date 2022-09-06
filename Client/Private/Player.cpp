@@ -48,7 +48,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 		m_tInfo.iMaxHp = 186;
 		m_tInfo.iHp = m_tInfo.iMaxHp;
 		m_tInfo.iMp = 186;
-		m_tInfo.iExp = 0.f;
+		m_tInfo.iExp = 0;
 	}
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
@@ -103,10 +103,12 @@ void CPlayer::Tick(_float fTimeDelta)
 			m_tInfo.iHp += 10;
 		}
 		m_tInfo.iMp += 10;
-		m_tInfo.iExp += 100.f;
+		m_tInfo.iExp += 100;
 	}
 
-	m_pColliderCom->Set_Transform(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
+
+	m_pCollisionMgrCom->Add_ColiisionGroup(COLLISION_PLAYER, this);
 }
 
 void CPlayer::Late_Tick(_float fTimeDelta)
@@ -120,6 +122,24 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	}
 	OnBillboard();
 
+	if (m_pCollisionMgrCom->Collision(this, COLLISION_OBJECT))
+	{
+		_float3 vBackPos;
+		if (fabs(m_pCollisionMgrCom->Get_Collision().x) < fabs(m_pCollisionMgrCom->Get_Collision().z))
+		{
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - m_pCollisionMgrCom->Get_Collision().x;
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
+		}
+		else if (fabs(m_pCollisionMgrCom->Get_Collision().z) < fabs(m_pCollisionMgrCom->Get_Collision().x))
+		{
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - m_pCollisionMgrCom->Get_Collision().z;
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
+		}
+		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
+	}
+		
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
 }
@@ -144,8 +164,9 @@ HRESULT CPlayer::Render(void)
 	
 	On_SamplerState();
 
-	m_pColliderCom->Render();
-
+	if (g_bCollider)
+		m_pColliderCom->Render();
+	
 	return S_OK;
 }
 
@@ -172,7 +193,6 @@ CGameObject * CPlayer::Clone(void * pArg)
 		Safe_Release(pInstance);
 	}
 	
-
 	return pInstance;
 }
 
@@ -247,6 +267,9 @@ HRESULT CPlayer::SetUp_Components(void)
 		return E_FAIL;
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Components(TEXT("Com_CollisionMgr"), LEVEL_STATIC, TEXT("Prototype_Component_CollisionMgr"), (CComponent**)&m_pCollisionMgrCom)))
 		return E_FAIL;
 
 	CTransform::TRANSFORMDESC TransformDesc;
@@ -487,8 +510,6 @@ void CPlayer::Key_Input(_float fTimeDelta)
 				m_tFrame.fFrameSpeed = 0.07f;
 			}
 			break;
-		default:
-			break;
 		}
 	}
 
@@ -600,6 +621,7 @@ void CPlayer::Free(void)
 
 	CKeyMgr::Get_Instance()->Destroy_Instance();
 
+	Safe_Release(m_pCollisionMgrCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pRendererCom);

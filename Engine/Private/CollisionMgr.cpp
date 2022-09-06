@@ -1,62 +1,263 @@
 #include "..\Public\CollisionMgr.h"
+#include "GameInstance.h"
+#include "GameObject.h"
 
-
-bool CCollisionMgr::Collision_Sphere(CLayer::GAMEOBJECTS _Dest, CLayer::GAMEOBJECTS _Sour, CGameObject** pDest, CGameObject** pSour)
+CCollisionMgr::CCollisionMgr(LPDIRECT3DDEVICE9 pGraphic_Device)
+	: CComponent(pGraphic_Device)
 {
-	for (auto& Dest : _Dest)
+}
+
+HRESULT CCollisionMgr::Initialize_Prototype(void)
+{
+	return S_OK;
+}
+
+HRESULT CCollisionMgr::Initialize(void * pArg)
+{
+	return S_OK;
+}
+
+HRESULT CCollisionMgr::Ready_ObjectsArray(_uint iNumObjects)
+{
+	m_iNumObjects = iNumObjects;
+
+	m_GameObjects = new GAMEOBJECTS[m_iNumObjects];
+
+	return S_OK;
+}
+
+HRESULT CCollisionMgr::Add_ColiisionGroup(_uint iCollisionGroup, CGameObject * pGameObject)
+{
+	if (nullptr == pGameObject)
+		return E_FAIL;
+
+	m_GameObjects[iCollisionGroup].push_back(pGameObject);
+
+	Safe_AddRef(pGameObject);
+
+	return S_OK;
+}
+
+_bool CCollisionMgr::Collision(CGameObject * pGameObject, _uint iCollisionGroup)
+{
+	if (nullptr == pGameObject)
 	{
-		for (auto& Sour : _Sour)
-		{
-			if (Check_Sphere(Dest, Sour))
-			{
-				*pDest = Dest;
-				*pSour = Sour;
-				return true;
-			}
-		}
+		ERR_MSG(TEXT("Failed to Collision : pGameObject"));
+		return false;
 	}
+
+	for (auto& iter : m_GameObjects[iCollisionGroup])
+	{
+		if (Collision_AABB(pGameObject, iter))
+			return true;
+	}
+
 	return false;
 }
 
-bool CCollisionMgr::Check_Sphere(CGameObject * pDest, CGameObject * pSour)
+void CCollisionMgr::Release_Objects(void)
 {
-	_float fDist = D3DXVec3Length(&(*(_float3*)&pDest->Get_World().m[3][0] - *(_float3*)&pSour->Get_World().m[3][0]));
-	_float	fRadius = pDest->Get_Info().fX + pSour->Get_Info().fX;
+	if (nullptr != m_GameObjects)
+	{
+		for (_uint i = 0; i < m_iNumObjects; ++i)
+		{
+			for (auto& iter : m_GameObjects[i])
+				Safe_Release(iter);
 
-
-	return fRadius >= fDist;	// 충돌을 한 경우
+			m_GameObjects[i].clear();
+		}
+	}
 }
 
-//HRESULT CCollisionMgr::Initialize_Prototype(void)
-//{
-//	return E_NOTIMPL;
-//}
-//
-//HRESULT CCollisionMgr::Initialize(void * pArg)
-//{
-//	return E_NOTIMPL;
-//}
-//
-//HRESULT CCollisionMgr::Add_ColiisionGroup(COLLISIONGROUP eCollisionGroup, CGameObject * pGameObject)
-//{
-//	return E_NOTIMPL;
-//}
-//
-//HRESULT CCollisionMgr::Collision_AABB(GAMEOBJECTS _Dest, GAMEOBJECTS _Sour)
-//{
-//	return E_NOTIMPL;
-//}
-//
-//CCollisionMgr * CCollisionMgr::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
-//{
-//	return nullptr;
-//}
-//
-//CComponent * CCollisionMgr::Clone(void * pArg)
-//{
-//	return nullptr;
-//}
-//
-//void CCollisionMgr::Free(void)
-//{
-//}
+
+_bool CCollisionMgr::Collision_AABB(class CGameObject* _Dest, class CGameObject* _Sour)
+{
+	CCollider* DestCollider = (CCollider*)_Dest->Find_Component(TEXT("Com_Collider"));
+	if (nullptr == DestCollider)
+	{
+		ERR_MSG(TEXT("Failed to Check AABB : Dest"));
+		return true;
+	}
+
+	_float3 DestMin = DestCollider->Find_MinPoint();
+	_float3 DestMax = DestCollider->Find_MaxPoint();
+
+	CCollider* SourCollider = (CCollider*)_Sour->Find_Component(TEXT("Com_Collider"));
+	if (nullptr == SourCollider)
+	{
+		ERR_MSG(TEXT("Failed to Check AABB : Sour"));
+		return true;
+	}
+
+	ZeroMemory(&m_vCollision, sizeof(_float3));
+
+	_float3 SourMin = SourCollider->Find_MinPoint();
+	_float3 SourMax = SourCollider->Find_MaxPoint();
+
+	if (_Dest->Get_World().m[3][0] < _Sour->Get_World().m[3][0])
+	{
+		if (DestMax.x <= SourMin.x)
+			return false;
+		else
+		{
+			m_vCollision.x = DestMax.x - SourMin.x;
+
+			if (_Dest->Get_World().m[3][2] < _Sour->Get_World().m[3][2])
+			{
+				if (DestMax.z <= SourMin.z)
+					return false;
+
+				else
+				{
+					m_vCollision.z = DestMax.z - SourMin.z;
+
+					if (_Dest->Get_World().m[3][1] < _Sour->Get_World().m[3][1])
+					{
+						if (DestMax.y <= SourMin.y)
+							return false;
+
+						else
+							m_vCollision.y = DestMax.y - SourMin.y;
+					}
+					else
+					{
+						if (DestMin.y >= SourMax.y)
+							return false;
+
+						else
+							m_vCollision.y = DestMin.y - SourMax.y;
+					}
+				}
+			}
+			else
+			{
+				if (DestMin.z >= SourMax.z)
+					return false;
+
+				else
+				{
+					m_vCollision.z = DestMin.z - SourMax.z;
+
+					if (_Dest->Get_World().m[3][1] < _Sour->Get_World().m[3][1])
+					{
+						if (DestMax.y <= SourMin.y)
+							return false;
+
+						else
+							m_vCollision.y = DestMax.y - SourMin.y;
+					}
+					else
+					{
+						if (DestMin.y >= SourMax.y)
+							return false;
+
+						else
+							m_vCollision.y = DestMin.y - SourMax.y;
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		if (DestMin.x >= SourMax.x)
+			return false;
+		else
+		{
+			m_vCollision.x = DestMin.x - SourMax.x;
+
+			if (_Dest->Get_World().m[3][2] < _Sour->Get_World().m[3][2])
+			{
+				if (DestMax.z <= SourMin.z)
+					return false;
+
+				else
+				{
+					m_vCollision.z = DestMax.z - SourMin.z;
+
+					if (_Dest->Get_World().m[3][1] < _Sour->Get_World().m[3][1])
+					{
+						if (DestMax.y <= SourMin.y)
+							return false;
+
+						else
+							m_vCollision.y = DestMax.y - SourMin.y;
+					}
+					else
+					{
+						if (DestMin.y >= SourMax.y)
+							return false;
+
+						else
+							m_vCollision.y = DestMin.y - SourMax.y;
+					}
+				}
+
+			}
+			else
+			{
+				if (DestMin.z >= SourMax.z)
+					return false;
+
+				else
+				{
+					m_vCollision.z = DestMin.z - SourMax.z;
+
+					if (_Dest->Get_World().m[3][1] < _Sour->Get_World().m[3][1])
+					{
+						if (DestMax.y <= SourMin.y)
+							return false;
+
+						else
+							m_vCollision.y = DestMax.y - SourMin.y;
+					}
+					else
+					{
+						if (DestMin.y >= SourMax.y)
+							return false;
+
+						else
+							m_vCollision.y = DestMin.y - SourMax.y;
+					}
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
+CCollisionMgr * CCollisionMgr::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
+{
+	CCollisionMgr* pInstance = new CCollisionMgr(pGraphic_Device);
+
+	if (FAILED(pInstance->Initialize_Prototype()))
+	{
+		ERR_MSG(TEXT("Failed to Created : CColiisionMgr"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+CComponent * CCollisionMgr::Clone(void * pArg)
+{
+	AddRef();
+
+	return this;
+}
+
+void CCollisionMgr::Free(void)
+{
+	for (_uint i = 0; i < m_iNumObjects; ++i)
+	{
+		for (auto& iter : m_GameObjects[i])
+			Safe_Release(iter);
+
+		m_GameObjects[i].clear();
+	}
+
+	Safe_Delete_Array(m_GameObjects);
+
+	__super::Free();
+}

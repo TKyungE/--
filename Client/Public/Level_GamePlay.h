@@ -62,6 +62,7 @@ private:
 	_float fRainTime = 0.f;
 	bool m_IconRender = false;
 	bool m_bNextLevel = false;
+
 };
 
 END

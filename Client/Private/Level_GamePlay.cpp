@@ -4,7 +4,6 @@
 #include "GameInstance.h"
 #include "Camera_Dynamic.h"
 #include "SoundMgr.h"
-#include "CollisionMgr.h"
 #include "KeyMgr.h"
 #include "BackGroundRect.h" 
 #include "BackGroundTree.h"
@@ -12,6 +11,9 @@
 #include "House.h"
 #include "House2.h"
 #include "BackGroundTree.h"
+#include "Layer.h"
+
+bool g_bCollider = false;
 
 CLEVEL_GamePlay::CLEVEL_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -63,9 +65,9 @@ void CLEVEL_GamePlay::Tick(_float fTimeDelta)
 	//fSound += (pGameInstance->Get_DIMMoveState(DIMM_WHEEL)*fTimeDelta) / 100;
 
 	if (CKeyMgr::Get_Instance()->Key_Down('O'))
-		fSound += 0.01;
+		fSound += 0.01f;
 	if (CKeyMgr::Get_Instance()->Key_Down('P'))
-		fSound -= 0.01;
+		fSound -= 0.01f;
 	
 	if (fSound > 1.f)
 		fSound = 1.f;
@@ -74,6 +76,17 @@ void CLEVEL_GamePlay::Tick(_float fTimeDelta)
 
 	CSoundMgr::Get_Instance()->SetSoundVolume(SOUND_BGM, fSound);
  	
+	if (GetKeyState('Y') < 0)
+	{
+		if (!g_bCollider)
+			g_bCollider = true;
+	}
+	if (GetKeyState('U') < 0)
+	{
+		if (g_bCollider)
+			g_bCollider = false;
+	}
+		
 	Create_Rain(fTimeDelta);
 
 	Safe_Release(pGameInstance);
@@ -85,55 +98,15 @@ void CLEVEL_GamePlay::Late_Tick(_float fTimeDelta)
 
 	SetWindowText(g_hWnd, TEXT("게임플레이레벨입니다."));
 
-	//충돌 사용법
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
-	
 
-	CGameObject* Dest;
-	CGameObject* Sour;
-	
-	
-	if (pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_Skill")) != nullptr)
-	{
-		if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_Skill"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour))
-		{
-			
-			Dest->Set_Dead();
-
-			if(Dest->Get_Info().iMoney == 33)
-			{ 
-				fCollTime += fTimeDelta;
-				if (fCollTime > 0.3f)
-				{
-					_float3 vPos = Get_CollisionPos(Dest, Sour);
-
-					Sour->Set_Hit(Dest->Get_Info().iDmg, vPos);
-					Sour->Set_Hp(Dest->Get_Info().iDmg);
-					fCollTime = 0.f;
-				}
-			}
-			else
-			{
-				_float3 vPos = Get_CollisionPos(Dest, Sour);
-
-				Sour->Set_Hit(Dest->Get_Info().iDmg, vPos);
-				Sour->Set_Hp(Dest->Get_Info().iDmg);
-			}
-			if (Sour->Get_Info().iHp <= 0)
-				Sour->Set_Dead();
-		}
-	}
-	if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Portal"))->Get_Objects(), &Dest, &Sour))
-	{
-		m_bNextLevel = true;
-		pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(Dest->Get_Info());
-	}
 	if (m_bNextLevel == true)
 	{
 		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_TOWN))))
 			return;
 	}
+
 	Safe_Release(pGameInstance);
 }
 
@@ -152,8 +125,6 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_GAMEPLAY, pLayerTag)))
 		return E_FAIL;
-
-	
 
 	for (auto& iter : m_vecTree)
 	{
@@ -224,8 +195,6 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	//		return E_FAIL;
 	//}
 	
-
-
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -641,7 +610,6 @@ void CLEVEL_GamePlay::Create_Rain(_float fTimeDelta)
 
 }
 
-
 CLEVEL_GamePlay * CLEVEL_GamePlay::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
 	CLEVEL_GamePlay*	pInstance = new CLEVEL_GamePlay(pGraphic_Device);
@@ -658,7 +626,4 @@ CLEVEL_GamePlay * CLEVEL_GamePlay::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 void CLEVEL_GamePlay::Free()
 {
 	__super::Free();
-
-	
-
 }

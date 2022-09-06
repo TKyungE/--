@@ -9,6 +9,7 @@ class CTransform;
 class CVIBuffer_Rect;
 class CTexture;
 class CCollider;
+class CCollisionMgr;
 END
 
 BEGIN(Client)
@@ -34,6 +35,7 @@ private:
 	CTransform* m_pTransformCom = nullptr;
 	CVIBuffer_Rect* m_pVIBuffer = nullptr;
 	CCollider* m_pColliderCom = nullptr;
+	CCollisionMgr* m_pCollisionMgrCom = nullptr;
 
 	CTexture* m_pTextureComIDLE_Front = nullptr;
 	CTexture* m_pTextureComIDLE_Back = nullptr;
