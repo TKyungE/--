@@ -82,7 +82,6 @@ private:
 	CFrustum*						m_pFrustum = nullptr;
 	CCollisionMgr*					m_pCollision_Manager = nullptr;
 
-
 public:
 	virtual void Free() override;
 };

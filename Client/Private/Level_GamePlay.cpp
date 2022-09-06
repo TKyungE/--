@@ -212,53 +212,114 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	
-	for (auto& iter : m_vMonsterPos1)
-		Info.vPos = iter;
-	
-	/*if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Monster"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;*/
-
 	Info.iLevelIndex = LEVEL_GAMEPLAY;
 
-	Info.vPos = { 15.f,0.f,15.f };
-//	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_FireDragon"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-//		return E_FAIL;
-	/*Info.vPos = { 10.f,0.f,10.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+	auto iter = m_vMonsterPos1.begin();
+
+	_uint iCount = 0;
+	
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+		if (iCount >= 4)
+		{
+			iCount = 0;
+			break;
+		}
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+		if (iCount >= 4)
+		{
+			iCount = 0;
+			break;
+		}
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+		if (iCount >= 2)
+		{
+			iCount = 0;
+			break;
+		}
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+		if (iCount >= 4)
+		{
+			iCount = 0;
+			break;
+		}
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+		if (iCount >= 4)
+		{
+			iCount = 0;
+			break;
+		}
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+		if (iCount >= 2)
+		{
+			iCount = 0;
+			break;
+		}
+	}
+
+
+
+	// 스테이지 2
+	/*if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
-	Info.vPos = { 10.f,0.f,12.f };
-
-
-	Info.vPos = { 5.f,0.f,5.f };
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 5.f,0.f,10.f };
+	
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
-	Info.vPos = { 8.f,0.f,10.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 7.f,0.f,3.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 8.f,0.f,5.f };
+	
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
-	Info.vPos = { 10.f,0.f,2.f };
+	
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
-	Info.vPos = { 10.f,0.f,10.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 7.f,0.f,7.f };
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;*/
+	
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bloodymurderer"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
+		return E_FAIL;*/
 
 
 	Safe_Release(pGameInstance);
