@@ -97,7 +97,7 @@ void CLevel_ChoboField::Late_Tick(_float fTimeDelta)
 
 	Open_Level();
 
-	SetWindowText(g_hWnd, TEXT("게임플레이레벨입니다."));
+	SetWindowText(g_hWnd, TEXT("초보필드레벨입니다."));
 }
 
 HRESULT CLevel_ChoboField::Ready_Layer_BackGround(const _tchar * pLayerTag)
@@ -496,6 +496,7 @@ HRESULT CLevel_ChoboField::Ready_Layer_Portal(const _tchar * pLayerTag)
 		tInfo.iLevelIndex = LEVEL_CHOBOFIELD;
 		tInfo.vPos = iter.BackGroundPos;
 		tInfo.vScale = iter.vScale;
+		tInfo.iNextLevel = LEVEL_GAMEPLAY;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 			return E_FAIL;
@@ -790,7 +791,7 @@ void CLevel_ChoboField::Open_Level(void)
 			}
 		}
 	}
-
+	Safe_Release(pGameInstance);
 }
 
 CLevel_ChoboField * CLevel_ChoboField::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -799,7 +800,7 @@ CLevel_ChoboField * CLevel_ChoboField::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 
 	if (FAILED(pInstance->Initialize()))
 	{
-		ERR_MSG(TEXT("Failed to Created : CLEVEL_GAMEPLAY"));
+		ERR_MSG(TEXT("Failed to Created : CLevel_ChoboField"));
 		Safe_Release(pInstance);
 	}
 
