@@ -13,7 +13,6 @@
 #include "BackGroundTree.h"
 #include "Layer.h"
 
-bool g_bCollider = false;
 
 CLEVEL_GamePlay::CLEVEL_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -120,10 +119,10 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	info.pstrPath = TEXT("../../Data/Terrain/TestTerrain2.dat");
 	
 	
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_GAMEPLAY, pLayerTag, &info)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_CHOBOFIELD, pLayerTag, &info)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_GAMEPLAY, pLayerTag)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_CHOBOFIELD, pLayerTag)))
 		return E_FAIL;
 
 	for (auto& iter : m_vecTree)
@@ -134,7 +133,7 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.vScale = iter.vScale;
 		indexpos.vPos = iter.BackGroundPos;
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundTree"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundTree"), LEVEL_CHOBOFIELD, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
 
@@ -147,7 +146,7 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.vPos = iter.BackGroundPos;
 		indexpos.iTrun = iter.iTrun;
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House"), LEVEL_CHOBOFIELD, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
 
@@ -164,7 +163,7 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.iTrun = iter.iTrun;
 
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House2"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House2"), LEVEL_CHOBOFIELD, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
 
@@ -177,7 +176,7 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.vScale = iter.vScale;
 		indexpos.vPos = iter.BackGroundPos;
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundRect"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundRect"), LEVEL_CHOBOFIELD, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
 	//CGameObject::INFO tInfo;
@@ -208,10 +207,10 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Player(const _tchar * pLayerTag)
 	CGameObject::INFO tInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Get_Info();
 
 	memcpy(&Info, &tInfo, sizeof(CGameObject::INFO));
-	Info.iLevelIndex = LEVEL_GAMEPLAY;
+	Info.iLevelIndex = LEVEL_CHOBOFIELD;
 	Info.vPos = m_vPlayerPos;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_CHOBOFIELD, pLayerTag, &Info)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -234,40 +233,14 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 	/*if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Monster"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;*/
 
-	Info.iLevelIndex = LEVEL_GAMEPLAY;
+	Info.iLevelIndex = LEVEL_CHOBOFIELD;
 	Info.vPos = { 15.f,0.f,15.f };
-//	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_FireDragon"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+
+
+//	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_CHOBOFIELD, pLayerTag, &Info)))
 //		return E_FAIL;
-	Info.vPos = { 10.f,0.f,10.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 10.f,0.f,12.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 5.f,0.f,10.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 8.f,0.f,15.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 10.f,0.f,8.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 7.f,0.f,3.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 8.f,0.f,5.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 10.f,0.f,2.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 10.f,0.f,10.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 7.f,0.f,7.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
+
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -297,7 +270,7 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Camera(const _tchar * pLayerTag)
 
 	CameraDesc.CameraDesc.Info.pTarget = Info.pTarget;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Camera_Dynamic"), LEVEL_GAMEPLAY, pLayerTag, &CameraDesc)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Camera_Dynamic"), LEVEL_CHOBOFIELD, pLayerTag, &CameraDesc)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -312,35 +285,35 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_UI(const _tchar * pLayerTag)
 
 	CGameObject::INFO tInfo;
 
-	tInfo.iLevelIndex = LEVEL_GAMEPLAY;
+	tInfo.iLevelIndex = LEVEL_CHOBOFIELD;
 	tInfo.bHit = false;
 	tInfo.bDead = false;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpBlank"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpBlank"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpLogo"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpLogo"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuickSlot"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuickSlot"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_IconBar"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_IconBar"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_InventoryIcon"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_InventoryIcon"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_EquipIcon"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_EquipIcon"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkillIcon"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkillIcon"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_StatsIcon"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_StatsIcon"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;
 
 
@@ -357,11 +330,11 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Portal(const _tchar * pLayerTag)
 	for (auto& iter : m_vecPortal)
 	{
 		CGameObject::INFO tInfo;
-		tInfo.iLevelIndex = LEVEL_TOWN;
+		tInfo.iLevelIndex = LEVEL_GAMEPLAY;
 		tInfo.vPos = iter.BackGroundPos;
 		tInfo.vScale = iter.vScale;
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 			return E_FAIL;
 	}
 
@@ -585,29 +558,29 @@ void CLEVEL_GamePlay::LoadData()
 
 void CLEVEL_GamePlay::Create_Rain(_float fTimeDelta)
 {
-	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
-	Safe_AddRef(pGameInstance);
+	//CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	//Safe_AddRef(pGameInstance);
 
-	CGameObject::INFO tInfo;
-	fRainTime += fTimeDelta;
-	if (fRainTime > 0.3f)
-	{
-		fRainTime = 0.f;
-		for (int i = 0; i < 30; ++i)
-		{
-			_float iSour = rand() % 60000 * 0.001f;
-			_float iTemp = rand() % 40000 * 0.001f;
+	//CGameObject::INFO tInfo;
+	//fRainTime += fTimeDelta;
+	//if (fRainTime > 0.3f)
+	//{
+	//	fRainTime = 0.f;
+	//	for (int i = 0; i < 30; ++i)
+	//	{
+	//		_float iSour = rand() % 60000 * 0.001f;
+	//		_float iTemp = rand() % 40000 * 0.001f;
 
-			_float3 vPos = { 0.f,0.f,0.f };
-			tInfo.vPos.x = vPos.x + iSour;
-			tInfo.vPos.y = vPos.y;
-			tInfo.vPos.z = vPos.z + iTemp;
+	//		_float3 vPos = { 0.f,0.f,0.f };
+	//		tInfo.vPos.x = vPos.x + iSour;
+	//		tInfo.vPos.y = vPos.y;
+	//		tInfo.vPos.z = vPos.z + iTemp;
 
-			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Rain"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
-				
-		}
-	}
-	Safe_Release(pGameInstance);
+	//		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Rain"), LEVEL_CHOBOFIELD, TEXT("Layer_Effect"), &tInfo);
+	//			
+	//	}
+	//}
+	//Safe_Release(pGameInstance);
 
 }
 

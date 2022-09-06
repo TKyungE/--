@@ -66,7 +66,9 @@
 #include "DefaultAttack.h"
 #include "Help.h"
 #include "Angry.h"
-
+#include "Byorgue.h"
+#include "Bloodymurderer.h"
+#include "Dandelion.h"
 
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -500,6 +502,81 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Bigfoot_Dead_Back"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Bigfoot/Dead_Back/%d.png"), 4))))
 		return E_FAIL;
+	//Byorgue
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Byorgue_IDLE_Front"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Byorgue/IDLE_Front/%d.png"), 9))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Byorgue_IDLE_Back"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Byorgue/IDLE_Back/%d.png"), 9))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Byorgue_Move_Front"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Byorgue/Move_Front/%d.png"), 6))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Byorgue_Move_Back"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Byorgue/Move_Back/%d.png"), 6))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Byorgue_Attack_Front"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Byorgue/Attack_Front/%d.png"), 5))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Byorgue_Attack_Back"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Byorgue/Attack_Back/%d.png"), 5))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Byorgue_Dead_Front"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Byorgue/Dead_Front/%d.png"), 3))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Byorgue_Dead_Back"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Byorgue/Dead_Back/%d.png"), 3))))
+		return E_FAIL;
+	//Bloodymurderer
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Bloodymurderer_IDLE_Front"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Bloodymurderer/IDLE_Front/%d.png"), 5))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Bloodymurderer_IDLE_Back"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Bloodymurderer/IDLE_Back/%d.png"), 5))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Bloodymurderer_Move_Front"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Bloodymurderer/Move_Front/%d.png"), 9))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Bloodymurderer_Move_Back"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Bloodymurderer/Move_Back/%d.png"), 9))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Bloodymurderer_Attack_Front"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Bloodymurderer/Attack_Front/%d.png"), 5))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Bloodymurderer_Attack_Back"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Bloodymurderer/Attack_Back/%d.png"), 5))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Bloodymurderer_Dead_Front"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Bloodymurderer/Dead_Front/%d.png"), 4))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Bloodymurderer_Dead_Back"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Bloodymurderer/Dead_Back/%d.png"), 4))))
+		return E_FAIL;
+	//Dandelion
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Dandelion_IDLE_Front"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Dandelion/IDLE_Front/%d.png"), 7))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Dandelion_IDLE_Back"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Dandelion/IDLE_Back/%d.png"), 7))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Dandelion_Move_Front"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Dandelion/Move_Front/%d.png"), 8))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Dandelion_Move_Back"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Dandelion/Move_Back/%d.png"), 8))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Dandelionr_Attack_Front"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Dandelion/Attack_Front/%d.png"), 5))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Dandelion_Attack_Back"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Dandelion/Attack_Back/%d.png"), 5))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Dandelion_Dead_Front"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Dandelion/Dead_Front/%d.png"), 5))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Dandelion_Dead_Back"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/MONSTER/Dandelion/Dead_Back/%d.png"), 5))))
+		return E_FAIL;
 	//for GamePlay
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Tree"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Terrain/grass_%d.png"), 2))))
@@ -751,8 +828,15 @@ HRESULT CLoader::Loading_Prototype()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Bigfoot"),
 		CBigfoot::Create(m_pGraphic_Device))))
 		return E_FAIL;
-	
-
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Byorgue"),
+		CByorgue::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Bloodymurderer"),
+		CBloodymurderer::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Dandelion"),
+		CDandelion::Create(m_pGraphic_Device))))
+		return E_FAIL;
 	Safe_Release(pGameInstance);
 
 	return S_OK;
