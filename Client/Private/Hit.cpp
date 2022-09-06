@@ -29,16 +29,16 @@ HRESULT CHit::Initialize(void* pArg)
 		return E_FAIL;
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
-	m_tInfo.vPos.y += 0.85f;
-	_float3 vScale = { 1.f,1.f,1.f };
+	//m_tInfo.vPos.y += 0.85f;
+	_float3 vScale = { 2.f,2.f,2.f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;
 	m_tFrame.iFrameStart = 0;
-	m_tFrame.iFrameEnd = 14;
-	m_tFrame.fFrameSpeed = 0.05f;
+	m_tFrame.iFrameEnd = 2;
+	m_tFrame.fFrameSpeed = 0.1f;
 	m_tInfo.bDead = false;
 
 	return S_OK;
@@ -111,8 +111,8 @@ void CHit::Motion_Change()
 		{
 		case IDLE:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 14;
-			m_tFrame.fFrameSpeed = 0.05f;
+			m_tFrame.iFrameEnd = 2;
+			m_tFrame.fFrameSpeed = 0.1f;
 			break;
 		}
 

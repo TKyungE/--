@@ -794,6 +794,7 @@ HRESULT CAlligator::RespawnMonster()
 	m_bRun = false;
 	m_bIDLE = false;
 	m_bRespawn = false;
+	m_bAngry = false;
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
