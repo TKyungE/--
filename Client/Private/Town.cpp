@@ -11,6 +11,8 @@
 #include "BackGroundTree.h"
 #include "Layer.h"
 
+bool g_bCollider = false;
+
 CTown::CTown(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
 {

@@ -256,6 +256,18 @@
     <Filter Include="03.Effect\Default\08.Angry">
       <UniqueIdentifier>{e5871eec-f7bd-41e8-bf02-e2d01be87033}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Monster\03.Byorgue">
+      <UniqueIdentifier>{0f91fd89-0909-4c29-9cad-1d1f01767ef0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\ChoboField">
+      <UniqueIdentifier>{c523ff40-c670-4567-b671-c1f5c7fe3348}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\04.Bloodymurderer">
+      <UniqueIdentifier>{31e8bcd1-0942-48a2-944e-266fca864cce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\05.Dandelion">
+      <UniqueIdentifier>{fccff6ea-d168-4f81-a9eb-9d94fe64fd3b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -492,6 +504,18 @@
     <ClInclude Include="..\public\Angry.h">
       <Filter>03.Effect\Default\08.Angry</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Byorgue.h">
+      <Filter>02.GameObject\Monster\03.Byorgue</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Level_ChoboField.h">
+      <Filter>01.Levels\ChoboField</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Bloodymurderer.h">
+      <Filter>02.GameObject\Monster\04.Bloodymurderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Dandelion.h">
+      <Filter>02.GameObject\Monster\05.Dandelion</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -715,6 +739,18 @@
     </ClCompile>
     <ClCompile Include="..\private\Angry.cpp">
       <Filter>03.Effect\Default\08.Angry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Byorgue.cpp">
+      <Filter>02.GameObject\Monster\03.Byorgue</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Level_ChoboField.cpp">
+      <Filter>01.Levels\ChoboField</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Bloodymurderer.cpp">
+      <Filter>02.GameObject\Monster\04.Bloodymurderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Dandelion.cpp">
+      <Filter>02.GameObject\Monster\05.Dandelion</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
