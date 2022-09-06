@@ -107,7 +107,7 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 
 	CGameObject::INFO info;
 	ZeroMemory(&info, sizeof(CGameObject::INFO));
-	info.pstrPath = TEXT("../../Data/Terrain/TestTerrain2.dat");
+	info.pstrPath = TEXT("../../Data/Terrain/TownHg1.dat");
 	info.iLevelIndex = LEVEL_GAMEPLAY;
 	
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_GAMEPLAY, pLayerTag, &info)))
@@ -220,86 +220,194 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 	
 	for (; iter != m_vMonsterPos1.end(); ++iter)
 	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
 		Info.vPos = (*iter);
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 			return E_FAIL;
 
 		++iCount;
-		if (iCount >= 4)
-		{
-			iCount = 0;
-			break;
-		}
+		
 	}
 
 	for (; iter != m_vMonsterPos1.end(); ++iter)
 	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
 		Info.vPos = (*iter);
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 			return E_FAIL;
 
 		++iCount;
-		if (iCount >= 4)
-		{
-			iCount = 0;
-			break;
-		}
+		
 	}
 
 	for (; iter != m_vMonsterPos1.end(); ++iter)
 	{
-		Info.vPos = (*iter);
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-			return E_FAIL;
-
-		++iCount;
-		if (iCount >= 2)
+		if (iCount >= 1)
 		{
 			iCount = 0;
 			break;
 		}
-	}
 
-	for (; iter != m_vMonsterPos1.end(); ++iter)
-	{
 		Info.vPos = (*iter);
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 			return E_FAIL;
 
 		++iCount;
-		if (iCount >= 4)
-		{
-			iCount = 0;
-			break;
-		}
+		
 	}
 
 	for (; iter != m_vMonsterPos1.end(); ++iter)
 	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
 		Info.vPos = (*iter);
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 			return E_FAIL;
 
 		++iCount;
-		if (iCount >= 4)
+		
+	}
+
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
 		{
 			iCount = 0;
 			break;
 		}
-	}
-
-	for (; iter != m_vMonsterPos1.end(); ++iter)
-	{
 		Info.vPos = (*iter);
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 			return E_FAIL;
 
 		++iCount;
-		if (iCount >= 2)
+		
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
 		{
 			iCount = 0;
 			break;
 		}
+
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+		
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+		
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+		
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+		
+	}
+
+	
+
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
 	}
 
 
@@ -469,7 +577,7 @@ void CLEVEL_GamePlay::Open_Level(void)
 
 void CLEVEL_GamePlay::LoadData()
 {
-	HANDLE hFile = CreateFile(TEXT("../../Data/Pos2.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(TEXT("../../Data/TownHgPos1.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		return;

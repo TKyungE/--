@@ -93,7 +93,7 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 
 	CGameObject::INFO info;
 	ZeroMemory(&info, sizeof(CGameObject::INFO));
-	info.pstrPath = TEXT("../../Data/Terrain/TestTerrain.dat");
+	info.pstrPath = TEXT("../../Data/Terrain/TownTerrain.dat");
 	info.iLevelIndex = LEVEL_TOWN;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_TOWN, pLayerTag, &info)))
@@ -373,7 +373,7 @@ void CTown::Open_Level(void)
 
 void CTown::LoadData()
 {
-	HANDLE hFile = CreateFile(TEXT("../../Data/Pos.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(TEXT("../../Data/TownPos.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		return;
