@@ -96,6 +96,8 @@ unsigned int APIENTRY Thread_Main(void* pArg)
 	case LEVEL_TOWN:
 		pLoader->Loading_ForTownLevel();
 		break;
+	case LEVEL_CHOBOFIELD:
+		pLoader->Loading_ForChoboLevel();
 	}
 
 	LeaveCriticalSection(&pLoader->Get_CriticalSection());
@@ -187,6 +189,27 @@ HRESULT CLoader::Loading_ForTownLevel()
 	
 
 	lstrcpy(m_szLoadingText, TEXT("타운 로딩이 완료되었습니다."));
+
+	m_isFinished = true;
+
+	Safe_Release(pGameInstance);
+	return S_OK;
+}
+
+HRESULT CLoader::Loading_ForChoboLevel()
+{
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return E_FAIL;
+
+	Safe_AddRef(pGameInstance);
+
+
+
+
+
+
+	lstrcpy(m_szLoadingText, TEXT("타운사냥터2 로딩이 완료되었습니다."));
 
 	m_isFinished = true;
 

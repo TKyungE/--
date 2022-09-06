@@ -196,8 +196,15 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Player(const _tchar * pLayerTag)
 	CGameObject::INFO tInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Get_Info();
 
 	memcpy(&Info, &tInfo, sizeof(CGameObject::INFO));
+	if (Info.iLevelIndex == LEVEL_TOWN)
+	{
+		Info.vPos = m_vPlayerPos;
+	}
+	else
+		Info.vPos = m_vBackPos;
+	
 	Info.iLevelIndex = LEVEL_GAMEPLAY;
-	Info.vPos = m_vPlayerPos;
+	
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
@@ -410,26 +417,6 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 		++iCount;
 	}
 
-
-
-	// 스테이지 2
-	/*if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	
-
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bloodymurderer"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;*/
-
-
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -516,18 +503,48 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Portal(const _tchar * pLayerTag)
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 	
-	for (auto& iter : m_vecPortal)
+	auto iter = m_vecPortal.begin();
+
+	_uint iCount = 0;
+	for (; iter != m_vecPortal.end(); ++iter)
 	{
+		if (iCount > 0)
+		{
+			iCount = 0;
+			break;
+		}
 		CGameObject::INFO tInfo;
 		tInfo.iLevelIndex = LEVEL_GAMEPLAY;
-		tInfo.vPos = iter.BackGroundPos;
-		tInfo.vScale = iter.vScale;
+		tInfo.vPos = iter->BackGroundPos;
+		tInfo.vScale = iter->vScale;
 		tInfo.iNextLevel = LEVEL_TOWN;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 			return E_FAIL;
-		break;
+
+		++iCount;
 	}
+
+	for (; iter != m_vecPortal.end(); ++iter)
+	{
+		if (iCount > 0)
+		{
+			iCount = 0;
+			break;
+		}
+		CGameObject::INFO tInfo;
+		tInfo.iLevelIndex = LEVEL_GAMEPLAY;
+		tInfo.vPos = iter->BackGroundPos;
+		tInfo.vScale = iter->vScale;
+		tInfo.iNextLevel = LEVEL_CHOBOFIELD;
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+
 
 	Safe_Release(pGameInstance);
 	return S_OK;

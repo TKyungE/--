@@ -46,12 +46,15 @@ private:		// 파일입출력 라인
 	vector<INDEXPOS>	m_vecHouse;
 	vector<INDEXPOS>	m_vecHouse2;
 	vector<INDEXPOS>	m_vecPortal;
+	vector<INDEXPOS>	m_vecNPC;
+
 	_float3	m_vPlayerPos;
+	_float3 m_vBackPos;
 	vector<_float3> m_vMonsterPos1;
 
 private:
 	void Create_Rain(_float fTimeDelta);
-
+	void Open_Level(void);
 public:
 	static CLevel_ChoboField* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual void Free() override;

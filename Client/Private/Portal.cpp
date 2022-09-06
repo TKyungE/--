@@ -30,7 +30,10 @@ HRESULT CPortal::Initialize(void * pArg)
 		return E_FAIL;
 	
 	m_pTransformCom->Set_Scaled(m_tInfo.vScale);
-
+	if (m_tInfo.iNextLevel == LEVEL_CHOBOFIELD)
+	{
+		m_pTransformCom->Turn(_float3(0.f, 1.f, 0.f), 1);
+	}
 	m_tInfo.vPos.y += 0.5f;
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 	m_tInfo.bDead = false;
@@ -71,7 +74,7 @@ void CPortal::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-	OnBillboard();
+	//OnBillboard();
 
 
 	CGameInstance* pInstance = CGameInstance::Get_Instance();

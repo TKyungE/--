@@ -29,19 +29,24 @@ HRESULT CTerrain::Initialize(void* pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	CGameObject::INFO info;
-	ZeroMemory(&info, sizeof(CGameObject::INFO));
-
-	memcpy(&info, pArg, sizeof(CGameObject::INFO));
+	ZeroMemory(&m_tInfo, sizeof(CGameObject::INFO));
+	memcpy(&m_tInfo, pArg, sizeof(CGameObject::INFO));
 	
 	//여기서 링크를 가져와서 대입하는 방식이 현명해보임,, 밑에는 임시방편
 
-	if(FAILED(OnLoadData(info.pstrPath)))
+	if(FAILED(OnLoadData(m_tInfo.pstrPath)))
 	{ 
 		ERR_MSG(TEXT("Failed to OnLoadData"));
 		return E_FAIL;
 	}
 	
+	if (m_tInfo.iLevelIndex == LEVEL_CHOBOFIELD)
+		m_tInfo.iMp = 393;
+	
+	else
+		m_tInfo.iMp = 1068;
+	
+
 	return S_OK;
 }
 
@@ -66,7 +71,7 @@ HRESULT CTerrain::Render()
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(1068)))
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tInfo.iMp)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_RenderState()))

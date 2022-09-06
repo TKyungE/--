@@ -11,6 +11,7 @@
 #include "House2.h"
 #include "BackGroundTree.h"
 #include "Layer.h"
+#include "Portal.h"
 
 
 CLevel_ChoboField::CLevel_ChoboField(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -94,18 +95,9 @@ void CLevel_ChoboField::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
+	Open_Level();
+
 	SetWindowText(g_hWnd, TEXT("게임플레이레벨입니다."));
-
-	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
-	Safe_AddRef(pGameInstance);
-
-	if (m_bNextLevel == true)
-	{
-		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_TOWN))))
-			return;
-	}
-
-	Safe_Release(pGameInstance);
 }
 
 HRESULT CLevel_ChoboField::Ready_Layer_BackGround(const _tchar * pLayerTag)
@@ -115,8 +107,8 @@ HRESULT CLevel_ChoboField::Ready_Layer_BackGround(const _tchar * pLayerTag)
 
 	CGameObject::INFO info;
 	ZeroMemory(&info, sizeof(CGameObject::INFO));
-	info.pstrPath = TEXT("../../Data/Terrain/TestTerrain2.dat");
-
+	info.pstrPath = TEXT("../../Data/Terrain/TownHg2.dat");
+	info.iLevelIndex = LEVEL_CHOBOFIELD;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_GAMEPLAY, pLayerTag, &info)))
 		return E_FAIL;
@@ -223,19 +215,194 @@ HRESULT CLevel_ChoboField::Ready_Layer_Monster(const _tchar * pLayerTag)
 	Safe_AddRef(pGameInstance);
 
 
-	for (auto& iter : m_vMonsterPos1)
+	Info.iLevelIndex = LEVEL_CHOBOFIELD;
+
+	auto iter = m_vMonsterPos1.begin();
+
+	_uint iCount = 0;
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
 	{
-		Info.vPos = iter;
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+	
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
 	}
 
 
-	/*if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Monster"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-	return E_FAIL;*/
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+		Info.vPos = (*iter);
 
-	Info.iLevelIndex = LEVEL_GAMEPLAY;
-	Info.vPos = { 15.f,0.f,15.f };
-	//	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_FireDragon"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-	//		return E_FAIL;
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bloodymurderer"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bloodymurderer"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
 
 	Safe_Release(pGameInstance);
 
@@ -359,24 +526,29 @@ _float3 CLevel_ChoboField::Get_CollisionPos(CGameObject * pDest, CGameObject * p
 
 void CLevel_ChoboField::LoadData()
 {
-	HANDLE hFile = CreateFile(TEXT("../../Data/Pos2.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(TEXT("../../Data/TownHgPos2.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		return;
 
 	DWORD	dwByte = 0;
 
-	_float3 vPos1;
-	_uint iMSize, iIndexSize, iTreeSize, iHouseSize, iHouse2Size, iPortalSize;
+
+	_float3 vPos1, vPos2;
+	_uint iMSize, iIndexSize, iTreeSize, iHouseSize, iHouse2Size, iPortalSize, iNPCSize;
 	_tchar str1[MAX_PATH];
 	_tchar str2[MAX_PATH];
 	_tchar str3[MAX_PATH];
 	_tchar str4[MAX_PATH];
 	_tchar str5[MAX_PATH];
 	_tchar str6[MAX_PATH];
+	_tchar str7[MAX_PATH];
 
 	ReadFile(hFile, vPos1, sizeof(_float3), &dwByte, nullptr);
 	m_vPlayerPos = vPos1;
+
+	ReadFile(hFile, vPos2, sizeof(_float3), &dwByte, nullptr);
+	m_vBackPos = vPos2;
 
 	ReadFile(hFile, str1, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str2, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
@@ -384,6 +556,7 @@ void CLevel_ChoboField::LoadData()
 	ReadFile(hFile, str4, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str5, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str6, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str7, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 
 
 
@@ -393,6 +566,7 @@ void CLevel_ChoboField::LoadData()
 	iHouseSize = stoi(str4);
 	iHouse2Size = stoi(str5);
 	iPortalSize = stoi(str6);
+	iNPCSize = stoi(str7);
 
 
 
@@ -543,6 +717,25 @@ void CLevel_ChoboField::LoadData()
 			m_vecPortal.push_back(PortalPos);
 		}
 
+		for (_uint i = 0; i < iNPCSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+			_float3 BackPos;
+			_tchar str3[MAX_PATH];
+			_uint Index;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+			INDEXPOS NPCPos;
+
+			NPCPos.BackGroundPos = BackPos;
+			NPCPos.iIndex = Index;
+
+			m_vecNPC.push_back(NPCPos);
+		}
 
 		if (0 == dwByte)
 			break;
@@ -576,6 +769,27 @@ void CLevel_ChoboField::Create_Rain(_float fTimeDelta)
 		}
 	}
 	Safe_Release(pGameInstance);
+
+}
+
+void CLevel_ChoboField::Open_Level(void)
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	if (nullptr != pGameInstance->Find_Layer(LEVEL_CHOBOFIELD, TEXT("Layer_Portal")))
+	{
+		for (auto& iter : pGameInstance->Find_Layer(LEVEL_CHOBOFIELD, TEXT("Layer_Portal"))->Get_Objects())
+		{
+			if (dynamic_cast<CPortal*>(iter)->Get_Level())
+			{
+				pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(pGameInstance->Find_Layer(LEVEL_CHOBOFIELD, TEXT("Layer_Player"))->Get_Objects().front()->Get_Info());
+				LEVEL eLevel = (LEVEL)iter->Get_Info().iNextLevel;
+				if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, eLevel))))
+					return;
+			}
+		}
+	}
 
 }
 
