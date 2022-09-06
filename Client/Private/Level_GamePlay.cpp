@@ -368,6 +368,7 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Portal(const _tchar * pLayerTag)
 	Safe_Release(pGameInstance);
 	return S_OK;
 }
+
 _float3 CLEVEL_GamePlay::Get_CollisionPos(CGameObject * pDest, CGameObject * pSour)
 {
 	_float3 vLook = *(_float3*)&pDest->Get_World().m[3][0] - *(_float3*)&pSour->Get_World().m[3][0];

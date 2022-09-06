@@ -8,6 +8,8 @@ class CTransform;
 class CVIBuffer_Rect;
 class CVIBuffer_Cube;
 class CTexture;
+class CCollider;
+class CCollisionMgr;
 END
 
 BEGIN(Client)
@@ -38,6 +40,8 @@ private:
 	CTransform* m_pTransformCom = nullptr;
 	CVIBuffer_Cube* m_pVIBuffer = nullptr;
 	CTexture* m_pTextureCom = nullptr;
+	CCollider* m_pColliderCom = nullptr;
+	CCollisionMgr* m_pCollisionMgrCom = nullptr;
 
 private:
 	INDEXPOS	m_IndexPos;
