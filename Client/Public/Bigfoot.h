@@ -72,6 +72,7 @@ private:
 	_float				m_fDeadTime = 0.f;
 	_float				m_fMove = 0.f;
 	_int				m_irand = 0;
+	_bool				m_bAngry = false;
 	_bool				m_bSkill = false;
 	_bool				m_bMove = false;
 	_bool				m_bDead = false;

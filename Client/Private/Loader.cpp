@@ -64,6 +64,10 @@
 #include "ElderWilow.h"
 #include "Bigfoot.h"
 #include "DefaultAttack.h"
+#include "Help.h"
+#include "Angry.h"
+
+
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
@@ -296,6 +300,12 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 		return E_FAIL;
 
 	//Effect ÅØ½ºÃÄ
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Help"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/Help/%d.png"), 1))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Angry"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/Angry/%d.png"), 3))))
+		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Wind"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/Wind/%d.bmp"), 5))))
 		return E_FAIL;
@@ -686,6 +696,12 @@ HRESULT CLoader::Loading_Prototype()
 		CDefaultAttack::Create(m_pGraphic_Device))))
 		return E_FAIL;
 	//Effect °´Ã¼
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Angry"),
+		CAngry::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Help"),
+		CHelp::Create(m_pGraphic_Device))))
+		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Wind"),
 		CWind::Create(m_pGraphic_Device))))
 		return E_FAIL;

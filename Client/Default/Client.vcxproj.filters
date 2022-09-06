@@ -250,6 +250,12 @@
     <Filter Include="02.GameObject\Monster\02.Bigfoot">
       <UniqueIdentifier>{5e6663fa-7cdb-4530-8cd3-94da7fc3f3b5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Effect\Default\07.Help">
+      <UniqueIdentifier>{4ffe2504-20e8-4613-ae8c-99cba0ebc484}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\08.Angry">
+      <UniqueIdentifier>{e5871eec-f7bd-41e8-bf02-e2d01be87033}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -480,6 +486,12 @@
     <ClInclude Include="..\public\Bigfoot.h">
       <Filter>02.GameObject\Monster\02.Bigfoot</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Help.h">
+      <Filter>03.Effect\Default\07.Help</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Angry.h">
+      <Filter>03.Effect\Default\08.Angry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -697,6 +709,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Bigfoot.cpp">
       <Filter>02.GameObject\Monster\02.Bigfoot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Help.cpp">
+      <Filter>03.Effect\Default\07.Help</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Angry.cpp">
+      <Filter>03.Effect\Default\08.Angry</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

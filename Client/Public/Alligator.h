@@ -73,6 +73,7 @@ private:
 	_bool				m_bMove = false;
 	_bool				m_bDead = false;
 	_bool				m_bRun = false;
+	_bool				m_bAngry = false;
 	_bool				m_bIDLE = false;
 	_bool				m_bRespawn = false;
 public:
