@@ -153,8 +153,6 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_GAMEPLAY, pLayerTag)))
 		return E_FAIL;
 
-	
-
 	for (auto& iter : m_vecTree)
 	{
 		CBackGroundTree::INDEXPOS indexpos;
@@ -209,6 +207,9 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundRect"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
+
+
+
 	//CGameObject::INFO tInfo;
 	//for (int i = 0; i < 100; ++i)
 	//{
@@ -269,7 +270,7 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 	Info.vPos = { 15.f,0.f,15.f };
 //	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_FireDragon"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 //		return E_FAIL;
-	Info.vPos = { 10.f,0.f,10.f };
+	/*Info.vPos = { 10.f,0.f,10.f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
 	Info.vPos = { 10.f,0.f,12.f };
@@ -298,7 +299,7 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 		return E_FAIL;
 	Info.vPos = { 7.f,0.f,7.f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
+		return E_FAIL;*/
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -388,7 +389,7 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Portal(const _tchar * pLayerTag)
 	for (auto& iter : m_vecPortal)
 	{
 		CGameObject::INFO tInfo;
-		tInfo.iLevelIndex = LEVEL_TOWN;
+		tInfo.iLevelIndex = LEVEL_GAMEPLAY;
 		tInfo.vPos = iter.BackGroundPos;
 		tInfo.vScale = iter.vScale;
 
@@ -428,17 +429,22 @@ void CLEVEL_GamePlay::LoadData()
 
 	DWORD	dwByte = 0;
 
-	_float3 vPos1;
-	_uint iMSize, iIndexSize, iTreeSize, iHouseSize, iHouse2Size, iPortalSize;
+
+	_float3 vPos1, vPos2;
+	_uint iMSize, iIndexSize, iTreeSize, iHouseSize, iHouse2Size, iPortalSize, iNPCSize;
 	_tchar str1[MAX_PATH];
 	_tchar str2[MAX_PATH];
 	_tchar str3[MAX_PATH];
 	_tchar str4[MAX_PATH];
 	_tchar str5[MAX_PATH];
 	_tchar str6[MAX_PATH];
+	_tchar str7[MAX_PATH];
 
 	ReadFile(hFile, vPos1, sizeof(_float3), &dwByte, nullptr);
 	m_vPlayerPos = vPos1;
+
+	ReadFile(hFile, vPos2, sizeof(_float3), &dwByte, nullptr);
+	m_vBackPos = vPos2;
 
 	ReadFile(hFile, str1, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str2, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
@@ -446,6 +452,7 @@ void CLEVEL_GamePlay::LoadData()
 	ReadFile(hFile, str4, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str5, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str6, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str7, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 
 
 
@@ -455,6 +462,7 @@ void CLEVEL_GamePlay::LoadData()
 	iHouseSize = stoi(str4);
 	iHouse2Size = stoi(str5);
 	iPortalSize = stoi(str6);
+	iNPCSize = stoi(str7);
 
 
 
@@ -605,6 +613,25 @@ void CLEVEL_GamePlay::LoadData()
 			m_vecPortal.push_back(PortalPos);
 		}
 
+		for (_uint i = 0; i < iNPCSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+			_float3 BackPos;
+			_tchar str3[MAX_PATH];
+			_uint Index;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+			INDEXPOS NPCPos;
+
+			NPCPos.BackGroundPos = BackPos;
+			NPCPos.iIndex = Index;
+
+			m_vecNPC.push_back(NPCPos);
+		}
 
 		if (0 == dwByte)
 			break;
