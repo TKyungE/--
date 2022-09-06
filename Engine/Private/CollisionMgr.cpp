@@ -2,26 +2,18 @@
 #include "GameInstance.h"
 #include "GameObject.h"
 
-CCollisionMgr::CCollisionMgr(LPDIRECT3DDEVICE9 pGraphic_Device)
-	: CComponent(pGraphic_Device)
+IMPLEMENT_SINGLETON(CCollisionMgr)
+
+CCollisionMgr::CCollisionMgr()
 {
+
 }
 
-HRESULT CCollisionMgr::Initialize_Prototype(void)
+HRESULT CCollisionMgr::Reserve_Container(_uint iNumObjects)
 {
-	return S_OK;
-}
+	m_iNumGroup = iNumObjects;
 
-HRESULT CCollisionMgr::Initialize(void * pArg)
-{
-	return S_OK;
-}
-
-HRESULT CCollisionMgr::Ready_ObjectsArray(_uint iNumObjects)
-{
-	m_iNumObjects = iNumObjects;
-
-	m_GameObjects = new GAMEOBJECTS[m_iNumObjects];
+	m_GameObjects = new GAMEOBJECTS[iNumObjects];
 
 	return S_OK;
 }
@@ -59,7 +51,7 @@ void CCollisionMgr::Release_Objects(void)
 {
 	if (nullptr != m_GameObjects)
 	{
-		for (_uint i = 0; i < m_iNumObjects; ++i)
+		for (_uint i = 0; i < m_iNumGroup; ++i)
 		{
 			for (auto& iter : m_GameObjects[i])
 				Safe_Release(iter);
@@ -227,29 +219,9 @@ _bool CCollisionMgr::Collision_AABB(class CGameObject* _Dest, class CGameObject*
 	return true;
 }
 
-CCollisionMgr * CCollisionMgr::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
-{
-	CCollisionMgr* pInstance = new CCollisionMgr(pGraphic_Device);
-
-	if (FAILED(pInstance->Initialize_Prototype()))
-	{
-		ERR_MSG(TEXT("Failed to Created : CColiisionMgr"));
-		Safe_Release(pInstance);
-	}
-
-	return pInstance;
-}
-
-CComponent * CCollisionMgr::Clone(void * pArg)
-{
-	AddRef();
-
-	return this;
-}
-
 void CCollisionMgr::Free(void)
 {
-	for (_uint i = 0; i < m_iNumObjects; ++i)
+	for (_uint i = 0; i < m_iNumGroup; ++i)
 	{
 		for (auto& iter : m_GameObjects[i])
 			Safe_Release(iter);
@@ -258,6 +230,4 @@ void CCollisionMgr::Free(void)
 	}
 
 	Safe_Delete_Array(m_GameObjects);
-
-	__super::Free();
 }

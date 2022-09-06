@@ -22,7 +22,7 @@ HRESULT CMainApp::Initialize()
 	Graphic_Desc.iWinSizeY = g_iWinSizeY;
 	Graphic_Desc.eWinMode = GRAPHIC_DESC::MODE_WIN;
 
-	if (FAILED(m_pGameInstance->Initialize_Engine(g_hInst, LEVEL_END, Graphic_Desc, &m_pGraphic_Device)))
+	if (FAILED(m_pGameInstance->Initialize_Engine(g_hInst, LEVEL_END, COLLISION_END, Graphic_Desc, &m_pGraphic_Device)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_SamplerState()))
@@ -47,8 +47,6 @@ void CMainApp::Tick(_float fTimeDelta)
 		return;
 
 	m_pGameInstance->Tick_Engine(fTimeDelta);
-
-	m_pCollisionMgr->Release_Objects();
 
 #ifdef _DEBUG
 	m_fTimeAcc += fTimeDelta;
@@ -126,14 +124,7 @@ HRESULT CMainApp::Ready_Prototype_Component()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Collider"), CCollider::Create(m_pGraphic_Device))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_CollisionMgr"), m_pCollisionMgr = CCollisionMgr::Create(m_pGraphic_Device))))
-		return E_FAIL;
-	
-	if (FAILED(m_pCollisionMgr->Ready_ObjectsArray(COLLISION_END)))
-		return E_FAIL;
-
 	Safe_AddRef(m_pRenderer);
-	Safe_AddRef(m_pCollisionMgr);
 
 	return S_OK;
 }
@@ -184,7 +175,6 @@ void CMainApp::Free()
 	CSoundMgr::Get_Instance()->Free();
 	CSoundMgr::Get_Instance()->Destroy_Instance();
 
-	Safe_Release(m_pCollisionMgr);
 	Safe_Release(m_pRenderer);
 	Safe_Release(m_pGraphic_Device);
 	Safe_Release(m_pGameInstance);

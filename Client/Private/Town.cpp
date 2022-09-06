@@ -10,6 +10,9 @@
 #include "House2.h"
 #include "BackGroundTree.h"
 #include "Layer.h"
+#include "Portal.h"
+
+bool g_bCollider = false;
 
 bool g_bCollider = false;
 
@@ -73,11 +76,6 @@ void CTown::Tick(_float fTimeDelta)
 		}
 	}
 
-	if (m_bNextLevel == true)
-	{
-		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_GAMEPLAY))))
-			return;
-	}
 	Safe_Release(pGameInstance);
 }
 
@@ -86,6 +84,8 @@ void CTown::Late_Tick(_float fTimeDelta)
 	__super::Late_Tick(fTimeDelta);
 
 	SetWindowText(g_hWnd, TEXT("타운레벨입니다."));
+
+	Open_Level();
 }
 
 HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
@@ -340,12 +340,34 @@ HRESULT CTown::Ready_Layer_Portal(const _tchar * pLayerTag)
 		tInfo.iLevelIndex = LEVEL_TOWN;
 		tInfo.vPos = iter.BackGroundPos;
 		tInfo.vScale = iter.vScale;
+		tInfo.iNextLevel = LEVEL_GAMEPLAY;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_TOWN, pLayerTag, &tInfo)))
 			return E_FAIL;
 	}
 	Safe_Release(pGameInstance);
 	return S_OK;
+}
+
+void CTown::Open_Level(void)
+{
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	if (nullptr != pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Portal")))
+	{
+		for (auto& iter : pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Portal"))->Get_Objects())
+		{
+			if (dynamic_cast<CPortal*>(iter)->Get_Level())
+			{
+				LEVEL eLevel = (LEVEL)iter->Get_Info().iNextLevel;
+				if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, eLevel))))
+					return;
+			}
+		}
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 void CTown::LoadData()

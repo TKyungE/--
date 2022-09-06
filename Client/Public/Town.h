@@ -51,6 +51,8 @@ public:
 	HRESULT Ready_Layer_NPC(const _tchar* pLayerTag);
 	HRESULT Ready_Layer_Portal(const _tchar* pLayerTag);
 
+private:
+	void Open_Level(void);
 
 public:
 	static CTown* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
