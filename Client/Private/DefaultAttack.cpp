@@ -46,7 +46,7 @@ HRESULT CDefaultAttack::Initialize(void* pArg)
 	vPosition += *D3DXVec3Normalize(&vLook, &vLook) * 0.5f;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-	m_pColliderCom->Set_Transform(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 1.f);
 	return S_OK;
 }
 
