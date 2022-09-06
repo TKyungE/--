@@ -110,10 +110,10 @@ HRESULT CLevel_ChoboField::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	info.pstrPath = TEXT("../../Data/Terrain/TownHg2.dat");
 	info.iLevelIndex = LEVEL_CHOBOFIELD;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_GAMEPLAY, pLayerTag, &info)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_CHOBOFIELD, pLayerTag, &info)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_GAMEPLAY, pLayerTag)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_CHOBOFIELD, pLayerTag)))
 		return E_FAIL;
 
 	for (auto& iter : m_vecTree)
@@ -124,7 +124,7 @@ HRESULT CLevel_ChoboField::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.vScale = iter.vScale;
 		indexpos.vPos = iter.BackGroundPos;
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundTree"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundTree"), LEVEL_CHOBOFIELD, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
 
@@ -137,7 +137,7 @@ HRESULT CLevel_ChoboField::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.vPos = iter.BackGroundPos;
 		indexpos.iTrun = iter.iTrun;
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House"), LEVEL_CHOBOFIELD, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
 
@@ -154,7 +154,7 @@ HRESULT CLevel_ChoboField::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.iTrun = iter.iTrun;
 
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House2"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House2"), LEVEL_CHOBOFIELD, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
 
@@ -167,7 +167,7 @@ HRESULT CLevel_ChoboField::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.vScale = iter.vScale;
 		indexpos.vPos = iter.BackGroundPos;
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundRect"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundRect"), LEVEL_CHOBOFIELD, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
 	//CGameObject::INFO tInfo;
@@ -198,10 +198,10 @@ HRESULT CLevel_ChoboField::Ready_Layer_Player(const _tchar * pLayerTag)
 	CGameObject::INFO tInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Get_Info();
 
 	memcpy(&Info, &tInfo, sizeof(CGameObject::INFO));
-	Info.iLevelIndex = LEVEL_GAMEPLAY;
+	Info.iLevelIndex = LEVEL_CHOBOFIELD;
 	Info.vPos = m_vPlayerPos;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_CHOBOFIELD, pLayerTag, &Info)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -230,7 +230,7 @@ HRESULT CLevel_ChoboField::Ready_Layer_Monster(const _tchar * pLayerTag)
 		}
 		Info.vPos = (*iter);
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_CHOBOFIELD, pLayerTag, &Info)))
 			return E_FAIL;
 
 		++iCount;
@@ -245,7 +245,7 @@ HRESULT CLevel_ChoboField::Ready_Layer_Monster(const _tchar * pLayerTag)
 		}
 		Info.vPos = (*iter);
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_CHOBOFIELD, pLayerTag, &Info)))
 			return E_FAIL;
 
 		++iCount;
@@ -260,23 +260,7 @@ HRESULT CLevel_ChoboField::Ready_Layer_Monster(const _tchar * pLayerTag)
 		}
 		Info.vPos = (*iter);
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-			return E_FAIL;
-
-		++iCount;
-	}
-
-
-	for (; iter != m_vMonsterPos1.end(); ++iter)
-	{
-		if (iCount >= 1)
-		{
-			iCount = 0;
-			break;
-		}
-		Info.vPos = (*iter);
-
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bloodymurderer"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_CHOBOFIELD, pLayerTag, &Info)))
 			return E_FAIL;
 
 		++iCount;
@@ -292,7 +276,23 @@ HRESULT CLevel_ChoboField::Ready_Layer_Monster(const _tchar * pLayerTag)
 		}
 		Info.vPos = (*iter);
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bloodymurderer"), LEVEL_CHOBOFIELD, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+		Info.vPos = (*iter);
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_CHOBOFIELD, pLayerTag, &Info)))
 			return E_FAIL;
 
 		++iCount;
@@ -307,7 +307,7 @@ HRESULT CLevel_ChoboField::Ready_Layer_Monster(const _tchar * pLayerTag)
 		}
 		Info.vPos = (*iter);
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_CHOBOFIELD, pLayerTag, &Info)))
 			return E_FAIL;
 
 		++iCount;
@@ -322,7 +322,7 @@ HRESULT CLevel_ChoboField::Ready_Layer_Monster(const _tchar * pLayerTag)
 		}
 		Info.vPos = (*iter);
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_CHOBOFIELD, pLayerTag, &Info)))
 			return E_FAIL;
 
 		++iCount;
@@ -337,7 +337,7 @@ HRESULT CLevel_ChoboField::Ready_Layer_Monster(const _tchar * pLayerTag)
 		}
 		Info.vPos = (*iter);
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_CHOBOFIELD, pLayerTag, &Info)))
 			return E_FAIL;
 
 		++iCount;
@@ -352,7 +352,7 @@ HRESULT CLevel_ChoboField::Ready_Layer_Monster(const _tchar * pLayerTag)
 		}
 		Info.vPos = (*iter);
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bloodymurderer"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bloodymurderer"), LEVEL_CHOBOFIELD, pLayerTag, &Info)))
 			return E_FAIL;
 
 		++iCount;
@@ -367,7 +367,7 @@ HRESULT CLevel_ChoboField::Ready_Layer_Monster(const _tchar * pLayerTag)
 		}
 		Info.vPos = (*iter);
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_CHOBOFIELD, pLayerTag, &Info)))
 			return E_FAIL;
 
 		++iCount;
@@ -382,7 +382,7 @@ HRESULT CLevel_ChoboField::Ready_Layer_Monster(const _tchar * pLayerTag)
 		}
 		Info.vPos = (*iter);
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_CHOBOFIELD, pLayerTag, &Info)))
 			return E_FAIL;
 
 		++iCount;
@@ -397,7 +397,7 @@ HRESULT CLevel_ChoboField::Ready_Layer_Monster(const _tchar * pLayerTag)
 		}
 		Info.vPos = (*iter);
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_CHOBOFIELD, pLayerTag, &Info)))
 			return E_FAIL;
 
 		++iCount;
@@ -433,7 +433,7 @@ HRESULT CLevel_ChoboField::Ready_Layer_Camera(const _tchar * pLayerTag)
 
 	CameraDesc.CameraDesc.Info.pTarget = Info.pTarget;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Camera_Dynamic"), LEVEL_GAMEPLAY, pLayerTag, &CameraDesc)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Camera_Dynamic"), LEVEL_CHOBOFIELD, pLayerTag, &CameraDesc)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -448,35 +448,35 @@ HRESULT CLevel_ChoboField::Ready_Layer_UI(const _tchar * pLayerTag)
 
 	CGameObject::INFO tInfo;
 
-	tInfo.iLevelIndex = LEVEL_GAMEPLAY;
+	tInfo.iLevelIndex = LEVEL_CHOBOFIELD;
 	tInfo.bHit = false;
 	tInfo.bDead = false;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_UI"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpBlank"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpBlank"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpLogo"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ExpLogo"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuickSlot"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuickSlot"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_IconBar"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_IconBar"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_InventoryIcon"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_InventoryIcon"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_EquipIcon"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_EquipIcon"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkillIcon"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SkillIcon"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_StatsIcon"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_StatsIcon"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 		return E_FAIL;
 
 
@@ -493,11 +493,11 @@ HRESULT CLevel_ChoboField::Ready_Layer_Portal(const _tchar * pLayerTag)
 	for (auto& iter : m_vecPortal)
 	{
 		CGameObject::INFO tInfo;
-		tInfo.iLevelIndex = LEVEL_TOWN;
+		tInfo.iLevelIndex = LEVEL_CHOBOFIELD;
 		tInfo.vPos = iter.BackGroundPos;
 		tInfo.vScale = iter.vScale;
 
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 			return E_FAIL;
 	}
 
@@ -764,8 +764,8 @@ void CLevel_ChoboField::Create_Rain(_float fTimeDelta)
 			tInfo.vPos.y = vPos.y;
 			tInfo.vPos.z = vPos.z + iTemp;
 
-			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Rain"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
-
+			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Rain"), LEVEL_CHOBOFIELD, TEXT("Layer_Effect"), &tInfo);
+			
 		}
 	}
 	Safe_Release(pGameInstance);
