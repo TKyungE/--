@@ -170,6 +170,7 @@
     <ClInclude Include="..\Public\Camera_Dynamic.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\public\Dandelion.h" />
+    <ClInclude Include="..\public\DandelionAttack.h" />
     <ClInclude Include="..\public\DefaultAttack.h" />
     <ClInclude Include="..\public\Default_NPC.h" />
     <ClInclude Include="..\public\DmgFont.h" />
@@ -221,6 +222,8 @@
     <ClInclude Include="..\public\StatsIcon.h" />
     <ClInclude Include="..\public\StatsWnd.h" />
     <ClInclude Include="..\public\Stone.h" />
+    <ClInclude Include="..\public\Sword.h" />
+    <ClInclude Include="..\public\SwordSlice.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\TerrainRect.h" />
     <ClInclude Include="..\public\ThunderCloud.h" />
@@ -252,6 +255,7 @@
     <ClCompile Include="..\private\Byorgue.cpp" />
     <ClCompile Include="..\Private\Camera_Dynamic.cpp" />
     <ClCompile Include="..\private\Dandelion.cpp" />
+    <ClCompile Include="..\private\DandelionAttack.cpp" />
     <ClCompile Include="..\private\DefaultAttack.cpp" />
     <ClCompile Include="..\private\Default_NPC.cpp" />
     <ClCompile Include="..\private\DmgFont.cpp" />
@@ -303,6 +307,8 @@
     <ClCompile Include="..\private\StatsIcon.cpp" />
     <ClCompile Include="..\private\StatsWnd.cpp" />
     <ClCompile Include="..\private\Stone.cpp" />
+    <ClCompile Include="..\private\Sword.cpp" />
+    <ClCompile Include="..\private\SwordSlice.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\TerrainRect.cpp" />
     <ClCompile Include="..\private\ThunderCloud.cpp" />

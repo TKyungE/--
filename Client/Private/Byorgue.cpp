@@ -559,9 +559,9 @@ HRESULT CByorgue::Skill_DefaultAttack(const _tchar * pLayerTag)
 	tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	tInfo.iLevelIndex = LEVEL_GAMEPLAY;
 	tInfo.vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-	tInfo.iDmg = 20;
+	
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DefaultAttack"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sword"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);

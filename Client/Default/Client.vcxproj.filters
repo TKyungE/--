@@ -268,6 +268,15 @@
     <Filter Include="02.GameObject\Monster\05.Dandelion">
       <UniqueIdentifier>{fccff6ea-d168-4f81-a9eb-9d94fe64fd3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Effect\Skill\07.SwordSlice">
+      <UniqueIdentifier>{9f03de17-976b-4e1b-a33a-473457f8a521}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\06.Sword">
+      <UniqueIdentifier>{79abb7f2-c886-4c92-9f8c-8150b658e65d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\08.DandelionAttack">
+      <UniqueIdentifier>{e4940682-ffc3-472d-a414-d8a67d0e5d76}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -516,6 +525,15 @@
     <ClInclude Include="..\public\Dandelion.h">
       <Filter>02.GameObject\Monster\05.Dandelion</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Sword.h">
+      <Filter>03.Effect\Skill\06.Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\SwordSlice.h">
+      <Filter>03.Effect\Skill\07.SwordSlice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\DandelionAttack.h">
+      <Filter>03.Effect\Skill\08.DandelionAttack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -751,6 +769,15 @@
     </ClCompile>
     <ClCompile Include="..\private\Dandelion.cpp">
       <Filter>02.GameObject\Monster\05.Dandelion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Sword.cpp">
+      <Filter>03.Effect\Skill\06.Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SwordSlice.cpp">
+      <Filter>03.Effect\Skill\07.SwordSlice</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\DandelionAttack.cpp">
+      <Filter>03.Effect\Skill\08.DandelionAttack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

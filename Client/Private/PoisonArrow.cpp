@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "..\Public\PoisonArrow.h"
-#include "Tornado.h"
 #include "GameInstance.h"
 
 CPoisonArrow::CPoisonArrow(LPDIRECT3DDEVICE9 pGraphic_Device)

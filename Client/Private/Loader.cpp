@@ -69,7 +69,9 @@
 #include "Byorgue.h"
 #include "Bloodymurderer.h"
 #include "Dandelion.h"
-
+#include "Sword.h"
+#include "SwordSlice.h"
+#include "DandelionAttack.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
@@ -355,7 +357,15 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_PoisonArrow"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/PoisonArrow/Effect%d.bmp"), 11))))
 		return E_FAIL;
-
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Sword"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/Sword/%d.png"), 2))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_SwordSlice"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/SwordSlice/%d.png"), 6))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_DandelionAttack"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/DandelionAttack/%d.png"), 5))))
+		return E_FAIL;
 	//Player ÅØ½ºÃÄ
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_IDLE_Back"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Player/IDLE_Back/%d.png"), 1))))
@@ -771,6 +781,15 @@ HRESULT CLoader::Loading_Prototype()
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_DefaultAttack"),
 		CDefaultAttack::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sword"),
+		CSword::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SwordSlice"),
+		CSwordSlice::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_DandelionAttack"),
+		CDandelionAttack::Create(m_pGraphic_Device))))
 		return E_FAIL;
 	//Effect °´Ã¼
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Angry"),
