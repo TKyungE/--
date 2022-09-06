@@ -53,8 +53,8 @@ void CHpPotion::Tick(_float fTimeDelta)
 
 		if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON))
 		{
-			m_tInfo.vPos.x = ptMouse.x;
-			m_tInfo.vPos.y = ptMouse.y;
+			m_tInfo.vPos.x = (_float)ptMouse.x;
+			m_tInfo.vPos.y = (_float)ptMouse.y;
 		}
 
 	}

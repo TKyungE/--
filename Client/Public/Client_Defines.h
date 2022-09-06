@@ -5,8 +5,9 @@ namespace Client
 	const unsigned int g_iWinSizeX = 1280;
 	const unsigned int g_iWinSizeY = 720;
 
-	enum LEVEL { LEVEL_STATIC, LEVEL_LOADING, LEVEL_LOGO, LEVEL_GAMEPLAY, LEVEL_TOWN,LEVEL_END };
+	enum LEVEL { LEVEL_STATIC, LEVEL_LOADING, LEVEL_LOGO, LEVEL_GAMEPLAY, LEVEL_TOWN,LEVEL_CHOBOFIELD,LEVEL_END };
 	enum CHANNELID { SOUND_EFFECT, SOUND_BGM, MAXCHANNEL };
+	enum COLLISIONGROUP { COLLISION_PLAYER, COLLISION_MONSTER, COLLISION_BOSS, COLLISION_OBJECT, COLLISION_ITEM, COLLISION_PLAYERSKILL, COLLISION_MONSTERSKILL, COLLISION_PORTAL, COLLISION_END };
 }
 #include <time.h>
 #include <string>
@@ -21,6 +22,7 @@ using namespace FMOD;
 
 extern HWND			g_hWnd;
 extern HINSTANCE	g_hInst;
+extern bool g_bCollider;
 //extern int g_iFrame;
 
 #define     fSOUND  0.1f

@@ -4,14 +4,15 @@
 #include "GameInstance.h"
 #include "Camera_Dynamic.h"
 #include "SoundMgr.h"
-#include "CollisionMgr.h"
 #include "KeyMgr.h"
 #include "BackGroundRect.h" 
 #include "BackGroundTree.h"
 #include "Level_Loading.h"
 #include "House.h"
 #include "House2.h"
-#include "BackGroundTree.h"
+#include "Layer.h"
+#include "Portal.h"
+
 
 CLEVEL_GamePlay::CLEVEL_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -63,9 +64,9 @@ void CLEVEL_GamePlay::Tick(_float fTimeDelta)
 	//fSound += (pGameInstance->Get_DIMMoveState(DIMM_WHEEL)*fTimeDelta) / 100;
 
 	if (CKeyMgr::Get_Instance()->Key_Down('O'))
-		fSound += 0.01;
+		fSound += 0.01f;
 	if (CKeyMgr::Get_Instance()->Key_Down('P'))
-		fSound -= 0.01;
+		fSound -= 0.01f;
 	
 	if (fSound > 1.f)
 		fSound = 1.f;
@@ -74,8 +75,19 @@ void CLEVEL_GamePlay::Tick(_float fTimeDelta)
 
 	CSoundMgr::Get_Instance()->SetSoundVolume(SOUND_BGM, fSound);
  	
+	if (GetKeyState('Y') < 0)
+	{
+		if (!g_bCollider)
+			g_bCollider = true;
+	}
+	if (GetKeyState('U') < 0)
+	{
+		if (g_bCollider)
+			g_bCollider = false;
+	}
+		
 	Create_Rain(fTimeDelta);
-
+	
 	Safe_Release(pGameInstance);
 }
 
@@ -84,57 +96,8 @@ void CLEVEL_GamePlay::Late_Tick(_float fTimeDelta)
 	__super::Late_Tick(fTimeDelta);
 
 	SetWindowText(g_hWnd, TEXT("게임플레이레벨입니다."));
-
-	//충돌 사용법
-	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
-	Safe_AddRef(pGameInstance);
 	
-
-	CGameObject* Dest;
-	CGameObject* Sour;
-	
-	
-	if (pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_Skill")) != nullptr)
-	{
-		if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_Skill"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour))
-		{
-			
-			Dest->Set_Dead();
-
-			if(Dest->Get_Info().iMoney == 33)
-			{ 
-				fCollTime += fTimeDelta;
-				if (fCollTime > 0.3f)
-				{
-					_float3 vPos = Get_CollisionPos(Dest, Sour);
-
-					Sour->Set_Hit(Dest->Get_Info().iDmg, vPos);
-					Sour->Set_Hp(Dest->Get_Info().iDmg);
-					fCollTime = 0.f;
-				}
-			}
-			else
-			{
-				_float3 vPos = Get_CollisionPos(Dest, Sour);
-
-				Sour->Set_Hit(Dest->Get_Info().iDmg, vPos);
-				Sour->Set_Hp(Dest->Get_Info().iDmg);
-			}
-			if (Sour->Get_Info().iHp <= 0)
-				Sour->Set_Dead();
-		}
-	}
-	if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Portal"))->Get_Objects(), &Dest, &Sour))
-	{
-		m_bNextLevel = true;
-		pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(Dest->Get_Info());
-	}
-	if (m_bNextLevel == true)
-	{
-		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_TOWN))))
-			return;
-	}
-	Safe_Release(pGameInstance);
+	Open_Level();
 }
 
 HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
@@ -178,9 +141,6 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 			return E_FAIL;
 	}
 
-
-
-
 	for (auto& iter : m_vecHouse2)
 	{
 		CHouse2::INDEXPOS indexpos;
@@ -190,11 +150,9 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.vPos = iter.BackGroundPos;
 		indexpos.iTrun = iter.iTrun;
 
-
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House2"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
-
 
 	for (auto& iter : m_vecIndex)
 	{
@@ -225,8 +183,6 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	//		return E_FAIL;
 	//}
 	
-
-
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -258,15 +214,13 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 	
 	for (auto& iter : m_vMonsterPos1)
-	{
 		Info.vPos = iter;
-	}
-	
 	
 	/*if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Monster"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;*/
 
 	Info.iLevelIndex = LEVEL_GAMEPLAY;
+
 	Info.vPos = { 15.f,0.f,15.f };
 //	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_FireDragon"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 //		return E_FAIL;
@@ -274,32 +228,39 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
 	Info.vPos = { 10.f,0.f,12.f };
+
+
+	Info.vPos = { 5.f,0.f,5.f };
+
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
 	Info.vPos = { 5.f,0.f,10.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
-	Info.vPos = { 8.f,0.f,15.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 10.f,0.f,8.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+	Info.vPos = { 8.f,0.f,10.f };
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Dandelion"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
 	Info.vPos = { 7.f,0.f,3.f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
 	Info.vPos = { 8.f,0.f,5.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
 	Info.vPos = { 10.f,0.f,2.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Byorgue"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
 	Info.vPos = { 10.f,0.f,10.f };
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
 	Info.vPos = { 7.f,0.f,7.f };
+
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;*/
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bloodymurderer"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+		return E_FAIL;
+
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -385,21 +346,24 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Portal(const _tchar * pLayerTag)
 {
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
-
+	
 	for (auto& iter : m_vecPortal)
 	{
 		CGameObject::INFO tInfo;
 		tInfo.iLevelIndex = LEVEL_GAMEPLAY;
 		tInfo.vPos = iter.BackGroundPos;
 		tInfo.vScale = iter.vScale;
+		tInfo.iNextLevel = LEVEL_TOWN;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 			return E_FAIL;
+		break;
 	}
 
 	Safe_Release(pGameInstance);
 	return S_OK;
 }
+
 _float3 CLEVEL_GamePlay::Get_CollisionPos(CGameObject * pDest, CGameObject * pSour)
 {
 	_float3 vLook = *(_float3*)&pDest->Get_World().m[3][0] - *(_float3*)&pSour->Get_World().m[3][0];
@@ -416,6 +380,28 @@ _float3 CLEVEL_GamePlay::Get_CollisionPos(CGameObject * pDest, CGameObject * pSo
 	CollisionPos.x = pDest->Get_World().m[3][0];
 
 	return CollisionPos;
+}
+
+void CLEVEL_GamePlay::Open_Level(void)
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	if (nullptr != pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Portal")))
+	{
+		for (auto& iter : pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Portal"))->Get_Objects())
+		{
+			if (dynamic_cast<CPortal*>(iter)->Get_Level())
+			{
+				pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Player"))->Get_Objects().front()->Get_Info());
+				LEVEL eLevel = (LEVEL)iter->Get_Info().iNextLevel;
+				if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, eLevel))))
+					return;
+			}
+		}
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 
@@ -642,32 +628,31 @@ void CLEVEL_GamePlay::LoadData()
 
 void CLEVEL_GamePlay::Create_Rain(_float fTimeDelta)
 {
-	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
-	Safe_AddRef(pGameInstance);
+	//CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	//Safe_AddRef(pGameInstance);
 
-	CGameObject::INFO tInfo;
-	fRainTime += fTimeDelta;
-	if (fRainTime > 0.3f)
-	{
-		fRainTime = 0.f;
-		for (int i = 0; i < 30; ++i)
-		{
-			_float iSour = rand() % 60000 * 0.001f;
-			_float iTemp = rand() % 40000 * 0.001f;
+	//CGameObject::INFO tInfo;
+	//fRainTime += fTimeDelta;
+	//if (fRainTime > 0.3f)
+	//{
+	//	fRainTime = 0.f;
+	//	for (int i = 0; i < 30; ++i)
+	//	{
+	//		_float iSour = rand() % 60000 * 0.001f;
+	//		_float iTemp = rand() % 40000 * 0.001f;
 
-			_float3 vPos = { 0.f,0.f,0.f };
-			tInfo.vPos.x = vPos.x + iSour;
-			tInfo.vPos.y = vPos.y;
-			tInfo.vPos.z = vPos.z + iTemp;
+	//		_float3 vPos = { 0.f,0.f,0.f };
+	//		tInfo.vPos.x = vPos.x + iSour;
+	//		tInfo.vPos.y = vPos.y;
+	//		tInfo.vPos.z = vPos.z + iTemp;
 
-			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Rain"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
-				
-		}
-	}
-	Safe_Release(pGameInstance);
+	//		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Rain"), LEVEL_CHOBOFIELD, TEXT("Layer_Effect"), &tInfo);
+	//			
+	//	}
+	//}
+	//Safe_Release(pGameInstance);
 
 }
-
 
 CLEVEL_GamePlay * CLEVEL_GamePlay::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
@@ -685,7 +670,4 @@ CLEVEL_GamePlay * CLEVEL_GamePlay::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 void CLEVEL_GamePlay::Free()
 {
 	__super::Free();
-
-	
-
 }

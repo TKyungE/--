@@ -8,6 +8,7 @@ class CTransform;
 class CVIBuffer_Rect;
 class CVIBuffer_Cube;
 class CTexture;
+class CCollider;
 END
 
 BEGIN(Client)
@@ -27,6 +28,9 @@ private:
 	virtual ~CPortal() = default;
 
 public:
+	_bool Get_Level(void) { return m_bLevel; }
+
+public:
 	virtual HRESULT Initialize_Prototype(void) override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Tick(_float fTimeDelta) override;
@@ -38,9 +42,11 @@ private:
 	CTransform* m_pTransformCom = nullptr;
 	CVIBuffer_Cube* m_pVIBuffer = nullptr;
 	CTexture* m_pTextureCom = nullptr;
+	CCollider* m_pColliderCom = nullptr;
 
 private:
 	INDEXPOS	m_IndexPos;
+	_bool m_bLevel;
 
 private:
 	HRESULT SetUp_Components(void);

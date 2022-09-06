@@ -32,7 +32,7 @@ HRESULT CElderWilow::Initialize(void * pArg)
 
 
 	//m_tInfo.vPos.y += 0.f;
-	_float3 vScale = { 2.f,2.f,1.f };
+	_float3 vScale = { 1.5f,1.5f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
@@ -54,7 +54,7 @@ HRESULT CElderWilow::Initialize(void * pArg)
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo);
-	tInfo.vPos = { 1.f,1.f,1.f };
+	tInfo.vPos = { 0.8f,0.8f,1.f };
 
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
 
@@ -67,10 +67,19 @@ HRESULT CElderWilow::Initialize(void * pArg)
 void CElderWilow::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	m_fSkillCool += fTimeDelta;
 	if (!m_bRespawn)
 	{
-	//	m_fSkillCool += fTimeDelta;
+		m_fSkillCool += fTimeDelta;
+		if (m_tInfo.iMp == 2 && !m_bAngry)
+		{
+			CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+			Safe_AddRef(pGameInstance);
+			CGameObject::INFO tInfo;
+			tInfo.pTarget = this;
+			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Angry"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+			Safe_Release(pGameInstance);
+			m_bAngry = true;
+		}
 		OnTerrain();
 		if (!m_bDead)
 			Check_Front();
@@ -114,6 +123,22 @@ void CElderWilow::Tick(_float fTimeDelta)
 		Move_Frame(fTimeDelta);
 		if (m_eCurState == SKILL)
 			Use_Skill(fTimeDelta);
+
+		m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
+
+		CGameInstance* pInstance = CGameInstance::Get_Instance();
+		if (nullptr == pInstance)
+			return;
+
+		Safe_AddRef(pInstance);
+
+		if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_MONSTER, this)))
+		{
+			ERR_MSG(TEXT("Failed to Add CollisionGroup : CDandelion"));
+			return;
+		}
+
+		Safe_Release(pInstance);
 	}
 	else
 	{
@@ -137,6 +162,7 @@ void CElderWilow::Late_Tick(_float fTimeDelta)
 		{
 			Check_Hit();
 			Motion_Change();
+			CheckColl();
 		}
 		OnBillboard();
 
@@ -173,6 +199,8 @@ HRESULT CElderWilow::Render(void)
 		if (FAILED(Release_RenderState()))
 			return E_FAIL;
 		On_SamplerState();
+		if (g_bCollider)
+			m_pColliderCom->Render();
 	}
 	return S_OK;
 }
@@ -199,6 +227,8 @@ HRESULT CElderWilow::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Dead_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_ElderWilow_Dead_Front"), (CComponent**)&m_pTextureComDead_Front)))
 		return E_FAIL;
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Dead_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_ElderWilow_Dead_Back"), (CComponent**)&m_pTextureComDead_Back)))
+		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
 		return E_FAIL;
 	CTransform::TRANSFORMDESC TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
@@ -261,7 +291,7 @@ void CElderWilow::Chase(_float fTimeDelta)
 		m_bIDLE = true;
 	if (1.f >= Distance)
 	{
-		if (m_fSkillCool >	0.5f)
+		if (m_fSkillCool >	0.4f)
 		{
 			m_fSkillCool = 0.f;
 			m_eCurState = SKILL;
@@ -489,7 +519,7 @@ _float4x4 CElderWilow::Get_World(void)
 void CElderWilow::Free(void)
 {
 	__super::Free();
-
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pRendererCom);
@@ -632,6 +662,12 @@ void CElderWilow::Check_Front()
 	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.3f) && !m_bRun)
 	{
 		m_bRun = true;
+		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+		CGameObject::INFO tInfo;
+		tInfo.pTarget = this;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Help"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+		Safe_Release(pGameInstance);
 	}
 }
 void CElderWilow::Use_Skill(_float fTimeDelta)
@@ -789,6 +825,7 @@ HRESULT CElderWilow::RespawnMonster()
 	m_bRun = false;
 	m_bIDLE = false;
 	m_bRespawn = false;
+	m_bAngry = false;
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
@@ -796,9 +833,10 @@ HRESULT CElderWilow::RespawnMonster()
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo);
-	tInfo.vPos = { 1.f,1.f,1.f };
+	tInfo.vPos = { 0.8f,0.8f,1.f };
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
 	Safe_Release(pGameInstance);
+	return S_OK;
 }
 void CElderWilow::OnBillboard()
 {
@@ -807,8 +845,69 @@ void CElderWilow::OnBillboard()
 	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
 
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-	_float3 vScale = { 2.f,2.f,1.f };
+	_float3 vScale = { 1.5f,1.5f,1.f };
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
 	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.x);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+}
+void CElderWilow::CheckColl()
+{
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+	CGameObject* pTarget;
+	if (pInstance->Collision(this, COLLISION_MONSTER, &pTarget))
+	{
+		_float3 vBackPos;
+		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
+		{
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
+		}
+		else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
+		{
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
+		}
+		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
+	}
+	if (pInstance->Collision(this, COLLISION_PLAYER, &pTarget))
+	{
+		_float3 vBackPos;
+		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
+		{
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
+		}
+		else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
+		{
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
+		}
+		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
+	}
+	if (pInstance->Collision(this, COLLISION_OBJECT, &pTarget))
+	{
+		_float3 vBackPos;
+		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
+		{
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
+		}
+		else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
+		{
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
+		}
+		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
+	}
+	Safe_Release(pInstance);
 }

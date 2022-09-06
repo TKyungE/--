@@ -9,6 +9,8 @@
 #include "Picking.h"
 #include "KeyMgr.h"
 #include "Frustum.h"
+#include "CollisionMgr.h"
+
 
 BEGIN(Engine)
 
@@ -20,7 +22,7 @@ private:
 	virtual ~CGameInstance() = default;
 
 public: /* For.Engine */
-	HRESULT Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, const GRAPHIC_DESC& GraphicDesc, LPDIRECT3DDEVICE9* ppOut);
+	HRESULT Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, _uint iNumObject, const GRAPHIC_DESC& GraphicDesc, LPDIRECT3DDEVICE9* ppOut);
 	void Tick_Engine(_float fTimeDelta);
 
 	void Clear(_uint iLevelIndex);
@@ -53,8 +55,18 @@ public: /* For.Object_Manager */
 public: /* For.Component_Manager */
 	HRESULT Add_Prototype(_uint iLevelIndex, const _tchar* pPrototypeTag, class CComponent* pPrototype);
 	class CComponent* Clone_Component(_uint iLevelIndex, const _tchar* pPrototypeTag, void* pArg = nullptr);
+
 public:	/* for. Frustum*/
 	_bool	IsInFrustum(_float3 vPos, _float3 vScale);
+
+	
+public: /* For.Collision_Manager */
+	HRESULT Add_ColiisionGroup(_uint iCollisionGroup, class CGameObject* pGameObject);
+	_bool Collision(class CGameObject* pGameObject, _uint iCollisionGroup, CGameObject** pTarget);
+	_float3 Get_Collision(void);
+	void Release_Objects(void);
+
+
 public:
 	static void Release_Engine();
 
@@ -68,6 +80,7 @@ private:
 	CPicking*						m_pPicking = nullptr;
 	CKeyMgr*						m_pKeyMgr = nullptr;
 	CFrustum*						m_pFrustum = nullptr;
+	CCollisionMgr*					m_pCollision_Manager = nullptr;
 
 public:
 	virtual void Free() override;

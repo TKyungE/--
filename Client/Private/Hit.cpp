@@ -29,16 +29,16 @@ HRESULT CHit::Initialize(void* pArg)
 		return E_FAIL;
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
-	m_tInfo.vPos.y += 0.85f;
-	_float3 vScale = { 1.f,1.f,1.f };
+	//m_tInfo.vPos.y += 0.85f;
+	_float3 vScale = { 2.f,2.f,2.f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;
 	m_tFrame.iFrameStart = 0;
-	m_tFrame.iFrameEnd = 14;
-	m_tFrame.fFrameSpeed = 0.05f;
+	m_tFrame.iFrameEnd = 3;
+	m_tFrame.fFrameSpeed = 0.1f;
 	m_tInfo.bDead = false;
 
 	return S_OK;
@@ -49,8 +49,8 @@ void CHit::Tick(_float fTimeDelta)
 	__super::Tick(fTimeDelta);
 
 	Move_Frame(fTimeDelta);
-	m_fDeadTime += fTimeDelta;
-	if (m_fDeadTime > 0.7f)
+	
+	if (m_tFrame.iFrameStart == 3)
 		Set_Dead();
 }
 
@@ -66,14 +66,14 @@ void CHit::Late_Tick(_float fTimeDelta)
 	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
 
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
-	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
-	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+	_float3 vScale = { 2.f,2.f,2.f };
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
+	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
+	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0] * vScale.z);
 
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
 }
 
 HRESULT CHit::Render()
@@ -111,8 +111,8 @@ void CHit::Motion_Change()
 		{
 		case IDLE:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 14;
-			m_tFrame.fFrameSpeed = 0.05f;
+			m_tFrame.iFrameEnd = 3;
+			m_tFrame.fFrameSpeed = 0.1f;
 			break;
 		}
 

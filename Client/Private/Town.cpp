@@ -3,13 +3,16 @@
 #include "GameInstance.h"
 #include "Level_Loading.h"
 #include "SoundMgr.h"
-#include "CollisionMgr.h"
 #include "BackGroundRect.h" 
 #include "Camera_Dynamic.h"
 #include "KeyMgr.h"
 #include "House.h"
 #include "House2.h"
 #include "BackGroundTree.h"
+#include "Layer.h"
+#include "Portal.h"
+
+bool g_bCollider = false;
 
 CTown::CTown(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -50,19 +53,27 @@ void CTown::Tick(_float fTimeDelta)
 	Safe_AddRef(pGameInstance);
 	
 	
-	CGameObject* Dest;
-	CGameObject* Sour;
+	/*CGameObject* Dest;
+	CGameObject* Sour;*/
 	
-	if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Portal"))->Get_Objects(), &Dest, &Sour))
+	/*if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Portal"))->Get_Objects(), &Dest, &Sour))
 	{
 		m_bNextLevel = true;
 		pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(Dest->Get_Info());
-	}
-	if (m_bNextLevel == true)
+	}*/
+	if (GetKeyState('Y') < 0)
 	{
-		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_GAMEPLAY))))
-			return;
+		if (!g_bCollider)
+			g_bCollider = true;
 	}
+	if (GetKeyState('U') < 0)
+	{
+		if (g_bCollider)
+		{
+			g_bCollider = false;
+		}
+	}
+
 	Safe_Release(pGameInstance);
 }
 
@@ -71,6 +82,8 @@ void CTown::Late_Tick(_float fTimeDelta)
 	__super::Late_Tick(fTimeDelta);
 
 	SetWindowText(g_hWnd, TEXT("타운레벨입니다."));
+
+	Open_Level();
 }
 
 HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
@@ -114,9 +127,6 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 			return E_FAIL;
 	}
 
-
-
-
 	for (auto& iter : m_vecHouse2)
 	{
 		CHouse2::INDEXPOS indexpos;
@@ -144,8 +154,6 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 			return E_FAIL;
 	}
 
-
-
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -155,7 +163,6 @@ HRESULT CTown::Ready_Layer_Player(const _tchar * pLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	
 	if (pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo")) != nullptr)
 	{
 		CGameObject::INFO tInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Get_Info();
@@ -331,12 +338,37 @@ HRESULT CTown::Ready_Layer_Portal(const _tchar * pLayerTag)
 		tInfo.iLevelIndex = LEVEL_TOWN;
 		tInfo.vPos = iter.BackGroundPos;
 		tInfo.vScale = iter.vScale;
+		tInfo.iNextLevel = LEVEL_GAMEPLAY;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_TOWN, pLayerTag, &tInfo)))
 			return E_FAIL;
+		
 	}
+	
 	Safe_Release(pGameInstance);
 	return S_OK;
+}
+
+void CTown::Open_Level(void)
+{
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	if (nullptr != pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Portal")))
+	{
+		for (auto& iter : pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Portal"))->Get_Objects())
+		{
+			if (dynamic_cast<CPortal*>(iter)->Get_Level())
+			{
+				pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(pGameInstance->Find_Layer(LEVEL_TOWN, TEXT("Layer_Player"))->Get_Objects().front()->Get_Info());
+				LEVEL eLevel = (LEVEL)iter->Get_Info().iNextLevel;
+				if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, eLevel))))
+					return;
+			}
+		}
+	}
+
+	Safe_Release(pGameInstance);
 }
 
 void CTown::LoadData()
@@ -574,6 +606,4 @@ CTown * CTown::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 void CTown::Free()
 {
 	__super::Free();
-
-
 }

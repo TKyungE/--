@@ -7,6 +7,7 @@ class CTexture;
 class CRenderer;
 class CTransform;
 class CVIBuffer_Rect;
+class CCollider;
 END
 
 BEGIN(Client)
@@ -32,10 +33,12 @@ private: /* For.Components */
 	CRenderer*				m_pRendererCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
+	CCollider*				m_pColliderCom = nullptr;
 private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
 	_float				m_fDeadTime = 0.f;
+	_float				m_CollTime = 0.f;
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
@@ -46,6 +49,8 @@ private:
 	HRESULT On_SamplerState();
 	HRESULT Off_SamplerState();
 	void	OnBillboard();
+	void CheckColl();
+	_float3 Get_CollisionPos(CGameObject* pDest, CGameObject* pSour);
 public:
 	static CFire* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;
