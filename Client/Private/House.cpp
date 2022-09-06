@@ -42,7 +42,19 @@ void CHouse::Tick(_float fTimeDelta)
 	//OnTerrain();
 	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 1.f);
 
-	m_pCollisionMgrCom->Add_ColiisionGroup(COLLISION_OBJECT, this);
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+
+	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_OBJECT, this)))
+	{
+		ERR_MSG(TEXT("Failed to Add CollisionGroup : CHouse"));
+		return;
+	}
+
+	Safe_Release(pInstance);
 }
 
 void CHouse::Late_Tick(_float fTimeDelta)
@@ -113,9 +125,6 @@ HRESULT CHouse::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
 		return E_FAIL;
 	
-	if (FAILED(__super::Add_Components(TEXT("Com_CollisionMgr"), LEVEL_STATIC, TEXT("Prototype_Component_CollisionMgr"), (CComponent**)&m_pCollisionMgrCom)))
-		return E_FAIL;
-
 	return S_OK;
 }
 
@@ -270,6 +279,7 @@ HRESULT CHouse::House_Render()
 		return E_FAIL;
 	m_pVIBuffer2->Render();
 
+	return S_OK;
 }
 
 CHouse * CHouse::Create(LPDIRECT3DDEVICE9 _pGraphic_Device)
@@ -307,7 +317,6 @@ void CHouse::Free(void)
 {
 	__super::Free();
 
-	Safe_Release(m_pCollisionMgrCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pTransformCom2);

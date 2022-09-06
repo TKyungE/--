@@ -11,8 +11,6 @@
 #include "VIBuffer_WingRect.h"
 #include "VIBuffer_RectLeft.h"
 #include "Collider.h"
-#include "CollisionMgr.h"
-
 
 BEGIN(Engine)
 

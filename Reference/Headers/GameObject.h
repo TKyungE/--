@@ -42,6 +42,7 @@ public:
 		_bool		 bDead;
 		_bool		 bHit;
 		_int		 iLevelIndex;
+		_int		 iNextLevel;
 
 	}INFO;
 	typedef struct tagFrameInfo

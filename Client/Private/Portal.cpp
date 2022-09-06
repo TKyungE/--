@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Public\Portal.h"
 #include "GameInstance.h"
+#include "Level_Loading.h"
 
 CPortal::CPortal(LPDIRECT3DDEVICE9 _pGraphic_Device)
 	: CGameObject(_pGraphic_Device)
@@ -37,6 +38,7 @@ HRESULT CPortal::Initialize(void * pArg)
 	m_tFrame.iFrameStart = 0;
 	m_tFrame.iFrameEnd = 23;
 	m_tFrame.fFrameSpeed = 0.05f;
+	m_bLevel = false;
 
 	return S_OK;
 }
@@ -47,6 +49,22 @@ void CPortal::Tick(_float fTimeDelta)
 
 	OnTerrain();
 	Move_Frame(fTimeDelta);
+
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+
+	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_PORTAL, this)))
+	{
+		ERR_MSG(TEXT("Failed to Add CollisionGroup : CPortal"));
+		return;
+	}
+
+	Safe_Release(pInstance);
 }
 
 void CPortal::Late_Tick(_float fTimeDelta)
@@ -57,6 +75,17 @@ void CPortal::Late_Tick(_float fTimeDelta)
 
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+
+	if (pInstance->Collision(this, COLLISION_PLAYER))
+		m_bLevel = true;
+
+	Safe_Release(pInstance);
 }
 
 HRESULT CPortal::Render(void)
@@ -81,6 +110,10 @@ HRESULT CPortal::Render(void)
 		return E_FAIL;
 
 	On_SamplerState();
+	
+	if (g_bCollider)
+		m_pColliderCom->Render();
+	
 	return S_OK;
 }
 
@@ -95,6 +128,8 @@ HRESULT CPortal::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Portal"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
+	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
+		return E_FAIL;
 
 	CTransform::TRANSFORMDESC TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
@@ -227,6 +262,7 @@ void CPortal::Free(void)
 {
 	__super::Free();
 
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pVIBuffer);

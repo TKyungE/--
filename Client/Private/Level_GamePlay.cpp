@@ -12,8 +12,7 @@
 #include "House2.h"
 #include "BackGroundTree.h"
 #include "Layer.h"
-
-bool g_bCollider = false;
+#include "Portal.h"
 
 CLEVEL_GamePlay::CLEVEL_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -88,7 +87,7 @@ void CLEVEL_GamePlay::Tick(_float fTimeDelta)
 	}
 		
 	Create_Rain(fTimeDelta);
-
+	
 	Safe_Release(pGameInstance);
 }
 
@@ -97,16 +96,23 @@ void CLEVEL_GamePlay::Late_Tick(_float fTimeDelta)
 	__super::Late_Tick(fTimeDelta);
 
 	SetWindowText(g_hWnd, TEXT("게임플레이레벨입니다."));
-
+	
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	if (m_bNextLevel == true)
+	if (nullptr != pGameInstance->Find_Layer(LEVEL_LOGO, TEXT("Layer_Portal")))
 	{
-		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_TOWN))))
-			return;
+		for (auto& iter : pGameInstance->Find_Layer(LEVEL_LOGO, TEXT("Layer_Portal"))->Get_Objects())
+		{
+			if (dynamic_cast<CPortal*>(iter)->Get_Level())
+			{
+				LEVEL eLevel = (LEVEL)iter->Get_Info().iNextLevel;
+				if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, eLevel))))
+					return;
+			}
+		}
 	}
-
+	
 	Safe_Release(pGameInstance);
 }
 
@@ -151,9 +157,6 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 			return E_FAIL;
 	}
 
-
-
-
 	for (auto& iter : m_vecHouse2)
 	{
 		CHouse2::INDEXPOS indexpos;
@@ -163,11 +166,9 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		indexpos.vPos = iter.BackGroundPos;
 		indexpos.iTrun = iter.iTrun;
 
-
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House2"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
-
 
 	for (auto& iter : m_vecIndex)
 	{
@@ -226,10 +227,7 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 	
 	for (auto& iter : m_vMonsterPos1)
-	{
 		Info.vPos = iter;
-	}
-	
 	
 	/*if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Monster"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;*/
@@ -357,9 +355,10 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Portal(const _tchar * pLayerTag)
 	for (auto& iter : m_vecPortal)
 	{
 		CGameObject::INFO tInfo;
-		tInfo.iLevelIndex = LEVEL_TOWN;
+		tInfo.iLevelIndex = LEVEL_GAMEPLAY;
 		tInfo.vPos = iter.BackGroundPos;
 		tInfo.vScale = iter.vScale;
+		tInfo.iNextLevel = LEVEL_TOWN;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 			return E_FAIL;

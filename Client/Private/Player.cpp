@@ -108,7 +108,19 @@ void CPlayer::Tick(_float fTimeDelta)
 
 	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
 
-	m_pCollisionMgrCom->Add_ColiisionGroup(COLLISION_PLAYER, this);
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+	
+	Safe_AddRef(pInstance);
+
+	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_PLAYER, this)))
+	{
+		ERR_MSG(TEXT("Failed to Add CollisionGroup : CPlayer"));
+		return;
+	}
+
+	Safe_Release(pInstance);
 }
 
 void CPlayer::Late_Tick(_float fTimeDelta)
@@ -122,24 +134,32 @@ void CPlayer::Late_Tick(_float fTimeDelta)
 	}
 	OnBillboard();
 
-	if (m_pCollisionMgrCom->Collision(this, COLLISION_OBJECT))
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+
+	if (pInstance->Collision(this, COLLISION_OBJECT))
 	{
 		_float3 vBackPos;
-		if (fabs(m_pCollisionMgrCom->Get_Collision().x) < fabs(m_pCollisionMgrCom->Get_Collision().z))
+		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
 		{
-			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - m_pCollisionMgrCom->Get_Collision().x;
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
 			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
 		}
-		else if (fabs(m_pCollisionMgrCom->Get_Collision().z) < fabs(m_pCollisionMgrCom->Get_Collision().x))
+		else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
 		{
-			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - m_pCollisionMgrCom->Get_Collision().z;
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
 			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
 		}
 		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
-		
+
+	Safe_Release(pInstance);
+
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
 }
@@ -267,9 +287,6 @@ HRESULT CPlayer::SetUp_Components(void)
 		return E_FAIL;
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
-		return E_FAIL;
-
-	if (FAILED(__super::Add_Components(TEXT("Com_CollisionMgr"), LEVEL_STATIC, TEXT("Prototype_Component_CollisionMgr"), (CComponent**)&m_pCollisionMgrCom)))
 		return E_FAIL;
 
 	CTransform::TRANSFORMDESC TransformDesc;
@@ -621,7 +638,6 @@ void CPlayer::Free(void)
 
 	CKeyMgr::Get_Instance()->Destroy_Instance();
 
-	Safe_Release(m_pCollisionMgrCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pRendererCom);

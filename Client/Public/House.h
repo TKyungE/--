@@ -9,7 +9,6 @@ class CVIBuffer_Rect;
 class CVIBuffer_Cube;
 class CTexture;
 class CCollider;
-class CCollisionMgr;
 END
 
 BEGIN(Client)
@@ -51,7 +50,6 @@ private:
 	CTexture* m_pTextureCom2 = nullptr;
 
 	CCollider* m_pColliderCom = nullptr;
-	CCollisionMgr* m_pCollisionMgrCom = nullptr;
 
 private:
 	INDEXPOS	m_IndexPos;
