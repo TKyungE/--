@@ -230,7 +230,13 @@ void CPoisonArrow::OnBillboard()
 	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
 
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-	_float3 vScale = { 0.5f,0.5f,1.f };
+
+	_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_float3 vScale;
+	if(m_tInfo.vTargetPos.x > vPosition.x)
+		vScale = { -0.5f,-0.5f,1.f };
+	else
+		vScale = { 0.5f,0.5f,1.f };
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
 	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]* vScale.y);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
