@@ -25,22 +25,26 @@ public:
 public:
 	typedef struct tagInfo
 	{
-		CGameObject* pTerrain;//ui x박스용
-		CGameObject* pTarget;//ui slot용
-		_float3		 vPos;//ui중점 용도
+		_tchar*		 pstrPath;
+		CGameObject* pTarget;
+		CGameObject* pTerrain;
+		_float3		 vPos;
 		_float3		 vTargetPos;
+		_float3		 vScale;		// 임시용이긴 하지만 객체마다 사이즈가 필요할 수도 있지 않을까..
 		_float       fX; // (객체의 지름) 객체 생성할때 이니셜라이즈에서 스케일 맥인거 대입해줘야함.
-		_int		 iMaxHp;//ui 아이콘 클릭 시 그 아이콘의 위치를 확인하는 변수
-		_int		 iHp;//ui테스트
-		_int		 iMp;//ui 아이템 랜더 끄고 키는거
+		_int		 iMaxHp;
+		_int		 iHp;
+		_int		 iMp;
 		_int		 iDmg;
 		_int	     iTargetDmg;
-		_int		 iExp;//ui 고유번호
-		_int		 iMaxExp;//ui 사용키
+		_int		 iExp;
+		_int		 iMaxExp;
 		_int		 iMoney;
 		_bool		 bDead;
-		_bool		 bHit;//ui 온오프
+		_bool		 bHit;
 		_int		 iLevelIndex;
+		_int		 iNextLevel;
+
 	}INFO;
 	typedef struct tagFrameInfo
 	{
@@ -58,12 +62,10 @@ public: // 여기에 갯 셋 만들어서 인포 +- 관리하면될듯
 	void	Set_Dead() { m_tInfo.bDead = true; }
 	void	Set_LevelIndex(_int _iLevelIndex) { m_tInfo.iLevelIndex = _iLevelIndex; };
 	void	Set_Hp(_int _iDmg) { m_tInfo.iHp -= _iDmg; }
-	void	Set_MaxExp(_int _MaxExp) { m_tInfo.iMaxExp = _MaxExp; }
-	void	Set_MP(_int _iMp) { m_tInfo.iMp = _iMp; }
-	void	Set_Exp(_int _iExp) { m_tInfo.iExp = _iExp; }
-	void	Set_MaxHp(_int _iMaxHp) { m_tInfo.iMaxHp = _iMaxHp; }
-	void	Set_bHit(bool _bHit) { m_tInfo.bHit = _bHit; }//추가함
 	void	Set_Hit(_int _iDmg, _float3 _vPos) { m_tInfo.bHit = true; m_tInfo.iTargetDmg = _iDmg; m_tInfo.vTargetPos = _vPos; }
+	void	Set_bHit(_bool _bHit) { m_tInfo.bHit = _bHit; }
+	void	Set_Mp(_int _iMp) { m_tInfo.iMp += _iMp; }
+	void	Set_Exp(_int _iExp) { m_tInfo.iExp += _iExp; }
 protected:
 	LPDIRECT3DDEVICE9			m_pGraphic_Device = nullptr;
 
