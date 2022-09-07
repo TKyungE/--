@@ -85,7 +85,7 @@ HRESULT CSkillSlot::Render()
 	else//Å¸°ÙÀ» °¡Áö°íÀÖ´Ù¸é ±× Å¸°ÙÀÇ ·»´õ¸¦ ¶ç¾î¾ßÇÑ´Ù
 	{
 		m_tInfo.pTarget->Set_Info(m_tInfo);//m_tInfo.pTarget½½·ÔÀÌ °°°í Å¸°Ù
-		m_tInfo.pTarget->Set_MP(5);
+		m_tInfo.pTarget->Set_Mp(5);
 	}
 	
 	if (FAILED(SetUp_RenderState()))

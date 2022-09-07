@@ -88,7 +88,7 @@ HRESULT CInventorySlot::Render()
 		if (m_tInfo.pTarget != nullptr)
 		{
 			m_tInfo.pTarget->Set_Info(m_tInfo);//m_tInfo.pTarget½½·ÔÀÌ °°°í Å¸°Ù
-			m_tInfo.pTarget->Set_MP(5);
+			m_tInfo.pTarget->Set_Mp(5);
 		}
 		else
 		{
@@ -110,7 +110,7 @@ HRESULT CInventorySlot::Render()
 	if (m_tInfo.pTarget != nullptr)
 		{
 			
-			m_tInfo.pTarget->Set_MP(3);
+			m_tInfo.pTarget->Set_Mp(3);
 		}
 	}
 
