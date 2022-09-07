@@ -87,7 +87,10 @@ void CPlayer::Tick(_float fTimeDelta)
 	Get_PickingPoint();
 	Key_Input(fTimeDelta);
 	Player_Move(fTimeDelta);
-
+	if (m_tInfo.iHp >= m_tInfo.iMaxHp)
+	{
+		m_tInfo.iHp = m_tInfo.iMaxHp;
+	}
 	if (GetKeyState('N') & 0x8000)
 	{
 		if (m_tInfo.iHp > 0)

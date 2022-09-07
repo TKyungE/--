@@ -183,6 +183,7 @@
     <ClInclude Include="..\public\Help.h" />
     <ClInclude Include="..\public\House.h" />
     <ClInclude Include="..\public\HpPotion.h" />
+    <ClInclude Include="..\Public\InventorySlot.h" />
     <ClInclude Include="..\public\Level_ChoboField.h" />
     <ClInclude Include="..\public\Loading.h" />
     <ClInclude Include="..\public\Maiden.h" />
@@ -269,6 +270,7 @@
     <ClCompile Include="..\Private\Help.cpp" />
     <ClCompile Include="..\private\House.cpp" />
     <ClCompile Include="..\private\HpPotion.cpp" />
+    <ClCompile Include="..\Private\InventorySlot.cpp" />
     <ClCompile Include="..\private\Level_ChoboField.cpp" />
     <ClCompile Include="..\private\Loading.cpp" />
     <ClCompile Include="..\private\Maiden.cpp" />

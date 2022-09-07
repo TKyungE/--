@@ -29,7 +29,7 @@ HRESULT CQuickSlot::Initialize(void * pArg)
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
 	m_tInfo.pTarget = nullptr;
-	
+
 	m_fSizeX = 400.0f;
 	m_fSizeY = 50.0f;
 	m_fX = 600.f;
@@ -69,8 +69,8 @@ void CQuickSlot::Tick(_float fTimeDelta)
 
 	//Change();
 	QuickUse();
-	
-	
+
+
 
 }
 void CQuickSlot::Late_Tick(_float fTimeDelta)
@@ -126,21 +126,21 @@ void CQuickSlot::QuickUse()
 			{
 				if (CKeyMgr::Get_Instance()->Key_Down('Z'))
 				{
-					m_vSlot[i]->Get_Info().pTarget->Set_Exp(2);
+					m_vSlot[i]->Get_Info().pTarget->Set_UiExp(2);
 				}
 			}
 			if (i == 1)
 			{
 				if (CKeyMgr::Get_Instance()->Key_Down('X'))
 				{
-					m_vSlot[i]->Get_Info().pTarget->Set_Exp(2);
+					m_vSlot[i]->Get_Info().pTarget->Set_UiExp(2);
 				}
 			}
 			if (i == 2)
 			{
 				if (CKeyMgr::Get_Instance()->Key_Down('C'))
 				{
-					m_vSlot[i]->Get_Info().pTarget->Set_Exp(2);
+					m_vSlot[i]->Get_Info().pTarget->Set_UiExp(2);
 				}
 
 			}

@@ -41,7 +41,7 @@ HRESULT CInventory::Initialize(void * pArg)
 
 	Safe_AddRef(pGameInstance);
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_XBox"), m_tInfo.iLevelIndex, TEXT("Layer_UI"), &m_tInfo);
-	
+
 	for (int j = 0; j < 3; ++j)
 	{
 		for (int i = 0; i < 5; ++i)
@@ -49,14 +49,14 @@ HRESULT CInventory::Initialize(void * pArg)
 
 			m_tInfo.vPos.x = 402 + i*50.f;
 			m_tInfo.vPos.y = 365.f + j*50.f;
-			m_tInfo.iHp = i+j*30+1;
+			m_tInfo.iHp = i + j * 30 + 1;
 			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_InvenSlot"), m_tInfo.iLevelIndex, TEXT("Layer_Slot"), &m_tInfo);
 			m_vSlot.push_back(pGameInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Slot"))->Get_Objects().back());
 		}
 	}
 
 
-	m_lTemp=pGameInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_SkillSlot"))->Get_Objects();
+	m_lTemp = pGameInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_SkillSlot"))->Get_Objects();
 	for (auto& iter : m_lTemp)
 	{
 		m_vQuick.push_back(iter);
@@ -112,11 +112,11 @@ void CInventory::Tick(_float fTimeDelta)
 		}
 		/*if (m_iTemp != nullptr)
 		{
-			if (m_iTemp->Get_Info().vPos.y > 49 || m_iTemp->Get_Info().vPos.y<0 || m_iTemp->Get_Info().vPos.x<395.f || m_iTemp->Get_Info().vPos.x>805.f)
-			{
-				m_vQuick[m_iSour]->Set_Target(m_iTemp);
-				m_bCheck = false;
-			}
+		if (m_iTemp->Get_Info().vPos.y > 49 || m_iTemp->Get_Info().vPos.y<0 || m_iTemp->Get_Info().vPos.x<395.f || m_iTemp->Get_Info().vPos.x>805.f)
+		{
+		m_vQuick[m_iSour]->Set_Target(m_iTemp);
+		m_bCheck = false;
+		}
 
 		}*/
 	}
@@ -238,9 +238,9 @@ void CInventory::Change(void)
 					if ((CKeyMgr::Get_Instance()->Key_Up(VK_LBUTTON)) && m_bCheck == true)
 					{
 						//만약에 내린곳이 인벤토리와 같은 벡터 번째이면 타겟을 삭제하고 그거를 다시 인벤에 푸쉬백해주기
-						if(m_iSour!= i + j * 5)
-						
-						m_vSlot[m_iSour]->Set_Target(m_vSlot[i + j * 5]->Get_Info().pTarget);
+						if (m_iSour != i + j * 5)
+
+							m_vSlot[m_iSour]->Set_Target(m_vSlot[i + j * 5]->Get_Info().pTarget);
 						m_vSlot[i + j * 5]->Set_Target(m_iTemp);
 						a = 0;
 						m_bCheck = false;
