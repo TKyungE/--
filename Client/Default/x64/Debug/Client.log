@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿  stdafx.cpp
   Client.cpp
   XBox.cpp
@@ -99,4 +100,7 @@ c:\users\태경\desktop\라그(sr)\라그v1.0\client\private\hppotion.cpp(143): 
   코드를 생성하고 있습니다...
   LINK : C:\Users\태경\Desktop\라그(SR)\라그v1.0\Client\Bin\Client.pdb 프로그램 데이터베이스가 없습니다. 전체 링크를 수행하고 있습니다.
   Client.vcxproj -> C:\Users\태경\Desktop\라그(SR)\라그v1.0\Client\Default\..\Bin\Client.exe
+=======
+﻿  Client.vcxproj -> C:\Users\태경\Desktop\라그(SR)\라그v1.0\Client\Default\..\Bin\Client.exe
+>>>>>>> Tkyung_Base
   Client.vcxproj -> ..\Bin\Client.pdb (Full PDB)
