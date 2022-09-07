@@ -63,8 +63,17 @@ void CVillage_Quest1::Late_Tick(_float fTimeDelta)
 
 
 	OnBillboard();
-	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+
+	Safe_AddRef(pInstance);
+
+	if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
+	{
+		if (nullptr != m_pRendererCom)
+			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
+	}
+	Safe_Release(pInstance);
 }
 
 HRESULT CVillage_Quest1::Render(void)
@@ -74,7 +83,7 @@ HRESULT CVillage_Quest1::Render(void)
 	Off_SamplerState();
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tInfo.iMp)))
 		return E_FAIL;
 
 
@@ -97,7 +106,7 @@ HRESULT CVillage_Quest1::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBuffer)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Village_Quest1"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_NPC"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 
@@ -198,7 +207,7 @@ CVillage_Quest1 * CVillage_Quest1::Create(LPDIRECT3DDEVICE9 _pGraphic_Device)
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		ERR_MSG(TEXT("Failed to Created : CPortal"));
+		ERR_MSG(TEXT("Failed to Created : CVillage_Quest1"));
 		Safe_Release(pInstance);
 	}
 

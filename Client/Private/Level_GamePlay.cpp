@@ -4,12 +4,15 @@
 #include "GameInstance.h"
 #include "Camera_Dynamic.h"
 #include "SoundMgr.h"
-#include "CollisionMgr.h"
 #include "KeyMgr.h"
 #include "BackGroundRect.h" 
 #include "BackGroundTree.h"
 #include "Level_Loading.h"
 #include "House.h"
+#include "House2.h"
+#include "Layer.h"
+#include "Portal.h"
+
 
 CLEVEL_GamePlay::CLEVEL_GamePlay(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -61,9 +64,9 @@ void CLEVEL_GamePlay::Tick(_float fTimeDelta)
 	//fSound += (pGameInstance->Get_DIMMoveState(DIMM_WHEEL)*fTimeDelta) / 100;
 
 	if (CKeyMgr::Get_Instance()->Key_Down('O'))
-		fSound += 0.01;
+		fSound += 0.01f;
 	if (CKeyMgr::Get_Instance()->Key_Down('P'))
-		fSound -= 0.01;
+		fSound -= 0.01f;
 	
 	if (fSound > 1.f)
 		fSound = 1.f;
@@ -72,8 +75,19 @@ void CLEVEL_GamePlay::Tick(_float fTimeDelta)
 
 	CSoundMgr::Get_Instance()->SetSoundVolume(SOUND_BGM, fSound);
  	
+	if (GetKeyState('Y') < 0)
+	{
+		if (!g_bCollider)
+			g_bCollider = true;
+	}
+	if (GetKeyState('U') < 0)
+	{
+		if (g_bCollider)
+			g_bCollider = false;
+	}
+		
 	Create_Rain(fTimeDelta);
-
+	
 	Safe_Release(pGameInstance);
 }
 
@@ -82,57 +96,8 @@ void CLEVEL_GamePlay::Late_Tick(_float fTimeDelta)
 	__super::Late_Tick(fTimeDelta);
 
 	SetWindowText(g_hWnd, TEXT("게임플레이레벨입니다."));
-
-	//충돌 사용법
-	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
-	Safe_AddRef(pGameInstance);
 	
-
-	CGameObject* Dest;
-	CGameObject* Sour;
-	
-	
-	if (pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_Skill")) != nullptr)
-	{
-		if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_Skill"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects(), &Dest, &Sour))
-		{
-			
-			Dest->Set_Dead();
-
-			if(Dest->Get_Info().iMoney == 33)
-			{ 
-				fCollTime += fTimeDelta;
-				if (fCollTime > 0.3f)
-				{
-					_float3 vPos = Get_CollisionPos(Dest, Sour);
-
-					Sour->Set_Hit(Dest->Get_Info().iDmg, vPos);
-					Sour->Set_Hp(Dest->Get_Info().iDmg);
-					fCollTime = 0.f;
-				}
-			}
-			else
-			{
-				_float3 vPos = Get_CollisionPos(Dest, Sour);
-
-				Sour->Set_Hit(Dest->Get_Info().iDmg, vPos);
-				Sour->Set_Hp(Dest->Get_Info().iDmg);
-			}
-			if (Sour->Get_Info().iHp <= 0)
-				Sour->Set_Dead();
-		}
-	}
-	if (CCollisionMgr::Collision_Sphere(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Player"))->Get_Objects(), pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Portal"))->Get_Objects(), &Dest, &Sour))
-	{
-		m_bNextLevel = true;
-		pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(Dest->Get_Info());
-	}
-	if (m_bNextLevel == true)
-	{
-		if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, LEVEL_TOWN))))
-			return;
-	}
-	Safe_Release(pGameInstance);
+	Open_Level();
 }
 
 HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
@@ -140,37 +105,16 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_GAMEPLAY, pLayerTag, (CGameObject**)&Info.pTerrain)))
+	CGameObject::INFO info;
+	ZeroMemory(&info, sizeof(CGameObject::INFO));
+	info.pstrPath = TEXT("../../Data/Terrain/TownHg1.dat");
+	info.iLevelIndex = LEVEL_GAMEPLAY;
+	
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_GAMEPLAY, pLayerTag, &info)))
 		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_GAMEPLAY, pLayerTag)))
 		return E_FAIL;
-
-	
-
-	for (auto& iter : m_vecIndex)
-	{
-		CBackGroundRect::INDEXPOS indexpos;
-		ZeroMemory(&indexpos, sizeof(CBackGroundRect::INDEXPOS));
-		indexpos.iIndex = iter.iIndex;
-		indexpos.vScale = iter.vScale;
-		indexpos.vPos = iter.BackGroundPos;
-
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundRect"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
-			return E_FAIL;
-		
-	}
-	for (auto& iter : m_vecHouse)
-	{
-		CHouse::INDEXPOS indexpos;
-		ZeroMemory(&indexpos, sizeof(CHouse::INDEXPOS));
-		indexpos.iIndex = iter.iIndex;
-		indexpos.vScale = iter.vScale;
-		indexpos.vPos = iter.BackGroundPos;
-
-//		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
-//			return E_FAIL;
-	}
 
 	for (auto& iter : m_vecTree)
 	{
@@ -183,23 +127,62 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_BackGround(const _tchar * pLayerTag)
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundTree"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
-	CGameObject::INFO tInfo;
-	for (int i = 0; i < 100; ++i)
-	{
-		_float iSour = rand() % 90000 * 0.001f;
-		_float iTemp = rand() % 90000 * 0.001f;
 
-		_float3 vPos = { 0.f,0.f,0.f };
-		tInfo.vPos.x = vPos.x + iSour;
-		tInfo.vPos.y = vPos.y;
-		tInfo.vPos.z = vPos.z + iTemp;
-		tInfo.iLevelIndex = LEVEL_GAMEPLAY;
-		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Stone"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	for (auto& iter : m_vecHouse)
+	{
+		CHouse::INDEXPOS indexpos;
+		ZeroMemory(&indexpos, sizeof(CHouse::INDEXPOS));
+		indexpos.iIndex = iter.iIndex;
+		indexpos.vScale = iter.vScale;
+		indexpos.vPos = iter.BackGroundPos;
+		indexpos.iTrun = iter.iTrun;
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
 			return E_FAIL;
 	}
+
+	for (auto& iter : m_vecHouse2)
+	{
+		CHouse2::INDEXPOS indexpos;
+		ZeroMemory(&indexpos, sizeof(CHouse2::INDEXPOS));
+		indexpos.iIndex = iter.iIndex;
+		indexpos.vScale = iter.vScale;
+		indexpos.vPos = iter.BackGroundPos;
+		indexpos.iTrun = iter.iTrun;
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_House2"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
+			return E_FAIL;
+	}
+
+	for (auto& iter : m_vecIndex)
+	{
+		CBackGroundRect::INDEXPOS indexpos;
+		ZeroMemory(&indexpos, sizeof(CBackGroundRect::INDEXPOS));
+		indexpos.iIndex = iter.iIndex;
+		indexpos.vScale = iter.vScale;
+		indexpos.vPos = iter.BackGroundPos;
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BackGroundRect"), LEVEL_GAMEPLAY, pLayerTag, &indexpos)))
+			return E_FAIL;
+	}
+
+
+
+	//CGameObject::INFO tInfo;
+	//for (int i = 0; i < 100; ++i)
+	//{
+	//	_float iSour = rand() % 90000 * 0.001f;
+	//	_float iTemp = rand() % 90000 * 0.001f;
+
+	//	_float3 vPos = { 0.f,0.f,0.f };
+	//	tInfo.vPos.x = vPos.x + iSour;
+	//	tInfo.vPos.y = vPos.y;
+	//	tInfo.vPos.z = vPos.z + iTemp;
+	//	tInfo.iLevelIndex = LEVEL_GAMEPLAY;
+	//	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Stone"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	//		return E_FAIL;
+	//}
 	
-
-
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -213,7 +196,16 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Player(const _tchar * pLayerTag)
 	CGameObject::INFO tInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Get_Info();
 
 	memcpy(&Info, &tInfo, sizeof(CGameObject::INFO));
+	if (Info.iLevelIndex == LEVEL_TOWN)
+	{
+		Info.vPos = m_vPlayerPos;
+	}
+	else
+		Info.vPos = m_vBackPos;
+	
 	Info.iLevelIndex = LEVEL_GAMEPLAY;
+	
+
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
 		return E_FAIL;
 
@@ -227,23 +219,204 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
+	Info.iLevelIndex = LEVEL_GAMEPLAY;
+
+	auto iter = m_vMonsterPos1.begin();
+
+	_uint iCount = 0;
 	
-	for (auto& iter : m_vMonsterPos1)
+	for (; iter != m_vMonsterPos1.end(); ++iter)
 	{
-		Info.vPos = iter;
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+		
 	}
-	
-	
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Monster"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+		
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+		
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+		
+	}
 
 
-	Info.vPos = { 15.f,0.f,15.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_FireDragon"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
-	Info.vPos = { 10.f,0.f,10.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
-		return E_FAIL;
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+		
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+		
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+		
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Bigfoot"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+		
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+		
+	}
+
+	
+
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Alligator"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+	for (; iter != m_vMonsterPos1.end(); ++iter)
+	{
+		if (iCount >= 1)
+		{
+			iCount = 0;
+			break;
+		}
+
+		Info.vPos = (*iter);
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_ElderWilow"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -329,14 +502,54 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Portal(const _tchar * pLayerTag)
 {
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
-	CGameObject::INFO tInfo;
-	tInfo.iLevelIndex = LEVEL_GAMEPLAY;
-	tInfo.vPos = { 20.f,0.f,2.f };
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
-		return E_FAIL;
+	
+	auto iter = m_vecPortal.begin();
+
+	_uint iCount = 0;
+	for (; iter != m_vecPortal.end(); ++iter)
+	{
+		if (iCount > 0)
+		{
+			iCount = 0;
+			break;
+		}
+		CGameObject::INFO tInfo;
+		tInfo.iLevelIndex = LEVEL_GAMEPLAY;
+		tInfo.vPos = iter->BackGroundPos;
+		tInfo.vScale = iter->vScale;
+		tInfo.iNextLevel = LEVEL_TOWN;
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+	for (; iter != m_vecPortal.end(); ++iter)
+	{
+		if (iCount > 0)
+		{
+			iCount = 0;
+			break;
+		}
+		CGameObject::INFO tInfo;
+		tInfo.iLevelIndex = LEVEL_GAMEPLAY;
+		tInfo.vPos = iter->BackGroundPos;
+		tInfo.vScale = iter->vScale;
+		tInfo.iNextLevel = LEVEL_CHOBOFIELD;
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+			return E_FAIL;
+
+		++iCount;
+	}
+
+
+
 	Safe_Release(pGameInstance);
 	return S_OK;
 }
+
 _float3 CLEVEL_GamePlay::Get_CollisionPos(CGameObject * pDest, CGameObject * pSour)
 {
 	_float3 vLook = *(_float3*)&pDest->Get_World().m[3][0] - *(_float3*)&pSour->Get_World().m[3][0];
@@ -355,38 +568,75 @@ _float3 CLEVEL_GamePlay::Get_CollisionPos(CGameObject * pDest, CGameObject * pSo
 	return CollisionPos;
 }
 
+void CLEVEL_GamePlay::Open_Level(void)
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	if (nullptr != pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Portal")))
+	{
+		for (auto& iter : pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Portal"))->Get_Objects())
+		{
+			if (dynamic_cast<CPortal*>(iter)->Get_Level())
+			{
+				pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Player"))->Get_Objects().front()->Get_Info());
+				LEVEL eLevel = (LEVEL)iter->Get_Info().iNextLevel;
+				if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, eLevel))))
+					return;
+			}
+		}
+	}
+
+	Safe_Release(pGameInstance);
+}
+
 
 
 void CLEVEL_GamePlay::LoadData()
 {
-	HANDLE hFile = CreateFile(TEXT("../../Data/Pos.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(TEXT("../../Data/TownHgPos1.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		return;
 
 	DWORD	dwByte = 0;
 
-	_float3 vPos1;
-	_uint iMSize, iIndexSize, iTreeSize, iHouseSize;
+
+	_float3 vPos1, vPos2;
+	_uint iMSize, iIndexSize, iTreeSize, iHouseSize, iHouse2Size, iPortalSize, iNPCSize;
 	_tchar str1[MAX_PATH];
 	_tchar str2[MAX_PATH];
 	_tchar str3[MAX_PATH];
 	_tchar str4[MAX_PATH];
+	_tchar str5[MAX_PATH];
+	_tchar str6[MAX_PATH];
+	_tchar str7[MAX_PATH];
 
 	ReadFile(hFile, vPos1, sizeof(_float3), &dwByte, nullptr);
 	m_vPlayerPos = vPos1;
+
+	ReadFile(hFile, vPos2, sizeof(_float3), &dwByte, nullptr);
+	m_vBackPos = vPos2;
 
 	ReadFile(hFile, str1, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str2, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 	ReadFile(hFile, str4, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str5, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str6, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+	ReadFile(hFile, str7, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+
 
 	iMSize = stoi(str1);
 	iIndexSize = stoi(str2);
 	iTreeSize = stoi(str3);
 	iHouseSize = stoi(str4);
+	iHouse2Size = stoi(str5);
+	iPortalSize = stoi(str6);
+	iNPCSize = stoi(str7);
 
-	
+
 
 	while (true)
 	{
@@ -404,8 +654,6 @@ void CLEVEL_GamePlay::LoadData()
 			vPos = Pos;
 
 			m_vMonsterPos1.push_back(vPos);
-
-			
 		}
 
 		for (_uint i = 0; i < iIndexSize; ++i)
@@ -463,21 +711,98 @@ void CLEVEL_GamePlay::LoadData()
 
 			_float3 BackPos, Scale;
 			_tchar str3[MAX_PATH];
-			_uint Index;
+			_tchar str4[MAX_PATH];
+			_uint Index, turn;
 
 			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
 			ReadFile(hFile, &Scale, sizeof(_float3), &dwByte, nullptr);
 			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+			ReadFile(hFile, str4, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
 
 			Index = stoi(str3);
+			turn = stoi(str4);
 
 			INDEXPOS HousePos;
 
 			HousePos.BackGroundPos = BackPos;
 			HousePos.vScale = Scale;
 			HousePos.iIndex = Index;
-
+			HousePos.iTrun = turn;
 			m_vecHouse.push_back(HousePos);
+		}
+
+		for (_uint i = 0; i < iHouse2Size; ++i)
+		{
+			if (0 == dwByte)
+				break;
+
+			_float3 BackPos, Scale;
+			_tchar str3[MAX_PATH];
+			_tchar str4[MAX_PATH];
+			_uint Index, turn;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &Scale, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+			ReadFile(hFile, str4, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+			turn = stoi(str4);
+
+			INDEXPOS HousePos;
+
+			HousePos.BackGroundPos = BackPos;
+			HousePos.vScale = Scale;
+			HousePos.iIndex = Index;
+			HousePos.iTrun = turn;
+			m_vecHouse2.push_back(HousePos);
+		}
+
+		for (_uint i = 0; i < iPortalSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+
+			_float3 BackPos, Scale;
+			_tchar str3[MAX_PATH];
+			_tchar str4[MAX_PATH];
+			_uint Index, turn;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, &Scale, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+			ReadFile(hFile, str4, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+			turn = stoi(str4);
+
+			INDEXPOS PortalPos;
+
+			PortalPos.BackGroundPos = BackPos;
+			PortalPos.vScale = Scale;
+			PortalPos.iIndex = Index;
+			PortalPos.iTrun = turn;
+			m_vecPortal.push_back(PortalPos);
+		}
+
+		for (_uint i = 0; i < iNPCSize; ++i)
+		{
+			if (0 == dwByte)
+				break;
+			_float3 BackPos;
+			_tchar str3[MAX_PATH];
+			_uint Index;
+
+			ReadFile(hFile, &BackPos, sizeof(_float3), &dwByte, nullptr);
+			ReadFile(hFile, str3, sizeof(_tchar) * MAX_PATH, &dwByte, nullptr);
+
+			Index = stoi(str3);
+			INDEXPOS NPCPos;
+
+			NPCPos.BackGroundPos = BackPos;
+			NPCPos.iIndex = Index;
+
+			m_vecNPC.push_back(NPCPos);
 		}
 
 		if (0 == dwByte)
@@ -489,32 +814,31 @@ void CLEVEL_GamePlay::LoadData()
 
 void CLEVEL_GamePlay::Create_Rain(_float fTimeDelta)
 {
-	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
-	Safe_AddRef(pGameInstance);
+	//CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	//Safe_AddRef(pGameInstance);
 
-	CGameObject::INFO tInfo;
-	fRainTime += fTimeDelta;
-	if (fRainTime > 0.3f)
-	{
-		fRainTime = 0.f;
-		for (int i = 0; i < 30; ++i)
-		{
-			_float iSour = rand() % 60000 * 0.001f;
-			_float iTemp = rand() % 40000 * 0.001f;
+	//CGameObject::INFO tInfo;
+	//fRainTime += fTimeDelta;
+	//if (fRainTime > 0.3f)
+	//{
+	//	fRainTime = 0.f;
+	//	for (int i = 0; i < 30; ++i)
+	//	{
+	//		_float iSour = rand() % 60000 * 0.001f;
+	//		_float iTemp = rand() % 40000 * 0.001f;
 
-			_float3 vPos = { 0.f,0.f,0.f };
-			tInfo.vPos.x = vPos.x + iSour;
-			tInfo.vPos.y = vPos.y;
-			tInfo.vPos.z = vPos.z + iTemp;
+	//		_float3 vPos = { 0.f,0.f,0.f };
+	//		tInfo.vPos.x = vPos.x + iSour;
+	//		tInfo.vPos.y = vPos.y;
+	//		tInfo.vPos.z = vPos.z + iTemp;
 
-			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Rain"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
-				
-		}
-	}
-	Safe_Release(pGameInstance);
+	//		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Rain"), LEVEL_CHOBOFIELD, TEXT("Layer_Effect"), &tInfo);
+	//			
+	//	}
+	//}
+	//Safe_Release(pGameInstance);
 
 }
-
 
 CLEVEL_GamePlay * CLEVEL_GamePlay::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 {
@@ -532,7 +856,4 @@ CLEVEL_GamePlay * CLEVEL_GamePlay::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
 void CLEVEL_GamePlay::Free()
 {
 	__super::Free();
-
-	
-
 }

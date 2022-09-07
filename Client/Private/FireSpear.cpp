@@ -61,17 +61,33 @@ void CFireSpear::Tick(_float fTimeDelta)
 	{
 		Create_Fire(TEXT("Layer_Skill"));
 	}
-	
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+
+	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_MONSTERSKILL, this)))
+	{
+		ERR_MSG(TEXT("Failed to Add CollisionGroup : CThunderSword"));
+		return;
+	}
+
+	Safe_Release(pInstance);
 }
 
 void CFireSpear::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-
+	m_CollTime += fTimeDelta;
 	Motion_Change();
-	
-
+	if (m_CollTime > 0.3f)
+	{
+		CheckColl();
+	}
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }
@@ -101,6 +117,8 @@ HRESULT CFireSpear::Render()
 		return E_FAIL;
 
 	On_SamplerState();
+	if (g_bCollider)
+		m_pColliderCom->Render();
 	return S_OK;
 }
 HRESULT CFireSpear::Create_Fire(const _tchar * pLayerTag)
@@ -202,7 +220,8 @@ HRESULT CFireSpear::SetUp_Components()
 		return E_FAIL;
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer2"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom2)))
 		return E_FAIL;
-
+	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
+		return E_FAIL;
 	/* For.Com_Transform */
 	CTransform::TRANSFORMDESC		TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
@@ -296,11 +315,47 @@ _float4x4 CFireSpear::Get_World(void)
 void CFireSpear::Free()
 {
 	__super::Free();
-
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pTransformCom2);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pVIBufferCom2);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pTextureCom);
+}
+void CFireSpear::CheckColl()
+{
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+	CGameObject* pTarget;
+	if (pInstance->Collision(this, COLLISION_PLAYER, &pTarget))
+	{
+		pTarget->Set_Hp(m_tInfo.iDmg);
+		pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
+		if (pTarget->Get_Info().iHp <= 0)
+			pTarget->Set_Dead();
+	//	Set_Dead();
+	}
+
+	Safe_Release(pInstance);
+}
+_float3 CFireSpear::Get_CollisionPos(CGameObject * pDest, CGameObject * pSour)
+{
+	_float3 vLook = *(_float3*)&pDest->Get_World().m[3][0] - *(_float3*)&pSour->Get_World().m[3][0];
+	D3DXVec3Normalize(&vLook, &vLook);
+
+	vLook = vLook * 0.5f;
+
+	_float Angle = D3DXVec3Dot(&vLook, (_float3*)&pSour->Get_World().m[1][0]);
+	_float3 SourUp = *(_float3*)&pSour->Get_World().m[1][0];
+	_float3 Proj = (Angle / D3DXVec3Length(&SourUp) * D3DXVec3Length(&SourUp)) * *(_float3*)&pSour->Get_World().m[1][0];
+
+	_float3 CollisionPos = *(_float3*)&pSour->Get_World().m[3][0] + Proj;
+//	CollisionPos.y -= 0.8f;
+	CollisionPos.x = pDest->Get_World().m[3][0];
+
+	return CollisionPos;
 }

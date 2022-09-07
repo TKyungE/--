@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "..\Public\HpPotion.h"
 #include"GameInstance.h"
-#include"Layer.h"
+
 CHpPotion::CHpPotion(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:CGameObject(pGraphic_Device)
 {
@@ -35,44 +35,12 @@ HRESULT CHpPotion::Initialize(void * pArg)
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 	
 
-	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
-
-	Safe_AddRef(pGameInstance);
-
-	pTarget=pGameInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Player"))->Get_Objects().back();
-
-	Safe_Release(pGameInstance);
-
 	return S_OK;
 }
 
 void CHpPotion::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-
-	if (m_tInfo.iMp == 5)
-	{
-		RECT		rcRect;
-		SetRect(&rcRect, (int)(m_tInfo.vPos.x - m_fSizeX * 0.5f), (int)(m_tInfo.vPos.y - m_fSizeY * 0.5f), (int)(m_tInfo.vPos.x + m_fSizeX * 0.5f), (int)(m_tInfo.vPos.y + m_fSizeY * 0.5f));
-
-		POINT		ptMouse;
-		GetCursorPos(&ptMouse);
-		ScreenToClient(g_hWnd, &ptMouse);
-
-		if (PtInRect(&rcRect, ptMouse))
-		{
-
-			if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON))
-			{
-				m_tInfo.vPos.x = ptMouse.x;
-				m_tInfo.vPos.y = ptMouse.y;
-			}
-
-		}
-
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_tInfo.vPos.x - g_iWinSizeX * 0.5f, -m_tInfo.vPos.y + g_iWinSizeY * 0.5f, 0.f));
-	}
-
 	RECT		rcRect;
 	SetRect(&rcRect, (int)(m_tInfo.vPos.x - m_fSizeX * 0.5f), (int)(m_tInfo.vPos.y - m_fSizeY * 0.5f), (int)(m_tInfo.vPos.x + m_fSizeX * 0.5f), (int)(m_tInfo.vPos.y + m_fSizeY * 0.5f));
 
@@ -82,16 +50,16 @@ void CHpPotion::Tick(_float fTimeDelta)
 
 	if (PtInRect(&rcRect, ptMouse))
 	{
-		if (CKeyMgr::Get_Instance()->Key_Down(VK_RBUTTON))
+
+		if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON))
 		{
-			m_tInfo.iExp = 2;
+			m_tInfo.vPos.x = (_float)ptMouse.x;
+			m_tInfo.vPos.y = (_float)ptMouse.y;
 		}
+
 	}
 
-	if (m_tInfo.iExp == 2)
-	{
-		Use();
-	}
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_tInfo.vPos.x - g_iWinSizeX * 0.5f, -m_tInfo.vPos.y + g_iWinSizeY * 0.5f, 0.f));
 
 }
 void CHpPotion::Late_Tick(_float fTimeDelta)
@@ -104,44 +72,31 @@ void CHpPotion::Late_Tick(_float fTimeDelta)
 }
 
 HRESULT CHpPotion::Render()
-
 {
-	if (m_tInfo.iMp == 5)
-	{
-		if (FAILED(__super::Render()))
-			return E_FAIL;
 
-		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-			return E_FAIL;
+	if (FAILED(__super::Render()))
+		return E_FAIL;
 
-		_float4x4		ViewMatrix;
-		D3DXMatrixIdentity(&ViewMatrix);
+	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+		return E_FAIL;
 
-		m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
-		m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
+	_float4x4		ViewMatrix;
+	D3DXMatrixIdentity(&ViewMatrix);
 
-		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(1)))
-			return E_FAIL;
+	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
+	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
 
-		if (FAILED(SetUp_RenderState()))
-			return E_FAIL;
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(1)))
+		return E_FAIL;
 
-		m_pVIBufferCom->Render();
+	if (FAILED(SetUp_RenderState()))
+		return E_FAIL;
 
-		if (FAILED(Release_RenderState()))
-			return E_FAIL;
-	}
+	m_pVIBufferCom->Render();
+
+	if (FAILED(Release_RenderState()))
+		return E_FAIL;
 	return S_OK;
-	
-}
-
-void CHpPotion::Use(void)
-{
-	if (pTarget->Get_Info().iHp != pTarget->Get_Info().iMaxHp)
-	{
-		pTarget->Set_Hp(-(pTarget->Get_Info().iMaxHp*0.3));
-		Set_Dead();
-	}
 }
 
 HRESULT CHpPotion::SetUp_Components()

@@ -22,7 +22,7 @@ HRESULT CMainApp::Initialize()
 	Graphic_Desc.iWinSizeY = g_iWinSizeY;
 	Graphic_Desc.eWinMode = GRAPHIC_DESC::MODE_WIN;
 
-	if (FAILED(m_pGameInstance->Initialize_Engine(g_hInst, LEVEL_END, Graphic_Desc, &m_pGraphic_Device)))
+	if (FAILED(m_pGameInstance->Initialize_Engine(g_hInst, LEVEL_END, COLLISION_END, Graphic_Desc, &m_pGraphic_Device)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_SamplerState()))
@@ -103,6 +103,8 @@ HRESULT CMainApp::Ready_Prototype_Component()
 
 	/* For.Prototype_Component_VIBuffer_Rect */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), CVIBuffer_Rect::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect2"), CVIBuffer_Rect2::Create(m_pGraphic_Device))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Cube"),CVIBuffer_Cube::Create(m_pGraphic_Device))))
 		return E_FAIL;

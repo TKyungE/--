@@ -8,6 +8,7 @@ class CTransform;
 class CVIBuffer_Rect;
 class CVIBuffer_Cube;
 class CTexture;
+class CCollider;
 END
 
 BEGIN(Client)
@@ -20,6 +21,7 @@ public:
 		_float3		vPos;
 		_float3		vScale;
 		_uint	iIndex;
+		_uint iTrun;
 	}INDEXPOS;
 
 private:
@@ -46,6 +48,9 @@ private:
 	CVIBuffer_Cube* m_pVIBufferCube2 = nullptr;
 	CTexture* m_pTextureCom = nullptr;
 	CTexture* m_pTextureCom2 = nullptr;
+
+	CCollider* m_pColliderCom = nullptr;
+
 private:
 	INDEXPOS	m_IndexPos;
 

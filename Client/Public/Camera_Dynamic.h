@@ -33,7 +33,7 @@ private:
 	
 private:
 	_float3 m_vecCameraNormal;
-	_float m_YfAngle = 0.f;
+	_float m_YfAngle = 40.f;
 	_float m_XfAngle = 0.f;
 	_float4x4 m_matRotY;
 	_float4x4 m_matRotX;

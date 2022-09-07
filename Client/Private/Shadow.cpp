@@ -158,13 +158,10 @@ void CShadow::OnTerrain()
 }
 void CShadow::Set_TargetPos()
 {
-	if (/*m_tInfo.pTarget->Get_Info().iHp <= 0 ||*/ m_tInfo.pTarget->Get_Info().bDead)
-	{
-		Set_Dead();
-	}
-	_float3 vPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 	
-
+	_float3 vPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+	if (m_tInfo.pTarget->Get_Info().iHp <= 0)
+		Set_Dead();
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 }
 HRESULT CShadow::TextureRender()

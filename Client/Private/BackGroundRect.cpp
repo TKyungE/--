@@ -30,6 +30,10 @@ HRESULT CBackGroundRect::Initialize(void * pArg)
 		return E_FAIL;
 	
 	memcpy(&m_IndexPos, pArg, sizeof(INDEXPOS));
+	
+	m_pTransformCom->Set_Scaled(m_IndexPos.vScale);
+
+	m_IndexPos.vPos.y += 0.5f * m_IndexPos.vScale.y;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_IndexPos.vPos);
 
@@ -40,7 +44,7 @@ void CBackGroundRect::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
-	OnTerrain();
+	//OnTerrain();
 }
 
 void CBackGroundRect::Late_Tick(_float fTimeDelta)
@@ -49,8 +53,16 @@ void CBackGroundRect::Late_Tick(_float fTimeDelta)
 
 	OnBillBoard();
 
-	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+
+	Safe_AddRef(pInstance);
+
+	if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
+	{
+		if (nullptr != m_pRendererCom)
+			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
+	}
+	Safe_Release(pInstance);
 }
 
 HRESULT CBackGroundRect::Render(void)
@@ -110,6 +122,7 @@ HRESULT CBackGroundRect::SetUp_RenderState(void)
 	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_NONE);
 	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_NONE);
 	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+
 	return S_OK;
 }
 

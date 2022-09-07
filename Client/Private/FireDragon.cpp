@@ -260,7 +260,8 @@ void CFireDragon::Tick(_float fTimeDelta)
 
 	m_tInfo.bDead = false;
 
-	m_pColliderCom->Set_Transform(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	if (g_bCollider)
+		m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 1.f);
 }
 
 void CFireDragon::Late_Tick(_float fTimeDelta)
@@ -272,8 +273,17 @@ void CFireDragon::Late_Tick(_float fTimeDelta)
 		Motion_Change();
 	}
 	OnBillboard();
-	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+
+	Safe_AddRef(pInstance);
+
+	if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
+	{
+		if (nullptr != m_pRendererCom)
+			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
+	}
+	Safe_Release(pInstance);
 }
 
 HRESULT CFireDragon::Render(void)
@@ -333,8 +343,8 @@ HRESULT CFireDragon::Skill_FireSpear(const _tchar * pLayerTag)
 
 	for (int i = 0; i < 100; ++i)
 	{
-		_float iSour = rand() % 60000 * 0.001f;
-		_float iTemp = rand() % 60000 * 0.001f;
+		_float iSour = rand() % 4000 * 0.001f;
+		_float iTemp = rand() % 4000 * 0.001f;
 		_float3 vPos = { 0.f,0.f,0.f };
 		tInfo.vPos.x = vPos.x + iSour;
 		tInfo.vPos.y = vPos.y;
@@ -356,8 +366,8 @@ HRESULT CFireDragon::Skill_Meteor(const _tchar * pLayerTag)
 	CGameObject::INFO tInfo;
 	for (int i = 0; i < 100; ++i)
 	{
-		_float iSour = rand() % 60000 * 0.001f;
-		_float iTemp = rand() % 60000 * 0.001f;
+		_float iSour = rand() % 4000 * 0.001f;
+		_float iTemp = rand() % 4000 * 0.001f;
 
 		_float3 vPos = { 0.f,0.f,0.f };
 		tInfo.vPos.x = vPos.x + iSour;
@@ -481,6 +491,7 @@ HRESULT CFireDragon::Create_Wind()
 			Safe_Release(pGameInstance);
 		}
 	}
+	return S_OK;
 }
 HRESULT CFireDragon::TextureRender()
 {

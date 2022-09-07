@@ -29,16 +29,24 @@ HRESULT CTerrain::Initialize(void* pArg)
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 
-	*(CGameObject**)pArg = this;
+	ZeroMemory(&m_tInfo, sizeof(CGameObject::INFO));
+	memcpy(&m_tInfo, pArg, sizeof(CGameObject::INFO));
 	
 	//여기서 링크를 가져와서 대입하는 방식이 현명해보임,, 밑에는 임시방편
 
-	if(FAILED(OnLoadData(TEXT("../../Data/Terrain/TestTerrain.dat"))))
+	if(FAILED(OnLoadData(m_tInfo.pstrPath)))
 	{ 
 		ERR_MSG(TEXT("Failed to OnLoadData"));
 		return E_FAIL;
 	}
 	
+	if (m_tInfo.iLevelIndex == LEVEL_CHOBOFIELD)
+		m_tInfo.iMp = 393;
+	
+	else
+		m_tInfo.iMp = 1068;
+	
+
 	return S_OK;
 }
 
@@ -63,11 +71,13 @@ HRESULT CTerrain::Render()
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(0)))
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tInfo.iMp)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
+
+
 
 	m_pVIBufferCom->Render();
 
@@ -117,7 +127,7 @@ HRESULT CTerrain::OnLoadData(const _tchar* pFilePath)
 			tRectInfo.TextureArray[j] = vTex;
 		}
 
-		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TerrainRect"), LEVEL_GAMEPLAY, TEXT("Layer_TerrainRect"), &tRectInfo)))
+		if (FAILED(pInstance->Add_GameObject(TEXT("Prototype_GameObject_TerrainRect"), m_tInfo.iLevelIndex, TEXT("Layer_TerrainRect"), &tRectInfo)))
 		{
 			ERR_MSG(TEXT("Failed to Cloned : CTerrainRect"));
 			return E_FAIL;
@@ -193,7 +203,7 @@ HRESULT CTerrain::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_Texture */
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Terrain"), (CComponent**)&m_pTextureCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), m_tInfo.iLevelIndex, TEXT("Prototype_Component_Texture_TerrainRect"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */

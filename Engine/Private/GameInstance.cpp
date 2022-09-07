@@ -11,7 +11,11 @@ CGameInstance::CGameInstance()
 	, m_pComponent_Manager(CComponent_Manager::Get_Instance())
 	, m_pPicking(CPicking::Get_Instance())
 	, m_pKeyMgr(CKeyMgr::Get_Instance())
+	, m_pFrustum(CFrustum::Get_Instance())
+	, m_pCollision_Manager(CCollisionMgr::Get_Instance())
 {
+	Safe_AddRef(m_pFrustum);
+	Safe_AddRef(m_pCollision_Manager);
 	Safe_AddRef(m_pKeyMgr);
 	Safe_AddRef(m_pPicking);
 	Safe_AddRef(m_pComponent_Manager);
@@ -22,7 +26,7 @@ CGameInstance::CGameInstance()
 	Safe_AddRef(m_pGraphic_Device);
 }
 
-HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, const GRAPHIC_DESC& GraphicDesc, LPDIRECT3DDEVICE9* ppOut)
+HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, _uint iNumObject, const GRAPHIC_DESC& GraphicDesc, LPDIRECT3DDEVICE9* ppOut)
 {
 	if (nullptr == m_pGraphic_Device || nullptr == m_pObject_Manager)
 		return E_FAIL;
@@ -48,6 +52,13 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 	if (FAILED(m_pComponent_Manager->Reserve_Container(iNumLevels)))
 		return E_FAIL;
 
+
+	if (FAILED(m_pFrustum->Initialize(*ppOut)))
+		return E_FAIL;
+
+	if (FAILED(m_pCollision_Manager->Reserve_Container(iNumObject)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -61,10 +72,13 @@ void CGameInstance::Tick_Engine(_float fTimeDelta)
 	m_pLevel_Manager->Tick(fTimeDelta);
 	m_pObject_Manager->Tick(fTimeDelta);
 
+	m_pFrustum->Tick();
 	m_pPicking->Tick();
 
 	m_pLevel_Manager->Late_Tick(fTimeDelta);
 	m_pObject_Manager->Late_Tick(fTimeDelta);
+
+	m_pCollision_Manager->Release_Objects();
 }
 
 void CGameInstance::Clear(_uint iLevelIndex)
@@ -204,6 +218,38 @@ CComponent * CGameInstance::Clone_Component(_uint iLevelIndex, const _tchar * pP
 	return m_pComponent_Manager->Clone_Component(iLevelIndex, pPrototypeTag, pArg);
 }
 
+
+_bool CGameInstance::IsInFrustum(_float3 vPos, _float3 vScale)
+{
+	if (nullptr == m_pFrustum)
+		return false;
+
+	return m_pFrustum->IsinFrustum(vPos, vScale);
+}
+HRESULT CGameInstance::Add_ColiisionGroup(_uint iCollisionGroup, CGameObject * pGameObject)
+{
+	if (nullptr == m_pCollision_Manager)
+		return E_FAIL;
+	
+	return m_pCollision_Manager->Add_ColiisionGroup(iCollisionGroup, pGameObject);
+}
+
+_bool CGameInstance::Collision(CGameObject * pGameObject, _uint iCollisionGroup, CGameObject** pTarget)
+{
+	if (nullptr == m_pCollision_Manager)
+		return false;
+	
+	return m_pCollision_Manager->Collision(pGameObject, iCollisionGroup, pTarget);
+}
+
+_float3 CGameInstance::Get_Collision(void)
+{
+	if (nullptr == m_pCollision_Manager)
+		return _float3();
+
+	return m_pCollision_Manager->Get_Collision();
+}
+
 void CGameInstance::Release_Engine()
 {
 	CGameInstance::Get_Instance()->Destroy_Instance();
@@ -214,7 +260,11 @@ void CGameInstance::Release_Engine()
 
 	CComponent_Manager::Get_Instance()->Destroy_Instance();
 
+	CCollisionMgr::Get_Instance()->Destroy_Instance();
+
 	CTimer_Manager::Get_Instance()->Destroy_Instance();
+
+	CFrustum::Get_Instance()->Destroy_Instance();
 
 	CInput_Device::Get_Instance()->Destroy_Instance();
 
@@ -227,6 +277,9 @@ void CGameInstance::Release_Engine()
 
 void CGameInstance::Free()
 {
+
+	Safe_Release(m_pFrustum);
+	Safe_Release(m_pCollision_Manager);
 	Safe_Release(m_pKeyMgr);
 	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pTimer_Manager);

@@ -46,17 +46,18 @@ void CWorldHpBar::Tick(_float fTimeDelta)
 	{
 		Set_Dead();
 	}
-
+	
 	_float3 vPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-	vPos.y += 1.f;
+	vPos.y += m_tInfo.vPos.y;
+	vPos.x -= 0.5f;
 	m_pTransformCom2->Set_Scaled({ 1.f, 0.1f, 1.f });
 	m_pTransformCom2->Set_State(CTransform::STATE_POSITION, vPos);
 	m_fSizeX = m_tInfo.pTarget->Get_Info().iHp /(float)m_tInfo.pTarget->Get_Info().iMaxHp;
 
 	m_pTransformCom->Set_Scaled({m_fSizeX, 0.1f, 1.f });
 	_float fX = (1.f - m_fSizeX) / 2.f;
-	vPos.x -= fX;
 	vPos.z -= 0.001f;
+
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 	
 
@@ -110,9 +111,9 @@ HRESULT CWorldHpBar::SetUp_Components()
 		return E_FAIL;
 
 	/* For.Com_VIBuffer */
-	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_WingRect"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer2"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom2)))
+	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer2"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_WingRect"), (CComponent**)&m_pVIBufferCom2)))
 		return E_FAIL;
 
 	/* For.Com_Transform */
@@ -157,9 +158,17 @@ void CWorldHpBar::OnBillboard()
 
 	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
 
+	
+
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] );
-	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
+	
+	_float3 vScale = { 1.f,0.1f,1.f };
+	m_pTransformCom2->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
+	m_pTransformCom2->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
+	m_pTransformCom2->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+	vScale = { m_fSizeX,0.1f,1.f };
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
+	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.y);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
 }
 

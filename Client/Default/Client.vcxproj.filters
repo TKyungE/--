@@ -181,9 +181,6 @@
     <Filter Include="02.GameObject\Loading">
       <UniqueIdentifier>{529a4711-daf2-4b0b-9f46-064b8cdf1930}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\Camera">
-      <UniqueIdentifier>{6ad6400b-9d5a-4bf0-9b0f-946a3f09392e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObject\Portal">
       <UniqueIdentifier>{da6952f7-abbe-4b17-b86a-c71274cfa03b}</UniqueIdentifier>
     </Filter>
@@ -235,8 +232,53 @@
     <Filter Include="02.GameObject\Terrain\TerrainRect">
       <UniqueIdentifier>{1aeaeda5-7149-40ac-8889-6855c833cf44}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.UI\Inventory\InventorySlot">
-      <UniqueIdentifier>{dd676a4d-0fb1-4181-9729-82826c4fb83b}</UniqueIdentifier>
+    <Filter Include="02.GameObject\BackGroundObj\RectHouse">
+      <UniqueIdentifier>{5296e59f-0882-4402-bb8c-0d0508430126}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Tree">
+      <UniqueIdentifier>{b1f71cda-a31f-4f45-8be3-49ca2120de54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\01.ElderWilow">
+      <UniqueIdentifier>{73809adf-d0a6-4582-bb47-a372bb0ee4f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\05.DefaultAttack">
+      <UniqueIdentifier>{cfef189c-c68a-4a94-9306-311682decb20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\02.Bigfoot">
+      <UniqueIdentifier>{5e6663fa-7cdb-4530-8cd3-94da7fc3f3b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\07.Help">
+      <UniqueIdentifier>{4ffe2504-20e8-4613-ae8c-99cba0ebc484}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\08.Angry">
+      <UniqueIdentifier>{e5871eec-f7bd-41e8-bf02-e2d01be87033}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\03.Byorgue">
+      <UniqueIdentifier>{0f91fd89-0909-4c29-9cad-1d1f01767ef0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\ChoboField">
+      <UniqueIdentifier>{c523ff40-c670-4567-b671-c1f5c7fe3348}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\04.Bloodymurderer">
+      <UniqueIdentifier>{31e8bcd1-0942-48a2-944e-266fca864cce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Monster\05.Dandelion">
+      <UniqueIdentifier>{fccff6ea-d168-4f81-a9eb-9d94fe64fd3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\07.SwordSlice">
+      <UniqueIdentifier>{9f03de17-976b-4e1b-a33a-473457f8a521}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\06.Sword">
+      <UniqueIdentifier>{79abb7f2-c886-4c92-9f8c-8150b658e65d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\08.DandelionAttack">
+      <UniqueIdentifier>{e4940682-ffc3-472d-a414-d8a67d0e5d76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Boss\Meiden">
+      <UniqueIdentifier>{cfbe9a46-ef29-46f4-a85e-3e94a7e9d8e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Camera">
+      <UniqueIdentifier>{6ad6400b-9d5a-4bf0-9b0f-946a3f09392e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -405,7 +447,6 @@
     <ClInclude Include="..\public\Loading.h">
       <Filter>02.GameObject\Loading</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\BackGroundTree.h" />
     <ClInclude Include="..\public\Portal.h">
       <Filter>02.GameObject\Portal</Filter>
     </ClInclude>
@@ -454,8 +495,50 @@
     <ClInclude Include="..\Public\TerrainRect.h">
       <Filter>02.GameObject\Terrain\TerrainRect</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\InventorySlot.h">
-      <Filter>04.UI\Inventory\InventorySlot</Filter>
+    <ClInclude Include="..\Public\House2.h">
+      <Filter>02.GameObject\BackGroundObj\RectHouse</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\BackGroundTree.h">
+      <Filter>02.GameObject\BackGroundObj\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\ElderWilow.h">
+      <Filter>02.GameObject\Monster\01.ElderWilow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\DefaultAttack.h">
+      <Filter>03.Effect\Skill\05.DefaultAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Bigfoot.h">
+      <Filter>02.GameObject\Monster\02.Bigfoot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Help.h">
+      <Filter>03.Effect\Default\07.Help</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Angry.h">
+      <Filter>03.Effect\Default\08.Angry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Byorgue.h">
+      <Filter>02.GameObject\Monster\03.Byorgue</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Level_ChoboField.h">
+      <Filter>01.Levels\ChoboField</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Bloodymurderer.h">
+      <Filter>02.GameObject\Monster\04.Bloodymurderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Dandelion.h">
+      <Filter>02.GameObject\Monster\05.Dandelion</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Sword.h">
+      <Filter>03.Effect\Skill\06.Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\SwordSlice.h">
+      <Filter>03.Effect\Skill\07.SwordSlice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\DandelionAttack.h">
+      <Filter>03.Effect\Skill\08.DandelionAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Maiden.h">
+      <Filter>02.GameObject\Boss\Meiden</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -558,9 +641,6 @@
     <ClCompile Include="..\private\Rain.cpp">
       <Filter>03.Effect\Default\04.Rain</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\FireDragon.cpp">
-      <Filter>02.GameObject\Boss\FireDragon</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Wind.cpp">
       <Filter>03.Effect\Default\05.Wind</Filter>
     </ClCompile>
@@ -612,7 +692,6 @@
     <ClCompile Include="..\private\Loading.cpp">
       <Filter>02.GameObject\Loading</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\BackGroundTree.cpp" />
     <ClCompile Include="..\private\Portal.cpp">
       <Filter>02.GameObject\Portal</Filter>
     </ClCompile>
@@ -661,8 +740,53 @@
     <ClCompile Include="..\Private\TerrainRect.cpp">
       <Filter>02.GameObject\Terrain\TerrainRect</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\InventorySlot.cpp">
-      <Filter>04.UI\Inventory\InventorySlot</Filter>
+    <ClCompile Include="..\Private\House2.cpp">
+      <Filter>02.GameObject\BackGroundObj\RectHouse</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\BackGroundTree.cpp">
+      <Filter>02.GameObject\BackGroundObj\Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\ElderWilow.cpp">
+      <Filter>02.GameObject\Monster\01.ElderWilow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\DefaultAttack.cpp">
+      <Filter>03.Effect\Skill\05.DefaultAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Bigfoot.cpp">
+      <Filter>02.GameObject\Monster\02.Bigfoot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Help.cpp">
+      <Filter>03.Effect\Default\07.Help</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Angry.cpp">
+      <Filter>03.Effect\Default\08.Angry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Byorgue.cpp">
+      <Filter>02.GameObject\Monster\03.Byorgue</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Level_ChoboField.cpp">
+      <Filter>01.Levels\ChoboField</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Bloodymurderer.cpp">
+      <Filter>02.GameObject\Monster\04.Bloodymurderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Dandelion.cpp">
+      <Filter>02.GameObject\Monster\05.Dandelion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Sword.cpp">
+      <Filter>03.Effect\Skill\06.Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\SwordSlice.cpp">
+      <Filter>03.Effect\Skill\07.SwordSlice</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\DandelionAttack.cpp">
+      <Filter>03.Effect\Skill\08.DandelionAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\FireDragon.cpp">
+      <Filter>02.GameObject\Boss\FireDragon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Maiden.cpp">
+      <Filter>02.GameObject\Boss\Meiden</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

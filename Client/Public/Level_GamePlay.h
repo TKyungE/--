@@ -29,7 +29,7 @@ private:
 
 private:
 	_float3 Get_CollisionPos(CGameObject* pDest, CGameObject* pSour);
-
+	void Open_Level(void);
 
 private:		// 파일입출력 라인
 	void LoadData();
@@ -39,12 +39,18 @@ private:		// 파일입출력 라인
 		_float3  BackGroundPos;
 		_float3 vScale;
 		_uint	iIndex;
+		_uint iTrun;
 	}INDEXPOS;
 
 	vector<INDEXPOS>	m_vecTree;
-	vector<INDEXPOS>	m_vecHouse;
 	vector<INDEXPOS>	m_vecIndex;
+	vector<INDEXPOS>	m_vecHouse;
+	vector<INDEXPOS>	m_vecHouse2;
+	vector<INDEXPOS>	m_vecPortal;
+	vector<INDEXPOS>	m_vecNPC;
+
 	_float3	m_vPlayerPos;
+	_float3 m_vBackPos;
 	vector<_float3> m_vMonsterPos1;
 
 private:
@@ -59,6 +65,7 @@ private:
 	_float fRainTime = 0.f;
 	bool m_IconRender = false;
 	bool m_bNextLevel = false;
+
 };
 
 END

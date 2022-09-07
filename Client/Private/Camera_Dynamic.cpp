@@ -51,9 +51,9 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 	_long MouseMove = 0;
 
 	if (GetKeyState(VK_LEFT) < 0)
-		CameraRotationX(fTimeDelta, 10.f);
-	if (GetKeyState(VK_RIGHT) < 0)
 		CameraRotationX(fTimeDelta, -10.f);
+	if (GetKeyState(VK_RIGHT) < 0)
+		CameraRotationX(fTimeDelta, 10.f);
 
 //	if ((GetKeyState(VK_LSHIFT)& 8000) &&  (MouseMove = pGameInstance->Get_DIMMoveState(DIMM_Y)))
 //		CameraRotationY(fTimeDelta, MouseMove);
@@ -66,11 +66,26 @@ void CCamera_Dynamic::Tick(_float fTimeDelta)
 		else if ((0.4f >= m_CameraDesc.fFovy) && (0 >= D3DXToRadian(fTimeDelta * MouseMove * -1.f)))
 			m_CameraDesc.fFovy = 0.4f;
 		else
-		m_CameraDesc.fFovy += D3DXToRadian(fTimeDelta * MouseMove * -1.f);
+		{
+			m_CameraDesc.fFovy += D3DXToRadian(fTimeDelta * MouseMove * -1.f);
+			if (0 >= D3DXToRadian(fTimeDelta * MouseMove * -1.f))
+			{
+				m_YfAngle -= 1.f;
+				if (m_YfAngle < 30.f)
+					m_YfAngle = 30.f;
+			}
+			else if (0 < D3DXToRadian(fTimeDelta * MouseMove * -1.f))
+			{
+				m_YfAngle += 1.f;
+				if (m_YfAngle > 50.f)
+					m_YfAngle = 50.f;
+			}
+		}
 	}
 
+
 	_float4x4 CameraRotationMatrix, CameraMatrix;
-	D3DXMatrixRotationAxis(&CameraRotationMatrix, &m_pTransform->Get_State(CTransform::STATE_RIGHT), D3DXToRadian(40.f));
+	D3DXMatrixRotationAxis(&CameraRotationMatrix, &m_pTransform->Get_State(CTransform::STATE_RIGHT), D3DXToRadian(45.f));
 
 	_float3 Camera;
 	CameraMatrix = m_matRotX * CameraRotationMatrix;

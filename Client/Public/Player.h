@@ -48,6 +48,7 @@ private:
 	CTexture* m_pTextureComRide_Move_Back = nullptr;
 
 private:
+	void CheckColl();
 	void OnTerrain();
 	void	OnBillboard();
 	HRESULT SetUp_Components(void);
@@ -94,7 +95,7 @@ private:
 	void Move_Frame(_float fTimeDelta);
 	void Check_Front();
 	HRESULT TextureRender();
-
+	void Check_Hit();
 	void Get_PickingPoint(void);
 
 private:

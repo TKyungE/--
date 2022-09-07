@@ -94,6 +94,12 @@
     <Filter Include="01.Utility\97.CollisionMgr\Collider">
       <UniqueIdentifier>{097a0320-b7c4-4d3f-9e26-9f134af244cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\Rect2">
+      <UniqueIdentifier>{3dff4865-6a08-419e-b716-6bd5c1864fee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\04. Frustum">
+      <UniqueIdentifier>{65a50a28-abc1-4879-8fa6-ab5888511e22}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -107,9 +113,6 @@
     </ClCompile>
     <ClCompile Include="..\private\Level.cpp">
       <Filter>01.Utility\01.Levels</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\GameObject.cpp">
-      <Filter>01.Utility\02.GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Object_Manager.cpp">
       <Filter>01.Utility\02.GameObjects\Manager</Filter>
@@ -176,6 +179,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Collider.cpp">
       <Filter>01.Utility\97.CollisionMgr\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\VIBuffer_Rect2.cpp">
+      <Filter>01.Utility\03.Components\VIBuffer\Rect2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Frustum.cpp">
+      <Filter>01.Utility\04. Frustum</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\GameObject.cpp">
+      <Filter>01.Utility\02.GameObjects\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -274,6 +286,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\Collider.h">
       <Filter>01.Utility\97.CollisionMgr\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\VIBuffer_Rect2.h">
+      <Filter>01.Utility\03.Components\VIBuffer\Rect2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Frustum.h">
+      <Filter>01.Utility\04. Frustum</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
