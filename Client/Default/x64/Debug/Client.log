@@ -1,0 +1,60 @@
+﻿  Town.cpp
+c:\users\shout\desktop\과제\--\client\private\town.cpp(96): error C2039: 'pstrPath': 'Engine::CGameObject::tagInfo'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(27): note: 'Engine::CGameObject::tagInfo' 선언을 참조하십시오.
+c:\users\shout\desktop\과제\--\client\private\town.cpp(343): error C2039: 'vScale': 'Engine::CGameObject::tagInfo'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(27): note: 'Engine::CGameObject::tagInfo' 선언을 참조하십시오.
+c:\users\shout\desktop\과제\--\client\private\town.cpp(344): error C2039: 'iNextLevel': 'Engine::CGameObject::tagInfo'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(27): note: 'Engine::CGameObject::tagInfo' 선언을 참조하십시오.
+c:\users\shout\desktop\과제\--\client\private\town.cpp(367): error C2039: 'iNextLevel': 'Engine::CGameObject::tagInfo'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(27): note: 'Engine::CGameObject::tagInfo' 선언을 참조하십시오.
+  Portal.cpp
+c:\users\shout\desktop\과제\--\client\private\portal.cpp(32): error C2039: 'vScale': 'Engine::CGameObject::tagInfo'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(27): note: 'Engine::CGameObject::tagInfo' 선언을 참조하십시오.
+c:\users\shout\desktop\과제\--\client\private\portal.cpp(33): error C2039: 'iNextLevel': 'Engine::CGameObject::tagInfo'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(27): note: 'Engine::CGameObject::tagInfo' 선언을 참조하십시오.
+  Alligator.cpp
+c:\users\shout\desktop\과제\--\client\private\alligator.cpp(357): error C2039: 'Set_Mp': 'Engine::CGameObject'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(9): note: 'Engine::CGameObject' 선언을 참조하십시오.
+  Terrain.cpp
+c:\users\shout\desktop\과제\--\client\private\terrain.cpp(37): error C2039: 'pstrPath': 'Engine::CGameObject::tagInfo'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(27): note: 'Engine::CGameObject::tagInfo' 선언을 참조하십시오.
+  Player.cpp
+c:\users\shout\desktop\과제\--\client\private\player.cpp(112): error C2660: 'Engine::CCollider::Set_Transform': 함수는 1개의 매개 변수를 사용하지 않습니다.
+  Level_GamePlay.cpp
+c:\users\shout\desktop\과제\--\client\private\level_gameplay.cpp(110): error C2039: 'pstrPath': 'Engine::CGameObject::tagInfo'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(27): note: 'Engine::CGameObject::tagInfo' 선언을 참조하십시오.
+c:\users\shout\desktop\과제\--\client\private\level_gameplay.cpp(519): error C2039: 'vScale': 'Engine::CGameObject::tagInfo'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(27): note: 'Engine::CGameObject::tagInfo' 선언을 참조하십시오.
+c:\users\shout\desktop\과제\--\client\private\level_gameplay.cpp(520): error C2039: 'iNextLevel': 'Engine::CGameObject::tagInfo'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(27): note: 'Engine::CGameObject::tagInfo' 선언을 참조하십시오.
+c:\users\shout\desktop\과제\--\client\private\level_gameplay.cpp(538): error C2039: 'vScale': 'Engine::CGameObject::tagInfo'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(27): note: 'Engine::CGameObject::tagInfo' 선언을 참조하십시오.
+c:\users\shout\desktop\과제\--\client\private\level_gameplay.cpp(539): error C2039: 'iNextLevel': 'Engine::CGameObject::tagInfo'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(27): note: 'Engine::CGameObject::tagInfo' 선언을 참조하십시오.
+c:\users\shout\desktop\과제\--\client\private\level_gameplay.cpp(583): error C2039: 'iNextLevel': 'Engine::CGameObject::tagInfo'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(27): note: 'Engine::CGameObject::tagInfo' 선언을 참조하십시오.
+  Level_ChoboField.cpp
+c:\users\shout\desktop\과제\--\client\private\level_chobofield.cpp(110): error C2039: 'pstrPath': 'Engine::CGameObject::tagInfo'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(27): note: 'Engine::CGameObject::tagInfo' 선언을 참조하십시오.
+c:\users\shout\desktop\과제\--\client\private\level_chobofield.cpp(498): error C2039: 'vScale': 'Engine::CGameObject::tagInfo'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(27): note: 'Engine::CGameObject::tagInfo' 선언을 참조하십시오.
+c:\users\shout\desktop\과제\--\client\private\level_chobofield.cpp(499): error C2039: 'iNextLevel': 'Engine::CGameObject::tagInfo'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(27): note: 'Engine::CGameObject::tagInfo' 선언을 참조하십시오.
+c:\users\shout\desktop\과제\--\client\private\level_chobofield.cpp(788): error C2039: 'iNextLevel': 'Engine::CGameObject::tagInfo'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(27): note: 'Engine::CGameObject::tagInfo' 선언을 참조하십시오.
+  ElderWilow.cpp
+c:\users\shout\desktop\과제\--\client\private\elderwilow.cpp(357): error C2039: 'Set_Mp': 'Engine::CGameObject'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(9): note: 'Engine::CGameObject' 선언을 참조하십시오.
+  Dandelion.cpp
+c:\users\shout\desktop\과제\--\client\private\dandelion.cpp(348): error C2039: 'Set_Mp': 'Engine::CGameObject'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(9): note: 'Engine::CGameObject' 선언을 참조하십시오.
+  Byorgue.cpp
+c:\users\shout\desktop\과제\--\client\private\byorgue.cpp(348): error C2039: 'Set_Mp': 'Engine::CGameObject'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(9): note: 'Engine::CGameObject' 선언을 참조하십시오.
+  Bloodymurderer.cpp
+c:\users\shout\desktop\과제\--\client\private\bloodymurderer.cpp(348): error C2039: 'Set_Mp': 'Engine::CGameObject'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(9): note: 'Engine::CGameObject' 선언을 참조하십시오.
+  Bigfoot.cpp
+c:\users\shout\desktop\과제\--\client\private\bigfoot.cpp(376): error C2039: 'Set_Mp': 'Engine::CGameObject'의 멤버가 아닙니다.
+  c:\users\shout\desktop\과제\--\reference\headers\gameobject.h(9): note: 'Engine::CGameObject' 선언을 참조하십시오.
+  코드를 생성하고 있습니다...
