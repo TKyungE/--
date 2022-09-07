@@ -957,7 +957,7 @@ void CBigfoot::CheckColl()
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
-	if (pInstance->Collision(this, COLLISION_PLAYER, &pTarget))
+	/*if (pInstance->Collision(this, COLLISION_PLAYER, &pTarget))
 	{
 		_float3 vBackPos;
 		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
@@ -973,7 +973,7 @@ void CBigfoot::CheckColl()
 		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
-	}
+	}*/
 	if (pInstance->Collision(this, COLLISION_OBJECT, &pTarget))
 	{
 		_float3 vBackPos;

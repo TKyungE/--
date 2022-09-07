@@ -158,7 +158,6 @@ void CShadow::OnTerrain()
 }
 void CShadow::Set_TargetPos()
 {
-	
 	_float3 vPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 	if (m_tInfo.pTarget->Get_Info().iHp <= 0)
 		Set_Dead();
