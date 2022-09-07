@@ -50,25 +50,27 @@ void CXBox::Tick(_float fTimeDelta)
 	__super::Tick(fTimeDelta);
 
 
-
-	RECT		rcRect;
-	SetRect(&rcRect, (int)(m_fX - m_fSizeX * 0.5f), (int)(m_fY - m_fSizeY * 0.5f), (int)(m_fX + m_fSizeX * 0.5f), (int)(m_fY + m_fSizeY * 0.5f));
-
-	POINT		ptMouse;
-	GetCursorPos(&ptMouse);
-	ScreenToClient(g_hWnd, &ptMouse);
-
-	if (PtInRect(&rcRect, ptMouse))
+	if (m_tInfo.pTerrain->Get_Info().bHit == false)
 	{
-		m_bCheck = true;
-		if (GetKeyState(VK_LBUTTON) & 0x8000)
+		RECT		rcRect;
+		SetRect(&rcRect, (int)(m_fX - m_fSizeX * 0.5f), (int)(m_fY - m_fSizeY * 0.5f), (int)(m_fX + m_fSizeX * 0.5f), (int)(m_fY + m_fSizeY * 0.5f));
+
+		POINT		ptMouse;
+		GetCursorPos(&ptMouse);
+		ScreenToClient(g_hWnd, &ptMouse);
+
+		if (PtInRect(&rcRect, ptMouse))
 		{
-			m_tInfo.pTarget->Set_Hit(0, {0.f,0.f,0.f});
-			Set_Dead();
+			m_bCheck = true;
+			if (GetKeyState(VK_LBUTTON) & 0x8000)
+			{
+				m_tInfo.pTerrain->Set_Hit(0, { 0.f,0.f,0.f });
+			
+			}
 		}
+		else
+			m_bCheck = false;
 	}
-	else
-		m_bCheck = false;
 }
 
 void CXBox::Late_Tick(_float fTimeDelta)
@@ -84,30 +86,31 @@ HRESULT CXBox::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
+	if (m_tInfo.pTerrain->Get_Info().bHit == false)
+	{
+		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
+			return E_FAIL;
 
-	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
-		return E_FAIL;
+		_float4x4		ViewMatrix;
+		D3DXMatrixIdentity(&ViewMatrix);
 
-	_float4x4		ViewMatrix;
-	D3DXMatrixIdentity(&ViewMatrix);
+		m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
+		m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
 
-	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
-	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
+		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_bCheck)))
+			return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_bCheck)))
-		return E_FAIL;
+		if (FAILED(SetUp_RenderState()))
+			return E_FAIL;
 
-	if (FAILED(SetUp_RenderState()))
-		return E_FAIL;
+		m_pVIBufferCom->Render();
 
-	m_pVIBufferCom->Render();
-
-	if (FAILED(Release_RenderState()))
-		return E_FAIL;
+		if (FAILED(Release_RenderState()))
+			return E_FAIL;
 
 
 
-
+	}
 	return S_OK;
 }
 

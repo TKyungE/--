@@ -280,6 +280,9 @@
     <Filter Include="02.GameObject\Camera">
       <UniqueIdentifier>{6ad6400b-9d5a-4bf0-9b0f-946a3f09392e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\Inventory\InventorySLot">
+      <UniqueIdentifier>{f07b9a8b-503c-4296-98da-67207a1ecdce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -540,6 +543,9 @@
     <ClInclude Include="..\public\Maiden.h">
       <Filter>02.GameObject\Boss\Meiden</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\InventorySlot.h">
+      <Filter>04.UI\Inventory\InventorySLot</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -787,6 +793,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Maiden.cpp">
       <Filter>02.GameObject\Boss\Meiden</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\InventorySlot.cpp">
+      <Filter>04.UI\Inventory\InventorySLot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

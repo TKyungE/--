@@ -2,7 +2,7 @@
 
 #include "..\Public\InventoryIcon.h"
 #include "GameInstance.h"
-
+#include"Layer.h"
 CInventoryIcon::CInventoryIcon(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:CGameObject(pGraphic_Device)
 {
@@ -62,9 +62,7 @@ void CInventoryIcon::Tick(_float fTimeDelta)
 				CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 				
 				Safe_AddRef(pGameInstance);
-			
-
-				pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Inventory"), m_tInfo.iLevelIndex, TEXT("Layer_UI"),&m_tInfo);
+				pGameInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Inventory"))->Get_Objects().back()->Set_bHit(false);
 				Safe_Release(pGameInstance);
 			}
 		}

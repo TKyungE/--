@@ -36,6 +36,9 @@ private:
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
 	bool*					m_Click = false;
 	_ushort					m_Check = 0;
+	CGameObject *			pTarget = nullptr;
+	void					Use(void);
+
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
