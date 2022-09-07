@@ -29,6 +29,7 @@ HRESULT CQuickSlot::Initialize(void * pArg)
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
 	m_tInfo.pTarget = nullptr;
+	
 	m_fSizeX = 400.0f;
 	m_fSizeY = 50.0f;
 	m_fX = 600.f;
@@ -64,47 +65,13 @@ HRESULT CQuickSlot::Initialize(void * pArg)
 
 void CQuickSlot::Tick(_float fTimeDelta)
 {
-
 	__super::Tick(fTimeDelta);
 
-
-
-	POINT		ptMouse;
-	GetCursorPos(&ptMouse);
-	ScreenToClient(g_hWnd, &ptMouse);
-	for (int i = 0; i < 9; ++i)
-	{
-		RECT		rcRect;
-		SetRect(&rcRect, (int)(m_vSlot[i]->Get_Info().vPos.x - 36 * 0.5f), (int)(m_vSlot[i]->Get_Info().vPos.y - 36 * 0.5f), (int)(m_vSlot[i]->Get_Info().vPos.x + 36 * 0.5f), (int)(m_vSlot[i]->Get_Info().vPos.y + 36 * 0.5f));
-		if (PtInRect(&rcRect, ptMouse))
-		{
-			if ((CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON)) && m_bCheck == false&& m_vSlot[i]->Get_Info().pTarget!=nullptr)
-			{
-				m_iTemp = m_vSlot[i]->Get_Info().pTarget;
-				m_iSour = i;
-				m_vSlot[i]->Set_Target(nullptr); 
-					
-				m_bCheck = true;
-
-			}
-			if ((CKeyMgr::Get_Instance()->Key_Up(VK_LBUTTON)) && m_bCheck == true)
-			{
-				m_vSlot[m_iSour]->Set_Target(m_vSlot[i]->Get_Info().pTarget);
-				m_vSlot[i]->Set_Target(m_iTemp);
-
-				m_bCheck = false;
-			}
-		}
-		if (m_iTemp != nullptr)
-		{
-			if (m_iTemp->Get_Info().vPos.y > 49 || m_iTemp->Get_Info().vPos.y<0|| m_iTemp->Get_Info().vPos.x<395.f|| m_iTemp->Get_Info().vPos.x>805.f)
-			{
-				m_vSlot[m_iSour]->Set_Target(m_iTemp);
-				m_bCheck = false;
-			}
+	//Change();
+	QuickUse();
 	
-		}
-	}
+	
+
 }
 void CQuickSlot::Late_Tick(_float fTimeDelta)
 {
@@ -147,6 +114,39 @@ HRESULT CQuickSlot::Render()
 
 
 	return S_OK;
+}
+
+void CQuickSlot::QuickUse()
+{
+	for (int i = 0; i < 9; ++i)
+	{
+		if (m_vSlot[i]->Get_Info().pTarget != nullptr)
+		{
+			if (i == 0)
+			{
+				if (CKeyMgr::Get_Instance()->Key_Down('Z'))
+				{
+					m_vSlot[i]->Get_Info().pTarget->Set_Exp(2);
+				}
+			}
+			if (i == 1)
+			{
+				if (CKeyMgr::Get_Instance()->Key_Down('X'))
+				{
+					m_vSlot[i]->Get_Info().pTarget->Set_Exp(2);
+				}
+			}
+			if (i == 2)
+			{
+				if (CKeyMgr::Get_Instance()->Key_Down('C'))
+				{
+					m_vSlot[i]->Get_Info().pTarget->Set_Exp(2);
+				}
+
+			}
+		}
+
+	}
 }
 
 HRESULT CQuickSlot::SetUp_Components()
@@ -194,6 +194,46 @@ HRESULT CQuickSlot::Release_RenderState()
 
 	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
+}
+
+void CQuickSlot::Change(void)
+{
+	POINT		ptMouse;
+	GetCursorPos(&ptMouse);
+	ScreenToClient(g_hWnd, &ptMouse);
+	for (int i = 0; i < 9; ++i)
+	{
+		RECT		rcRect;
+		SetRect(&rcRect, (int)(m_vSlot[i]->Get_Info().vPos.x - 36 * 0.5f), (int)(m_vSlot[i]->Get_Info().vPos.y - 36 * 0.5f), (int)(m_vSlot[i]->Get_Info().vPos.x + 36 * 0.5f), (int)(m_vSlot[i]->Get_Info().vPos.y + 36 * 0.5f));
+		if (PtInRect(&rcRect, ptMouse))
+		{
+			if ((CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON)) && m_bCheck == false && m_vSlot[i]->Get_Info().pTarget != nullptr)
+			{
+				m_iTemp = m_vSlot[i]->Get_Info().pTarget;
+				m_iSour = i;
+				m_vSlot[i]->Set_Target(nullptr);
+
+				m_bCheck = true;
+
+			}
+			if ((CKeyMgr::Get_Instance()->Key_Up(VK_LBUTTON)) && m_bCheck == true)
+			{
+				m_vSlot[m_iSour]->Set_Target(m_vSlot[i]->Get_Info().pTarget);
+				m_vSlot[i]->Set_Target(m_iTemp);
+
+				m_bCheck = false;
+			}
+		}
+		if (m_iTemp != nullptr)
+		{
+			if (m_iTemp->Get_Info().vPos.y > 49 || m_iTemp->Get_Info().vPos.y<0 || m_iTemp->Get_Info().vPos.x<395.f || m_iTemp->Get_Info().vPos.x>805.f)
+			{
+				m_vSlot[m_iSour]->Set_Target(m_iTemp);
+				m_bCheck = false;
+			}
+
+		}
+	}
 }
 
 CQuickSlot * CQuickSlot::Create(LPDIRECT3DDEVICE9 pGraphic_Device)

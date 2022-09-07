@@ -235,6 +235,9 @@
     <Filter Include="02.GameObject\Terrain\TerrainRect">
       <UniqueIdentifier>{1aeaeda5-7149-40ac-8889-6855c833cf44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\Inventory\InventorySlot">
+      <UniqueIdentifier>{dd676a4d-0fb1-4181-9729-82826c4fb83b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -451,6 +454,9 @@
     <ClInclude Include="..\Public\TerrainRect.h">
       <Filter>02.GameObject\Terrain\TerrainRect</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\InventorySlot.h">
+      <Filter>04.UI\Inventory\InventorySlot</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -654,6 +660,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\TerrainRect.cpp">
       <Filter>02.GameObject\Terrain\TerrainRect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\InventorySlot.cpp">
+      <Filter>04.UI\Inventory\InventorySlot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

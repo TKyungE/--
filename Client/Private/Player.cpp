@@ -45,10 +45,10 @@ HRESULT CPlayer::Initialize(void * pArg)
 	if (m_tInfo.iMaxHp <= 0)
 	{
 		m_tInfo.fX = 0.5f;
-		m_tInfo.iMaxHp = 186;
+		m_tInfo.iMaxHp = 9999;
 		m_tInfo.iHp = m_tInfo.iMaxHp;
 		m_tInfo.iMp = 186;
-		m_tInfo.iExp = 0.f;
+		m_tInfo.iExp = 0;
 	}
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
@@ -87,7 +87,10 @@ void CPlayer::Tick(_float fTimeDelta)
 	Get_PickingPoint();
 	Key_Input(fTimeDelta);
 	Player_Move(fTimeDelta);
-
+	if (m_tInfo.iHp >= m_tInfo.iMaxHp)
+	{
+		m_tInfo.iHp = m_tInfo.iMaxHp;
+	}
 	if (GetKeyState('N') & 0x8000)
 	{
 		if (m_tInfo.iHp > 0)
@@ -103,7 +106,7 @@ void CPlayer::Tick(_float fTimeDelta)
 			m_tInfo.iHp += 10;
 		}
 		m_tInfo.iMp += 10;
-		m_tInfo.iExp += 100.f;
+		m_tInfo.iExp += 100;
 	}
 
 	m_pColliderCom->Set_Transform(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
@@ -487,8 +490,7 @@ void CPlayer::Key_Input(_float fTimeDelta)
 				m_tFrame.fFrameSpeed = 0.07f;
 			}
 			break;
-		default:
-			break;
+
 		}
 	}
 

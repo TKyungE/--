@@ -38,6 +38,7 @@ HRESULT CSkillSlot::Initialize(void * pArg)
 	Safe_AddRef(pGameInstance);
 	if (m_tInfo.iHp == 1)
 	{
+		m_tInfo.iMp = 5;
 		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), m_tInfo.iLevelIndex, TEXT("Layer_Potion"), &m_tInfo);
 		m_tInfo.pTarget = pGameInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Potion"))->Get_Objects().back();
 	}
@@ -51,7 +52,7 @@ HRESULT CSkillSlot::Initialize(void * pArg)
 void CSkillSlot::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	
+
 }
 void CSkillSlot::Late_Tick(_float fTimeDelta)
 {
@@ -59,7 +60,7 @@ void CSkillSlot::Late_Tick(_float fTimeDelta)
 
 
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
+		m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_UI, this);
 }
 
 HRESULT CSkillSlot::Render()
@@ -84,6 +85,7 @@ HRESULT CSkillSlot::Render()
 	else//Å¸°ÙÀ» °¡Áö°íÀÖ´Ù¸é ±× Å¸°ÙÀÇ ·»´õ¸¦ ¶ç¾î¾ßÇÑ´Ù
 	{
 		m_tInfo.pTarget->Set_Info(m_tInfo);//m_tInfo.pTarget½½·ÔÀÌ °°°í Å¸°Ù
+		m_tInfo.pTarget->Set_MP(5);
 	}
 	
 	if (FAILED(SetUp_RenderState()))

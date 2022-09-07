@@ -1,2 +1,12 @@
-﻿  Engine.vcxproj -> C:\Users\JJH\Desktop\--\Engine\Default\..\Bin\Engine.dll
+﻿  Camera.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  Renderer.cpp
+  Object_Manager.cpp
+  Layer.cpp
+  GameObject.cpp
+  CollisionMgr.cpp
+  코드를 생성하고 있습니다...
+     ..\Bin\Engine.lib 라이브러리 및 ..\Bin\Engine.exp 개체를 생성하고 있습니다.
+  Engine.vcxproj -> C:\Users\dp951\Desktop\상호작용까지 다함\Engine\Default\..\Bin\Engine.dll
   Engine.vcxproj -> ..\Bin\Engine.pdb (Full PDB)

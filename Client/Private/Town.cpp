@@ -190,6 +190,9 @@ HRESULT CTown::Ready_Layer_UI(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
 
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Inventory"), LEVEL_TOWN, TEXT("Layer_Inventory"), &tInfo)))
+		return E_FAIL;
+	
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_IconBar"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
 

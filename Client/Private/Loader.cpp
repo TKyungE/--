@@ -60,7 +60,7 @@
 #include "PoisonArrow.h"
 #include "Alligator.h"
 #include "TerrainRect.h"
-
+#include"InventorySlot.h"
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
 {
@@ -227,6 +227,7 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_StatsWnd"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/StatWnd/StatWnd%d.png"), 3))))
 		return E_FAIL;
+
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_PlusBox"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/UI/StatWnd/StatWnd%d.png"), 3))))
 		return E_FAIL;
@@ -485,6 +486,9 @@ HRESULT CLoader::Loading_Prototype()
 	//UI °´Ã¼
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_UI"),
 		CUI::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_InvenSlot"),
+		CInventorySlot::Create(m_pGraphic_Device))))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_StatsWnd"),
 		CStatsWnd::Create(m_pGraphic_Device))))
