@@ -173,7 +173,7 @@ void CAlligator::Late_Tick(_float fTimeDelta)
 		Safe_AddRef(pInstance);
 
 		if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
-		{
+	{
 			if (nullptr != m_pRendererCom)
 				m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
 		}
@@ -853,14 +853,23 @@ void CAlligator::OnBillboard()
 
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
 	_float3 vScale;
-	if(m_bRight && m_bFront || !m_bRight && !m_bFront)
-		vScale = { -1.5f,1.5f,1.f };
-	else if (m_bRight && !m_bFront || !m_bRight && m_bFront)
-		vScale = { 1.5f,1.5f,1.f };
+	_float3 vRight = *(_float3*)&ViewMatrix.m[0][0];
+	_float3 vUp = *(_float3*)&ViewMatrix.m[1][0];
 
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
-	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.x);
+	if (m_bRight && m_bFront || m_bRight && !m_bFront)
+	{
+		m_pTransformCom->Set_Scaled(_float3(-1.5f, 1.5f, 1.f));
+		vRight.x = -1;
+	}
+	else if (!m_bRight && !m_bFront || !m_bRight && m_bFront)
+		m_pTransformCom->Set_Scaled(_float3(1.5f, 1.5f, 1.f));
+		
+
+	
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *D3DXVec3Normalize(&vRight, &vRight) * m_pTransformCom->Get_Scale().x);
+	m_pTransformCom->Set_State(CTransform::STATE_UP, *D3DXVec3Normalize(&vUp, &vUp) * m_pTransformCom->Get_Scale().y);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+	
 }
 void CAlligator::CheckColl()
 {

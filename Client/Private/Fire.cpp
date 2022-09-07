@@ -86,7 +86,7 @@ void CFire::Late_Tick(_float fTimeDelta)
 		m_CollTime = 0.f;
 	}
 	if (nullptr != m_pRendererCom)
-		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
+		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_ALPHABLEND, this);
 }
 
 HRESULT CFire::Render()
