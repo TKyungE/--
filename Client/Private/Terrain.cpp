@@ -41,10 +41,10 @@ HRESULT CTerrain::Initialize(void* pArg)
 	}
 	
 	if (m_tInfo.iLevelIndex == LEVEL_CHOBOFIELD)
-		m_tInfo.iMp = 393;
+		m_tInfo.iMp = 91;
 	
 	else
-		m_tInfo.iMp = 1068;
+		m_tInfo.iMp = 111;
 	
 
 	return S_OK;
