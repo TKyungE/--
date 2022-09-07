@@ -16,7 +16,7 @@ BEGIN(Client)
 class CPlayer final : public CGameObject
 {
 public:
-	enum STATE { IDLE,MOVE,SKILL, STATE_END };
+	enum STATE { IDLE,MOVE,SKILL,MOVE_LEFT, STATE_END };
 private:
 	CPlayer(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	CPlayer(const CPlayer& rhs);
@@ -39,13 +39,17 @@ private:
 	CTexture* m_pTextureComIDLE_Back = nullptr;
 	CTexture* m_pTextureComMove_Front = nullptr;
 	CTexture* m_pTextureComMove_Back = nullptr;
+	CTexture* m_pTextureComMove_Left_Front = nullptr;
+	CTexture* m_pTextureComMove_Left_Back = nullptr;
 	CTexture* m_pTextureComSkill_Front = nullptr;
 	CTexture* m_pTextureComSkill_Back = nullptr;
-
+	
 	CTexture* m_pTextureComRide_IDLE_Front = nullptr;
 	CTexture* m_pTextureComRide_IDLE_Back = nullptr;
 	CTexture* m_pTextureComRide_Move_Front = nullptr;
 	CTexture* m_pTextureComRide_Move_Back = nullptr;
+	CTexture* m_pTextureComRide_Move_Left_Front = nullptr;
+	CTexture* m_pTextureComRide_Move_Left_Back = nullptr;
 
 private:
 	void CheckColl();
@@ -76,6 +80,8 @@ private:
 	_bool	m_bFireSpear = false;
 	_bool	m_bMeteor = false;
 	_bool	m_bFront = false;
+	_bool	m_bRight = false;
+	_bool	m_bLeft = false;
 	_bool	m_bCamera = false;
 	_bool   m_bRide = false;
 	_bool	m_bFly = false;

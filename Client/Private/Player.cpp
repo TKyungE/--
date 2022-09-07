@@ -87,7 +87,10 @@ void CPlayer::Tick(_float fTimeDelta)
 	Get_PickingPoint();
 	Key_Input(fTimeDelta);
 	Player_Move(fTimeDelta);
-
+	if (m_tInfo.iHp >= m_tInfo.iMaxHp)
+	{
+		m_tInfo.iHp = m_tInfo.iMaxHp;
+	}
 	if (GetKeyState('N') & 0x8000)
 	{
 		if (m_tInfo.iHp > 0)
@@ -320,6 +323,10 @@ HRESULT CPlayer::SetUp_Components(void)
 		return E_FAIL;
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Move_Back"), (CComponent**)&m_pTextureComMove_Back)))
 		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Left_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Move_Left_Front"), (CComponent**)&m_pTextureComMove_Left_Front)))
+		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Left_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Move_Left_Back"), (CComponent**)&m_pTextureComMove_Left_Back)))
+		return E_FAIL;
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Skill_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Skill_Front"), (CComponent**)&m_pTextureComSkill_Front)))
 		return E_FAIL;
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Skill_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Skill_Back"), (CComponent**)&m_pTextureComSkill_Back)))
@@ -333,6 +340,11 @@ HRESULT CPlayer::SetUp_Components(void)
 		return E_FAIL;
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_Move_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Ride_Move_Back"), (CComponent**)&m_pTextureComRide_Move_Back)))
 		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_Move_Left_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Ride_Move_Left_Front"), (CComponent**)&m_pTextureComRide_Move_Left_Front)))
+		return E_FAIL;
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Ride_Move_Left_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Ride_Move_Left_Back"), (CComponent**)&m_pTextureComRide_Move_Left_Back)))
+		return E_FAIL;
+
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
 		return E_FAIL;
@@ -375,9 +387,22 @@ void CPlayer::OnBillboard()
 	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
 
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-	_float3 vScale = { 1.f,1.f,1.f };
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
-	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
+	_float3 vScale;
+	_float3 vRight = *(_float3*)&ViewMatrix.m[0][0];
+	_float3 vUp = *(_float3*)&ViewMatrix.m[1][0];
+
+	if (m_bRight)
+	{
+		m_pTransformCom->Set_Scaled(_float3(-1.f, 1.f, 1.f));
+		vRight.x = -1;
+	}
+	else if (m_bLeft)
+		m_pTransformCom->Set_Scaled(_float3(1.f, 1.f, 1.f));
+
+
+
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *D3DXVec3Normalize(&vRight, &vRight) * m_pTransformCom->Get_Scale().x);
+	m_pTransformCom->Set_State(CTransform::STATE_UP, *D3DXVec3Normalize(&vUp, &vUp) * m_pTransformCom->Get_Scale().y);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
 }
 
@@ -527,12 +552,30 @@ void CPlayer::Key_Input(_float fTimeDelta)
 		
 	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_RBUTTON) && m_eCurState != SKILL)
 	{
+		_float3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		m_vTarget = m_fPickPoint;
-		if (!m_bFly)
+		if (!m_bFly && m_vTarget.x > vPos.x + 1.f)
+		{
+			m_eCurState = MOVE_LEFT;
+			m_tFrame.iFrameStart = 0;
+			m_bRight = true;
+			m_bLeft = false;
+		}
+		else if (!m_bFly && m_vTarget.x < vPos.x - 1.f)
+		{
+			m_eCurState = MOVE_LEFT;
+			m_tFrame.iFrameStart = 0;
+			m_bLeft = true;
+			m_bRight = false;
+		}
+		else if(!m_bFly)
 		{
 			m_eCurState = MOVE;
 			m_tFrame.iFrameStart = 0;
+			m_bRight = false;
+			m_bLeft = false;
 		}
+		
 		Check_Front();
 	}
 
@@ -694,12 +737,16 @@ void CPlayer::Free(void)
 	Safe_Release(m_pTextureComIDLE_Back);
 	Safe_Release(m_pTextureComMove_Front);
 	Safe_Release(m_pTextureComMove_Back);
+	Safe_Release(m_pTextureComMove_Left_Front);
+	Safe_Release(m_pTextureComMove_Left_Back);
 	Safe_Release(m_pTextureComSkill_Front);
 	Safe_Release(m_pTextureComSkill_Back);
 	Safe_Release(m_pTextureComRide_IDLE_Front);
 	Safe_Release(m_pTextureComRide_IDLE_Back);
 	Safe_Release(m_pTextureComRide_Move_Front);
 	Safe_Release(m_pTextureComRide_Move_Back);
+	Safe_Release(m_pTextureComRide_Move_Left_Front);
+	Safe_Release(m_pTextureComRide_Move_Left_Back);
 }
 
 _float3 CPlayer::Get_Pos()
@@ -764,7 +811,21 @@ void CPlayer::Motion_Change()
 			{
 				m_tFrame.iFrameStart = 0;
 				m_tFrame.iFrameEnd = 4;
-				m_tFrame.fFrameSpeed = 0.07f;
+				m_tFrame.fFrameSpeed = 0.1f;
+			}
+			else
+			{
+				m_tFrame.iFrameStart = 0;
+				m_tFrame.iFrameEnd = 7;
+				m_tFrame.fFrameSpeed = 0.1f;
+			}
+			break;
+		case MOVE_LEFT:
+			if (m_bRide)
+			{
+				m_tFrame.iFrameStart = 0;
+				m_tFrame.iFrameEnd = 3;
+				m_tFrame.fFrameSpeed = 0.1f;
 			}
 			else
 			{
@@ -811,6 +872,18 @@ void CPlayer::Move_Frame(_float fTimeDelta)
 				m_tFrame.iFrameStart = m_pTextureComRide_Move_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
 			else
 				m_tFrame.iFrameStart = m_pTextureComMove_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+		break;
+	case MOVE_LEFT:
+		if (m_bFront)
+			if (m_bRide)
+				m_tFrame.iFrameStart = m_pTextureComRide_Move_Left_Front->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+			else
+				m_tFrame.iFrameStart = m_pTextureComMove_Left_Front->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+		else
+			if (m_bRide)
+				m_tFrame.iFrameStart = m_pTextureComRide_Move_Left_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
+			else
+				m_tFrame.iFrameStart = m_pTextureComMove_Left_Back->MoveFrame(fTimeDelta, m_tFrame.fFrameSpeed, m_tFrame.iFrameEnd);
 		break;
 	case SKILL:
 		if (m_bFront)
@@ -898,6 +971,34 @@ HRESULT CPlayer::TextureRender()
 			else
 			{
 				if (FAILED(m_pTextureComMove_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+					return E_FAIL;
+			}
+		}
+		break;
+	case MOVE_LEFT:
+		if (m_bFront)
+		{
+			if (m_bRide)
+			{
+				if (FAILED(m_pTextureComRide_Move_Left_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+					return E_FAIL;
+			}
+			else
+			{
+				if (FAILED(m_pTextureComMove_Left_Front->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+					return E_FAIL;
+			}
+		}
+		else
+		{
+			if (m_bRide)
+			{
+				if (FAILED(m_pTextureComRide_Move_Left_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
+					return E_FAIL;
+			}
+			else
+			{
+				if (FAILED(m_pTextureComMove_Left_Back->Bind_OnGraphicDev(m_tFrame.iFrameStart)))
 					return E_FAIL;
 			}
 		}

@@ -27,6 +27,13 @@ HRESULT CSky::Initialize(void* pArg)
 
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
+	memcpy(&m_tInfo, pArg, sizeof(INFO));
+	if (m_tInfo.iLevelIndex == LEVEL_CHOBOFIELD)
+	{
+		m_tInfo.iMp = 4;
+	}
+	else
+		m_tInfo.iMp = 2;
 
 	return S_OK;
 }
@@ -60,7 +67,7 @@ HRESULT CSky::Render()
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(2)))
+	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tInfo.iMp)))
 		return E_FAIL;
 
 	if (FAILED(SetUp_RenderState()))

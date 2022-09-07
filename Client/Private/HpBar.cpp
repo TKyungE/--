@@ -30,7 +30,7 @@ HRESULT CHpBar::Initialize(void * pArg)
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
 
-	m_fSizeX = (float)m_tInfo.pTarget->Get_Info().iHp;//나중에 늘어나고 줄어듦을 여기서 조절한다
+	m_fSizeX = m_tInfo.pTarget->Get_Info().iHp / (float)m_tInfo.pTarget->Get_Info().iMaxHp;//나중에 늘어나고 줄어듦을 여기서 조절한다
 	m_fSizeY = 16.f;
 
 	m_fY = 91.f;
@@ -47,8 +47,8 @@ void CHpBar::Tick(_float fTimeDelta)
 	__super::Tick(fTimeDelta);
 
 	
-	m_fSizeX = (float)m_tInfo.pTarget->Get_Info().iHp;
-
+	m_fSizeX = (m_tInfo.pTarget->Get_Info().iHp / (float)m_tInfo.pTarget->Get_Info().iMaxHp)*186.f;
+	
 	if (m_fSizeX >= 186.0f)
 	{
 		m_fSizeX = 186.0;
@@ -56,7 +56,7 @@ void CHpBar::Tick(_float fTimeDelta)
 
 	if (m_fSizeX <= 0.f)
 	{
-		m_fSizeX = 0.00001f;
+		m_fSizeX = 1.f;
 	}
 
 	m_fX = m_fSizeX *0.5f + 47.f;
