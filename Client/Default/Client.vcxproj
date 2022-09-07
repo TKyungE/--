@@ -185,6 +185,7 @@
     <ClInclude Include="..\public\HpPotion.h" />
     <ClInclude Include="..\public\Level_ChoboField.h" />
     <ClInclude Include="..\public\Loading.h" />
+    <ClInclude Include="..\public\Maiden.h" />
     <ClInclude Include="..\Public\MpBar.h" />
     <ClInclude Include="..\public\Fire.h" />
     <ClInclude Include="..\Public\FireDragon.h" />
@@ -270,6 +271,7 @@
     <ClCompile Include="..\private\HpPotion.cpp" />
     <ClCompile Include="..\private\Level_ChoboField.cpp" />
     <ClCompile Include="..\private\Loading.cpp" />
+    <ClCompile Include="..\private\Maiden.cpp" />
     <ClCompile Include="..\Private\MpBar.cpp" />
     <ClCompile Include="..\private\Fire.cpp" />
     <ClCompile Include="..\Private\FireDragon.cpp" />
