@@ -938,11 +938,11 @@ void CBigfoot::OnBillboard()
 
 	if (m_bRight && m_bFront || m_bRight && !m_bFront)
 	{
-		m_pTransformCom->Set_Scaled(_float3(-1.5f, 1.5f, 1.f));
+		m_pTransformCom->Set_Scaled(_float3(-2.f, 2.f, 1.f));
 		vRight.x = -1;
 	}
 	else if (!m_bRight && !m_bFront || !m_bRight && m_bFront)
-		m_pTransformCom->Set_Scaled(_float3(1.5f, 1.5f, 1.f));
+		m_pTransformCom->Set_Scaled(_float3(2.f, 2.f, 1.f));
 
 
 
