@@ -86,7 +86,7 @@ void CLevel_ChoboField::Tick(_float fTimeDelta)
 			g_bCollider = false;
 	}
 
-	Create_Rain(fTimeDelta);
+	
 
 	Safe_Release(pGameInstance);
 }
