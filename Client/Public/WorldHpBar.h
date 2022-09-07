@@ -7,7 +7,7 @@ BEGIN(Engine)
 class CTexture;
 class CRenderer;
 class CTransform;
-class CVIBuffer_Rect;
+class CVIBuffer_WingRect;
 END
 
 BEGIN(Client)
@@ -30,8 +30,8 @@ private: /* For.Components */
 	CRenderer*				m_pRendererCom = nullptr;
 	CTransform*				m_pTransformCom = nullptr;
 	CTransform*				m_pTransformCom2 = nullptr;
-	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
-	CVIBuffer_Rect*			m_pVIBufferCom2 = nullptr;
+	CVIBuffer_WingRect*			m_pVIBufferCom = nullptr;
+	CVIBuffer_WingRect*			m_pVIBufferCom2 = nullptr;
 private:
 
 	_float4x4				m_ProjMatrix;

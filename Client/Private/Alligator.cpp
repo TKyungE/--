@@ -53,7 +53,9 @@ HRESULT CAlligator::Initialize(void * pArg)
 	Safe_AddRef(pGameInstance);
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
+	tInfo.vPos = { 1.f,0.5f,1.f };
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), m_tInfo.iLevelIndex, TEXT("Layer_Status"), &tInfo);
+
 	tInfo.vPos = { 0.8f,0.8f,1.f };
 
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
@@ -831,6 +833,7 @@ HRESULT CAlligator::RespawnMonster()
 	Safe_AddRef(pGameInstance);
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
+	tInfo.vPos = { 1.f,0.5f,1.f };
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo);
 	tInfo.vPos = { 0.8f,0.8f,1.f };
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
