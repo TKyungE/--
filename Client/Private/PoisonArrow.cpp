@@ -98,7 +98,7 @@ void CPoisonArrow::Late_Tick(_float fTimeDelta)
 	if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
 	{
 		if (nullptr != m_pRendererCom)
-			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
+			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_ALPHABLEND, this);
 	}
 	Safe_Release(pInstance);
 }
@@ -241,7 +241,7 @@ void CPoisonArrow::OnBillboard()
 	_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	_float3 vScale;
 	if(m_tInfo.vTargetPos.x > vPosition.x)
-		vScale = { -0.5f,-0.5f,1.f };
+		vScale = { -0.5f,0.5f,1.f };
 	else
 		vScale = { 0.5f,0.5f,1.f };
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);

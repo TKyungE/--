@@ -36,13 +36,22 @@ private:
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
 	_float					m_fPrePosX = 0, m_fPrePosY = 0;
 	Pos						m_Pass;
-
-
+	vector < CGameObject* > m_vSlot;
+	vector < CGameObject* > m_vQuick;
+	list < CGameObject* >  m_lTemp;
+	CGameObject*			m_Test = nullptr;
+	CGameObject*			m_iTemp = nullptr;
+	bool					m_bCheck = false;
+	int						m_iSour = 0;
+	int						Temp = 0;
+	int                     a = 0;
 
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
 	HRESULT Release_RenderState();
+public:
+	void Change(void);
 
 public:
 	static CInventory* Create(LPDIRECT3DDEVICE9 pGraphic_Device);

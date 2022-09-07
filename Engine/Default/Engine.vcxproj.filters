@@ -187,7 +187,7 @@
       <Filter>01.Utility\04. Frustum</Filter>
     </ClCompile>
     <ClCompile Include="..\private\GameObject.cpp">
-      <Filter>01.Utility\02.GameObjects\Manager</Filter>
+      <Filter>01.Utility\02.GameObjects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

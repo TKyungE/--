@@ -173,7 +173,7 @@ void CAlligator::Late_Tick(_float fTimeDelta)
 		Safe_AddRef(pInstance);
 
 		if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
-		{
+	{
 			if (nullptr != m_pRendererCom)
 				m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
 		}
@@ -651,7 +651,10 @@ void CAlligator::Check_Front()
 		m_bFront = false;
 	if (vTargetPos.z <= vPos.z)
 		m_bFront = true;
-
+	if (vTargetPos.x > vPos.x)
+		m_bRight = true;
+	if (vTargetPos.x <= vPos.x)
+		m_bRight = false;
 	
 	if (m_tInfo.bDead && m_eCurState != DEAD)
 	{
@@ -784,6 +787,7 @@ void CAlligator::MonsterMove(_float fTimeDelta)
 		{
 			m_pTransformCom->Go_Right(fTimeDelta);
 			m_eCurState = IDLE;
+			m_bRight = false;
 		}
 		break;
 	case 3:
@@ -794,6 +798,7 @@ void CAlligator::MonsterMove(_float fTimeDelta)
 		{
 			m_pTransformCom->Go_Left(fTimeDelta);
 			m_eCurState = IDLE;
+			m_bRight = true;
 		}
 		break;
 	default:
@@ -847,10 +852,24 @@ void CAlligator::OnBillboard()
 	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
 
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-	_float3 vScale = { 1.5f,1.5f,1.f };
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
-	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.x);
+	_float3 vScale;
+	_float3 vRight = *(_float3*)&ViewMatrix.m[0][0];
+	_float3 vUp = *(_float3*)&ViewMatrix.m[1][0];
+
+	if (m_bRight && m_bFront || m_bRight && !m_bFront)
+	{
+		m_pTransformCom->Set_Scaled(_float3(-1.5f, 1.5f, 1.f));
+		vRight.x = -1;
+	}
+	else if (!m_bRight && !m_bFront || !m_bRight && m_bFront)
+		m_pTransformCom->Set_Scaled(_float3(1.5f, 1.5f, 1.f));
+		
+
+	
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *D3DXVec3Normalize(&vRight, &vRight) * m_pTransformCom->Get_Scale().x);
+	m_pTransformCom->Set_State(CTransform::STATE_UP, *D3DXVec3Normalize(&vUp, &vUp) * m_pTransformCom->Get_Scale().y);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+	
 }
 void CAlligator::CheckColl()
 {

@@ -73,7 +73,7 @@
 #include "SwordSlice.h"
 #include "DandelionAttack.h"
 #include "Maiden.h"
-
+#include"InventorySlot.h"
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
 {
@@ -697,7 +697,9 @@ HRESULT CLoader::Loading_Prototype()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_HpPotion"),
 		CHpPotion::Create(m_pGraphic_Device))))
 		return E_FAIL;
-
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_InvenSlot"),
+		CInventorySlot::Create(m_pGraphic_Device))))
+		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SkillSlot"),
 		CSkillSlot::Create(m_pGraphic_Device))))
 		return E_FAIL;

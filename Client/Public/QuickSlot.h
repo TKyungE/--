@@ -37,15 +37,17 @@ private:
 	_float					m_fPrePosX = 0, m_fPrePosY = 0;
 	Pos						m_Pass;
 	vector < CGameObject* > m_vSlot;
-	CGameObject*			m_Test;
 	CGameObject*			m_iTemp = nullptr;
 	bool					m_bCheck = false;
 	int						m_iSour = 0;
 	int						Temp = 0;
+	void					QuickUse();
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
 	HRESULT Release_RenderState();
+public:
+	void Change(void);
 
 public:
 	static CQuickSlot* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
