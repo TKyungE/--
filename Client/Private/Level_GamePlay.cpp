@@ -416,6 +416,9 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 		++iCount;
 	}
+	Info.vPos = { 15.f,0.f,15.f };
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Maiden"), LEVEL_GAMEPLAY, pLayerTag, &Info)))
+		return E_FAIL;
 
 	Safe_Release(pGameInstance);
 

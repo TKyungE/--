@@ -92,10 +92,10 @@ void CElderWilow::Tick(_float fTimeDelta)
 				m_fDeadTime += fTimeDelta;
 				if (m_fDeadTime > 3.f)
 				{
+					DropItem();
 					_float3 vDeadPos = { -50000.f,-50000.f,-50000.f };
 					m_pTransformCom->Set_State(CTransform::STATE_POSITION, vDeadPos);
 					m_pTransformCom->Bind_OnGraphicDev();
-					DropItem();
 					m_bRespawn = true;
 					return;
 				}
