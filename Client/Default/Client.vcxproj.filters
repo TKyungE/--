@@ -283,6 +283,9 @@
     <Filter Include="04.UI\Inventory\InventorySLot">
       <UniqueIdentifier>{f07b9a8b-503c-4296-98da-67207a1ecdce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\LogRect">
+      <UniqueIdentifier>{1800de47-275d-479a-b035-e32c2be8f886}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -546,6 +549,9 @@
     <ClInclude Include="..\Public\InventorySlot.h">
       <Filter>04.UI\Inventory\InventorySLot</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\LogRect.h">
+      <Filter>04.UI\LogRect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -796,6 +802,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\InventorySlot.cpp">
       <Filter>04.UI\Inventory\InventorySLot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\LogRect.cpp">
+      <Filter>04.UI\LogRect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -156,7 +156,7 @@ HRESULT CStatsWnd::SetUp_RenderState()
 HRESULT CStatsWnd::Release_RenderState()
 {
 	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
-
+	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
 }
 

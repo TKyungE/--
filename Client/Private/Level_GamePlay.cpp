@@ -477,6 +477,12 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_UI(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_QuickSlot"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+		return E_FAIL;
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Inventory"), LEVEL_GAMEPLAY, TEXT("Layer_Inventory"), &tInfo)))
+		return E_FAIL;
+
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_IconBar"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 		return E_FAIL;
 
@@ -814,29 +820,29 @@ void CLEVEL_GamePlay::LoadData()
 
 void CLEVEL_GamePlay::Create_Rain(_float fTimeDelta)
 {
-	//CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
-	//Safe_AddRef(pGameInstance);
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
 
-	//CGameObject::INFO tInfo;
-	//fRainTime += fTimeDelta;
-	//if (fRainTime > 0.3f)
-	//{
-	//	fRainTime = 0.f;
-	//	for (int i = 0; i < 30; ++i)
-	//	{
-	//		_float iSour = rand() % 60000 * 0.001f;
-	//		_float iTemp = rand() % 40000 * 0.001f;
+	CGameObject::INFO tInfo;
+	fRainTime += fTimeDelta;
+	if (fRainTime > 3.f)
+	{
+		fRainTime = 0.f;
+		for (int i = 0; i < 30; ++i)
+		{
+			_float iSour = rand() % 60;
+			_float iTemp = rand() % 60;
 
-	//		_float3 vPos = { 0.f,0.f,0.f };
-	//		tInfo.vPos.x = vPos.x + iSour;
-	//		tInfo.vPos.y = vPos.y;
-	//		tInfo.vPos.z = vPos.z + iTemp;
+			_float3 vPos = { 0.f,0.f,0.f };
+			tInfo.vPos.x = vPos.x + iSour;
+			tInfo.vPos.y = vPos.y;
+			tInfo.vPos.z = vPos.z + iTemp;
 
-	//		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Rain"), LEVEL_CHOBOFIELD, TEXT("Layer_Effect"), &tInfo);
-	//			
-	//	}
-	//}
-	//Safe_Release(pGameInstance);
+			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Rain"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+				
+		}
+	}
+	Safe_Release(pGameInstance);
 
 }
 

@@ -2,6 +2,8 @@
 #include "..\Public\HpPotion.h"
 #include"GameInstance.h"
 #include"Layer.h"
+#include "Inventory.h"
+
 
 CHpPotion::CHpPotion(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:CGameObject(pGraphic_Device)
@@ -31,7 +33,20 @@ HRESULT CHpPotion::Initialize(void * pArg)
 	m_tInfo.iExp = 0;
 	m_fSizeX = 30.0f;
 	m_fSizeY = 30.0f;
-
+	m_iCount = 10;
+	m_tInfo.bDead = false;
+	D3DXCreateFont(m_pGraphic_Device,
+		15,
+		0,
+		FW_NORMAL, 
+		1, 
+		FALSE,
+		DEFAULT_CHARSET,
+		OUT_DEFAULT_PRECIS,
+		DEFAULT_QUALITY, 
+		DEFAULT_PITCH | FF_DONTCARE,
+		TEXT("±Ã¼­"),
+		&m_pFont);
 
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 
@@ -41,7 +56,8 @@ HRESULT CHpPotion::Initialize(void * pArg)
 	Safe_AddRef(pGameInstance);
 
 	pTarget = pGameInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Player"))->Get_Objects().back();
-
+	
+	
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -50,6 +66,7 @@ HRESULT CHpPotion::Initialize(void * pArg)
 void CHpPotion::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+
 
 	if (m_tInfo.iMp == 5)
 	{
@@ -93,12 +110,25 @@ void CHpPotion::Tick(_float fTimeDelta)
 	{
 		Use();
 	}
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.3f);
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
 
+	Safe_AddRef(pInstance);
+
+	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_ITEM, this)))
+	{
+		ERR_MSG(TEXT("Failed to Add CollisionGroup : CHP_POTION"));
+		return;
+	}
+
+	Safe_Release(pInstance);
 }
 void CHpPotion::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-
+	CheckColl();
 	if (nullptr != m_pRendererCom)
 		m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_UI, this);
 
@@ -124,6 +154,7 @@ HRESULT CHpPotion::Render()
 		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(1)))
 			return E_FAIL;
 
+
 		if (FAILED(SetUp_RenderState()))
 			return E_FAIL;
 
@@ -131,7 +162,23 @@ HRESULT CHpPotion::Render()
 
 		if (FAILED(Release_RenderState()))
 			return E_FAIL;
+
+		RECT rcText;
+		TCHAR Count[VK_MAX];
+
+		
+		wsprintf(Count, (L"%d"), m_iCount);
+		if (m_iCount > 9)
+		{
+			SetRect(&m_rcRect, m_tInfo.vPos.x, m_tInfo.vPos.y, 0, 0);
+		}else
+			SetRect(&m_rcRect, m_tInfo.vPos.x+8.f, m_tInfo.vPos.y, 0, 0);
+		m_pFont->DrawText(NULL, Count, -1, &m_rcRect, DT_NOCLIP, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.f));
+
+		
 	}
+	if (g_bCollider)
+		m_pColliderCom->Render();
 	return S_OK;
 
 }
@@ -140,8 +187,21 @@ void CHpPotion::Use(void)
 {
 	if (pTarget->Get_Info().iHp != pTarget->Get_Info().iMaxHp)
 	{
+		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+
+		Safe_AddRef(pGameInstance);
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_LogRect"), m_tInfo.iLevelIndex, TEXT("Layer_Log"), &m_tInfo);
+		Safe_Release(pGameInstance);
 		pTarget->Set_Hp(-(pTarget->Get_Info().iMaxHp*0.3));
-		Set_Dead();
+		if (m_iCount > 0)
+		{
+			--m_iCount;	
+		}
+		else if (m_iCount == 0)
+		{
+			Set_Dead();
+			m_tInfo.pTarget->Set_bHit(false);
+		}
 	}
 }
 
@@ -158,7 +218,8 @@ HRESULT CHpPotion::SetUp_Components()
 	/* For.Com_VIBuffer */
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
-
+	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
+		return E_FAIL;
 
 	/* For.Com_Transform */
 	CTransform::TRANSFORMDESC		TransformDesc;
@@ -184,8 +245,54 @@ HRESULT CHpPotion::SetUp_RenderState()
 HRESULT CHpPotion::Release_RenderState()
 {
 	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
-
+	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
+}
+
+void CHpPotion::CheckColl()
+{
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+	CGameObject* pTarget;
+	if (pInstance->Collision(this, COLLISION_PLAYER, &pTarget))
+	{
+		
+		Set_Dead();
+		auto& iter = dynamic_cast<CInventory*>(pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Inventory")))->Get_InvenSlot()->begin();
+		for (; iter != dynamic_cast<CInventory*>(pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Inventory")))->Get_InvenSlot()->end();++iter)
+		{
+			if ((*iter)->Get_Info().bHit == false)
+			{
+				CGameObject::INFO tInfo;
+				tInfo.vPos = (*iter)->Get_Info().vPos;
+				tInfo.pTarget = this;
+				tInfo.iMp = 3;
+				pInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), m_tInfo.iLevelIndex, TEXT("Layer_Potion"), &tInfo);
+				(*iter)->Set_bHit(true);
+			}
+		}
+	}
+	if (pInstance->Collision(this, COLLISION_PET, &pTarget))
+	{
+		Set_Dead();
+		auto& iter = dynamic_cast<CInventory*>(pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Inventory")))->Get_InvenSlot()->begin();
+		for (; iter != dynamic_cast<CInventory*>(pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Inventory")))->Get_InvenSlot()->end(); ++iter)
+		{
+			if ((*iter)->Get_Info().bHit == false)
+			{
+				CGameObject::INFO tInfo;
+				tInfo.vPos = (*iter)->Get_Info().vPos;
+				tInfo.pTarget = this;
+				tInfo.iMp = 3;
+				pInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), m_tInfo.iLevelIndex, TEXT("Layer_Potion"), &tInfo);
+				(*iter)->Set_bHit(true);
+			}
+		}
+	}
+	Safe_Release(pInstance);
 }
 
 CHpPotion * CHpPotion::Create(LPDIRECT3DDEVICE9 pGraphic_Device)
@@ -222,11 +329,12 @@ _float4x4 CHpPotion::Get_World(void)
 void CHpPotion::Free()
 {
 	__super::Free();
-
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pFont);
 }
 
 

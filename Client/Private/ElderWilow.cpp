@@ -95,6 +95,7 @@ void CElderWilow::Tick(_float fTimeDelta)
 					_float3 vDeadPos = { -50000.f,-50000.f,-50000.f };
 					m_pTransformCom->Set_State(CTransform::STATE_POSITION, vDeadPos);
 					m_pTransformCom->Bind_OnGraphicDev();
+					DropItem();
 					m_bRespawn = true;
 					return;
 				}
@@ -931,4 +932,9 @@ void CElderWilow::CheckColl()
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
 	Safe_Release(pInstance);
+}
+
+void CElderWilow::DropItem()
+{
+//	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), m_tInfo.iLevelIndex, TEXT("Layer_Potion"), &tInfo);
 }
