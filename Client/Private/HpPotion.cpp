@@ -31,7 +31,19 @@ HRESULT CHpPotion::Initialize(void * pArg)
 	m_tInfo.iExp = 0;
 	m_fSizeX = 30.0f;
 	m_fSizeY = 30.0f;
-
+	m_iCount = 10;
+	D3DXCreateFont(m_pGraphic_Device,
+		15,
+		0,
+		FW_NORMAL, 
+		1, 
+		FALSE,
+		DEFAULT_CHARSET,
+		OUT_DEFAULT_PRECIS,
+		DEFAULT_QUALITY, 
+		DEFAULT_PITCH | FF_DONTCARE,
+		TEXT("±Ã¼­"),
+		&m_pFont);
 
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 
@@ -41,7 +53,8 @@ HRESULT CHpPotion::Initialize(void * pArg)
 	Safe_AddRef(pGameInstance);
 
 	pTarget = pGameInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Player"))->Get_Objects().back();
-
+	
+	
 	Safe_Release(pGameInstance);
 
 	return S_OK;
@@ -50,6 +63,7 @@ HRESULT CHpPotion::Initialize(void * pArg)
 void CHpPotion::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+
 
 	if (m_tInfo.iMp == 5)
 	{
@@ -124,6 +138,7 @@ HRESULT CHpPotion::Render()
 		if (FAILED(m_pTextureCom->Bind_OnGraphicDev(1)))
 			return E_FAIL;
 
+
 		if (FAILED(SetUp_RenderState()))
 			return E_FAIL;
 
@@ -131,6 +146,18 @@ HRESULT CHpPotion::Render()
 
 		if (FAILED(Release_RenderState()))
 			return E_FAIL;
+
+		RECT rcText;
+		TCHAR Count[VK_MAX];
+
+		
+		wsprintf(Count, (L"%d"), m_iCount);
+		if (m_iCount > 9)
+		{
+			SetRect(&m_rcRect, m_tInfo.vPos.x, m_tInfo.vPos.y, 0, 0);
+		}else
+			SetRect(&m_rcRect, m_tInfo.vPos.x+8.f, m_tInfo.vPos.y, 0, 0);
+		m_pFont->DrawText(NULL, Count, -1, &m_rcRect, DT_NOCLIP, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.f));
 	}
 	return S_OK;
 
@@ -140,8 +167,20 @@ void CHpPotion::Use(void)
 {
 	if (pTarget->Get_Info().iHp != pTarget->Get_Info().iMaxHp)
 	{
+		CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+
+		Safe_AddRef(pGameInstance);
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_LogRect"), m_tInfo.iLevelIndex, TEXT("Layer_Log"), &m_tInfo);
+		Safe_Release(pGameInstance);
 		pTarget->Set_Hp(-(pTarget->Get_Info().iMaxHp*0.3));
-		Set_Dead();
+		if (m_iCount > 0)
+		{
+			--m_iCount;	
+		}
+		if (m_iCount == 0)
+		{
+			Set_Dead();
+		}
 	}
 }
 
@@ -227,6 +266,7 @@ void CHpPotion::Free()
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pFont);
 }
 
 

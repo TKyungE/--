@@ -38,7 +38,9 @@ private:
 	_ushort					m_Check = 0;
 	CGameObject *			pTarget = nullptr;
 	void					Use(void);
-
+	LPD3DXFONT				m_pFont;
+	RECT                    m_rcRect;
+	_int					m_iCount;
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
