@@ -2,6 +2,8 @@
 #include "..\Public\HpPotion.h"
 #include"GameInstance.h"
 #include"Layer.h"
+#include "Inventory.h"
+
 
 CHpPotion::CHpPotion(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:CGameObject(pGraphic_Device)
@@ -257,11 +259,38 @@ void CHpPotion::CheckColl()
 	CGameObject* pTarget;
 	if (pInstance->Collision(this, COLLISION_PLAYER, &pTarget))
 	{
+		
 		Set_Dead();
+		auto& iter = dynamic_cast<CInventory*>(pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Inventory")))->Get_InvenSlot()->begin();
+		for (; iter != dynamic_cast<CInventory*>(pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Inventory")))->Get_InvenSlot()->end();++iter)
+		{
+			if ((*iter)->Get_Info().bHit == false)
+			{
+				CGameObject::INFO tInfo;
+				tInfo.vPos = (*iter)->Get_Info().vPos;
+				tInfo.pTarget = this;
+				tInfo.iMp = 3;
+				pInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), m_tInfo.iLevelIndex, TEXT("Layer_Potion"), &tInfo);
+				(*iter)->Set_bHit(true);
+			}
+		}
 	}
 	if (pInstance->Collision(this, COLLISION_PET, &pTarget))
 	{
 		Set_Dead();
+		auto& iter = dynamic_cast<CInventory*>(pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Inventory")))->Get_InvenSlot()->begin();
+		for (; iter != dynamic_cast<CInventory*>(pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Inventory")))->Get_InvenSlot()->end(); ++iter)
+		{
+			if ((*iter)->Get_Info().bHit == false)
+			{
+				CGameObject::INFO tInfo;
+				tInfo.vPos = (*iter)->Get_Info().vPos;
+				tInfo.pTarget = this;
+				tInfo.iMp = 3;
+				pInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), m_tInfo.iLevelIndex, TEXT("Layer_Potion"), &tInfo);
+				(*iter)->Set_bHit(true);
+			}
+		}
 	}
 	Safe_Release(pInstance);
 }
