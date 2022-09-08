@@ -86,7 +86,7 @@ void CLevel_ChoboField::Tick(_float fTimeDelta)
 			g_bCollider = false;
 	}
 
-	Create_Rain(fTimeDelta);
+	
 
 	Safe_Release(pGameInstance);
 }
@@ -113,7 +113,7 @@ HRESULT CLevel_ChoboField::Ready_Layer_BackGround(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Terrain"), LEVEL_CHOBOFIELD, pLayerTag, &info)))
 		return E_FAIL;
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_CHOBOFIELD, pLayerTag)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sky"), LEVEL_CHOBOFIELD, pLayerTag, &info)))
 		return E_FAIL;
 
 	for (auto& iter : m_vecTree)

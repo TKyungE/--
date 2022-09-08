@@ -66,6 +66,7 @@ private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
 	_bool				m_bFront = false;
+	_bool				m_bRight = false;
 	_float				m_fSkillCool = 0.f;
 	_float				m_fRespawnTime = 0.f;
 	_float				m_fDeadTime = 0.f;
