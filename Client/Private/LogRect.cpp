@@ -112,17 +112,11 @@ HRESULT CLogRect::Render()
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
 
-	_float4x4		ViewMatrix;
-	D3DXMatrixIdentity(&ViewMatrix);
-
-	m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
-	m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
-
 
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
 
-	m_pVIBufferCom->Render();
+//	m_pVIBufferCom->Render();
 
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
@@ -163,11 +157,12 @@ HRESULT CLogRect::SetUp_RenderState()
 {
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
-
+	
 	return S_OK;
 }
 HRESULT CLogRect::Release_RenderState()
 {
+	m_pGraphic_Device->SetTexture(0, nullptr);
 	return S_OK;
 }
 
