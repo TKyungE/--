@@ -35,8 +35,8 @@ HRESULT CLevel_MidBoss::Initialize(void)
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
-		return E_FAIL;
+	/*if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+		return E_FAIL;*/
 
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
@@ -197,7 +197,7 @@ HRESULT CLevel_MidBoss::Ready_Layer_Player(const _tchar * pLayerTag)
 
 HRESULT CLevel_MidBoss::Ready_Layer_Monster(const _tchar * pLayerTag)
 {
-	return E_NOTIMPL;
+	return S_OK;
 }
 
 HRESULT CLevel_MidBoss::Ready_Layer_Camera(const _tchar * pLayerTag)
@@ -340,7 +340,7 @@ void CLevel_MidBoss::Open_Level(void)
 		{
 			if (dynamic_cast<CPortal*>(iter)->Get_Level())
 			{
-				pGameInstance->Find_Layer(LEVEL_MIDBOSS, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(pGameInstance->Find_Layer(LEVEL_MIDBOSS, TEXT("Layer_Player"))->Get_Objects().front()->Get_Info());
+				pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Set_Info(pGameInstance->Find_Layer(LEVEL_MIDBOSS, TEXT("Layer_Player"))->Get_Objects().front()->Get_Info());
 				LEVEL eLevel = (LEVEL)iter->Get_Info().iNextLevel;
 				if (FAILED(pGameInstance->Open_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pGraphic_Device, eLevel))))
 					return;

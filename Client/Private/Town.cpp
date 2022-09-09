@@ -346,7 +346,7 @@ HRESULT CTown::Ready_Layer_Portal(const _tchar * pLayerTag)
 		tInfo.iLevelIndex = LEVEL_TOWN;
 		tInfo.vPos = iter.BackGroundPos;
 		tInfo.vScale = iter.vScale;
-		tInfo.iNextLevel = LEVEL_GAMEPLAY;
+		tInfo.iNextLevel = LEVEL_MIDBOSS;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_TOWN, pLayerTag, &tInfo)))
 			return E_FAIL;
