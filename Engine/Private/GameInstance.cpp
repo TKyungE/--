@@ -74,7 +74,7 @@ void CGameInstance::Tick_Engine(_float fTimeDelta)
 
 	m_pFrustum->Tick();
 	m_pPicking->Tick();
-	m_pQuest_Manager->Tick();
+	//m_pQuest_Manager->Tick();
 
 	m_pLevel_Manager->Late_Tick(fTimeDelta);
 	m_pObject_Manager->Late_Tick(fTimeDelta);
