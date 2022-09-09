@@ -10,7 +10,7 @@
 #include "KeyMgr.h"
 #include "Frustum.h"
 #include "CollisionMgr.h"
-
+#include "QuestManager.h"
 
 BEGIN(Engine)
 
@@ -58,14 +58,15 @@ public: /* For.Component_Manager */
 
 public:	/* for. Frustum*/
 	_bool	IsInFrustum(_float3 vPos, _float3 vScale);
-
 	
 public: /* For.Collision_Manager */
 	HRESULT Add_ColiisionGroup(_uint iCollisionGroup, class CGameObject* pGameObject);
 	_bool Collision(class CGameObject* pGameObject, _uint iCollisionGroup, CGameObject** pTarget);
 	_float3 Get_Collision(void);
-	void Release_Objects(void);
 
+public: /* For. Quest_Manager */
+	HRESULT Add_Quest(class CQuest* pQuest, _int* pOut);
+	HRESULT Release_Quest(_int iIndex);
 
 public:
 	static void Release_Engine();
@@ -81,6 +82,7 @@ private:
 	CKeyMgr*						m_pKeyMgr = nullptr;
 	CFrustum*						m_pFrustum = nullptr;
 	CCollisionMgr*					m_pCollision_Manager = nullptr;
+	CQuestManager*					m_pQuest_Manager = nullptr;
 
 public:
 	virtual void Free() override;

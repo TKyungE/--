@@ -74,6 +74,7 @@ void CGameInstance::Tick_Engine(_float fTimeDelta)
 
 	m_pFrustum->Tick();
 	m_pPicking->Tick();
+	m_pQuest_Manager->Tick();
 
 	m_pLevel_Manager->Late_Tick(fTimeDelta);
 	m_pObject_Manager->Late_Tick(fTimeDelta);
@@ -250,6 +251,22 @@ _float3 CGameInstance::Get_Collision(void)
 	return m_pCollision_Manager->Get_Collision();
 }
 
+HRESULT CGameInstance::Add_Quest(CQuest * pQuest, _int * pOut)
+{
+	if (nullptr == m_pQuest_Manager)
+		return E_FAIL;
+	
+	return m_pQuest_Manager->Add_Quest(pQuest, pOut);
+}
+
+HRESULT CGameInstance::Release_Quest(_int iIndex)
+{
+	if (nullptr == m_pQuest_Manager)
+		return E_FAIL;
+	
+	return m_pQuest_Manager->Release_Quest(iIndex);
+}
+
 void CGameInstance::Release_Engine()
 {
 	CGameInstance::Get_Instance()->Destroy_Instance();
@@ -261,6 +278,8 @@ void CGameInstance::Release_Engine()
 	CComponent_Manager::Get_Instance()->Destroy_Instance();
 
 	CCollisionMgr::Get_Instance()->Destroy_Instance();
+
+	CQuestManager::Get_Instance()->Destroy_Instance();
 
 	CTimer_Manager::Get_Instance()->Destroy_Instance();
 
@@ -277,7 +296,7 @@ void CGameInstance::Release_Engine()
 
 void CGameInstance::Free()
 {
-
+	Safe_Release(m_pQuest_Manager);
 	Safe_Release(m_pFrustum);
 	Safe_Release(m_pCollision_Manager);
 	Safe_Release(m_pKeyMgr);

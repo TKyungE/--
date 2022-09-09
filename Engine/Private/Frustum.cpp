@@ -107,7 +107,6 @@ _bool CFrustum::IsinFrustum(_float3 vPos, _float3 vScale)
 	{
 		D3DXPLANE			Plane;
 
-
 		D3DXPlaneFromPoints(&Plane, &m_vProj2[i][0], &m_vProj2[i][1], &m_vProj2[i][2]);
 
 		_float		fHeight = Plane.a * vPos.x + Plane.b * vPos.y + Plane.c * vPos.z + Plane.d;
@@ -115,10 +114,10 @@ _bool CFrustum::IsinFrustum(_float3 vPos, _float3 vScale)
 		if (fHeight > 0)
 		{
 			if (fHeight > fLength)
-			{
 				return false;
-			}
 		}
+		else
+			return false;
 	}
 
 	return true;

@@ -286,6 +286,15 @@
     <Filter Include="04.UI\LogRect">
       <UniqueIdentifier>{1800de47-275d-479a-b035-e32c2be8f886}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Quest">
+      <UniqueIdentifier>{d4c11920-343d-4514-9db3-5a0223e41ea6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Quest\CollectQuest">
+      <UniqueIdentifier>{1cb3dd11-dfcd-4ceb-ad86-fcd7cc325ea8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\Quest\HuntQuest">
+      <UniqueIdentifier>{ea5d7e4d-8eca-432b-96ea-97455aadb9d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -552,6 +561,9 @@
     <ClInclude Include="..\public\LogRect.h">
       <Filter>04.UI\LogRect</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\HuntQuest.h">
+      <Filter>02.GameObject\Quest\HuntQuest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -805,6 +817,9 @@
     </ClCompile>
     <ClCompile Include="..\private\LogRect.cpp">
       <Filter>04.UI\LogRect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\HuntQuest.cpp">
+      <Filter>02.GameObject\Quest\HuntQuest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
