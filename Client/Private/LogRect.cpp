@@ -2,6 +2,7 @@
 #include "..\Public\LogRect.h"
 #include"GameInstance.h"
 #include"Layer.h"
+
 CLogRect::CLogRect(LPDIRECT3DDEVICE9 pGraphic_Device)
 	:CGameObject(pGraphic_Device)
 {
@@ -57,13 +58,13 @@ HRESULT CLogRect::Initialize(void * pArg)
 		{
 			m_Obj = pGameInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Log"))->Get_Objects().back();//·Î±×°¡ ÀÖ¾î
 			m_bPreCheck = true;
-		}	
+		}
 		for (auto& iter : m_lObj)
 		{
 			m_iCount += 1;
 
 		}
-		
+
 	}
 
 	Safe_Release(pGameInstance);
@@ -75,10 +76,12 @@ void CLogRect::Tick(_float fTimeDelta)
 
 	++m_iTimer;
 	__super::Tick(fTimeDelta);
-	if (m_bPreCheck==true)
+	if (m_bPreCheck == true)
 	{
-	m_Obj->Set_UiPos({ 0.f,-m_iCount*15.f,0.f });
-	m_bPreCheck = false;
+		_float3 vPos = _float3(0.f, -m_iCount * 15.f, 0.f);
+		m_Obj->Set_UiPos(vPos);
+		m_bPreCheck = false;
+
 	}
 	m_fX = m_tInfo.vPos.x;
 	m_fY = m_tInfo.vPos.y;
@@ -90,8 +93,8 @@ void CLogRect::Tick(_float fTimeDelta)
 	{
 		Set_Dead();
 	}
-	
-	
+
+
 	m_pTransformCom->Set_Scaled(_float3(m_fSizeX, m_fSizeY, 1.f));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _float3(m_fX - g_iWinSizeX * 0.5f, -m_fY + g_iWinSizeY * 0.5f, 0.f));
 }
@@ -116,7 +119,7 @@ HRESULT CLogRect::Render()
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
 
-//	m_pVIBufferCom->Render();
+	//	m_pVIBufferCom->Render();
 
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
@@ -124,7 +127,7 @@ HRESULT CLogRect::Render()
 	TCHAR Count[VK_MAX];
 
 	wsprintf(Count, (L"¹ìÆÄÀÌ¾îÀÇ ÇÇ¸¦ È¹µæÇÏ¼Ì½À´Ï´Ù."));
-	SetRect(&m_rcRect, (int)m_fX-m_fSizeX*0.5, (int)m_fY+ m_fSizeY*0.5, (int)m_fX + m_fSizeX*0.5, (int)m_fY+m_fSizeX*0.5);
+	SetRect(&m_rcRect, (int)m_fX - m_fSizeX*0.5, (int)m_fY + m_fSizeY*0.5, (int)m_fX + m_fSizeX*0.5, (int)m_fY + m_fSizeX*0.5);
 	m_pFont->DrawText(NULL, Count, -1, &m_rcRect, DT_RIGHT, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.f));
 
 
@@ -155,7 +158,7 @@ HRESULT CLogRect::SetUp_RenderState()
 {
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
-	
+
 	return S_OK;
 }
 HRESULT CLogRect::Release_RenderState()

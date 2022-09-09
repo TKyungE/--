@@ -26,10 +26,11 @@ HRESULT CBackGroundRect::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 	
+	memcpy(&m_IndexPos, pArg, sizeof(INDEXPOS));
+
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 	
-	memcpy(&m_IndexPos, pArg, sizeof(INDEXPOS));
 	
 	m_pTransformCom->Set_Scaled(m_IndexPos.vScale);
 
@@ -57,10 +58,25 @@ void CBackGroundRect::Late_Tick(_float fTimeDelta)
 
 	Safe_AddRef(pInstance);
 
+	if (m_iCheck == 12)		//ÆÄ¸®
+	{
+		m_fTime += fTimeDelta;
+		if (m_fTime > 1.f / 30.f)
+		{
+			++m_IndexPos.iIndex;
+			m_fTime = 0.f;
+			if (m_IndexPos.iIndex >= 12)
+			{
+				m_IndexPos.iIndex = 0;
+			}
+		}
+	}
+
+
 	if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
 	{
 		if (nullptr != m_pRendererCom)
-			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 	}
 	Safe_Release(pInstance);
 }
@@ -95,8 +111,17 @@ HRESULT CBackGroundRect::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBuffer)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_BackGroundRect"), (CComponent**)&m_pTextureCom)))
-		return E_FAIL;
+	if (m_IndexPos.iIndex == 12)
+	{
+		if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_BackGroundFly"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
+		m_iCheck = m_IndexPos.iIndex;
+		m_IndexPos.iIndex = 0;
+		m_IndexPos.vPos.y += 0.5f;
+	}
+	else
+		if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_BackGroundRect"), (CComponent**)&m_pTextureCom)))
+			return E_FAIL;
 
 	CTransform::TRANSFORMDESC TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
@@ -173,6 +198,8 @@ void CBackGroundRect::OnBillBoard(void)
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
 
+
+	m_pTransformCom->Set_Scaled(m_IndexPos.vScale);
 }
 
 CBackGroundRect * CBackGroundRect::Create(LPDIRECT3DDEVICE9 _pGraphic_Device)

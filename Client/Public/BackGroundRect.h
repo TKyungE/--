@@ -41,7 +41,8 @@ private:
 	CTexture* m_pTextureCom = nullptr;
 private:
 	INDEXPOS	m_IndexPos;
-
+	_uint		m_iCheck = 0;
+	_float		m_fTime = 0.f;
 private:
 	HRESULT SetUp_Components(void);
 	HRESULT SetUp_RenderState(void);
