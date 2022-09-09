@@ -78,9 +78,8 @@ void CLogRect::Tick(_float fTimeDelta)
 	__super::Tick(fTimeDelta);
 	if (m_bPreCheck == true)
 	{
-
-		m_Obj->Set_UiPos({ 0.f,-m_iCount*15.f,0.f });
-
+		_float3 vPos = _float3(0.f, -m_iCount * 15.f, 0.f);
+		m_Obj->Set_UiPos(vPos);
 		m_bPreCheck = false;
 
 	}
