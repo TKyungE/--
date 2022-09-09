@@ -1,3 +1,4 @@
-﻿  BackGroundRect.cpp
-  Client.vcxproj -> C:\Users\태경\Desktop\라그(SR)\라그v1.0\Client\Default\..\Bin\Client.exe
-  Client.vcxproj -> ..\Bin\Client.pdb (Full PDB)
+﻿  LogRect.cpp
+c:\users\태경\desktop\라그(sr)\라그v1.0\client\private\logrect.cpp(131): warning C4244: '인수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+LogRect.obj : error LNK2019: "__declspec(dllimport) public: void __cdecl Engine::CGameObject::Set_UiPos(struct D3DXVECTOR3)" (__imp_?Set_UiPos@CGameObject@Engine@@QEAAXUD3DXVECTOR3@@@Z) 외부 기호(참조 위치: "public: virtual void __cdecl Client::CLogRect::Tick(float)" (?Tick@CLogRect@Client@@UEAAXM@Z) 함수)에서 확인하지 못했습니다.
+..\Bin\Client.exe : fatal error LNK1120: 1개의 확인할 수 없는 외부 참조입니다.
