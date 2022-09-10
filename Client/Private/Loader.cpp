@@ -75,6 +75,7 @@
 #include "Maiden.h"
 #include"InventorySlot.h"
 #include"LogRect.h"
+
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
 {
@@ -100,6 +101,10 @@ unsigned int APIENTRY Thread_Main(void* pArg)
 		break;
 	case LEVEL_CHOBOFIELD:
 		pLoader->Loading_ForChoboLevel();
+		break;
+	case LEVEL_MIDBOSS:
+		pLoader->Loading_ForMidBoss();
+		break;
 	}
 
 	LeaveCriticalSection(&pLoader->Get_CriticalSection());
@@ -212,6 +217,27 @@ HRESULT CLoader::Loading_ForChoboLevel()
 
 
 	lstrcpy(m_szLoadingText, TEXT("타운사냥터2 로딩이 완료되었습니다."));
+
+	m_isFinished = true;
+
+	Safe_Release(pGameInstance);
+	return S_OK;
+}
+
+HRESULT CLoader::Loading_ForMidBoss()
+{
+	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+	if (nullptr == pGameInstance)
+		return E_FAIL;
+
+	Safe_AddRef(pGameInstance);
+
+
+
+
+
+
+	lstrcpy(m_szLoadingText, TEXT("중간보스 로딩이 완료되었습니다."));
 
 	m_isFinished = true;
 
@@ -662,8 +688,13 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/BackGround/Tree/%d.png"), 2))))
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_BackGroundRect"),
-		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/BackGround/etc/%d.png"), 7))))
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/BackGround/etc/BackGround%d.png"), 13))))
 		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_BackGroundFly"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/BackGround/etc/Fly/%d.png"), 12))))
+		return E_FAIL;
+
+
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_HouseRect"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/BackGround/House/%d.png"), 1))))
 		return E_FAIL;
