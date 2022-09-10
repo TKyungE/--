@@ -47,6 +47,7 @@ HRESULT CMaiden::Initialize(void * pArg)
 	m_tInfo.iMaxHp = 9999;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
 	m_tInfo.iMp = 1;
+	
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
@@ -54,10 +55,10 @@ HRESULT CMaiden::Initialize(void * pArg)
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
 	tInfo.vPos = { 1.f,0.7f,1.f };
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo);
-	tInfo.vPos = { 0.7f,0.7f,1.f };
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_MIDBOSS, TEXT("Layer_Status"), &tInfo);
+	tInfo.vPos = { 1.f,1.f,1.f };
 
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_MIDBOSS, TEXT("Layer_Effect"), &tInfo);
 
 	Safe_Release(pGameInstance);
 
@@ -78,7 +79,7 @@ void CMaiden::Tick(_float fTimeDelta)
 			Safe_AddRef(pGameInstance);
 			CGameObject::INFO tInfo;
 			tInfo.pTarget = this;
-			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Angry"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Angry"), LEVEL_MIDBOSS, TEXT("Layer_Effect"), &tInfo);
 			Safe_Release(pGameInstance);
 			m_bAngry = true;
 		}
@@ -266,9 +267,9 @@ void CMaiden::Check_Hit()
 		tInfo.pTarget = this;
 		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);;
 		tInfo.iTargetDmg = m_tInfo.iTargetDmg;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), LEVEL_GAMEPLAY, TEXT("Layer_DmgFont"), &tInfo);
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), LEVEL_MIDBOSS, TEXT("Layer_DmgFont"), &tInfo);
 		tInfo.vPos = m_tInfo.vTargetPos;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_MIDBOSS, TEXT("Layer_Effect"), &tInfo);
 		CSoundMgr::Get_Instance()->PlayEffect(L"Hit_Sound.wav", fSOUND);
 		m_tInfo.bHit = false;
 		Safe_Release(pGameInstance);
@@ -278,13 +279,13 @@ void CMaiden::Check_Hit()
 void CMaiden::Chase(_float fTimeDelta)
 {
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
-	if (Distance >= 5.f)
+	if (Distance >= 15.f)
 		m_bIDLE = false;
 	else
 		m_bIDLE = true;
-	if (2.f >= Distance)
+	if (10.f >= Distance)
 	{
-		if (m_fSkillCool >	3.f)
+		if (m_fSkillCool >	2.f)
 		{
 			m_fSkillCool = 0.f;
 			m_eCurState = SKILL;
@@ -299,7 +300,7 @@ void CMaiden::Chase(_float fTimeDelta)
 		//	vPosition.y = vTargetPos.y += 2.f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
-	else if (2.f < Distance && 5.f > Distance)
+	else if (10.f < Distance && 15.f > Distance)
 	{
 		if (!m_bSkill)
 			m_eCurState = MOVE;
@@ -333,9 +334,9 @@ void CMaiden::Chase2(_float fTimeDelta)
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	if (pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster")) != nullptr)
+	if (pGameInstance->Find_Layer(LEVEL_MIDBOSS, TEXT("Layer_Monster")) != nullptr)
 	{
-		for (auto& iter : pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects())
+		for (auto& iter : pGameInstance->Find_Layer(LEVEL_MIDBOSS, TEXT("Layer_Monster"))->Get_Objects())
 		{
 			_float3 Target = *(_float3*)&iter->Get_World().m[3][0];
 			if (iter->Get_Info().iHp <= 0)
@@ -462,18 +463,30 @@ void CMaiden::OnTerrain()
 	if (nullptr == pGameInstance)
 		return;
 	Safe_AddRef(pGameInstance);
-	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
+	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_MIDBOSS, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
 	if (nullptr == pVIBuffer_Terrain)
 		return;
 
-	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
+	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(LEVEL_MIDBOSS, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
 	if (nullptr == pTransform_Terrain)
 		return;
 
 	_float3			vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.5f);
-
+	if (m_eCurState == SKILL && m_tFrame.iFrameStart < 5)
+	{
+		m_fY += 0.05f;
+		vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.7f + m_fY);
+	}
+	else if (m_eCurState == SKILL && m_tFrame.iFrameStart < 8 && m_tFrame.iFrameStart > 4)
+	{
+	
+	}
+	else
+	{
+		m_fY = 0.f;
+		vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.7f);
+	}
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	Safe_Release(pGameInstance);
 }
@@ -559,11 +572,11 @@ HRESULT CMaiden::Skill_DefaultAttack(const _tchar * pLayerTag)
 
 	CGameObject::INFO tInfo;
 	tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	tInfo.iLevelIndex = LEVEL_GAMEPLAY;
+	tInfo.iLevelIndex = LEVEL_MIDBOSS;
 	tInfo.vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sword"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sword"), LEVEL_MIDBOSS, pLayerTag, &tInfo)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -595,7 +608,7 @@ void CMaiden::Motion_Change()
 		case SKILL:
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 7;
-			m_tFrame.fFrameSpeed = 0.15f;
+			m_tFrame.fFrameSpeed = 0.1f;
 			break;
 		}
 
@@ -664,22 +677,34 @@ void CMaiden::Check_Front()
 		Safe_AddRef(pGameInstance);
 		CGameObject::INFO tInfo;
 		tInfo.pTarget = this;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Help"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Help"), LEVEL_MIDBOSS, TEXT("Layer_Effect"), &tInfo);
 		Safe_Release(pGameInstance);
 	}
 }
 void CMaiden::Use_Skill(_float fTimeDelta)
 {
+	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
+
 	if (!m_bSkill && m_tFrame.iFrameStart == 5)
 	{
-		Skill_DefaultAttack(TEXT("Layer_MonsterSkill"));
+		//Skill_DefaultAttack(TEXT("Layer_MonsterSkill"));
 		m_bSkill = true;
 	}
 	if (m_tFrame.iFrameStart == 7)
 	{
 		m_eCurState = IDLE;
 		m_tFrame.iFrameStart = 0;
+		Skill_DefaultAttack(TEXT("Layer_MonsterSkill"));
 		m_bSkill = false;
+	}
+	if(m_tFrame.iFrameStart < 8 && m_tFrame.iFrameStart > 3 && Distance > 0.5f)
+	{
+		_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_float3		vLook = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		
+		vPosition += *D3DXVec3Normalize(&vLook, &vLook) * 0.5f;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
 }
 HRESULT CMaiden::TextureRender()
@@ -831,9 +856,9 @@ HRESULT CMaiden::RespawnMonster()
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
 	tInfo.vPos = { 1.f,0.7f,1.f };
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_MIDBOSS, TEXT("Layer_Status"), &tInfo);
 	tInfo.vPos = { 0.7f,0.7f,1.f };
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_MIDBOSS, TEXT("Layer_Effect"), &tInfo);
 	Safe_Release(pGameInstance);
 	return S_OK;
 }
@@ -862,23 +887,23 @@ void CMaiden::CheckColl()
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
-	if (pInstance->Collision(this, COLLISION_PLAYER, &pTarget))
-	{
-		_float3 vBackPos;
-		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
-		{
-			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
-			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
-		}
-		else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
-		{
-			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
-			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
-		}
-		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
+	//if (pInstance->Collision(this, COLLISION_PLAYER, &pTarget))
+	//{
+	//	_float3 vBackPos;
+	//	if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
+	//	{
+	//		vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
+	//		vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
+	//	}
+	//	else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
+	//	{
+	//		vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
+	//		vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
+	//	}
+	//	vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
-	}
+	//	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
+	//}
 	if (pInstance->Collision(this, COLLISION_OBJECT, &pTarget))
 	{
 		_float3 vBackPos;

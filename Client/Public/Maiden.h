@@ -71,6 +71,7 @@ private:
 	_float				m_fRespawnTime = 0.f;
 	_float				m_fDeadTime = 0.f;
 	_float				m_fMove = 0.f;
+	_float				m_fY = 0.f;
 	_int				m_irand = 0;
 	_bool				m_bSkill = false;
 	_bool				m_bMove = false;
