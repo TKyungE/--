@@ -24,6 +24,7 @@ HRESULT CLogRect::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
+
 	D3DXMatrixOrthoLH(&m_ProjMatrix, (float)g_iWinSizeX, (float)g_iWinSizeY, 0.f, 1.f);
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	m_fSizeX = 360.f;
@@ -32,8 +33,10 @@ HRESULT CLogRect::Initialize(void * pArg)
 	m_fY = 650.0f;
 	m_tInfo.vPos.x = m_fX;
 	m_tInfo.vPos.y = m_fY;
+
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
+
 	D3DXCreateFont(m_pGraphic_Device,
 		15,
 		0,
@@ -46,6 +49,7 @@ HRESULT CLogRect::Initialize(void * pArg)
 		DEFAULT_PITCH | FF_DONTCARE,
 		TEXT("±Ã¼­"),
 		&m_pFont);
+
 	m_iTimer = 0;
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 
@@ -105,7 +109,6 @@ void CLogRect::Late_Tick(_float fTimeDelta)
 
 HRESULT CLogRect::Render()
 {
-
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
@@ -199,11 +202,11 @@ _float4x4 CLogRect::Get_World(void)
 
 void CLogRect::Free()
 {
+	Safe_Release(m_pFont);
 	__super::Free();
 
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pRendererCom);
-	Safe_Release(m_pFont);
 }
 

@@ -116,8 +116,6 @@ _bool CFrustum::IsinFrustum(_float3 vPos, _float3 vScale)
 			if (fHeight > fLength)
 				return false;
 		}
-		else
-			return false;
 	}
 
 	return true;
