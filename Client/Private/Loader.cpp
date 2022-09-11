@@ -75,6 +75,8 @@
 #include "Maiden.h"
 #include"InventorySlot.h"
 #include"LogRect.h"
+#include "Drain.h"
+
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
@@ -148,33 +150,7 @@ HRESULT CLoader::Loading_ForLogoLevel()
 
 HRESULT CLoader::Loading_ForGamePlayLevel()
 {
-	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-	if (nullptr == pGameInstance)
-		return E_FAIL;
 
-	Safe_AddRef(pGameInstance);
-
-	/* 텍스쳐 로딩 중. */
-	lstrcpy(m_szLoadingText, TEXT("텍스쳐 로딩 중."));
-
-	
-
-	/* 모델 로딩 중. */
-	lstrcpy(m_szLoadingText, TEXT("모델 로딩 중."));
-
-
-	/* 셰이더 로딩 중. */
-	lstrcpy(m_szLoadingText, TEXT("셰이더 로딩 중."));
-	
-
-	/* 객체 생성 중. */
-	lstrcpy(m_szLoadingText, TEXT("객체 생성 중."));
-
-
-
-	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
-
-	Safe_Release(pGameInstance);
 
 	m_isFinished = true;
 
@@ -184,64 +160,25 @@ HRESULT CLoader::Loading_ForGamePlayLevel()
 
 HRESULT CLoader::Loading_ForTownLevel()
 {
-	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-	if (nullptr == pGameInstance)
-		return E_FAIL;
 
-	Safe_AddRef(pGameInstance);
-
-	
-	
-	
-	
-
-	lstrcpy(m_szLoadingText, TEXT("타운 로딩이 완료되었습니다."));
 
 	m_isFinished = true;
 
-	Safe_Release(pGameInstance);
 	return S_OK;
 }
 
 HRESULT CLoader::Loading_ForChoboLevel()
 {
-	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-	if (nullptr == pGameInstance)
-		return E_FAIL;
-
-	Safe_AddRef(pGameInstance);
-
-
-
-
-
-
-	lstrcpy(m_szLoadingText, TEXT("타운사냥터2 로딩이 완료되었습니다."));
-
 	m_isFinished = true;
 
-	Safe_Release(pGameInstance);
 	return S_OK;
 }
 
 HRESULT CLoader::Loading_ForMidBoss()
 {
-	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-	if (nullptr == pGameInstance)
-		return E_FAIL;
-
-	Safe_AddRef(pGameInstance);
-
-
-
-
-
-
-	lstrcpy(m_szLoadingText, TEXT("중간보스 로딩이 완료되었습니다."));
 
 	m_isFinished = true;
 
-	Safe_Release(pGameInstance);
 	return S_OK;
 }
 
@@ -385,6 +322,10 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Rain"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/snow/%d.png"), 2))))
 		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Drain"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/Drain/%d.bmp"), 1))))
+		return E_FAIL;
+
 
 	//Skill 텍스쳐
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_ThunderCloud"),
@@ -919,7 +860,9 @@ HRESULT CLoader::Loading_Prototype()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Shadow"),
 		CShadow::Create(m_pGraphic_Device))))
 		return E_FAIL;
-	
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Drain"),
+		CDrain::Create(m_pGraphic_Device))))
+		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_House"),
 		CHouse::Create(m_pGraphic_Device))))

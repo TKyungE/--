@@ -204,7 +204,7 @@ HRESULT CLevel_MidBoss::Ready_Layer_Monster(const _tchar * pLayerTag)
 	Info.iLevelIndex = LEVEL_MIDBOSS;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Maiden"), LEVEL_MIDBOSS, pLayerTag, &Info)))
 		return E_FAIL;
-
+	
 	Safe_Release(pGameInstance);
 	return S_OK;
 }

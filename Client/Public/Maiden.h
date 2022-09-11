@@ -52,15 +52,12 @@ private:
 	HRESULT Skill_DefaultAttack(const _tchar * pLayerTag);
 	void Check_Hit();
 	void Chase(_float fTimeDelta);
-	void Chase2(_float fTimeDelta);
-	void Chase3(_float fTimeDelta);
 	void Motion_Change();
 	void Move_Frame(_float fTimeDelta);
 	void Check_Front();
 	void Use_Skill(_float fTimeDelta);
 	HRESULT TextureRender();
 	void MonsterMove(_float fTimeDelta);
-	HRESULT RespawnMonster();
 	void CheckColl();
 private:
 	STATE				m_ePreState;
@@ -76,10 +73,10 @@ private:
 	_bool				m_bSkill = false;
 	_bool				m_bMove = false;
 	_bool				m_bDead = false;
-	_bool				m_bRun = false;
+	_bool				m_bTotem = false;
 	_bool				m_bAngry = false;
 	_bool				m_bIDLE = false;
-	_bool				m_bRespawn = false;
+
 public:
 	static CMaiden* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

@@ -172,9 +172,6 @@
     <Filter Include="02.GameObject\BackGroundObj\House">
       <UniqueIdentifier>{36349508-8e85-4729-bab5-e5cb61236108}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\BackGroundObj\Stone">
-      <UniqueIdentifier>{2485e12a-1952-4029-bd81-c026f7e639c0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Levels\Town">
       <UniqueIdentifier>{68167f68-27fb-4e3c-ab0b-50f5c284a1da}</UniqueIdentifier>
     </Filter>
@@ -288,6 +285,12 @@
     </Filter>
     <Filter Include="01.Levels\MidBoss">
       <UniqueIdentifier>{b1e7dcf6-c4ff-48e1-9f9b-13ecdaded839}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\09.Drain">
+      <UniqueIdentifier>{8b81d193-2917-4d24-b6e2-ae9043da6817}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Totem">
+      <UniqueIdentifier>{2485e12a-1952-4029-bd81-c026f7e639c0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -448,7 +451,7 @@
       <Filter>02.GameObject\BackGroundObj\House</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Stone.h">
-      <Filter>02.GameObject\BackGroundObj\Stone</Filter>
+      <Filter>02.GameObject\BackGroundObj\Totem</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Town.h">
       <Filter>01.Levels\Town</Filter>
@@ -557,6 +560,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Level_MidBoss.h">
       <Filter>01.Levels\MidBoss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Drain.h">
+      <Filter>03.Effect\Default\09.Drain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -702,7 +708,7 @@
       <Filter>02.GameObject\BackGroundObj\House</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Stone.cpp">
-      <Filter>02.GameObject\BackGroundObj\Stone</Filter>
+      <Filter>02.GameObject\BackGroundObj\Totem</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Town.cpp">
       <Filter>01.Levels\Town</Filter>
@@ -814,6 +820,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Level_MidBoss.cpp">
       <Filter>01.Levels\MidBoss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Drain.cpp">
+      <Filter>03.Effect\Default\09.Drain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
