@@ -27,7 +27,6 @@ public: /* For.Engine */
 
 	void Clear(_uint iLevelIndex);
 
-
 public: /* For.Graphic_Device */	
 	void		Render_Begin(void);
 	void		Render_End(HWND hWnd = 0);

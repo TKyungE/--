@@ -44,7 +44,7 @@ public:
 		_bool		 bHit;//ui 온오프
 		_int		 iLevelIndex;
 		_int		 iNextLevel;
-
+		_int		 iMonsterType;	//퀘스트용 몬스터 구분 변수
 	}INFO;
 	typedef struct tagFrameInfo
 	{

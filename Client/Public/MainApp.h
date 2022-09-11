@@ -41,7 +41,6 @@ private:
 
 	HRESULT SetUp_RenderState();
 	HRESULT SetUp_SamplerState();
-	
 
 public:
 	static CMainApp* Create();

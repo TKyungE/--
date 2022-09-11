@@ -289,6 +289,15 @@
     <Filter Include="01.Levels\MidBoss">
       <UniqueIdentifier>{b1e7dcf6-c4ff-48e1-9f9b-13ecdaded839}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. Quest">
+      <UniqueIdentifier>{2ad4a041-b5c5-4315-bc39-678bf2609c8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Quest\HuntQuest1">
+      <UniqueIdentifier>{61f8b335-ecfc-42dc-9705-4eeab5e8a15c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Quest\CollectQuest1">
+      <UniqueIdentifier>{7233d4cd-a30e-4657-900b-d3f759868549}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -558,6 +567,9 @@
     <ClInclude Include="..\Public\Level_MidBoss.h">
       <Filter>01.Levels\MidBoss</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\HuntQuest1.h">
+      <Filter>05. Quest\HuntQuest1</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -814,6 +826,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Level_MidBoss.cpp">
       <Filter>01.Levels\MidBoss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\HuntQuest1.cpp">
+      <Filter>05. Quest\HuntQuest1</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

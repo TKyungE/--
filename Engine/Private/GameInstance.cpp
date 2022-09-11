@@ -13,7 +13,9 @@ CGameInstance::CGameInstance()
 	, m_pKeyMgr(CKeyMgr::Get_Instance())
 	, m_pFrustum(CFrustum::Get_Instance())
 	, m_pCollision_Manager(CCollisionMgr::Get_Instance())
+	, m_pQuest_Manager(CQuestManager::Get_Instance())
 {
+	Safe_AddRef(m_pQuest_Manager);
 	Safe_AddRef(m_pFrustum);
 	Safe_AddRef(m_pCollision_Manager);
 	Safe_AddRef(m_pKeyMgr);
@@ -52,7 +54,6 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, _uin
 	if (FAILED(m_pComponent_Manager->Reserve_Container(iNumLevels)))
 		return E_FAIL;
 
-
 	if (FAILED(m_pFrustum->Initialize(*ppOut)))
 		return E_FAIL;
 
@@ -74,7 +75,7 @@ void CGameInstance::Tick_Engine(_float fTimeDelta)
 
 	m_pFrustum->Tick();
 	m_pPicking->Tick();
-	//m_pQuest_Manager->Tick();
+	m_pQuest_Manager->Tick();
 
 	m_pLevel_Manager->Late_Tick(fTimeDelta);
 	m_pObject_Manager->Late_Tick(fTimeDelta);

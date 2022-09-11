@@ -24,20 +24,26 @@ HRESULT CVillage_Quest1::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
+
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
+
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
+
 	_float3 vScale = { 1.f,1.f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 
-	m_tInfo.vPos.y -= 0.5f;
+	//m_tInfo.vPos.y += 0.3f;
+
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 	m_tInfo.bDead = false;
 	m_tInfo.fX = 0.1f;
 	m_tFrame.iFrameStart = 0;
+
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
+
 	Safe_AddRef(pGameInstance);
 
 	CGameObject::INFO tInfo;
@@ -45,7 +51,9 @@ HRESULT CVillage_Quest1::Initialize(void * pArg)
 	tInfo.vPos = { 0.7f,0.7f,1.f };
 
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
+
 	Safe_Release(pGameInstance);
+
 	return S_OK;
 }
 
@@ -61,7 +69,6 @@ void CVillage_Quest1::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
 
-
 	OnBillboard();
 
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
@@ -73,6 +80,7 @@ void CVillage_Quest1::Late_Tick(_float fTimeDelta)
 		if (nullptr != m_pRendererCom)
 			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
 	}
+
 	Safe_Release(pInstance);
 }
 
@@ -80,12 +88,14 @@ HRESULT CVillage_Quest1::Render(void)
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
+
 	Off_SamplerState();
+
 	if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 		return E_FAIL;
+
 	if (FAILED(m_pTextureCom->Bind_OnGraphicDev(m_tInfo.iMp)))
 		return E_FAIL;
-
 
 	if (FAILED(SetUp_RenderState()))
 		return E_FAIL;
@@ -94,7 +104,9 @@ HRESULT CVillage_Quest1::Render(void)
 
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
+
 	On_SamplerState();
+
 	return S_OK;
 }
 
@@ -108,7 +120,6 @@ HRESULT CVillage_Quest1::SetUp_Components(void)
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_NPC"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
-
 
 	CTransform::TRANSFORMDESC TransformDesc;
 	ZeroMemory(&TransformDesc, sizeof(CTransform::TRANSFORMDESC));
@@ -130,6 +141,7 @@ HRESULT CVillage_Quest1::SetUp_RenderState(void)
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+
 	return S_OK;
 }
 
@@ -140,6 +152,7 @@ HRESULT CVillage_Quest1::Release_RenderState(void)
 
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	m_pGraphic_Device->SetTexture(0, nullptr);
+
 	return S_OK;
 }
 HRESULT CVillage_Quest1::On_SamplerState()
@@ -159,9 +172,9 @@ HRESULT CVillage_Quest1::Off_SamplerState()
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
 
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_NONE);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_NONE);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_POINT);
 
 	return S_OK;
 }
@@ -172,6 +185,7 @@ void CVillage_Quest1::OnTerrain(void)
 		return;
 
 	Safe_AddRef(pGameInstance);
+
 	CVIBuffer_Terrain* pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(m_tInfo.iLevelIndex, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
 	if (nullptr == pVIBuffer_Terrain)
 		return;
@@ -182,7 +196,7 @@ void CVillage_Quest1::OnTerrain(void)
 
 	_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.4f);
+	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.3f);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	Safe_Release(pGameInstance);
