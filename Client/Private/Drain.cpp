@@ -33,8 +33,8 @@ HRESULT CDrain::Initialize(void* pArg)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
 	ScaleX = rand() % 30 * 0.01f;
-	ScaleY = rand() % 30 * 0.01f;
-	_float3 vScale = { ScaleX,ScaleY,1.f };
+//	ScaleY = rand() % 30 * 0.01f;
+	_float3 vScale = { ScaleX,ScaleX,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 
 
@@ -150,7 +150,7 @@ void CDrain::OnBillboard()
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
 
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * ScaleX);
-	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * ScaleY);
+	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * ScaleX);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
 }
 void CDrain::Move(_float fTimeDelta)
@@ -169,8 +169,20 @@ void CDrain::TargetHeal()
 	if (Distance < 0.1f)
 	{
 		Set_Dead();
-		if(m_tInfo.pTarget->Get_Info().iHp < m_tInfo.pTarget->Get_Info().iMaxHp - 1000)
-			m_tInfo.pTarget->Set_Hp(-1000);
+		if (m_tInfo.pTarget->Get_Info().iHp < m_tInfo.pTarget->Get_Info().iMaxHp - 30)
+		{
+			m_tInfo.pTarget->Set_Hp(-30);
+			CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+			Safe_AddRef(pGameInstance);
+			CGameObject::INFO tInfo;
+	
+			tInfo.pTarget = m_tInfo.pTarget;
+			tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+			if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_AuraBlue"), LEVEL_MIDBOSS, TEXT("Layer_Effect"), &tInfo)))
+				return;
+			
+			Safe_Release(pGameInstance);
+		}
 	}
 }
 HRESULT CDrain::SetUp_RenderState()

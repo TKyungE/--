@@ -57,8 +57,8 @@ private:
 	void Check_Front();
 	void Use_Skill(_float fTimeDelta);
 	HRESULT TextureRender();
-	void MonsterMove(_float fTimeDelta);
 	void CheckColl();
+	void Create_BlueFire(_float fTimeDelta);
 private:
 	STATE				m_ePreState;
 	STATE				m_eCurState;
@@ -74,9 +74,12 @@ private:
 	_bool				m_bMove = false;
 	_bool				m_bDead = false;
 	_bool				m_bTotem = false;
-	_bool				m_bAngry = false;
+	_bool				m_bPowerTotem = false;
+	_bool				m_bPowerTotem2 = false;
 	_bool				m_bIDLE = false;
-
+	_bool				m_bLastHeal = false;
+	_bool				m_bBlueFire = false;
+	_bool				m_bBlueFireTime = 0.f;
 public:
 	static CMaiden* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

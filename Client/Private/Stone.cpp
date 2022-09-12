@@ -245,7 +245,7 @@ HRESULT CStone::CreateDrain(_float fTimeDelta)
 		CGameObject::INFO tInfo;
 		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		tInfo.vPos.y += 1.8f;
-		tInfo.pTarget = m_tInfo.pTarget;
+		tInfo.pTarget = m_tInfo.pTerrain;
 		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 
 		float iDest = rand() % 30 * 0.01f;
@@ -343,24 +343,4 @@ void CStone::Free(void)
 }
 void CStone::CheckColl()
 {
-	CGameInstance* pInstance = CGameInstance::Get_Instance();
-	if (nullptr == pInstance)
-		return;
-
-	Safe_AddRef(pInstance);
-	CGameObject* pTarget;
-	if (pInstance->Collision(this, COLLISION_PLAYERSKILL, &pTarget))
-	{
-		if (m_fHitTime > 0.1f)
-		{
-			m_tInfo.iHp -= pTarget->Get_Info().iDmg;
-			m_tInfo.iTargetDmg = pTarget->Get_Info().iDmg;
-			m_tInfo.bHit = true;
-			if (m_tInfo.iHp <= 0)
-				Set_Dead();
-			m_fHitTime = 0.f;
-		}
-	}
-
-
 }
