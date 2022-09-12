@@ -213,7 +213,7 @@ void CPlayer::CheckColl()
 
 	Safe_AddRef(pInstance);
 	CGameObject* pTarget;
-	if (pInstance->Collision(this, COLLISION_OBJECT, &pTarget))
+	if (pInstance->Collision(this, COLLISION_OBJECT, TEXT("Com_Collider"), &pTarget))
 	{
 		_float3 vBackPos;
 		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
@@ -230,7 +230,7 @@ void CPlayer::CheckColl()
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
-	if (pInstance->Collision(this, COLLISION_TOTEM, &pTarget))
+	if (pInstance->Collision(this, COLLISION_TOTEM, TEXT("Com_Collider"),&pTarget))
 	{
 		_float3 vBackPos;
 		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
@@ -264,6 +264,27 @@ void CPlayer::CheckColl()
 
 	//	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	//}
+	if (pInstance->Collision(this, COLLISION_NPC, TEXT("Com_Collider"), &pTarget))
+	{
+		_float3 vBackPos;
+		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
+		{
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
+		}
+		else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
+		{
+			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
+			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
+		}
+		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
+	}
+	if (pInstance->Collision(this, COLLISION_NPC, TEXT("Com_QuestCollider"), &pTarget))
+	{
+		ERR_MSG(TEXT("Can Talk"));
+	}
 	Safe_Release(pInstance);
 }
 
@@ -1029,26 +1050,6 @@ void CPlayer::Get_PickingPoint(void)
 		return;
 
 	Safe_AddRef(pGameInstance);
-
-	CLayer* pNPC_Layer = pGameInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_NPC"));
-	if (nullptr != pNPC_Layer)
-	{
-		for (_int i = 0; i < pNPC_Layer->Get_Objects().size(); ++i)
-		{
-			CVIBuffer_Rect* pVIBuffer_Rect = (CVIBuffer_Rect*)pGameInstance->Get_Component(m_tInfo.iLevelIndex, TEXT("Layer_NPC"), TEXT("Com_VIBuffer"), i);
-			if (nullptr == pVIBuffer_Rect)
-				continue;
-			
-			CTransform* pTransform_Rect = (CTransform*)pGameInstance->Get_Component(m_tInfo.iLevelIndex, TEXT("Layer_NPC"), TEXT("Com_Transform"), i);
-			if (nullptr == pTransform_Rect)
-				continue;
-			
-			pVIBuffer_Rect->Picking(pTransform_Rect->Get_WorldMatrix(), &m_fPickPoint);
-
-			Safe_Release(pGameInstance);
-			return;
-		}
-	}
 
 	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(m_tInfo.iLevelIndex, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
 	if (nullptr == pVIBuffer_Terrain)

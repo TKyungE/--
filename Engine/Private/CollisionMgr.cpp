@@ -6,7 +6,6 @@ IMPLEMENT_SINGLETON(CCollisionMgr)
 
 CCollisionMgr::CCollisionMgr()
 {
-
 }
 
 HRESULT CCollisionMgr::Reserve_Container(_uint iNumObjects)
@@ -30,7 +29,7 @@ HRESULT CCollisionMgr::Add_ColiisionGroup(_uint iCollisionGroup, CGameObject * p
 	return S_OK;
 }
 
-_bool CCollisionMgr::Collision(CGameObject * pGameObject, _uint iCollisionGroup, CGameObject** pTarget)
+_bool CCollisionMgr::Collision(CGameObject * pGameObject, _uint iCollisionGroup, const _tchar* szColliderName, CGameObject** pTarget)
 {
 	if (nullptr == pGameObject)
 	{
@@ -40,7 +39,7 @@ _bool CCollisionMgr::Collision(CGameObject * pGameObject, _uint iCollisionGroup,
 
 	for (auto& iter : m_GameObjects[iCollisionGroup])
 	{
-		if (Collision_AABB(pGameObject, iter))
+		if (Collision_AABB(pGameObject, iter, szColliderName))
 		{
 			*pTarget = iter;
 			return true;
@@ -64,8 +63,7 @@ void CCollisionMgr::Release_Objects(void)
 	}
 }
 
-
-_bool CCollisionMgr::Collision_AABB(class CGameObject* _Dest, class CGameObject* _Sour)
+_bool CCollisionMgr::Collision_AABB(class CGameObject* _Dest, class CGameObject* _Sour, const _tchar* szColliderName)
 {
 	if (_Dest == _Sour)
 		return false;
@@ -80,7 +78,7 @@ _bool CCollisionMgr::Collision_AABB(class CGameObject* _Dest, class CGameObject*
 	_float3 DestMin = DestCollider->Find_MinPoint();
 	_float3 DestMax = DestCollider->Find_MaxPoint();
 
-	CCollider* SourCollider = (CCollider*)_Sour->Find_Component(TEXT("Com_Collider"));
+	CCollider* SourCollider = (CCollider*)_Sour->Find_Component(szColliderName);
 	if (nullptr == SourCollider)
 	{
 		ERR_MSG(TEXT("Failed to Check AABB : Sour"));

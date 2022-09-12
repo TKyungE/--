@@ -76,7 +76,6 @@ void CPortal::Late_Tick(_float fTimeDelta)
 
 	//OnBillboard();
 
-
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 	if (nullptr == pInstance)
 		return;
@@ -89,9 +88,8 @@ void CPortal::Late_Tick(_float fTimeDelta)
 	}
 
 	CGameObject* pTarget;
-	if (pInstance->Collision(this, COLLISION_PLAYER, &pTarget))
+	if (pInstance->Collision(this, COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
 		m_bLevel = true;
-
 
 	Safe_Release(pInstance);
 }

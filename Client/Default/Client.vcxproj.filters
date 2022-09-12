@@ -304,6 +304,12 @@
     <Filter Include="03.Effect\Default\11.AuraBlue">
       <UniqueIdentifier>{552a4c66-03e3-45ee-a30b-8ec4eecae360}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05. Quest">
+      <UniqueIdentifier>{d4a02d66-7e4e-458d-a7be-e9b2c68cf598}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05. Quest\HuntQuest">
+      <UniqueIdentifier>{a33dba0d-0654-45f0-a817-d2ea17391af2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -588,6 +594,9 @@
     <ClInclude Include="..\public\AuraBlue.h">
       <Filter>03.Effect\Default\11.AuraBlue</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\HuntQuest1.h">
+      <Filter>05. Quest\HuntQuest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -859,6 +868,9 @@
     </ClCompile>
     <ClCompile Include="..\private\AuraBlue.cpp">
       <Filter>03.Effect\Default\11.AuraBlue</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\HuntQuest1.cpp">
+      <Filter>05. Quest\HuntQuest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
