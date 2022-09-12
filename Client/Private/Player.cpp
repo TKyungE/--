@@ -1030,6 +1030,26 @@ void CPlayer::Get_PickingPoint(void)
 
 	Safe_AddRef(pGameInstance);
 
+	CLayer* pNPC_Layer = pGameInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_NPC"));
+	if (nullptr != pNPC_Layer)
+	{
+		for (_int i = 0; i < pNPC_Layer->Get_Objects().size(); ++i)
+		{
+			CVIBuffer_Rect* pVIBuffer_Rect = (CVIBuffer_Rect*)pGameInstance->Get_Component(m_tInfo.iLevelIndex, TEXT("Layer_NPC"), TEXT("Com_VIBuffer"), i);
+			if (nullptr == pVIBuffer_Rect)
+				continue;
+			
+			CTransform* pTransform_Rect = (CTransform*)pGameInstance->Get_Component(m_tInfo.iLevelIndex, TEXT("Layer_NPC"), TEXT("Com_Transform"), i);
+			if (nullptr == pTransform_Rect)
+				continue;
+			
+			pVIBuffer_Rect->Picking(pTransform_Rect->Get_WorldMatrix(), &m_fPickPoint);
+
+			Safe_Release(pGameInstance);
+			return;
+		}
+	}
+
 	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(m_tInfo.iLevelIndex, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
 	if (nullptr == pVIBuffer_Terrain)
 		return;

@@ -33,7 +33,7 @@ HRESULT CVillage_Quest1::Initialize(void * pArg)
 	_float3 vScale = { 1.f,1.f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 
-	//m_tInfo.vPos.y += 0.3f;
+	m_tInfo.vPos.y += 0.3f;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 	m_tInfo.bDead = false;
@@ -61,7 +61,7 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
-	OnTerrain();
+	//OnTerrain();
 
 }
 
@@ -234,7 +234,7 @@ CGameObject * CVillage_Quest1::Clone(void * pArg)
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		ERR_MSG(TEXT("Failed to Cloned : CPortal"));
+		ERR_MSG(TEXT("Failed to Cloned : CVillage_Quest1"));
 		Safe_Release(pInstance);
 	}
 
