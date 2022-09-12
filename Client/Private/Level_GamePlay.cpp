@@ -428,6 +428,7 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Monster(const _tchar * pLayerTag)
 
 		++iCount;
 	}
+	
 
 	Safe_Release(pGameInstance);
 

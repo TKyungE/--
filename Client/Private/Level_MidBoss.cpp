@@ -35,8 +35,8 @@ HRESULT CLevel_MidBoss::Initialize(void)
 	if (FAILED(Ready_Layer_Camera(TEXT("Layer_Camera"))))
 		return E_FAIL;
 
-	/*if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
-		return E_FAIL;*/
+	if (FAILED(Ready_Layer_Monster(TEXT("Layer_Monster"))))
+		return E_FAIL;
 
 	if (FAILED(Ready_Layer_UI(TEXT("Layer_UI"))))
 		return E_FAIL;
@@ -197,6 +197,15 @@ HRESULT CLevel_MidBoss::Ready_Layer_Player(const _tchar * pLayerTag)
 
 HRESULT CLevel_MidBoss::Ready_Layer_Monster(const _tchar * pLayerTag)
 {
+	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	Info.vPos = { 19.f,0.f,21.f };
+	Info.iLevelIndex = LEVEL_MIDBOSS;
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Maiden"), LEVEL_MIDBOSS, pLayerTag, &Info)))
+		return E_FAIL;
+	
+	Safe_Release(pGameInstance);
 	return S_OK;
 }
 

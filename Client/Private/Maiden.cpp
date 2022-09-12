@@ -39,24 +39,26 @@ HRESULT CMaiden::Initialize(void * pArg)
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;
 	m_tFrame.iFrameStart = 0;
-	m_tFrame.iFrameEnd = 6;
+	m_tFrame.iFrameEnd = 5;
 	m_tFrame.fFrameSpeed = 0.15f;
 	m_tInfo.bDead = false;
 	m_tInfo.iDmg = 66;
 	m_tInfo.fX = 0.5f;
-	m_tInfo.iMaxHp = 299999;
+	m_tInfo.iMaxHp = 9999;
 	m_tInfo.iHp = m_tInfo.iMaxHp;
-	m_tInfo.iMp = 1;
+	m_tInfo.iMp = 0;
+	
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return E_FAIL;
 	Safe_AddRef(pGameInstance);
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo);
-	tInfo.vPos = { 0.7f,0.7f,1.f };
+	tInfo.vPos = { 1.f,0.7f,1.f };
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_MIDBOSS, TEXT("Layer_Status"), &tInfo);
+	tInfo.vPos = { 1.f,1.f,1.f };
 
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_MIDBOSS, TEXT("Layer_Effect"), &tInfo);
 
 	Safe_Release(pGameInstance);
 
@@ -67,58 +69,33 @@ HRESULT CMaiden::Initialize(void * pArg)
 void CMaiden::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
-	if (!m_bRespawn)
-	{
-		m_fSkillCool += fTimeDelta;
-		if (m_tInfo.iMp == 2 && !m_bAngry)
-		{
-			CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-			Safe_AddRef(pGameInstance);
-			CGameObject::INFO tInfo;
-			tInfo.pTarget = this;
-			pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Angry"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
-			Safe_Release(pGameInstance);
-			m_bAngry = true;
-		}
+	
 		OnTerrain();
 		if (!m_bDead)
+		{
 			Check_Front();
+			if (m_bBlueFire)
+				Create_BlueFire(fTimeDelta);
+		}
 		if (m_eCurState == DEAD)
 		{
 			if (m_tFrame.iFrameStart == 4)
 			{
-				m_fDeadTime += fTimeDelta;
-				if (m_fDeadTime > 3.f)
-				{
-					_float3 vDeadPos = { -50000.f,-50000.f,-50000.f };
-					m_pTransformCom->Set_State(CTransform::STATE_POSITION, vDeadPos);
-					m_pTransformCom->Bind_OnGraphicDev();
-					m_bRespawn = true;
-					return;
-				}
+				Set_Dead();
+				return;
+				
 			}
 			if (m_tFrame.iFrameStart != 4)
 				Move_Frame(fTimeDelta);
 			m_tInfo.bDead = false;
 			return;
 		}
-		if (m_tInfo.iMp == 1)
+		if (!m_bLastHeal)
 		{
-			if (!m_bSkill && !m_bDead && !m_bRun)
+			m_fSkillCool += fTimeDelta;
+			if (!m_bSkill && !m_bDead)
 				Chase(fTimeDelta);
-
-			if (m_bRun)
-				Chase2(fTimeDelta);
 		}
-		else if (!m_bSkill && !m_bDead)
-			Chase3(fTimeDelta);
-
-		if (m_tInfo.iMp == 1 && !m_bIDLE)
-		{
-			MonsterMove(fTimeDelta);
-		}
-
-
 		Move_Frame(fTimeDelta);
 		if (m_eCurState == SKILL)
 			Use_Skill(fTimeDelta);
@@ -131,24 +108,15 @@ void CMaiden::Tick(_float fTimeDelta)
 
 		Safe_AddRef(pInstance);
 
-		if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_MONSTER, this)))
+		if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_BOSS, this)))
 		{
 			ERR_MSG(TEXT("Failed to Add CollisionGroup : CMaiden"));
 			return;
 		}
 
 		Safe_Release(pInstance);
-	}
-	else
-	{
-		m_fRespawnTime += fTimeDelta;
-		if (m_fRespawnTime > 10.f)
-		{
-			RespawnMonster();
-			m_fRespawnTime = 0.f;
-			m_bRespawn = false;
-		}
-	}
+	
+
 
 	m_tInfo.bDead = false;
 }
@@ -156,8 +124,7 @@ void CMaiden::Tick(_float fTimeDelta)
 void CMaiden::Late_Tick(_float fTimeDelta)
 {
 	__super::Late_Tick(fTimeDelta);
-	if (!m_bRespawn)
-	{
+	
 		if (!m_bDead)
 		{
 			Check_Hit();
@@ -167,13 +134,12 @@ void CMaiden::Late_Tick(_float fTimeDelta)
 		OnBillboard();
 		if (nullptr != m_pRendererCom)
 			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
-	}
+	
 }
 
 HRESULT CMaiden::Render(void)
 {
-	if (!m_bRespawn)
-	{
+
 		if (FAILED(__super::Render()))
 			return E_FAIL;
 		Off_SamplerState();
@@ -192,7 +158,7 @@ HRESULT CMaiden::Render(void)
 		On_SamplerState();
 		if (g_bCollider)
 			m_pColliderCom->Render();
-	}
+	
 	return S_OK;
 }
 HRESULT CMaiden::SetUp_Components(void)
@@ -203,21 +169,21 @@ HRESULT CMaiden::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_VIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pVIBufferCom)))
 		return E_FAIL;
 
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Dandelion_IDLE_Front"), (CComponent**)&m_pTextureComIDLE_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Maiden_IDLE_Front"), (CComponent**)&m_pTextureComIDLE_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Dandelion_IDLE_Back"), (CComponent**)&m_pTextureComIDLE_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_IDLE_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Maiden_IDLE_Back"), (CComponent**)&m_pTextureComIDLE_Back)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Dandelion_Move_Front"), (CComponent**)&m_pTextureComMove_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Maiden_IDLE_Front"), (CComponent**)&m_pTextureComMove_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Dandelion_Move_Back"), (CComponent**)&m_pTextureComMove_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Move_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Maiden_IDLE_Back"), (CComponent**)&m_pTextureComMove_Back)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Attack_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Dandelion_Attack_Front"), (CComponent**)&m_pTextureComAttack_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Attack_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Maiden_Attack_Front"), (CComponent**)&m_pTextureComAttack_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Attack_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Dandelion_Attack_Back"), (CComponent**)&m_pTextureComAttack_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Attack_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Maiden_Attack_Back"), (CComponent**)&m_pTextureComAttack_Back)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Dead_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Dandelion_Dead_Front"), (CComponent**)&m_pTextureComDead_Front)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Dead_Front"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Maiden_Dead_Front"), (CComponent**)&m_pTextureComDead_Front)))
 		return E_FAIL;
-	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Dead_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Dandelion_Dead_Back"), (CComponent**)&m_pTextureComDead_Back)))
+	if (FAILED(__super::Add_Components(TEXT("Com_Texture_Dead_Back"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_Maiden_Dead_Back"), (CComponent**)&m_pTextureComDead_Back)))
 		return E_FAIL;
 	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
 		return E_FAIL;
@@ -264,9 +230,9 @@ void CMaiden::Check_Hit()
 		tInfo.pTarget = this;
 		tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);;
 		tInfo.iTargetDmg = m_tInfo.iTargetDmg;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), LEVEL_GAMEPLAY, TEXT("Layer_DmgFont"), &tInfo);
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DmgFont"), LEVEL_MIDBOSS, TEXT("Layer_DmgFont"), &tInfo);
 		tInfo.vPos = m_tInfo.vTargetPos;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Hit"), LEVEL_MIDBOSS, TEXT("Layer_Effect"), &tInfo);
 		CSoundMgr::Get_Instance()->PlayEffect(L"Hit_Sound.wav", fSOUND);
 		m_tInfo.bHit = false;
 		Safe_Release(pGameInstance);
@@ -276,13 +242,13 @@ void CMaiden::Check_Hit()
 void CMaiden::Chase(_float fTimeDelta)
 {
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
-	if (Distance >= 5.f)
+	if (Distance >= 15.f)
 		m_bIDLE = false;
 	else
 		m_bIDLE = true;
-	if (1.f >= Distance)
+	if (10.f >= Distance)
 	{
-		if (m_fSkillCool >	0.4f)
+		if (m_fSkillCool >	3.f)
 		{
 			m_fSkillCool = 0.f;
 			m_eCurState = SKILL;
@@ -297,7 +263,7 @@ void CMaiden::Chase(_float fTimeDelta)
 		//	vPosition.y = vTargetPos.y += 2.f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
-	else if (1.f < Distance && 5.f > Distance)
+	else if (10.f < Distance && 15.f > Distance)
 	{
 		if (!m_bSkill)
 			m_eCurState = MOVE;
@@ -322,156 +288,39 @@ void CMaiden::Chase(_float fTimeDelta)
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
 }
-void CMaiden::Chase2(_float fTimeDelta)
-{
-	_float MinDist = 100000.f;
-	_float3 MinTarget;
-	_float HelpDistance = 0.f;
-	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
-	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-	Safe_AddRef(pGameInstance);
-
-	if (pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster")) != nullptr)
-	{
-		for (auto& iter : pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_Objects())
-		{
-			_float3 Target = *(_float3*)&iter->Get_World().m[3][0];
-			if (iter->Get_Info().iHp <= 0)
-				continue;
-			HelpDistance = D3DXVec3Length(&(Target - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
-			if (HelpDistance <= 0.f)
-				continue;
-			if (HelpDistance <= 2.f)
-			{
-				iter->Set_Mp(1);
-				m_tInfo.iMp = 2;
-			}
-			if (MinDist > HelpDistance)
-			{
-				MinDist = HelpDistance;
-				MinTarget = *(_float3*)&iter->Get_World().m[3][0];
-			}
-		}
-
-		if (2.f <= MinDist)
-		{
-			if (!m_bSkill)
-				m_eCurState = MOVE;
-			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
-				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
 
 
-			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-			vPosition += *D3DXVec3Normalize(&MinTarget, &(MinTarget - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
-			//	vPosition.y += 2.f;
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-		}
-		else
-		{
-			if (!m_bSkill)
-				m_eCurState = IDLE;
-			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
-				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
-			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-			//	vPosition.y = vTargetPos.y += 2.f;
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-		}
-	}
-	else
-	{
-		if (10.f > Distance)
-		{
-			if (!m_bSkill)
-				m_eCurState = MOVE;
-			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
-				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
-
-
-			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-			vPosition -= *D3DXVec3Normalize(&MinTarget, &(MinTarget - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
-			//	vPosition.y += 2.f;
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-		}
-		else
-		{
-			if (!m_bSkill)
-				m_eCurState = IDLE;
-			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
-				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
-			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-			//	vPosition.y = vTargetPos.y += 2.f;
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-		}
-	}
-	Safe_Release(pGameInstance);
-}
-void CMaiden::Chase3(_float fTimeDelta)
-{
-	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
-	if (1.f >= Distance)
-	{
-		if (m_fSkillCool >	0.3f)
-		{
-			m_fSkillCool = 0.f;
-			m_eCurState = SKILL;
-			m_tFrame.iFrameStart = 0;
-		}
-		if (m_eCurState != SKILL)
-			m_eCurState = IDLE;
-		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
-			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
-		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-		//	vPosition.y = vTargetPos.y += 2.f;
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-	}
-	else if (1.f < Distance && 10000.f > Distance)
-	{
-		if (!m_bSkill)
-			m_eCurState = MOVE;
-		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
-			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
-		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-
-		vPosition += *D3DXVec3Normalize(&vTargetPos, &(vTargetPos - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
-		//	vPosition.y += 2.f;
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-	}
-	else
-	{
-		if (!m_bSkill)
-			m_eCurState = IDLE;
-		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
-			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
-		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-		//	vPosition.y = vTargetPos.y += 2.f;
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-	}
-}
 void CMaiden::OnTerrain()
 {
 	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 	if (nullptr == pGameInstance)
 		return;
 	Safe_AddRef(pGameInstance);
-	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
+	CVIBuffer_Terrain*		pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(LEVEL_MIDBOSS, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
 	if (nullptr == pVIBuffer_Terrain)
 		return;
 
-	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
+	CTransform*		pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(LEVEL_MIDBOSS, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
 	if (nullptr == pTransform_Terrain)
 		return;
 
 	_float3			vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.5f);
-
+	if (m_eCurState == SKILL && m_tFrame.iFrameStart < 5)
+	{
+		m_fY += 0.05f;
+		vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.7f + m_fY);
+	}
+	else if (m_eCurState == SKILL && m_tFrame.iFrameStart < 8 && m_tFrame.iFrameStart > 4)
+	{
+	
+	}
+	else
+	{
+		if(!m_bLastHeal)
+			m_fY = 0.f;
+		vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.7f + m_fY);
+	}
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	Safe_Release(pGameInstance);
 }
@@ -557,11 +406,11 @@ HRESULT CMaiden::Skill_DefaultAttack(const _tchar * pLayerTag)
 
 	CGameObject::INFO tInfo;
 	tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	tInfo.iLevelIndex = LEVEL_GAMEPLAY;
+	tInfo.iLevelIndex = LEVEL_MIDBOSS;
 	tInfo.vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 
 
-	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_DandelionAttack"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Sword"), LEVEL_MIDBOSS, pLayerTag, &tInfo)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);
@@ -576,24 +425,24 @@ void CMaiden::Motion_Change()
 		{
 		case IDLE:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 6;
+			m_tFrame.iFrameEnd = 5;
 			m_tFrame.fFrameSpeed = 0.15f;
 			break;
 		case MOVE:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 7;
+			m_tFrame.iFrameEnd = 5;
 			m_tFrame.fFrameSpeed = 0.15f;
 			break;
 		case DEAD:
 			m_tFrame.iFrameStart = 0;
 			m_tFrame.iFrameEnd = 4;
-			m_tFrame.fFrameSpeed = 0.25f;
+			m_tFrame.fFrameSpeed = 0.2f;
 			m_bDead = true;
 			break;
 		case SKILL:
 			m_tFrame.iFrameStart = 0;
-			m_tFrame.iFrameEnd = 4;
-			m_tFrame.fFrameSpeed = 0.2f;
+			m_tFrame.iFrameEnd = 7;
+			m_tFrame.fFrameSpeed = 0.1f;
 			break;
 		}
 
@@ -642,6 +491,10 @@ void CMaiden::Check_Front()
 		m_bFront = false;
 	if (vTargetPos.z <= vPos.z)
 		m_bFront = true;
+	if (vTargetPos.x > vPos.x)
+		m_bRight = true;
+	if (vTargetPos.x <= vPos.x)
+		m_bRight = false;
 
 
 	if (m_tInfo.bDead && m_eCurState != DEAD)
@@ -651,29 +504,108 @@ void CMaiden::Check_Front()
 		m_bDead = true;
 		Motion_Change();
 	}
-	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.3f) && !m_bRun)
+	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.5f) && !m_bTotem)
 	{
-		m_bRun = true;
+
 		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 		Safe_AddRef(pGameInstance);
 		CGameObject::INFO tInfo;
-		tInfo.pTarget = this;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Help"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
+		tInfo.pTerrain = this;
+		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+		tInfo.vPos = { 32.f,0.f,33.f };
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Stone"), LEVEL_MIDBOSS, TEXT("Layer_Totem"), &tInfo)))
+			return;
+		tInfo.vPos = { 6.f,0.f,33.f };
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Stone"), LEVEL_MIDBOSS, TEXT("Layer_Totem"), &tInfo)))
+			return;
+		tInfo.vPos = { 32.f,0.f,11.f };
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Stone"), LEVEL_MIDBOSS, TEXT("Layer_Totem"), &tInfo)))
+			return;
+		tInfo.vPos = { 6.f,0.f,11.f };
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Stone"), LEVEL_MIDBOSS, TEXT("Layer_Totem"), &tInfo)))
+			return;
+		m_tInfo.iMp = 4;
+		m_bTotem = true;
 		Safe_Release(pGameInstance);
 	}
+	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.7f) && !m_bPowerTotem)
+	{
+
+		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+		CGameObject::INFO tInfo;
+		tInfo.pTerrain = this;
+		tInfo.pTarget = m_tInfo.pTarget;
+		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+		tInfo.vPos = { 19.f,0.f,21.f };
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_PowerTotem"), LEVEL_MIDBOSS, TEXT("Layer_Totem"), &tInfo)))
+			return;
+		m_tInfo.iMp = 1;
+		m_bPowerTotem = true;
+		Safe_Release(pGameInstance);
+	}
+	if ((((float)m_tInfo.iHp / (float)m_tInfo.iMaxHp) < 0.3f) && !m_bPowerTotem2)
+	{
+
+		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+		CGameObject::INFO tInfo;
+		tInfo.pTerrain = this;
+		tInfo.pTarget = m_tInfo.pTarget;
+		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+		tInfo.vPos = { 19.f,0.f,21.f };
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Stone"), LEVEL_MIDBOSS, TEXT("Layer_Totem"), &tInfo)))
+			return;
+		tInfo.vPos = { 32.f,0.f,33.f };
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_PowerTotem"), LEVEL_MIDBOSS, TEXT("Layer_Totem"), &tInfo)))
+			return;
+		tInfo.vPos = { 6.f,0.f,33.f };
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_PowerTotem"), LEVEL_MIDBOSS, TEXT("Layer_Totem"), &tInfo)))
+			return;
+		tInfo.vPos = { 32.f,0.f,11.f };
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_PowerTotem"), LEVEL_MIDBOSS, TEXT("Layer_Totem"), &tInfo)))
+			return;
+		tInfo.vPos = { 6.f,0.f,11.f };
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_PowerTotem"), LEVEL_MIDBOSS, TEXT("Layer_Totem"), &tInfo)))
+			return;
+		m_tInfo.iMp = 5;
+		m_bPowerTotem2 = true;
+		m_bLastHeal = true;
+		_float3 vPos = { 19.f,1.f,24.f };
+		m_fY = 1.5f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+		Safe_Release(pGameInstance);
+	}
+	if (m_bLastHeal && m_tInfo.iMp == 0)
+	{
+		m_bBlueFire = true;
+		m_bLastHeal = false;
+	}
+	
 }
 void CMaiden::Use_Skill(_float fTimeDelta)
 {
-	if (!m_bSkill && m_tFrame.iFrameStart == 2)
+	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
+
+	if (!m_bSkill && m_tFrame.iFrameStart == 5)
 	{
-		Skill_DefaultAttack(TEXT("Layer_MonsterSkill"));
 		m_bSkill = true;
 	}
-	if (m_tFrame.iFrameStart == 4)
+	if (m_tFrame.iFrameStart == 7)
 	{
 		m_eCurState = IDLE;
 		m_tFrame.iFrameStart = 0;
+		Skill_DefaultAttack(TEXT("Layer_MonsterSkill"));
 		m_bSkill = false;
+	}
+	if(m_tFrame.iFrameStart < 8 && m_tFrame.iFrameStart > 3 && Distance > 0.5f)
+	{
+		_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_float3		vLook = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		
+		vPosition += *D3DXVec3Normalize(&vLook, &vLook) * 0.5f;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
 	}
 }
 HRESULT CMaiden::TextureRender()
@@ -733,103 +665,7 @@ HRESULT CMaiden::TextureRender()
 	}
 	return S_OK;
 }
-void CMaiden::MonsterMove(_float fTimeDelta)
-{
 
-	m_fMove += fTimeDelta;
-	if (m_fMove > 1.5f)
-	{
-		m_irand = rand() % 4;
-		m_fMove = 0.f;
-	}
-	_float3 vPos;
-	switch (m_irand)
-	{
-	case 0:
-		m_pTransformCom->Go_Straight(fTimeDelta);
-		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		m_eCurState = MOVE;
-		if (vPos.z > m_tInfo.vPos.z + 3.f)
-		{
-			m_bFront = false;
-			m_pTransformCom->Go_Backward(fTimeDelta);
-			m_eCurState = IDLE;
-		}
-		break;
-	case 1:
-		m_pTransformCom->Go_Backward(fTimeDelta);
-		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		m_eCurState = MOVE;
-		if (vPos.z < m_tInfo.vPos.z - 3.f)
-		{
-			m_bFront = true;
-			m_pTransformCom->Go_Straight(fTimeDelta);
-			m_eCurState = IDLE;
-		}
-		break;
-	case 2:
-		m_pTransformCom->Go_Left(fTimeDelta);
-		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		m_eCurState = MOVE;
-		if (vPos.x < m_tInfo.vPos.x - 3.f)
-		{
-			m_pTransformCom->Go_Right(fTimeDelta);
-			m_eCurState = IDLE;
-		}
-		break;
-	case 3:
-		m_pTransformCom->Go_Right(fTimeDelta);
-		vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		m_eCurState = MOVE;
-		if (vPos.x > m_tInfo.vPos.x + 3.f)
-		{
-			m_pTransformCom->Go_Left(fTimeDelta);
-			m_eCurState = IDLE;
-		}
-		break;
-	default:
-		break;
-	}
-
-
-
-
-}
-HRESULT CMaiden::RespawnMonster()
-{
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
-	m_ePreState = STATE_END;
-	m_eCurState = IDLE;
-	m_tFrame.iFrameStart = 0;
-	m_tFrame.iFrameEnd = 6;
-	m_tFrame.fFrameSpeed = 0.15f;
-	m_tInfo.iHp = m_tInfo.iMaxHp;
-	m_tInfo.iMp = 1;
-	m_bFront = false;
-	m_fSkillCool = 0.f;
-	m_fRespawnTime = 0.f;
-	m_fDeadTime = 0.f;
-	m_fMove = 0.f;
-	m_irand = 0;
-	m_bSkill = false;
-	m_bMove = false;
-	m_bDead = false;
-	m_bRun = false;
-	m_bIDLE = false;
-	m_bRespawn = false;
-	m_bAngry = false;
-	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-	if (nullptr == pGameInstance)
-		return E_FAIL;
-	Safe_AddRef(pGameInstance);
-	CGameObject::INFO tInfo;
-	tInfo.pTarget = this;
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_WorldHpBar"), LEVEL_GAMEPLAY, TEXT("Layer_Status"), &tInfo);
-	tInfo.vPos = { 0.7f,0.7f,1.f };
-	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), LEVEL_GAMEPLAY, TEXT("Layer_Effect"), &tInfo);
-	Safe_Release(pGameInstance);
-	return S_OK;
-}
 void CMaiden::CheckColl()
 {
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
@@ -855,7 +691,7 @@ void CMaiden::CheckColl()
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
-	if (pInstance->Collision(this, COLLISION_PLAYER, &pTarget))
+	if (pInstance->Collision(this, COLLISION_TOTEM, &pTarget))
 	{
 		_float3 vBackPos;
 		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
@@ -891,6 +727,36 @@ void CMaiden::CheckColl()
 	}
 	Safe_Release(pInstance);
 }
+
+void CMaiden::Create_BlueFire(_float fTimeDelta)
+{
+	m_bBlueFireTime += fTimeDelta;
+	if (m_bBlueFireTime > 0.5f)
+	{
+		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
+		Safe_AddRef(pGameInstance);
+		CGameObject::INFO tInfo;
+		_float3 vPos = { 0.f,0.3f,0.f };
+
+		
+
+		_float fDest = rand() % 40000 * 0.001f;
+		_float fSour = rand() % 40000 * 0.001f;
+		
+		tInfo.pTarget = m_tInfo.pTarget;
+		tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+		
+		vPos.x = fDest;
+		vPos.z = fSour;
+		tInfo.vPos = vPos;
+		tInfo.fX = 1.f;
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_BossSkillTarget"), LEVEL_MIDBOSS, TEXT("Layer_Effect"), &tInfo)))
+			return;
+	
+		Safe_Release(pGameInstance);
+		m_bBlueFireTime = 0.f;
+	}
+}
 void CMaiden::OnBillboard()
 {
 	_float4x4		ViewMatrix;
@@ -898,8 +764,19 @@ void CMaiden::OnBillboard()
 	m_pGraphic_Device->GetTransform(D3DTS_VIEW, &ViewMatrix);
 
 	D3DXMatrixInverse(&ViewMatrix, nullptr, &ViewMatrix);
-	_float3 vScale = { 1.f,1.f,1.f };
-	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
-	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0] * vScale.x);
+	_float3 vScale;
+	_float3 vRight = *(_float3*)&ViewMatrix.m[0][0];
+	_float3 vUp = *(_float3*)&ViewMatrix.m[1][0];
+
+	if (m_bRight && m_bFront || m_bRight && !m_bFront)
+	{
+		m_pTransformCom->Set_Scaled(_float3(-2.5f, 2.5f, 1.f));
+		vRight.x = -1;
+	}
+	else if (!m_bRight && !m_bFront || !m_bRight && m_bFront)
+		m_pTransformCom->Set_Scaled(_float3(2.5f, 2.5f, 1.f));
+
+	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *D3DXVec3Normalize(&vRight, &vRight) * m_pTransformCom->Get_Scale().x);
+	m_pTransformCom->Set_State(CTransform::STATE_UP, *D3DXVec3Normalize(&vUp, &vUp) * m_pTransformCom->Get_Scale().y);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
 }

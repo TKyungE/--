@@ -230,7 +230,7 @@ void CPlayer::CheckColl()
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
-	if (pInstance->Collision(this, COLLISION_MONSTER, &pTarget))
+	if (pInstance->Collision(this, COLLISION_TOTEM, &pTarget))
 	{
 		_float3 vBackPos;
 		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
@@ -247,23 +247,23 @@ void CPlayer::CheckColl()
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
 	}
-	if (pInstance->Collision(this, COLLISION_BOSS, &pTarget))
-	{
-		_float3 vBackPos;
-		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
-		{
-			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
-			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
-		}
-		else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
-		{
-			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
-			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
-		}
-		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
+	//if (pInstance->Collision(this, COLLISION_BOSS, &pTarget))
+	//{
+	//	_float3 vBackPos;
+	//	if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
+	//	{
+	//		vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
+	//		vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
+	//	}
+	//	else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
+	//	{
+	//		vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
+	//		vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
+	//	}
+	//	vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
-	}
+	//	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
+	//}
 	Safe_Release(pInstance);
 }
 
@@ -602,7 +602,7 @@ void CPlayer::Key_Input(_float fTimeDelta)
 		}
 	}
 
-	if (CKeyMgr::Get_Instance()->Key_Down('R') && !m_bFly)
+	if (CKeyMgr::Get_Instance()->Key_Down('R') && !m_bFly && m_eCurState == IDLE)
 	{
 		switch (m_bRide)
 		{

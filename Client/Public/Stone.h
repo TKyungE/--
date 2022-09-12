@@ -8,6 +8,7 @@ class CTransform;
 class CVIBuffer_Rect;
 class CVIBuffer_Cube;
 class CTexture;
+class CCollider;
 END
 
 BEGIN(Client)
@@ -36,12 +37,15 @@ public:
 private:
 	CRenderer* m_pRendererCom = nullptr;
 	CTransform* m_pTransformCom = nullptr;
+	CTransform* m_pTransformCom2 = nullptr;
 	CVIBuffer_Cube* m_pVIBufferCube = nullptr;
+	CVIBuffer_Rect* m_pVIBufferRect = nullptr;
 	CTexture* m_pTextureCom = nullptr;
-
+	CTexture* m_pTextureCom2 = nullptr;
+	CCollider*				m_pColliderCom = nullptr;
 private:
-	INDEXPOS	m_IndexPos;
-
+	_float		m_fHitTime = 0.f;
+	_float		m_fDrainTime = 0.f;
 private:
 	HRESULT SetUp_Components(void);
 	HRESULT SetUp_RenderState(void);
@@ -52,6 +56,9 @@ private:
 	//void OnBillBoard(void);
 	void Set_vPos();
 	HRESULT House_Render();
+	void CheckColl();
+	void Check_Hit();
+	HRESULT CreateDrain(_float fTimeDelta);
 public:
 	static CStone* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

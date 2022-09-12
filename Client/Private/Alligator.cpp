@@ -173,7 +173,7 @@ void CAlligator::Late_Tick(_float fTimeDelta)
 		Safe_AddRef(pInstance);
 
 		if (pInstance->IsInFrustum(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_pTransformCom->Get_Scale()))
-	{
+		{
 			if (nullptr != m_pRendererCom)
 				m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
 		}
@@ -882,16 +882,40 @@ void CAlligator::CheckColl()
 	if (pInstance->Collision(this, COLLISION_MONSTER, &pTarget))
 	{
 		_float3 vBackPos;
+	
 		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
 		{
-			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
-			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
+			if (pInstance->Get_Collision().x > 0)
+			{
+				vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
+				vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
+				vBackPos.z -= 0.01f;
+			}
+			else if (pInstance->Get_Collision().x < 0)
+			{
+				vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
+				vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
+				vBackPos.z += 0.01f;
+			}
 		}
 		else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
 		{
-			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
-			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
+			if (pInstance->Get_Collision().z > 0)
+			{
+				vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
+				vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
+				vBackPos.x -= 0.01f;
+			}
+			else if (pInstance->Get_Collision().z < 0)
+			{
+				vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
+				vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
+				vBackPos.x += 0.01f;
+			}
 		}
+	
+	
+
 		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
