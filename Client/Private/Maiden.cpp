@@ -810,7 +810,7 @@ void CMaiden::CheckColl()
 	Safe_AddRef(pInstance);
 	CGameObject* pTarget;
 
-	if (pInstance->Collision(this, COLLISION_PLAYER, &pTarget))
+	if (pInstance->Collision(this, COLLISION_PLAYER, TEXT("Com_Collider"), &pTarget))
 	{
 		_float3		vPosition = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 		pTarget->Set_Hp(444);
