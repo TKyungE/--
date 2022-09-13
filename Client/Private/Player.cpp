@@ -446,6 +446,17 @@ void CPlayer::Use_Skill()
 		m_bUseSkill = true;
 		m_bTornado = true;
 	}
+	if (CKeyMgr::Get_Instance()->Key_Down('5') && !m_bUseSkill && !m_bFireBall)
+	{
+		CGameObject::INFO tInfo;
+
+		tInfo.vPos = m_fPickPoint;
+		tInfo.pTarget = this;
+		pInstance->Add_GameObject(TEXT("Prototype_GameObject_UseSkill"), m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"), &tInfo);
+
+		m_bUseSkill = true;
+		m_bFireBall = true;
+	}
 	if (CKeyMgr::Get_Instance()->Key_Down('3') && !m_bUseSkill && !m_bFireSpear)
 	{
 		CGameObject::INFO tInfo;
@@ -485,6 +496,17 @@ void CPlayer::Use_Skill()
 		Skill_Tornado(TEXT("Layer_Skill"), m_fPickPoint);
 		m_bUseSkill = false;
 		m_bTornado = false;
+		m_eCurState = SKILL;
+		m_tFrame.iFrameStart = 0;
+		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_tInfo.iMp -= 5;
+	}
+	if (CKeyMgr::Get_Instance()->Key_Pressing(VK_LBUTTON) && m_bUseSkill && m_bFireBall)
+	{
+		pInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_UseSkill"))->Get_Objects().front()->Set_Dead();
+		Skill_FireBall(TEXT("Layer_Skill"), m_fPickPoint);
+		m_bUseSkill = false;
+		m_bFireBall = false;
 		m_eCurState = SKILL;
 		m_tFrame.iFrameStart = 0;
 		m_vTarget = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
@@ -649,6 +671,22 @@ HRESULT CPlayer::Skill_Tornado(const _tchar * pLayerTag, _float3 _vPos)
 	tInfo.vPos = _vPos;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Tornado"), m_tInfo.iLevelIndex, pLayerTag, &tInfo)))
+		return E_FAIL;
+
+	Safe_Release(pGameInstance);
+
+	return S_OK;
+}
+HRESULT CPlayer::Skill_FireBall(const _tchar * pLayerTag, _float3 _vPos)
+{
+	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
+	Safe_AddRef(pGameInstance);
+
+	CGameObject::INFO tInfo;
+	tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+	tInfo.vTargetPos = _vPos;
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_FireBall"), m_tInfo.iLevelIndex, pLayerTag, &tInfo)))
 		return E_FAIL;
 
 	Safe_Release(pGameInstance);

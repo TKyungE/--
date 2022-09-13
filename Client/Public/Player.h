@@ -64,6 +64,7 @@ private:
 	void Key_Input(_float fTimeDelta);
 	HRESULT Skill_Thunder(const _tchar * pLayerTag, _float3 _vPos);
 	HRESULT Skill_Tornado(const _tchar * pLayerTag,_float3 _vPos);
+	HRESULT Skill_FireBall(const _tchar * pLayerTag, _float3 _vPos);
 	HRESULT Skill_FireSpear(const _tchar * pLayerTag, _float3 _vPos);
 	HRESULT Skill_Meteor(const _tchar * pLayerTag, _float3 _vPos);
 public:
@@ -77,6 +78,7 @@ private:
 	_bool	m_bUseSkill = false;
 	_bool	m_bThunder = false;
 	_bool	m_bTornado = false;
+	_bool	m_bFireBall = false;
 	_bool	m_bFireSpear = false;
 	_bool	m_bMeteor = false;
 	_bool	m_bFront = false;

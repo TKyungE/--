@@ -304,6 +304,9 @@
     <Filter Include="03.Effect\Default\11.AuraBlue">
       <UniqueIdentifier>{552a4c66-03e3-45ee-a30b-8ec4eecae360}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.Effect\Skill\10.FireBall">
+      <UniqueIdentifier>{b0fa95fc-101c-407a-b6b2-a7647d04e2a9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -588,6 +591,9 @@
     <ClInclude Include="..\public\AuraBlue.h">
       <Filter>03.Effect\Default\11.AuraBlue</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\FireBall.h">
+      <Filter>03.Effect\Skill\10.FireBall</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -859,6 +865,9 @@
     </ClCompile>
     <ClCompile Include="..\private\AuraBlue.cpp">
       <Filter>03.Effect\Default\11.AuraBlue</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\FireBall.cpp">
+      <Filter>03.Effect\Skill\10.FireBall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
