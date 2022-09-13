@@ -93,12 +93,25 @@ void CMaiden::Tick(_float fTimeDelta)
 		if (!m_bLastHeal)
 		{
 			m_fSkillCool += fTimeDelta;
-			if (!m_bSkill && !m_bDead)
+			if (!m_bSkill && !m_bDead && !m_bSkill2)
 				Chase(fTimeDelta);
+			if(!m_bSkill)
+				m_fSkillCool2 += fTimeDelta;
+
+			if (m_fSkillCool2 > 8.f)
+			{
+				m_bSkill2 = true;
+				m_fSkillCool2 = 0;
+				m_fSkillCool = 0;
+			}
+
 		}
 		Move_Frame(fTimeDelta);
-		if (m_eCurState == SKILL)
+		if (m_eCurState == SKILL && !m_bSkill2)
 			Use_Skill(fTimeDelta);
+		
+		if(m_bSkill2 && m_bStart && !m_bSkill)
+			Use_Skill2(fTimeDelta);
 
 		m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
 
@@ -129,7 +142,15 @@ void CMaiden::Late_Tick(_float fTimeDelta)
 		{
 			Check_Hit();
 			Motion_Change();
-			CheckColl();
+			if (m_bSkill2)
+			{
+				m_CollTime += fTimeDelta;
+				if (m_CollTime > 0.05f)
+				{
+					CheckColl();
+					m_CollTime = 0.f;
+				}
+			}
 		}
 		OnBillboard();
 		if (nullptr != m_pRendererCom)
@@ -242,50 +263,41 @@ void CMaiden::Check_Hit()
 void CMaiden::Chase(_float fTimeDelta)
 {
 	_float Distance = D3DXVec3Length(&(*(_float3*)&m_tInfo.pTarget->Get_World().m[3][0] - m_pTransformCom->Get_State(CTransform::STATE_POSITION)));
-	if (Distance >= 15.f)
-		m_bIDLE = false;
-	else
-		m_bIDLE = true;
-	if (10.f >= Distance)
+	if (Distance < 1.f)
+		m_bStart = true;
+	if (m_bStart)
 	{
-		if (m_fSkillCool >	3.f)
+		if (m_fSkillCool > 3.f)
 		{
 			m_fSkillCool = 0.f;
 			m_eCurState = SKILL;
 			m_tFrame.iFrameStart = 0;
 		}
-		if (m_eCurState != SKILL)
-			m_eCurState = IDLE;
-		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
-			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
-		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-		//	vPosition.y = vTargetPos.y += 2.f;
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-	}
-	else if (10.f < Distance && 15.f > Distance)
-	{
-		if (!m_bSkill)
-			m_eCurState = MOVE;
-		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
-			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
-		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+		
+		if (0.5f < Distance)
+		{
+			if (m_eCurState != SKILL)
+				m_eCurState = MOVE;
+			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
+			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
 
-		vPosition += *D3DXVec3Normalize(&vTargetPos, &(vTargetPos - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
-		//	vPosition.y += 2.f;
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-	}
-	else
-	{
-		if (!m_bSkill)
-			m_eCurState = IDLE;
-		if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
-			m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
-		_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
-		//	vPosition.y = vTargetPos.y += 2.f;
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+			vPosition += *D3DXVec3Normalize(&vTargetPos, &(vTargetPos - vPosition)) * m_pTransformCom->Get_TransformDesc().fSpeedPerSec * fTimeDelta;
+			//	vPosition.y += 2.f;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		}
+		else
+		{
+			if (m_eCurState != SKILL)
+				m_eCurState = IDLE;
+			if (m_tFrame.iFrameStart > m_tFrame.iFrameEnd)
+				m_tFrame.iFrameStart = m_tFrame.iFrameEnd;
+			_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+			//	vPosition.y = vTargetPos.y += 2.f;
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		}
 	}
 }
 
@@ -580,6 +592,8 @@ void CMaiden::Check_Front()
 	{
 		m_bBlueFire = true;
 		m_bLastHeal = false;
+		m_fSkillCool2 = 0;
+		m_fSkillCool = 0;
 	}
 	
 }
@@ -595,6 +609,7 @@ void CMaiden::Use_Skill(_float fTimeDelta)
 	{
 		m_eCurState = IDLE;
 		m_tFrame.iFrameStart = 0;
+		m_fSkillCool = 0.f;
 		Skill_DefaultAttack(TEXT("Layer_MonsterSkill"));
 		m_bSkill = false;
 	}
@@ -606,6 +621,126 @@ void CMaiden::Use_Skill(_float fTimeDelta)
 		vPosition += *D3DXVec3Normalize(&vLook, &vLook) * 0.5f;
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+	}
+}
+void CMaiden::Use_Skill2(_float fTimeDelta)
+{
+	if (m_iSkillMove == 0)
+	{
+		_float3		vPosition = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+		vPosition.z += 3.f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		++m_iSkillMove;
+		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+		vTargetPos.z -= 3.f;
+		m_vTargetLook = vTargetPos - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		return;
+	}
+	if (m_iSkillMove < 22 )
+	{
+		_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		
+		vPosition += *D3DXVec3Normalize(&m_vTargetLook, &m_vTargetLook) * 0.3f;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		++m_iSkillMove;
+		return;
+	}
+	if (m_iSkillMove == 22)
+	{
+		_float3		vPosition = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+		vPosition.x += 2.5f;
+		vPosition.z -= 2.5f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		++m_iSkillMove;
+		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+		vTargetPos.x -= 2.5f;
+		vTargetPos.z += 2.5f;
+		m_vTargetLook = vTargetPos - m_pTransformCom->Get_State(CTransform::STATE_POSITION); 
+		return;
+	}
+	if (m_iSkillMove > 22 && m_iSkillMove < 34)
+	{
+		_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	
+		vPosition += *D3DXVec3Normalize(&m_vTargetLook, &m_vTargetLook) * 0.3f;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		++m_iSkillMove;
+		return;
+	}
+	if (m_iSkillMove == 34)
+	{
+		_float3		vPosition = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+		vPosition.x -= 3.f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		++m_iSkillMove;
+		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+		vTargetPos.x += 3.f;
+		m_vTargetLook = vTargetPos - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		return;
+	}
+	if (m_iSkillMove > 34 && m_iSkillMove < 46)
+	{
+		_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		
+		vPosition += *D3DXVec3Normalize(&m_vTargetLook, &m_vTargetLook) * 0.3f;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		++m_iSkillMove;
+		return;
+	}
+	if (m_iSkillMove == 46)
+	{
+		_float3		vPosition = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+		vPosition.x += 2.5f;
+		vPosition.z += 2.5f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		++m_iSkillMove;
+		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+		vTargetPos.x -= 2.5f;
+		vTargetPos.z -= 2.5f;
+		m_vTargetLook = vTargetPos - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		return;
+	}
+	if (m_iSkillMove > 46 && m_iSkillMove < 58)
+	{
+		_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	
+		vPosition += *D3DXVec3Normalize(&m_vTargetLook, &m_vTargetLook) * 0.3f;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		++m_iSkillMove;
+		return;
+	}
+	if (m_iSkillMove == 58)
+	{
+		_float3		vPosition = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+		vPosition.x -= 2.5f;
+		vPosition.z += 2.5f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		++m_iSkillMove;
+		_float3 vTargetPos = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+		vTargetPos.x += 2.5f;
+		vTargetPos.z -= 2.5f;
+		m_vTargetLook = vTargetPos - m_pTransformCom->Get_State(CTransform::STATE_POSITION); 
+		return;
+	}
+	if (m_iSkillMove > 58 && m_iSkillMove < 70)
+	{
+		_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		
+		vPosition += *D3DXVec3Normalize(&m_vTargetLook, &m_vTargetLook) * 0.3f;
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
+		++m_iSkillMove;
+		return;
+	}
+	if (m_iSkillMove == 70)
+	{
+		m_iSkillMove = 0;
+		m_bSkill2 = false;
+		return;
 	}
 }
 HRESULT CMaiden::TextureRender()
@@ -674,22 +809,11 @@ void CMaiden::CheckColl()
 
 	Safe_AddRef(pInstance);
 	CGameObject* pTarget;
-	if (pInstance->Collision(this, COLLISION_MONSTER, &pTarget))
+	if (pInstance->Collision(this, COLLISION_PLAYER, &pTarget))
 	{
-		_float3 vBackPos;
-		if (fabs(pInstance->Get_Collision().x) < fabs(pInstance->Get_Collision().z))
-		{
-			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x - pInstance->Get_Collision().x;
-			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z;
-		}
-		else if (fabs(pInstance->Get_Collision().z) < fabs(pInstance->Get_Collision().x))
-		{
-			vBackPos.z = m_pTransformCom->Get_State(CTransform::STATE_POSITION).z - pInstance->Get_Collision().z;
-			vBackPos.x = m_pTransformCom->Get_State(CTransform::STATE_POSITION).x;
-		}
-		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
-
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vBackPos);
+		_float3		vPosition = *(_float3*)&m_tInfo.pTarget->Get_World().m[3][0];
+		pTarget->Set_Hp(444);
+		pTarget->Set_Hit(444, vPosition);
 	}
 	if (pInstance->Collision(this, COLLISION_TOTEM, &pTarget))
 	{

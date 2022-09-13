@@ -56,6 +56,7 @@ private:
 	void Move_Frame(_float fTimeDelta);
 	void Check_Front();
 	void Use_Skill(_float fTimeDelta);
+	void Use_Skill2(_float fTimeDelta);
 	HRESULT TextureRender();
 	void CheckColl();
 	void Create_BlueFire(_float fTimeDelta);
@@ -65,12 +66,14 @@ private:
 	_bool				m_bFront = false;
 	_bool				m_bRight = false;
 	_float				m_fSkillCool = 0.f;
+	_float				m_fSkillCool2 = 0.f;
 	_float				m_fRespawnTime = 0.f;
 	_float				m_fDeadTime = 0.f;
 	_float				m_fMove = 0.f;
 	_float				m_fY = 0.f;
 	_int				m_irand = 0;
 	_bool				m_bSkill = false;
+	_bool				m_bSkill2 = false;
 	_bool				m_bMove = false;
 	_bool				m_bDead = false;
 	_bool				m_bTotem = false;
@@ -80,6 +83,10 @@ private:
 	_bool				m_bLastHeal = false;
 	_bool				m_bBlueFire = false;
 	_bool				m_bBlueFireTime = 0.f;
+	_bool				m_bStart = false;
+	_int				m_iSkillMove = 0;
+	_float				m_CollTime = 0.f;
+	_float3				m_vTargetLook;
 public:
 	static CMaiden* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

@@ -333,11 +333,7 @@ void CTornado::CheckColl()
 		pTarget->Set_Hp(m_tInfo.iDmg);
 		pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
 		if (pTarget->Get_Info().iHp <= 0)
-		{
-			if(pTarget->Get_Info().pTerrain->Get_Info().iMp > 0)
-				pTarget->Get_Info().pTerrain->Set_Mp(-1);
 			pTarget->Set_Dead();
-		}
 		Set_Dead();
 	}
 	Safe_Release(pInstance);
