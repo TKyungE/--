@@ -319,6 +319,9 @@
     <Filter Include="02.GameObject\Quest\HuntQuest">
       <UniqueIdentifier>{24f77a44-e1f6-4e13-adc4-4bc3048a26cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\Transparent_Wall">
+      <UniqueIdentifier>{ae255d11-cb57-4cb9-bfc6-cbf716344943}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -615,6 +618,9 @@
     <ClInclude Include="..\Public\HuntQuest1.h">
       <Filter>02.GameObject\Quest\HuntQuest</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Transparent_Wall.h">
+      <Filter>02.GameObject\Transparent_Wall</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -898,6 +904,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\HuntQuest1.cpp">
       <Filter>02.GameObject\Quest\HuntQuest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Transparent_Wall.cpp">
+      <Filter>02.GameObject\Transparent_Wall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
