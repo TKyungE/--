@@ -913,8 +913,6 @@ void CAlligator::CheckColl()
 				vBackPos.x += 0.01f;
 			}
 		}
-	
-	
 
 		vBackPos.y = m_pTransformCom->Get_State(CTransform::STATE_POSITION).y;
 

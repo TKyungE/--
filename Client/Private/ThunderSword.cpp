@@ -33,6 +33,8 @@ HRESULT CThunderSword::Initialize(void* pArg)
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
+	//m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.2f);
+
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;
 	m_tFrame.iFrameStart = 0;
@@ -59,7 +61,6 @@ void CThunderSword::Tick(_float fTimeDelta)
 	CGameInstance* pInstance = CGameInstance::Get_Instance();
 	if (nullptr == pInstance)
 		return;
-
 
 	Safe_AddRef(pInstance);
 

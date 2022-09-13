@@ -313,6 +313,9 @@
     <Filter Include="04.UI\Space">
       <UniqueIdentifier>{42c08ded-502b-4f05-8084-69db9cb2e1a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\LetterBox">
+      <UniqueIdentifier>{2f5d90cf-5ef7-4843-91bc-198e58604f5f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -603,6 +606,9 @@
     <ClInclude Include="..\Public\Space.h">
       <Filter>04.UI\Space</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\LetterBox.h">
+      <Filter>04.UI\LetterBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -880,6 +886,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Space.cpp">
       <Filter>04.UI\Space</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\LetterBox.cpp">
+      <Filter>04.UI\LetterBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
