@@ -10,6 +10,7 @@ class CTransform;
 class CVIBuffer_Cube;
 class CVIBuffer_Rect;
 class CTexture;
+class CCollider;
 END
 
 BEGIN(Client)
@@ -49,6 +50,8 @@ private:
 	CVIBuffer_Rect* m_VIBufferRect2 = nullptr;
 	CTexture* m_pRectTexture2 = nullptr;
 
+
+	CCollider*	m_pColliderCom = nullptr;
 private:
 	HRESULT SetUp_Components(void);
 	HRESULT SetUp_RenderState(void);

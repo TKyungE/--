@@ -39,6 +39,22 @@ HRESULT CHouse2::Initialize(void * pArg)
 void CHouse2::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
+
+	m_pColliderCom->Set_Transform(m_pTransformCom1->Get_WorldMatrix(), 1.f);
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+
+	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_OBJECT, this)))
+	{
+		ERR_MSG(TEXT("Failed to Add CollisionGroup : CHouse"));
+		return;
+	}
+
+	Safe_Release(pInstance);
 }
 
 void CHouse2::Late_Tick(_float fTimeDelta)
@@ -52,7 +68,7 @@ void CHouse2::Late_Tick(_float fTimeDelta)
 	if (pInstance->IsInFrustum(m_pTransformCom1->Get_State(CTransform::STATE_POSITION), m_pTransformCom1->Get_Scale()))
 	{
 		if (nullptr != m_pRendererCom)
-			m_pRendererCom->Add_RenderGroup_Front(CRenderer::RENDER_NONALPHABLEND, this);
+			m_pRendererCom->Add_RenderGroup(CRenderer::RENDER_NONALPHABLEND, this);
 	}
 	Safe_Release(pInstance);
 }
@@ -70,6 +86,9 @@ HRESULT CHouse2::Render(void)
 
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
+
+	if (g_bCollider)
+		m_pColliderCom->Render();
 
 	return S_OK;
 }
@@ -115,6 +134,9 @@ HRESULT CHouse2::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform4"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom5, &TransformDesc)))
 		return E_FAIL;
 	
+	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -362,6 +384,7 @@ HRESULT CHouse2::RectHouse_Render(void)
 	if (FAILED(m_pTextureCom2->Bind_OnGraphicDev(0)))
 		return E_FAIL;
 	m_pVIBuffer4->Render();
+
 	return S_OK;
 }
 
@@ -393,12 +416,14 @@ CGameObject * CHouse2::Clone(void * pArg)
 
 _float4x4 CHouse2::Get_World(void)
 {
-	return _float4x4();
+	return m_pTransformCom1->Get_WorldMatrix();
 }
 
 void CHouse2::Free(void)
 {
 	__super::Free();
+
+	Safe_Release(m_pColliderCom);
 
 	Safe_Release(m_pTransformCom1);
 	Safe_Release(m_pRendererCom);

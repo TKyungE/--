@@ -304,6 +304,9 @@
     <Filter Include="03.Effect\Default\11.AuraBlue">
       <UniqueIdentifier>{552a4c66-03e3-45ee-a30b-8ec4eecae360}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Transparent Wall">
+      <UniqueIdentifier>{70530980-d153-4f55-b65e-08dc64e45357}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -588,6 +591,9 @@
     <ClInclude Include="..\public\AuraBlue.h">
       <Filter>03.Effect\Default\11.AuraBlue</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Transparent_Wall.h">
+      <Filter>02.GameObject\BackGroundObj\Transparent Wall</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -859,6 +865,9 @@
     </ClCompile>
     <ClCompile Include="..\private\AuraBlue.cpp">
       <Filter>03.Effect\Default\11.AuraBlue</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Transparent_Wall.cpp">
+      <Filter>02.GameObject\BackGroundObj\Transparent Wall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
