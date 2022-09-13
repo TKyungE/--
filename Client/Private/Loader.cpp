@@ -83,6 +83,7 @@
 #include "AuraBlue.h"
 #include "Space.h"
 #include "FireBall.h"
+#include "Transparent_Wall.h"
 
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
@@ -789,7 +790,7 @@ HRESULT CLoader::Loading_Prototype()
 		return E_FAIL;
 
 
-	//Terrain °´Ã¼
+	//Terrain , BackGround °´Ã¼
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
 		CTerrain::Create(m_pGraphic_Device))))
 		return E_FAIL;
@@ -814,6 +815,12 @@ HRESULT CLoader::Loading_Prototype()
 		CHouse2::Create(m_pGraphic_Device))))
 		return E_FAIL;
 	
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Transparent_Wall"),
+		Transparent_Wall::Create(m_pGraphic_Device))))
+		return E_FAIL;
+
+	
+
 	//sky °´Ã¼
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sky"),
 		CSky::Create(m_pGraphic_Device))))

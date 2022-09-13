@@ -25,7 +25,9 @@ HRESULT CBackGroundTree::Initialize(void * pArg)
 {
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
+
 	memcpy(&m_IndexPos, pArg, sizeof(INDEXPOS));
+
 	if (FAILED(SetUp_Components()))
 		return E_FAIL;
 	
@@ -41,10 +43,13 @@ HRESULT CBackGroundTree::Initialize(void * pArg)
 	m_pRectTransform->Set_Scaled(_float3(m_IndexPos.vScale.x + 2.5f, m_IndexPos.vScale.y, m_IndexPos.vScale.z));
 
 	vPos.y += m_pTransformCom->Get_State(CTransform::STATE_POSITION).y * 0.75f;
+
 	m_pRectTransform->Set_State(CTransform::STATE_POSITION, vPos);
 
 	m_pRectTransform2->Set_Scaled(_float3(m_IndexPos.vScale.x + 2.5f, m_IndexPos.vScale.y, m_IndexPos.vScale.z));
+
 	m_pRectTransform2->Set_State(CTransform::STATE_POSITION, vPos);
+
 	m_pRectTransform2->Turn(_float3(0.f, 1.f, 0.f), 1.f);
 
 	return S_OK;
@@ -55,6 +60,22 @@ void CBackGroundTree::Tick(_float fTimeDelta)
 	__super::Tick(fTimeDelta);
 
 	//OnTerrain();
+
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 1.f);
+
+	CGameInstance* pInstance = CGameInstance::Get_Instance();
+	if (nullptr == pInstance)
+		return;
+
+	Safe_AddRef(pInstance);
+
+	if (FAILED(pInstance->Add_ColiisionGroup(COLLISION_OBJECT, this)))
+	{
+		ERR_MSG(TEXT("Failed to Add CollisionGroup : CHouse"));
+		return;
+	}
+
+	Safe_Release(pInstance);
 }
 
 void CBackGroundTree::Late_Tick(_float fTimeDelta)
@@ -107,10 +128,6 @@ HRESULT CBackGroundTree::Render(void)
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
 
-
-
-
-
 	if (FAILED(m_pRectTransform2->Bind_OnGraphicDev()))
 		return E_FAIL;
 
@@ -124,6 +141,10 @@ HRESULT CBackGroundTree::Render(void)
 
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
+
+	if (g_bCollider)
+		m_pColliderCom->Render();
+
 	return S_OK;
 }
 
@@ -165,6 +186,9 @@ HRESULT CBackGroundTree::SetUp_Components(void)
 		return E_FAIL;
 
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform2"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&	m_pRectTransform2, &TransformDesc)))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
 		return E_FAIL;
 
 	return S_OK;
@@ -269,6 +293,7 @@ void CBackGroundTree::Free(void)
 {
 	__super::Free();
 
+	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pVIBuffer);

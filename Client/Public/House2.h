@@ -9,6 +9,7 @@ class CTransform;
 class CVIBuffer_Rect2;
 class CVIBuffer_Cube;
 class CTexture;
+class CCollider;
 END
 
 BEGIN(Client)
@@ -48,7 +49,7 @@ private:
 	CTexture* m_pTextureCom1 = nullptr;
 	CTexture* m_pTextureCom2 = nullptr;
 	
-
+	CCollider*	m_pColliderCom = nullptr;
 
 	INDEXPOS	m_IndexPos;
 private:

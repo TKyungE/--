@@ -243,6 +243,7 @@
     <ClInclude Include="..\Public\ThunderSword.h" />
     <ClInclude Include="..\Public\Tornado.h" />
     <ClInclude Include="..\public\Town.h" />
+    <ClInclude Include="..\Public\Transparent_Wall.h" />
     <ClInclude Include="..\Public\UI.h" />
     <ClInclude Include="..\public\UseSkill.h" />
     <ClInclude Include="..\public\Village_Chief.h" />
@@ -341,6 +342,7 @@
     <ClCompile Include="..\Private\ThunderSword.cpp" />
     <ClCompile Include="..\Private\Tornado.cpp" />
     <ClCompile Include="..\private\Town.cpp" />
+    <ClCompile Include="..\Private\Transparent_Wall.cpp" />
     <ClCompile Include="..\Private\UI.cpp" />
     <ClCompile Include="..\private\UseSkill.cpp" />
     <ClCompile Include="..\private\Village_Chief.cpp" />

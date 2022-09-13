@@ -155,6 +155,10 @@ HRESULT CTown::Ready_Layer_BackGround(const _tchar * pLayerTag)
 			return E_FAIL;
 	}
 
+
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Transparent_Wall"), LEVEL_TOWN, pLayerTag, nullptr)))
+		return E_FAIL;
+
 	Safe_Release(pGameInstance);
 
 	return S_OK;
