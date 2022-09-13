@@ -32,6 +32,7 @@ HRESULT CThunderSword::Initialize(void* pArg)
 	_float3 vScale = { 1.5f,1.5f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
+	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.2f);
 
 	m_ePreState = STATE_END;
 	m_eCurState = IDLE;

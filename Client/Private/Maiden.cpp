@@ -98,7 +98,7 @@ void CMaiden::Tick(_float fTimeDelta)
 			if(!m_bSkill)
 				m_fSkillCool2 += fTimeDelta;
 
-			if (m_fSkillCool2 > 8.f)
+			if (m_fSkillCool2 > 13.f)
 			{
 				m_bSkill2 = true;
 				m_fSkillCool2 = 0;
@@ -145,7 +145,7 @@ void CMaiden::Late_Tick(_float fTimeDelta)
 			if (m_bSkill2)
 			{
 				m_CollTime += fTimeDelta;
-				if (m_CollTime > 0.05f)
+				if (m_CollTime > 0.04f)
 				{
 					CheckColl();
 					m_CollTime = 0.f;
@@ -267,7 +267,7 @@ void CMaiden::Chase(_float fTimeDelta)
 		m_bStart = true;
 	if (m_bStart)
 	{
-		if (m_fSkillCool > 3.f)
+		if (m_fSkillCool > 5.f)
 		{
 			m_fSkillCool = 0.f;
 			m_eCurState = SKILL;
@@ -726,7 +726,7 @@ void CMaiden::Use_Skill2(_float fTimeDelta)
 		m_vTargetLook = vTargetPos - m_pTransformCom->Get_State(CTransform::STATE_POSITION); 
 		return;
 	}
-	if (m_iSkillMove > 58 && m_iSkillMove < 70)
+	if (m_iSkillMove > 58 && m_iSkillMove < 78)
 	{
 		_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		
@@ -736,7 +736,7 @@ void CMaiden::Use_Skill2(_float fTimeDelta)
 		++m_iSkillMove;
 		return;
 	}
-	if (m_iSkillMove == 70)
+	if (m_iSkillMove == 78)
 	{
 		m_iSkillMove = 0;
 		m_bSkill2 = false;
@@ -855,7 +855,7 @@ void CMaiden::CheckColl()
 void CMaiden::Create_BlueFire(_float fTimeDelta)
 {
 	m_bBlueFireTime += fTimeDelta;
-	if (m_bBlueFireTime > 0.5f)
+	if (m_bBlueFireTime > 0.7f)
 	{
 		CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
 		Safe_AddRef(pGameInstance);
