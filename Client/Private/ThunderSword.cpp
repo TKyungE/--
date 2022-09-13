@@ -189,10 +189,7 @@ void CThunderSword::CheckColl()
 		pTarget->Set_Hp(m_tInfo.iDmg);
 		pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
 		if (pTarget->Get_Info().iHp <= 0)
-		{
-			pTarget->Get_Info().pTarget->Set_Mp(-1);
 			pTarget->Set_Dead();
-		}
 		Set_Dead();
 	}
 	Safe_Release(pInstance);
