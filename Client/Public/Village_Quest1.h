@@ -40,7 +40,10 @@ private:
 	CVIBuffer_Rect* m_pVIBuffer = nullptr;
 	CTexture* m_pTextureCom = nullptr;
 	CCollider* m_pColliderCom = nullptr;
+	CTransform* m_pQuestTransformCom = nullptr;
+	CVIBuffer_Rect* m_pQuestVIBufferCom = nullptr;
 	CCollider* m_pQuestColliderCom = nullptr;
+	CTexture* m_pQuestTextureCom = nullptr;
 
 private:
 	INDEXPOS	m_IndexPos;
@@ -51,8 +54,8 @@ private:
 	HRESULT Release_RenderState(void);
 	HRESULT On_SamplerState();
 	HRESULT Off_SamplerState();
-	void OnTerrain(void);
 	void	OnBillboard();
+
 public:
 	static CVillage_Quest1* Create(LPDIRECT3DDEVICE9 _pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

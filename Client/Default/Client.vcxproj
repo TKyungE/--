@@ -229,6 +229,7 @@
     <ClInclude Include="..\public\SkillWnd.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\public\SoundMgr.h" />
+    <ClInclude Include="..\Public\Space.h" />
     <ClInclude Include="..\public\StatsIcon.h" />
     <ClInclude Include="..\public\StatsWnd.h" />
     <ClInclude Include="..\public\Stone.h" />
@@ -324,6 +325,7 @@
     <ClCompile Include="..\private\SkillWnd.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\private\SoundMgr.cpp" />
+    <ClCompile Include="..\Private\Space.cpp" />
     <ClCompile Include="..\private\StatsIcon.cpp" />
     <ClCompile Include="..\private\StatsWnd.cpp" />
     <ClCompile Include="..\private\Stone.cpp" />

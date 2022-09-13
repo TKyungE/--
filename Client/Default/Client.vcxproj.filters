@@ -310,6 +310,9 @@
     <Filter Include="05. Quest\HuntQuest">
       <UniqueIdentifier>{a33dba0d-0654-45f0-a817-d2ea17391af2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.UI\Space">
+      <UniqueIdentifier>{42c08ded-502b-4f05-8084-69db9cb2e1a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -597,6 +600,9 @@
     <ClInclude Include="..\Public\HuntQuest1.h">
       <Filter>05. Quest\HuntQuest</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Space.h">
+      <Filter>04.UI\Space</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\MainApp.cpp">
@@ -871,6 +877,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\HuntQuest1.cpp">
       <Filter>05. Quest\HuntQuest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Space.cpp">
+      <Filter>04.UI\Space</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

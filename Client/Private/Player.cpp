@@ -283,8 +283,15 @@ void CPlayer::CheckColl()
 	}
 	if (pInstance->Collision(this, COLLISION_NPC, TEXT("Com_QuestCollider"), &pTarget))
 	{
-		ERR_MSG(TEXT("Can Talk"));
+		m_bTalk = true;
+		g_bTalk = true;
 	}
+	else
+	{
+		m_bTalk = false;
+		g_bTalk = false;
+	}
+
 	Safe_Release(pInstance);
 }
 
@@ -654,6 +661,11 @@ void CPlayer::Key_Input(_float fTimeDelta)
 		m_fFly_fY += 0.1f;
 		if (m_fFly_fY > 0.f)
 			m_fFly_fY = 0.f;
+	}
+
+	if (CKeyMgr::Get_Instance()->Key_Down(VK_SPACE) && m_bTalk)
+	{
+		ERR_MSG(TEXT("Quest"));
 	}
 
 	Safe_Release(pInstance);

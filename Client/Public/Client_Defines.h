@@ -24,6 +24,7 @@ using namespace FMOD;
 extern HWND			g_hWnd;
 extern HINSTANCE	g_hInst;
 extern bool g_bCollider;
+extern bool g_bTalk;
 //extern int g_iFrame;
 
 #define     fSOUND  0.1f
@@ -34,6 +35,5 @@ typedef struct UiPos
 	bool  bNext;
 
 }Pos;
-
 
 using namespace Client;

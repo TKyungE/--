@@ -13,6 +13,7 @@
 #include "Portal.h"
 
 bool g_bCollider = false;
+bool g_bTalk = false;
 
 CTown::CTown(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: CLevel(pGraphic_Device)
@@ -271,7 +272,8 @@ HRESULT CTown::Ready_Layer_UI(const _tchar * pLayerTag)
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_StatsIcon"), LEVEL_TOWN, pLayerTag, &tInfo)))
 		return E_FAIL;
 
-	
+	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_SpaceUI"), LEVEL_TOWN, pLayerTag, &tInfo)))
+		return E_FAIL;
 
 	Safe_Release(pGameInstance);
 

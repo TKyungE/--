@@ -31,9 +31,16 @@ HRESULT CVillage_Quest1::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_tInfo.vPos.y += 0.3f;
+	_float3 vQuestPos = m_tInfo.vPos;
+	vQuestPos.y += 0.65f;
+
+	m_pQuestTransformCom->Set_Scaled(_float3(0.4f, 0.4f, 0.4f));
+
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
+	m_pQuestTransformCom->Set_State(CTransform::STATE_POSITION, vQuestPos);
 
 	m_tInfo.bDead = false;
+	m_tInfo.iHp = 1;
 	m_tInfo.fX = 0.1f;
 	m_tFrame.iFrameStart = 0;
 
@@ -45,7 +52,7 @@ HRESULT CVillage_Quest1::Initialize(void * pArg)
 
 	CGameObject::INFO tInfo;
 	tInfo.pTarget = this;
-	tInfo.vPos = { 0.7f,0.7f,1.f };
+	tInfo.vPos = { 0.7f, 0.7f, 1.f };
 
 	pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Shadow"), m_tInfo.iLevelIndex, TEXT("Layer_Effect"), &tInfo);
 
@@ -58,7 +65,6 @@ void CVillage_Quest1::Tick(_float fTimeDelta)
 {
 	__super::Tick(fTimeDelta);
 
-	//OnTerrain();
 	m_pColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 0.5f);
 	m_pQuestColliderCom->Set_Transform(m_pTransformCom->Get_WorldMatrix(), 2.f);
 
@@ -114,6 +120,14 @@ HRESULT CVillage_Quest1::Render(void)
 
 	m_pVIBuffer->Render();
 
+	if (FAILED(m_pQuestTransformCom->Bind_OnGraphicDev()))
+		return E_FAIL;
+
+	if (FAILED(m_pQuestTextureCom->Bind_OnGraphicDev(0)))
+		return E_FAIL;
+	
+	m_pQuestVIBufferCom->Render();
+
 	if (FAILED(Release_RenderState()))
 		return E_FAIL;
 
@@ -139,7 +153,13 @@ HRESULT CVillage_Quest1::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Texture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_NPC"), (CComponent**)&m_pTextureCom)))
 		return E_FAIL;
 
+	if (FAILED(__super::Add_Components(TEXT("Com_QuestTexture"), LEVEL_STATIC, TEXT("Prototype_Component_Texture_QuestUI"), (CComponent**)&m_pQuestTextureCom)))
+		return E_FAIL;
+
 	if (FAILED(__super::Add_Components(TEXT("Com_Collider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pColliderCom)))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Components(TEXT("Com_QuestVIBuffer"), LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"), (CComponent**)&m_pQuestVIBufferCom)))
 		return E_FAIL;
 
 	if (FAILED(__super::Add_Components(TEXT("Com_QuestCollider"), LEVEL_STATIC, TEXT("Prototype_Component_Collider"), (CComponent**)&m_pQuestColliderCom)))
@@ -154,6 +174,9 @@ HRESULT CVillage_Quest1::SetUp_Components(void)
 	if (FAILED(__super::Add_Components(TEXT("Com_Transform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pTransformCom, &TransformDesc)))
 		return E_FAIL;
 
+	if (FAILED(__super::Add_Components(TEXT("Com_QuestTransform"), LEVEL_STATIC, TEXT("Prototype_Component_Transform"), (CComponent**)&m_pQuestTransformCom, &TransformDesc)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -162,6 +185,7 @@ HRESULT CVillage_Quest1::SetUp_RenderState(void)
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
 
+	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAREF, 0);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
@@ -174,6 +198,7 @@ HRESULT CVillage_Quest1::Release_RenderState(void)
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
 
+	//m_pGraphic_Device->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	m_pGraphic_Device->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	m_pGraphic_Device->SetTexture(0, nullptr);
 
@@ -196,34 +221,11 @@ HRESULT CVillage_Quest1::Off_SamplerState()
 	if (nullptr == m_pGraphic_Device)
 		return E_FAIL;
 
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
-	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_POINT);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_NONE);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_NONE);
+	m_pGraphic_Device->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_NONE);
 
 	return S_OK;
-}
-void CVillage_Quest1::OnTerrain(void)
-{
-	CGameInstance* pGameInstance = CGameInstance::Get_Instance();
-	if (nullptr == pGameInstance)
-		return;
-
-	Safe_AddRef(pGameInstance);
-
-	CVIBuffer_Terrain* pVIBuffer_Terrain = (CVIBuffer_Terrain*)pGameInstance->Get_Component(m_tInfo.iLevelIndex, TEXT("Layer_BackGround"), TEXT("Com_VIBuffer"), 0);
-	if (nullptr == pVIBuffer_Terrain)
-		return;
-
-	CTransform* pTransform_Terrain = (CTransform*)pGameInstance->Get_Component(m_tInfo.iLevelIndex, TEXT("Layer_BackGround"), TEXT("Com_Transform"), 0);
-	if (nullptr == pTransform_Terrain)
-		return;
-
-	_float3 vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	vPosition.y = pVIBuffer_Terrain->Compute_Height(vPosition, pTransform_Terrain->Get_WorldMatrix(), 0.3f);
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPosition);
-	Safe_Release(pGameInstance);
 }
 
 void CVillage_Quest1::OnBillboard()
@@ -237,6 +239,11 @@ void CVillage_Quest1::OnBillboard()
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0]);
 	m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);
+	
+	_float3 vScale = m_pQuestTransformCom->Get_Scale();
+
+	m_pQuestTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
+	m_pQuestTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0] * vScale.z);
 }
 
 CVillage_Quest1 * CVillage_Quest1::Create(LPDIRECT3DDEVICE9 _pGraphic_Device)
@@ -274,11 +281,13 @@ void CVillage_Quest1::Free(void)
 {
 	__super::Free();
 
+	Safe_Release(m_pQuestTextureCom);
 	Safe_Release(m_pQuestColliderCom);
+	Safe_Release(m_pQuestVIBufferCom);
+	Safe_Release(m_pQuestTransformCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pTransformCom);
 	Safe_Release(m_pRendererCom);
 	Safe_Release(m_pVIBuffer);
 	Safe_Release(m_pTextureCom);
-
 }
