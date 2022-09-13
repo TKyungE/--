@@ -289,7 +289,7 @@ HRESULT CTown::Ready_Layer_NPC(const _tchar * pLayerTag)
 
 	CGameObject::INFO tInfo;
 	tInfo.iLevelIndex = LEVEL_TOWN;
-
+	tInfo.iHp = 1;
 	for (auto& iter : m_vecNPC)
 	{
 		if (iter.iIndex == 0)

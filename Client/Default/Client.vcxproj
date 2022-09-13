@@ -184,6 +184,7 @@
     <ClInclude Include="..\public\ExpBar.h" />
     <ClInclude Include="..\public\ExpBlank.h" />
     <ClInclude Include="..\public\ExpLogo.h" />
+    <ClInclude Include="..\public\FireBall.h" />
     <ClInclude Include="..\public\Help.h" />
     <ClInclude Include="..\public\House.h" />
     <ClInclude Include="..\public\HpPotion.h" />
@@ -281,6 +282,7 @@
     <ClCompile Include="..\private\ExpBar.cpp" />
     <ClCompile Include="..\private\ExpBlank.cpp" />
     <ClCompile Include="..\private\ExpLogo.cpp" />
+    <ClCompile Include="..\private\FireBall.cpp" />
     <ClCompile Include="..\Private\Help.cpp" />
     <ClCompile Include="..\private\House.cpp" />
     <ClCompile Include="..\private\HpPotion.cpp" />

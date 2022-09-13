@@ -555,7 +555,7 @@ HRESULT CLEVEL_GamePlay::Ready_Layer_Portal(const _tchar * pLayerTag)
 		tInfo.iLevelIndex = LEVEL_GAMEPLAY;
 		tInfo.vPos = iter->BackGroundPos;
 		tInfo.vScale = iter->vScale;
-		tInfo.iNextLevel = LEVEL_MIDBOSS;
+		tInfo.iNextLevel = LEVEL_CHOBOFIELD;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_GAMEPLAY, pLayerTag, &tInfo)))
 			return E_FAIL;

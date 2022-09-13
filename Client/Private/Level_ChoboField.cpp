@@ -198,8 +198,13 @@ HRESULT CLevel_ChoboField::Ready_Layer_Player(const _tchar * pLayerTag)
 	CGameObject::INFO tInfo = pGameInstance->Find_Layer(LEVEL_STATIC, TEXT("Layer_PlayerInfo"))->Get_Objects().front()->Get_Info();
 
 	memcpy(&Info, &tInfo, sizeof(CGameObject::INFO));
+	if (Info.iLevelIndex == LEVEL_GAMEPLAY)
+		Info.vPos = m_vPlayerPos;
+
+	else
+		Info.vPos = m_vBackPos;
+
 	Info.iLevelIndex = LEVEL_CHOBOFIELD;
-	Info.vPos = m_vPlayerPos;
 
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Player"), LEVEL_CHOBOFIELD, pLayerTag, &Info)))
 		return E_FAIL;
@@ -490,16 +495,46 @@ HRESULT CLevel_ChoboField::Ready_Layer_Portal(const _tchar * pLayerTag)
 	CGameInstance*			pGameInstance = CGameInstance::Get_Instance();
 	Safe_AddRef(pGameInstance);
 
-	for (auto& iter : m_vecPortal)
+	auto iter = m_vecPortal.begin();
+
+	_uint iCount = 0;
+	for (; iter != m_vecPortal.end(); ++iter)
 	{
+		if (iCount > 0)
+		{
+			iCount = 0;
+			break;
+		}
+
 		CGameObject::INFO tInfo;
 		tInfo.iLevelIndex = LEVEL_CHOBOFIELD;
-		tInfo.vPos = iter.BackGroundPos;
-		tInfo.vScale = iter.vScale;
+		tInfo.vPos = iter->BackGroundPos;
+		tInfo.vScale = iter->vScale;
 		tInfo.iNextLevel = LEVEL_GAMEPLAY;
 
 		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
 			return E_FAIL;
+
+		++iCount;
+	}
+
+	for (; iter != m_vecPortal.end(); ++iter)
+	{
+		if (iCount > 0)
+		{
+			iCount = 0;
+			break;
+		}
+		CGameObject::INFO tInfo;
+		tInfo.iLevelIndex = LEVEL_CHOBOFIELD;
+		tInfo.vPos = iter->BackGroundPos;
+		tInfo.vScale = iter->vScale;
+		tInfo.iNextLevel = LEVEL_MIDBOSS;
+
+		if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_Portal"), LEVEL_CHOBOFIELD, pLayerTag, &tInfo)))
+			return E_FAIL;
+
+		++iCount;
 	}
 
 	Safe_Release(pGameInstance);
@@ -527,7 +562,7 @@ _float3 CLevel_ChoboField::Get_CollisionPos(CGameObject * pDest, CGameObject * p
 
 void CLevel_ChoboField::LoadData()
 {
-	HANDLE hFile = CreateFile(TEXT("../../Data/TownHgPos2.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE hFile = CreateFile(TEXT("../../Data/TownHgPos2_1.dat"), GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 	if (INVALID_HANDLE_VALUE == hFile)
 		return;

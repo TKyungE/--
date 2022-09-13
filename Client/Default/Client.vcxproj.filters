@@ -304,17 +304,8 @@
     <Filter Include="03.Effect\Default\11.AuraBlue">
       <UniqueIdentifier>{552a4c66-03e3-45ee-a30b-8ec4eecae360}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05. Quest">
-      <UniqueIdentifier>{d4a02d66-7e4e-458d-a7be-e9b2c68cf598}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05. Quest\HuntQuest">
-      <UniqueIdentifier>{a33dba0d-0654-45f0-a817-d2ea17391af2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\Space">
-      <UniqueIdentifier>{42c08ded-502b-4f05-8084-69db9cb2e1a2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.UI\LetterBox">
-      <UniqueIdentifier>{2f5d90cf-5ef7-4843-91bc-198e58604f5f}</UniqueIdentifier>
+    <Filter Include="03.Effect\Skill\10.FireBall">
+      <UniqueIdentifier>{b0fa95fc-101c-407a-b6b2-a7647d04e2a9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -600,14 +591,8 @@
     <ClInclude Include="..\public\AuraBlue.h">
       <Filter>03.Effect\Default\11.AuraBlue</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\HuntQuest1.h">
-      <Filter>05. Quest\HuntQuest</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Space.h">
-      <Filter>04.UI\Space</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\LetterBox.h">
-      <Filter>04.UI\LetterBox</Filter>
+    <ClInclude Include="..\public\FireBall.h">
+      <Filter>03.Effect\Skill\10.FireBall</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -881,14 +866,8 @@
     <ClCompile Include="..\private\AuraBlue.cpp">
       <Filter>03.Effect\Default\11.AuraBlue</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\HuntQuest1.cpp">
-      <Filter>05. Quest\HuntQuest</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Space.cpp">
-      <Filter>04.UI\Space</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\LetterBox.cpp">
-      <Filter>04.UI\LetterBox</Filter>
+    <ClCompile Include="..\private\FireBall.cpp">
+      <Filter>03.Effect\Skill\10.FireBall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
