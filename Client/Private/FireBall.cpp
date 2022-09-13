@@ -30,7 +30,7 @@ HRESULT CFireBall::Initialize(void* pArg)
 
 	memcpy(&m_tInfo, pArg, sizeof(INFO));
 	m_tInfo.vPos.y += 0.5f;
-	_float3 vScale = { 0.5f,0.5f,1.f };
+	_float3 vScale = { 1.f,1.f,1.f };
 	m_pTransformCom->Set_Scaled(vScale);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_tInfo.vPos);
 
@@ -46,6 +46,7 @@ HRESULT CFireBall::Initialize(void* pArg)
 
 
 	_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	m_tInfo.vTargetPos.y = vPosition.y;
 	vLook = m_tInfo.vTargetPos - vPosition;
 
 	return S_OK;
@@ -240,10 +241,7 @@ void CFireBall::OnBillboard()
 
 	_float3		vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	_float3 vScale;
-	if (m_tInfo.vTargetPos.x > vPosition.x)
-		vScale = { -0.5f,0.5f,1.f };
-	else
-		vScale = { 0.5f,0.5f,1.f };
+	vScale = { 1.f,1.f,1.f };
 	m_pTransformCom->Set_State(CTransform::STATE_RIGHT, *(_float3*)&ViewMatrix.m[0][0] * vScale.x);
 	//m_pTransformCom->Set_State(CTransform::STATE_UP, *(_float3*)&ViewMatrix.m[1][0]* vScale.y);
 	m_pTransformCom->Set_State(CTransform::STATE_LOOK, *(_float3*)&ViewMatrix.m[2][0]);

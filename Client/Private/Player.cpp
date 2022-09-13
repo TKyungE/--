@@ -684,7 +684,7 @@ HRESULT CPlayer::Skill_FireBall(const _tchar * pLayerTag, _float3 _vPos)
 
 	CGameObject::INFO tInfo;
 	tInfo.vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	tInfo.iLevelIndex = m_tInfo.iLevelIndex;
+	//tInfo.iLevelIndex = m_tInfo.iLevelIndex;
 	tInfo.vTargetPos = _vPos;
 	if (FAILED(pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_FireBall"), m_tInfo.iLevelIndex, pLayerTag, &tInfo)))
 		return E_FAIL;
