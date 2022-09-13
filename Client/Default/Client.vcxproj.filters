@@ -172,9 +172,6 @@
     <Filter Include="02.GameObject\BackGroundObj\House">
       <UniqueIdentifier>{36349508-8e85-4729-bab5-e5cb61236108}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObject\BackGroundObj\Stone">
-      <UniqueIdentifier>{2485e12a-1952-4029-bd81-c026f7e639c0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Levels\Town">
       <UniqueIdentifier>{68167f68-27fb-4e3c-ab0b-50f5c284a1da}</UniqueIdentifier>
     </Filter>
@@ -282,6 +279,30 @@
     </Filter>
     <Filter Include="04.UI\Inventory\InventorySLot">
       <UniqueIdentifier>{f07b9a8b-503c-4296-98da-67207a1ecdce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.UI\LogRect">
+      <UniqueIdentifier>{1800de47-275d-479a-b035-e32c2be8f886}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Levels\MidBoss">
+      <UniqueIdentifier>{b1e7dcf6-c4ff-48e1-9f9b-13ecdaded839}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\09.Drain">
+      <UniqueIdentifier>{8b81d193-2917-4d24-b6e2-ae9043da6817}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Totem">
+      <UniqueIdentifier>{2485e12a-1952-4029-bd81-c026f7e639c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObject\BackGroundObj\Totem\00.PowerTotem">
+      <UniqueIdentifier>{f729911e-fcf3-47d0-8e71-42d3dcf9dcbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Skill\09.BlueFire">
+      <UniqueIdentifier>{e0a56abc-e4f2-4cfa-a1a8-b6082e147ec7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\10.BossSkillTarget">
+      <UniqueIdentifier>{4dd0d002-0c72-41e1-8cd9-36db78f3ace5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.Effect\Default\11.AuraBlue">
+      <UniqueIdentifier>{552a4c66-03e3-45ee-a30b-8ec4eecae360}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -442,7 +463,7 @@
       <Filter>02.GameObject\BackGroundObj\House</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Stone.h">
-      <Filter>02.GameObject\BackGroundObj\Stone</Filter>
+      <Filter>02.GameObject\BackGroundObj\Totem</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Town.h">
       <Filter>01.Levels\Town</Filter>
@@ -545,6 +566,27 @@
     </ClInclude>
     <ClInclude Include="..\Public\InventorySlot.h">
       <Filter>04.UI\Inventory\InventorySLot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\LogRect.h">
+      <Filter>04.UI\LogRect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Level_MidBoss.h">
+      <Filter>01.Levels\MidBoss</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Drain.h">
+      <Filter>03.Effect\Default\09.Drain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\PowerTotem.h">
+      <Filter>02.GameObject\BackGroundObj\Totem\00.PowerTotem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\BlueFire.h">
+      <Filter>03.Effect\Skill\09.BlueFire</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\BossSkillTarget.h">
+      <Filter>03.Effect\Default\10.BossSkillTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\AuraBlue.h">
+      <Filter>03.Effect\Default\11.AuraBlue</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -690,7 +732,7 @@
       <Filter>02.GameObject\BackGroundObj\House</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Stone.cpp">
-      <Filter>02.GameObject\BackGroundObj\Stone</Filter>
+      <Filter>02.GameObject\BackGroundObj\Totem</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Town.cpp">
       <Filter>01.Levels\Town</Filter>
@@ -796,6 +838,27 @@
     </ClCompile>
     <ClCompile Include="..\Private\InventorySlot.cpp">
       <Filter>04.UI\Inventory\InventorySLot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\LogRect.cpp">
+      <Filter>04.UI\LogRect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Level_MidBoss.cpp">
+      <Filter>01.Levels\MidBoss</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Drain.cpp">
+      <Filter>03.Effect\Default\09.Drain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\PowerTotem.cpp">
+      <Filter>02.GameObject\BackGroundObj\Totem\00.PowerTotem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\BlueFire.cpp">
+      <Filter>03.Effect\Skill\09.BlueFire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\BossSkillTarget.cpp">
+      <Filter>03.Effect\Default\10.BossSkillTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\AuraBlue.cpp">
+      <Filter>03.Effect\Default\11.AuraBlue</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

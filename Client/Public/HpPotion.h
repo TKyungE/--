@@ -8,6 +8,7 @@ class CTexture;
 class CRenderer;
 class CTransform;
 class CVIBuffer_Rect;
+class CCollider;
 END
 
 BEGIN(Client)
@@ -31,6 +32,7 @@ private: /* For.Components */
 	CTransform*				m_pTransformCom = nullptr;
 	CVIBuffer_Rect*			m_pVIBufferCom = nullptr;
 	CGameObject*			m_pTest = nullptr;
+	CCollider*				m_pColliderCom = nullptr;
 private:
 	_float4x4				m_ProjMatrix;
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
@@ -38,12 +40,14 @@ private:
 	_ushort					m_Check = 0;
 	CGameObject *			pTarget = nullptr;
 	void					Use(void);
-
+	LPD3DXFONT				m_pFont;
+	RECT                    m_rcRect;
+	_int					m_iCount;
 private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
 	HRESULT Release_RenderState();
-
+	void CheckColl();
 public:
 	static CHpPotion* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

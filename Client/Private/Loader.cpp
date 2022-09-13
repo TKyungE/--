@@ -74,6 +74,13 @@
 #include "DandelionAttack.h"
 #include "Maiden.h"
 #include"InventorySlot.h"
+#include"LogRect.h"
+#include "Drain.h"
+#include "PowerTotem.h"
+#include "BossSkillTarget.h"
+#include "BlueFire.h"
+#include "AuraBlue.h"
+
 CLoader::CLoader(LPDIRECT3DDEVICE9 pGraphic_Device)
 	: m_pGraphic_Device(pGraphic_Device)
 {
@@ -99,6 +106,10 @@ unsigned int APIENTRY Thread_Main(void* pArg)
 		break;
 	case LEVEL_CHOBOFIELD:
 		pLoader->Loading_ForChoboLevel();
+		break;
+	case LEVEL_MIDBOSS:
+		pLoader->Loading_ForMidBoss();
+		break;
 	}
 
 	LeaveCriticalSection(&pLoader->Get_CriticalSection());
@@ -142,33 +153,7 @@ HRESULT CLoader::Loading_ForLogoLevel()
 
 HRESULT CLoader::Loading_ForGamePlayLevel()
 {
-	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-	if (nullptr == pGameInstance)
-		return E_FAIL;
 
-	Safe_AddRef(pGameInstance);
-
-	/* 텍스쳐 로딩 중. */
-	lstrcpy(m_szLoadingText, TEXT("텍스쳐 로딩 중."));
-
-	
-
-	/* 모델 로딩 중. */
-	lstrcpy(m_szLoadingText, TEXT("모델 로딩 중."));
-
-
-	/* 셰이더 로딩 중. */
-	lstrcpy(m_szLoadingText, TEXT("셰이더 로딩 중."));
-	
-
-	/* 객체 생성 중. */
-	lstrcpy(m_szLoadingText, TEXT("객체 생성 중."));
-
-
-
-	lstrcpy(m_szLoadingText, TEXT("로딩이 완료되었습니다."));
-
-	Safe_Release(pGameInstance);
 
 	m_isFinished = true;
 
@@ -178,43 +163,25 @@ HRESULT CLoader::Loading_ForGamePlayLevel()
 
 HRESULT CLoader::Loading_ForTownLevel()
 {
-	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-	if (nullptr == pGameInstance)
-		return E_FAIL;
 
-	Safe_AddRef(pGameInstance);
-
-	
-	
-	
-	
-
-	lstrcpy(m_szLoadingText, TEXT("타운 로딩이 완료되었습니다."));
 
 	m_isFinished = true;
 
-	Safe_Release(pGameInstance);
 	return S_OK;
 }
 
 HRESULT CLoader::Loading_ForChoboLevel()
 {
-	CGameInstance*		pGameInstance = CGameInstance::Get_Instance();
-	if (nullptr == pGameInstance)
-		return E_FAIL;
+	m_isFinished = true;
 
-	Safe_AddRef(pGameInstance);
+	return S_OK;
+}
 
-
-
-
-
-
-	lstrcpy(m_szLoadingText, TEXT("타운사냥터2 로딩이 완료되었습니다."));
+HRESULT CLoader::Loading_ForMidBoss()
+{
 
 	m_isFinished = true;
 
-	Safe_Release(pGameInstance);
 	return S_OK;
 }
 
@@ -358,6 +325,18 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Rain"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/snow/%d.png"), 2))))
 		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_Drain"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/Drain/%d.bmp"), 1))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_PowerTotem"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/PowerTotem/%d.bmp"), 1))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_AuraBlue"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/OBJ/OBJ/AURA/AuraBlue/%d.bmp"), 10))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_BossSkillTarget"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/BossSkillTarget/%d.bmp"), 1))))
+		return E_FAIL;
 
 	//Skill 텍스쳐
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_ThunderCloud"),
@@ -390,6 +369,10 @@ HRESULT CLoader::Loading_Static(LEVEL Level)
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_DandelionAttack"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/DandelionAttack/%d.png"), 5))))
 		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_BlueFire"),
+		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Effect/Boss_Skill/BlueFire/%d.bmp"), 10))))
+		return E_FAIL;
+
 	//Player 텍스쳐
 	if (FAILED(pGameInstance->Add_Prototype(Level, TEXT("Prototype_Component_Texture_IDLE_Back"),
 		CTexture::Create(m_pGraphic_Device, CTexture::TYPE_DEFAULT, TEXT("../Bin/Resources/Textures/Player/IDLE_Back/%d.png"), 1))))
@@ -726,6 +709,9 @@ HRESULT CLoader::Loading_Prototype()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PlayerMpBar"),
 		CPlayerMpBar::Create(m_pGraphic_Device))))
 		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_LogRect"),
+		CLogRect::Create(m_pGraphic_Device))))
+		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PlusBox"),
 		CPlusBox::Create(m_pGraphic_Device))))
 		return E_FAIL;
@@ -858,6 +844,9 @@ HRESULT CLoader::Loading_Prototype()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_DandelionAttack"),
 		CDandelionAttack::Create(m_pGraphic_Device))))
 		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BlueFire"),
+		CBlueFire::Create(m_pGraphic_Device))))
+		return E_FAIL;
 	//Effect 객체
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Angry"),
 		CAngry::Create(m_pGraphic_Device))))
@@ -889,7 +878,15 @@ HRESULT CLoader::Loading_Prototype()
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Shadow"),
 		CShadow::Create(m_pGraphic_Device))))
 		return E_FAIL;
-	
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Drain"),
+		CDrain::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BossSkillTarget"),
+		CBossSkillTarget::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_AuraBlue"),
+		CAuraBlue::Create(m_pGraphic_Device))))
+		return E_FAIL;
 
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_House"),
 		CHouse::Create(m_pGraphic_Device))))
@@ -916,6 +913,9 @@ HRESULT CLoader::Loading_Prototype()
 		return E_FAIL;
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Dandelion"),
 		CDandelion::Create(m_pGraphic_Device))))
+		return E_FAIL;
+	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PowerTotem"),
+		CPowerTotem::Create(m_pGraphic_Device))))
 		return E_FAIL;
 	//BOSS
 	if (FAILED(pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster"),

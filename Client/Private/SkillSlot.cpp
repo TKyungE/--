@@ -133,7 +133,7 @@ HRESULT CSkillSlot::SetUp_RenderState()
 }
 HRESULT CSkillSlot::Release_RenderState()
 {
-
+	m_pGraphic_Device->SetTexture(0, nullptr);
 
 	return S_OK;
 }

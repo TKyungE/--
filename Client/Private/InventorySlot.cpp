@@ -37,9 +37,13 @@ HRESULT CInventorySlot::Initialize(void * pArg)
 	Safe_AddRef(pGameInstance);
 	if (m_tInfo.iHp == 1)
 	{
-		m_tInfo.iMp = 3;
-		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), m_tInfo.iLevelIndex, TEXT("Layer_Potion"), &m_tInfo);
+		CGameObject::INFO tInfo;
+		memcpy(&tInfo, &m_tInfo, sizeof(INFO));
+		tInfo.pTarget = this;
+		tInfo.iMp = 3;
+		pGameInstance->Add_GameObject(TEXT("Prototype_GameObject_HpPotion"), m_tInfo.iLevelIndex, TEXT("Layer_Potion"), &tInfo);
 		m_tInfo.pTarget = pGameInstance->Find_Layer(m_tInfo.iLevelIndex, TEXT("Layer_Potion"))->Get_Objects().back();
+		m_tInfo.bHit = true;
 	}
 
 	Safe_Release(pGameInstance);
@@ -79,15 +83,13 @@ HRESULT CInventorySlot::Render()
 		if (FAILED(m_pTransformCom->Bind_OnGraphicDev()))
 			return E_FAIL;
 
-		_float4x4		ViewMatrix;
-		D3DXMatrixIdentity(&ViewMatrix);
-
-		m_pGraphic_Device->SetTransform(D3DTS_VIEW, &ViewMatrix);
-		m_pGraphic_Device->SetTransform(D3DTS_PROJECTION, &m_ProjMatrix);
-
-		if (m_tInfo.pTarget != nullptr)
+		
+		if (m_tInfo.bHit)
 		{
-			m_tInfo.pTarget->Set_Info(m_tInfo);//m_tInfo.pTarget½½·ÔÀÌ °°°í Å¸°Ù
+			CGameObject::INFO tInfo;
+			memcpy(&tInfo, &m_tInfo, sizeof(INFO));
+			tInfo.pTarget = this;
+			m_tInfo.pTarget->Set_Info(tInfo);//m_tInfo.pTarget½½·ÔÀÌ °°°í Å¸°Ù
 			m_tInfo.pTarget->Set_UiMP(5);
 		}
 		else

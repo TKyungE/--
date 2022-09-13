@@ -40,7 +40,7 @@ HRESULT CThunderSword::Initialize(void* pArg)
 	m_tFrame.fFrameSpeed = 0.06f;
 	m_tInfo.bDead = false;
 	m_tInfo.fX = 0.5f;
-	m_tInfo.iDmg = 5678;
+	m_tInfo.iDmg = 79;
 	m_tInfo.iMoney = 22;
 	return S_OK;
 }
@@ -174,9 +174,25 @@ void CThunderSword::CheckColl()
 	}
 	if (pInstance->Collision(this, COLLISION_BOSS, &pTarget))
 	{
+		if (pTarget->Get_Info().iMp == 0)
+		{
+			pTarget->Set_Hp(m_tInfo.iDmg);
+			pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
+			if (pTarget->Get_Info().iHp <= 0)
+				pTarget->Set_Dead();
+			Set_Dead();
+		}
+	}
+	if (pInstance->Collision(this, COLLISION_TOTEM, &pTarget))
+	{
+
 		pTarget->Set_Hp(m_tInfo.iDmg);
+		pTarget->Set_Hit(m_tInfo.iDmg, Get_CollisionPos(pTarget, this));
 		if (pTarget->Get_Info().iHp <= 0)
+		{
+			pTarget->Get_Info().pTarget->Set_Mp(-1);
 			pTarget->Set_Dead();
+		}
 		Set_Dead();
 	}
 	Safe_Release(pInstance);

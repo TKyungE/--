@@ -50,9 +50,10 @@ private:
 	HRESULT SetUp_Components();
 	HRESULT SetUp_RenderState();
 	HRESULT Release_RenderState();
+	
 public:
 	void Change(void);
-
+	vector<CGameObject*>* Get_InvenSlot() { return &m_vSlot; }
 public:
 	static CInventory* Create(LPDIRECT3DDEVICE9 pGraphic_Device);
 	virtual CGameObject* Clone(void* pArg = nullptr) override;

@@ -35,7 +35,7 @@ private:
 	_float					m_fX, m_fY, m_fSizeX, m_fSizeY;
 	_float					m_fPrePosX = 0, m_fPrePosY = 0;
 	Pos						m_Pass;
-
+	
 
 private:
 	HRESULT SetUp_Components();
